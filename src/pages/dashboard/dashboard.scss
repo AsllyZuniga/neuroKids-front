@@ -1,0 +1,50 @@
+.dashboard-container {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr;
+  position: relative;
+  background-color: #d6f3f7;
+}
+
+footer {
+  background-color: #85cc88;
+  height: 80px;
+}
+
+.age-circles {
+  position: absolute;
+  top: 40%;
+  left: 1150px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 2rem;
+}
+
+
+
+/* ===================== */
+/* MEDIA QUERIES */
+/* ===================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .age-circles {
+    gap: 1.5rem;
+  }
+}
+
+/* Celulares grandes */
+@media (max-width: 768px) {
+  .age-circles {
+    gap: 1rem;
+  }
+}
+
+/* Celulares pequeños */
+@media (max-width: 480px) {
+  .age-circles {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+}

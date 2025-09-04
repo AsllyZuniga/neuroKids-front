@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem;
+  background-color: #008081;
+
+  .header__login-btn {
+    font-family: "OpenDyslexic", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    background-color: #ffffff;
+    color: #008081;
+    border: 2px solid #ffffff;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #e6e6e6;
+      color: #006666;
+    }
+
+    &:active {
+      background-color: #cccccc;
+    }
+  }
+}

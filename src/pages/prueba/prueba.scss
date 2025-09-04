@@ -1,0 +1,162 @@
+.prueba-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "OpenDyslexic";
+  min-height: 100vh;
+}
+
+/* HEADER */
+.prueba-header {
+  position: relative;
+  width: 100%;
+  max-height: 660px;
+  overflow: hidden;
+}
+
+.prueba-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* CONTENEDOR DE BOTONES */
+.prueba-buttons {
+  position: absolute;
+  top: 12%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+
+  /* botones dentro (solo base, sin colores) */
+  button {
+    min-width: 180px;
+    height: 60px;
+    padding: 0;
+    font-size: 18px;
+  }
+}
+
+.prueba-page.nivel1,
+.prueba-page.nivel2,
+.prueba-page.nivel3 {
+  background-color: #d6f3f7; 
+}
+/* SECCIÓN DE CARDS */
+.prueba-cards {
+  margin-top: 2rem;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.prueba-cards h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #333;
+  font-family: "OpenDyslexic";
+}
+
+.prueba-cards .cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===================== */
+/* MEDIA QUERIES - RESPONSIVE */
+/* ===================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .prueba-buttons {
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+
+    button {
+      min-width: 150px;
+      height: 55px;
+      font-size: 16px;
+    }
+  }
+}
+/* Celulares grandes */
+@media (max-width: 768px) {
+  .prueba-buttons {
+    position: static; /* debajo de la imagen */
+    transform: none;
+    margin-top: 0.8rem;
+    flex-direction: row; /* 👈 siguen en fila */
+    flex-wrap: wrap; /* si no caben, bajan a la siguiente línea */
+    justify-content: center;
+    gap: 0.5rem;
+
+    button {
+      min-width: 110px;
+      height: 40px;
+      font-size: 14px;
+      border-radius: 8px;
+      padding: 0.3rem 0.6rem;
+    }
+  }
+
+  .prueba-cards {
+    margin-top: 1.2rem;
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .cards-container {
+      grid-template-columns: repeat(2, 1fr); /* 👈 2 columnas en celulares */
+      gap: 0.8rem;
+    }
+
+    .card {
+      padding: 0.6rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+/* Celulares pequeños */
+@media (max-width: 480px) {
+  .prueba-buttons {
+    margin-top: 0.6rem;
+    gap: 0.4rem;
+
+    button {
+      min-width: 95px;
+      height: 36px;
+      font-size: 13px;
+      border-radius: 6px;
+    }
+  }
+
+  .prueba-cards {
+    h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .cards-container {
+      grid-template-columns: repeat(2, 1fr); /* 👈 también 2 columnas */
+      gap: 0.6rem;
+    }
+
+    .card {
+      padding: 0.5rem;
+      font-size: 0.85rem;
+    }
+  }
+}
