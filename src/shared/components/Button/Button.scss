@@ -37,6 +37,35 @@
   }
 
   /* ==== VARIANTES ==== */
+  &--primary {
+    background-color: #4CAF50;
+    color: white;
+
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+
+  &--secondary {
+    background-color: #2196F3;
+    color: white;
+
+    &:hover {
+      background-color: #1976D2;
+    }
+  }
+
+  &--text {
+    background-color: transparent;
+    color: #666;
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: #333;
+    }
+  }
+
   &--nivel1 {
     background-color: #adce36;
 

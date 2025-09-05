@@ -1,7 +1,7 @@
 import React from "react";
 import "./Button.scss";
 
-type ButtonVariant = "nivel1" | "nivel2" | "nivel3";
+type ButtonVariant = "primary" | "secondary" | "text" | "nivel1" | "nivel2" | "nivel3";
 type ButtonSize = "small" | "medium" | "large";
 
 interface ButtonProps {
