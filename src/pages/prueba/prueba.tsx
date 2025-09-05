@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/header/header";
 import Card from "../../shared/components/Card/Card";
 import Button from "../../shared/components/Button/Button";
-import "./Prueba.scss";
+import "./prueba.scss";
 
 type PruebaProps = {
   nivel: number;
@@ -15,6 +16,8 @@ export default function Prueba({ nivel, imagen, lecturas }: PruebaProps) {
 
   return (
     <div className={`prueba-page nivel${nivel}`}>
+      <Header />
+      
       {/* HEADER */}
       <div className="prueba-header">
         <img src={imagen} alt={`Nivel ${nivel}`} className="prueba-img" />

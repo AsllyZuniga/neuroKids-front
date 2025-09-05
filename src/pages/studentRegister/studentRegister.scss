@@ -1,0 +1,220 @@
+.student-register {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    padding: 2rem;
+
+    &__container {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    &__card {
+        padding: 3rem 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    &__header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    &__icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4CAF50, #388E3C);
+
+        img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    &__title {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    &__subtitle {
+        font-size: 1rem;
+        color: #666;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+
+    &__label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #333;
+
+        &::after {
+            content: "";
+        }
+    }
+
+    &__input,
+    &__select {
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        color: #333;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        background: white;
+
+        &:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        &:disabled {
+            background: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        &::placeholder {
+            color: #999;
+        }
+    }
+
+    &__select {
+        cursor: pointer;
+
+        option {
+            padding: 0.5rem;
+        }
+    }
+
+    &__error {
+        background: #ffebee;
+        color: #c62828;
+        padding: 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        border-left: 4px solid #f44336;
+    }
+
+    &__success {
+        background: #e8f5e8;
+        color: #2e7d32;
+        padding: 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        border-left: 4px solid #4caf50;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    &__submit {
+        margin-top: 1rem;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    &__footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #eee;
+    }
+
+    &__login-text {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+    }
+
+    &__login-link {
+        background: none;
+        border: none;
+        color: #4CAF50;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: underline;
+        font-size: inherit;
+        padding: 0;
+
+        &:hover {
+            color: #388E3C;
+        }
+
+        &:disabled {
+            color: #999;
+            cursor: not-allowed;
+        }
+    }
+
+    &__loading-text {
+        font-size: 0.8rem;
+        color: #4CAF50;
+        margin-top: 0.5rem;
+        font-style: italic;
+    }
+
+    &__error-text {
+        font-size: 0.8rem;
+        color: #f44336;
+        margin-top: 0.5rem;
+        font-style: italic;
+    }
+
+    // Responsive design
+    @media (max-width: 768px) {
+        padding: 1rem;
+
+        &__card {
+            padding: 2rem 1.5rem;
+        }
+
+        &__title {
+            font-size: 1.5rem;
+        }
+
+        &__subtitle {
+            font-size: 0.9rem;
+        }
+
+        &__input,
+        &__select {
+            padding: 0.875rem;
+        }
+    }
+}

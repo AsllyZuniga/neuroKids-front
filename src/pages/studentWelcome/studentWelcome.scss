@@ -1,0 +1,262 @@
+.student-welcome {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    &__container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    &__hero {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    &__hero-content {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    &__avatar {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 2rem;
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+
+        img {
+            width: 60px;
+            height: 60px;
+            filter: brightness(0) invert(1);
+        }
+    }
+
+    &__title {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+        font-weight: bold;
+        font-family: "OpenDyslexic", sans-serif;
+    }
+
+    &__subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 2rem;
+        font-family: "OpenDyslexic", sans-serif;
+    }
+
+    &__info {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    &__info-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__info-label {
+        font-size: 0.9rem;
+        color: #888;
+        font-weight: 500;
+    }
+
+    &__info-value {
+        font-size: 1rem;
+        color: #333;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        background: #f8f9fa;
+        border-radius: 20px;
+        border: 2px solid #e9ecef;
+    }
+
+    &__actions {
+        margin-bottom: 3rem;
+    }
+
+    &__actions-title {
+        text-align: center;
+        font-size: 2rem;
+        color: white;
+        margin-bottom: 2rem;
+        font-weight: bold;
+        font-family: "OpenDyslexic", sans-serif;
+    }
+
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        justify-items: center;
+    }
+
+    &__card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        max-width: 350px;
+        width: 100%;
+
+        &:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        &--primary {
+            border-top: 4px solid #4CAF50;
+        }
+
+        &--secondary {
+            border-top: 4px solid #2196F3;
+        }
+    }
+
+    &__card-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+        img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+    }
+
+    &__card-title {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+        font-weight: 600;
+        font-family: "OpenDyslexic", sans-serif;
+    }
+
+    &__card-description {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 2rem;
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    &__card-button {
+        width: 100%;
+        margin-top: auto;
+        font-family: "OpenDyslexic", sans-serif;
+    }
+
+    &__motivational {
+        text-align: center;
+    }
+
+    &__quote {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    &__quote-icon {
+        width: 60px;
+        height: 60px;
+        filter: brightness(0) invert(1);
+        flex-shrink: 0;
+    }
+
+    &__quote-text {
+        font-size: 1.1rem;
+        color: white;
+        font-style: italic;
+        margin: 0;
+        line-height: 1.5;
+        font-family: "OpenDyslexic", sans-serif;
+    }
+
+    // Loading state
+    .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-size: 1.2rem;
+        color: white;
+    }
+
+    // Responsive design
+    @media (max-width: 768px) {
+        &__container {
+            padding: 1rem;
+        }
+
+        &__hero-content {
+            padding: 2rem 1.5rem;
+        }
+
+        &__title {
+            font-size: 2rem;
+        }
+
+        &__subtitle {
+            font-size: 1rem;
+        }
+
+        &__info {
+            gap: 1rem;
+        }
+
+        &__actions-title {
+            font-size: 1.5rem;
+        }
+
+        &__cards {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        &__card {
+            padding: 2rem 1.5rem;
+        }
+
+        &__quote {
+            flex-direction: column;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        &__quote-text {
+            font-size: 1rem;
+        }
+    }
+}
