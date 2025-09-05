@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import "./App.css";
+
 
 // Páginas existentes
 const Dashboard = lazy(() => import("./pages/dashboard/dashboard"));

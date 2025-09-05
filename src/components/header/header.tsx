@@ -65,7 +65,7 @@ export default function Header() {
     <header className="header">
       <div className="header__container">
         <div className="header__logo">
-          <img src="/src/assets/img/neuroKids.svg" alt="NeuroKids" className="header__logo-img" />
+          <img src="/src/assets/logo.png" alt="NeuroKids" className="header__logo-img" />
         </div>
 
         <div className="header__auth">
