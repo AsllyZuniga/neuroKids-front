@@ -1,3 +1,4 @@
+//ok
 import "./SceneImages.scss";
 import arcoiris from "../../assets/img/arcoiris.svg";
 import bloques1 from "../../assets/img/bloque1.svg";

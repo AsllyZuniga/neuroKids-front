@@ -1,3 +1,4 @@
+//..ok
 import Header from "../../components/header/header";
 import SceneImages from "../../components/sceneImages/sceneImages";
 import "./dashboard.scss";
