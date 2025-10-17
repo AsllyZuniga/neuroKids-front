@@ -1,5 +1,5 @@
 //ok
-import "./SceneImages.scss" // Test import scenes
+import "./sceneImages.scss" // Test import scenes
 import arcoiris from "../../assets/img/arcoiris.svg";
 import bloques1 from "../../assets/img/bloque1.svg";
 import bloques2 from "../../assets/img/bloque2.svg";
