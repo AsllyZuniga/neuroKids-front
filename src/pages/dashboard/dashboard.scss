@@ -1,3 +1,6 @@
+/* ===================== */
+/* DASHBOARD */
+/* ===================== */
 .dashboard-container {
   display: grid;
   min-height: 100dvh;
@@ -20,31 +23,65 @@ footer {
   gap: 2rem;
 }
 
-
-
-/* ===================== */
-/* MEDIA QUERIES */
-/* ===================== */
-
-/* Tablets */
+/* Media queries - Dashboard */
 @media (max-width: 1024px) {
+  .dashboard-container {
+    grid-template-rows: auto 1fr auto;
+  }
+
+  footer {
+    height: 70px;
+  }
+
   .age-circles {
-    gap: 1.5rem;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    padding: 1.5rem 0;
+    justify-content: center;
   }
 }
 
-/* Celulares grandes */
 @media (max-width: 768px) {
+  .dashboard-container {
+    grid-template-rows: auto 1fr auto;
+  }
+
+  
+
   .age-circles {
-    gap: 1rem;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    padding: 1rem 0;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
+footer {
+    height: 60px;
+  }
 
-/* Celulares pequeños */
 @media (max-width: 480px) {
+  .dashboard-container {
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+  }
+
+  footer {
+    height: 50px;
+  }
+
   .age-circles {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.8rem;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    padding: 0.8rem 0;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 }
