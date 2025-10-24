@@ -1,25 +1,67 @@
-//ok
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header/header";
 import Card from "../../shared/components/Card/Card";
 import Button from "../../shared/components/Button/Button";
 import "./prueba.scss";
 
-type PruebaProps = {
+export default function Prueba({
+  nivel,
+  imagen,
+  lecturas,
+  games,
+}: {
   nivel: number;
   imagen: string;
   lecturas: number;
-};
-
-export default function Prueba({ nivel, imagen, lecturas }: PruebaProps) {
+  games: number;
+}) {
   const navigate = useNavigate();
-  const variant = `nivel${nivel}` as "nivel1" | "nivel2" | "nivel3"; // 👈 calcula el variant
+  const variant = `nivel${nivel}` as "nivel1" | "nivel2" | "nivel3";
+
+  // 🎮 Nombres de juegos y lecturas (nivel 7–8 años)
+  const juegosNivel1 = [
+    { id: 1, nombre: "Bingo de Palabras" },
+    { id: 2, nombre: "Caza la Sílaba" },
+    { id: 3, nombre: "Escucha y Elige" },
+  ];
+
+  const lecturasNivel1 = [
+    { id: 1, nombre: "Cuento con Pictogramas" },
+    { id: 2, nombre: "Frases Mágicas" },
+    { id: 3, nombre: "Primera Palabra" },
+  ];
+
+  // 🎮 Nombres de juegos y lecturas (nivel 9–10 años)
+  const juegosNivel2 = [
+    { id: 1, nombre: "Construye Frases" },
+    { id: 2, nombre: "Laberinto Lector" },
+    { id: 3, nombre: "Ordena la historia" },
+  ];
+
+  const lecturasNivel2 = [
+    { id: 1, nombre: "Historias interactivas" },
+    { id: 2, nombre: "Mini Aventuras" },
+    { id: 3, nombre: "Revista Infantil" },
+  ];
+
+  const juegosNivel3 = [
+    { id: 1, nombre: "Construye Frases" },
+    { id: 2, nombre: "Laberinto Lector" },
+    { id: 3, nombre: "Ordena la historia" },
+  ];
+
+  const lecturasNivel3 = [
+    { id: 1, nombre: "Historias interactivas" },
+    { id: 2, nombre: "Mini Aventuras" },
+    { id: 3, nombre: "Revista Infantil" },
+  ];
+
 
   return (
     <div className={`prueba-page nivel${nivel}`}>
       <Header />
-      
-      {/* HEADER */}
+
+      {/* 🧩 HEADER */}
       <div className="prueba-header">
         <img src={imagen} alt={`Nivel ${nivel}`} className="prueba-img" />
         <div className="prueba-buttons">
@@ -44,18 +86,117 @@ export default function Prueba({ nivel, imagen, lecturas }: PruebaProps) {
         </div>
       </div>
 
-      {/* SECCIÓN DE CARDS */}
-      <section className="prueba-cards">
-        <h2>Lecturas disponibles</h2>
-        <div className="cards-container">
-          {[...Array(lecturas)].map((_, i) => (
-            <Card key={i} title={`Lectura ${i + 1}`} variant="shadow">
-              <p>Comprensión lectora</p>
-            </Card>
-          ))}
-        </div>
-      </section>
-      <footer></footer>
+      {/* 🧠 CONTENIDO */}
+      {nivel === 1 ? (
+        <>
+          {/* 🎮 Juegos */}
+          <section className="prueba-cards">
+            <h2>Juegos disponibles</h2>
+            <div className="cards-container">
+              {juegosNivel1.map((juego, index) => (
+                <Card
+                  key={juego.id}
+                  title={juego.nombre}
+                  variant="shadow"
+                  onClick={() => navigate(`/nivel1/juego${index + 1}`)}
+                >
+                  <p>Haz clic para jugar</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* 📚 Lecturas */}
+          <section className="prueba-cards">
+            <h2>Lecturas disponibles</h2>
+            <div className="cards-container">
+              {lecturasNivel1.map((lectura, index) => (
+                <Card
+                  key={lectura.id}
+                  title={lectura.nombre}
+                  variant="shadow"
+                  onClick={() => navigate(`/nivel1/lectura${index + 1}`)}
+                >
+                  <p>Haz clic para leer</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+        </>
+      ) : nivel === 2 ? (
+        <>
+          {/* 🎮 Juegos */}
+          <section className="prueba-cards">
+            <h2>Juegos disponibles</h2>
+            <div className="cards-container">
+              {juegosNivel2.map((juego, index) => (
+                <Card
+                  key={juego.id}
+                  title={juego.nombre}
+                  variant="shadow"
+                  onClick={() => navigate(`/nivel2/juego${index + 1}`)}
+                >
+                  <p>Haz clic para jugar</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* 📚 Lecturas */}
+          <section className="prueba-cards">
+            <h2>Lecturas disponibles</h2>
+            <div className="cards-container">
+              {lecturasNivel2.map((lectura, index) => (
+                <Card
+                  key={lectura.id}
+                  title={lectura.nombre}
+                  variant="shadow"
+                  onClick={() => navigate(`/nivel2/lectura${index + 1}`)}
+                >
+                  <p>Haz clic para leer</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+        </>
+      ) : nivel === 3 ? (
+        <>
+          {/* juegos*/}
+          <section className="prueba-cards">
+            <h2>Juegos disponibles</h2>
+            <div className="cards-container">
+              {juegosNivel3.map((juego, index) => (
+                <Card
+                  key={juego.id}
+                  title={juego.nombre}
+                  variant="shadow"
+                  onClick={() => navigate(`/nivel3/juego${index + 1}`)}
+                >
+                  <p>Haz clic para jugar</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* lecturas*/}
+          <section className="prueba-cards">
+            <h2>Lecturas disponibles</h2>
+            <div className="cards-container">
+              {lecturasNivel3.map((lectura, index) => (
+                <Card
+                  key={lectura.id}
+                  title={lectura.nombre}
+                  variant="shadow"
+                  onClick={() => navigate(`/nivel3/lectura${index + 1}`)}
+                >
+                  <p>Haz clic para leer</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+        </>
+      ) : null}
+
     </div>
   );
 }
