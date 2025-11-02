@@ -23,16 +23,18 @@ const animalNames = {
 export function AnimalGuide({ animal, message, onRepeat, className = '' }: AnimalGuideProps) {
   const handleSpeak = () => {
     if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(message);
       utterance.lang = 'es-ES';
       utterance.rate = 0.8;
-      speechSynthesis.speak(utterance);
+      utterance.pitch = 1.1;
+      window.speechSynthesis.speak(utterance);
     }
     onRepeat?.();
   };
 
   return (
-    <div className={`flex items-center gap-4 p-4 bg-white/90 rounded-2xl shadow-lg border-2 border-orange-200 ${className}`}>
+    <div className={` w-900 flex items-center gap-4 p-4 bg-white/90 rounded-2xl shadow-lg border-2 border-orange-200 ${className}`}>
       <div className="relative">
         <div className="w-16 h-16 rounded-full bg-orange-100 border-2 border-orange-300 flex items-center justify-center text-3xl">
           {animalEmojis[animal]}

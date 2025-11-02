@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, Volume2, Star, ChevronLeft, ChevronRight, BookOpen, MapPin } from 'lucide-react';
+import { Volume2, ChevronLeft, ChevronRight} from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
-import { Progress } from '../../../ui/progress';
-import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
+import { GameHeader } from '../../../others/GameHeader';
+import { ProgressBar } from '../../../others/ProgressBar';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { StartScreenMiniAventuras } from '../IniciosJuegosLecturas/StartScreenMiniAventuras/StartScreenMiniAventuras';
 
 interface MiniAventurasProps {
   onBack: () => void;
@@ -88,6 +91,24 @@ const adventures: Adventure[] = [
         text: "¡Al final de la cueva, Sara encontró el tesoro de Bobby! Cuando abrió el cofre, sus ojos se llenaron de alegría al ver todos esos libros maravillosos. Ahora tenía aventuras para leer durante todo el año.",
         image: "📚",
         audio: "/audio/bobby6.mp3"
+      },
+      {
+        id: 7,
+        text: "Sara decidió compartir los libros con sus amigos. Juntos, leyeron historias de piratas valientes y tesoros escondidos, inspirando nuevas aventuras.",
+        image: "👭",
+        audio: "/audio/bobby7.mp3",
+        interactive: {
+          type: "choice",
+          content: "¿Qué hizo Sara con los libros?",
+          options: ["Los guardó para ella sola", "Los compartió con amigos", "Los vendió"],
+          correct: 1
+        }
+      },
+      {
+        id: 8,
+        text: "Desde ese día, Sara y sus amigos crearon sus propios mapas y tesoros, continuando el legado de Bobby el pirata bondadoso.",
+        image: "🧭",
+        audio: "/audio/bobby8.mp3"
       }
     ]
   },
@@ -144,68 +165,151 @@ const adventures: Adventure[] = [
         text: "Luna regresó a la Tierra con una grabación de la música alienígena. Ahora, cada vez que la gente de la Tierra escucha esas melodías, recuerda que en el universo hay seres que viven en armonía a través de la música.",
         image: "🌍",
         audio: "/audio/luna6.mp3"
+      },
+      {
+        id: 7,
+        text: "De vuelta en la Tierra, Luna compartió su experiencia en una conferencia. Los científicos se emocionaron y planearon más misiones para explorar otros planetas musicales.",
+        image: "🔬",
+        audio: "/audio/luna7.mp3",
+        interactive: {
+          type: "choice",
+          content: "¿Qué hizo Luna al regresar?",
+          options: ["Guardó el secreto", "Compartió su experiencia", "Se retiró de las misiones"],
+          correct: 1
+        }
+      },
+      {
+        id: 8,
+        text: "Gracias a Luna, la humanidad aprendió que la música puede unir mundos, y comenzaron a enviar señales musicales al espacio para hacer nuevos amigos.",
+        image: "🎼",
+        audio: "/audio/luna8.mp3"
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "La Jungla Mágica de Alex",
+    theme: "jungle",
+    difficulty: 3,
+    pages: [
+      {
+        id: 1,
+        text: "Alex era un explorador valiente que amaba las aventuras en la naturaleza. Un día, encontró un mapa antiguo que lo llevó a una jungla mágica llena de secretos.",
+        image: "🌿",
+        audio: "/audio/alex1.mp3"
+      },
+      {
+        id: 2,
+        text: "En la jungla, los animales hablaban y las plantas brillaban con colores vibrantes. Alex se maravilló con todo lo que veía.",
+        image: "🦜",
+        audio: "/audio/alex2.mp3",
+        interactive: {
+          type: "choice",
+          content: "¿Qué animal encontró Alex primero?",
+          options: ["Un loro parlante", "Un tigre feroz", "Un mono juguetón"],
+          correct: 0
+        }
+      },
+      {
+        id: 3,
+        text: "El loro le contó a Alex sobre un tesoro escondido protegido por un río encantado y guardianes antiguos.",
+        image: "🗿",
+        audio: "/audio/alex3.mp3"
+      },
+      {
+        id: 4,
+        text: "Alex cruzó el río resolviendo acertijos difíciles y evitando trampas naturales.",
+        image: "❓",
+        audio: "/audio/alex4.mp3",
+        interactive: {
+          type: "question",
+          content: "¿Qué protegía el tesoro?",
+          options: ["Un volcán", "Un río encantado", "Una montaña alta"],
+          correct: 1
+        }
+      },
+      {
+        id: 5,
+        text: "Al resolver todos los desafíos, Alex encontró el tesoro: semillas mágicas que podían hacer crecer bosques enteros en un día.",
+        image: "🌱",
+        audio: "/audio/alex5.mp3"
+      },
+      {
+        id: 6,
+        text: "Alex plantó las semillas y la jungla se volvió aún más hermosa y llena de vida. Desde entonces, protegió el secreto para que otros pudieran descubrirlo.",
+        image: "🌳",
+        audio: "/audio/alex6.mp3"
+      },
+      {
+        id: 7,
+        text: "Alex hizo amigos con más animales en la jungla, como un elefante sabio que le enseñó sobre la importancia de la conservación.",
+        image: "🐘",
+        audio: "/audio/alex7.mp3",
+        interactive: {
+          type: "choice",
+          content: "¿Qué le enseñó el elefante a Alex?",
+          options: ["A cazar", "La importancia de la conservación", "A volar"],
+          correct: 1
+        }
+      },
+      {
+        id: 8,
+        text: "Al final de su aventura, Alex regresó a casa con un corazón lleno de respeto por la naturaleza y prometió proteger todos los bosques del mundo.",
+        image: "❤️",
+        audio: "/audio/alex8.mp3"
       }
     ]
   }
 ];
 
-export function MiniAventuras({ onBack, level }: MiniAventurasProps) {
+export function MiniAventuras({ onBack}: MiniAventurasProps) {
+  const [gameStarted, setGameStarted] = useState(false);
   const [currentAdventure, setCurrentAdventure] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [score, setScore] = useState(0);
-  const [readingComplete, setReadingComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [interactionComplete, setInteractionComplete] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const adventure = adventures[currentAdventure];
   const page = adventure.pages[currentPage];
-  const progress = ((currentPage + 1) / adventure.pages.length) * 100;
+  const totalPages = adventure.pages.length;
+  const progress = (currentPage / totalPages) * 100;
 
   const playPageAudio = () => {
     setIsPlaying(true);
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, 3000);
+    setTimeout(() => setIsPlaying(false), 3000);
   };
 
   const handleInteraction = (optionIndex: number) => {
     if (interactionComplete) return;
-    
     setSelectedOption(optionIndex);
-    
-    if (page.interactive && page.interactive.correct !== undefined) {
-      if (optionIndex === page.interactive.correct) {
-        setScore(score + 15);
-        setShowReward(true);
-        setTimeout(() => setShowReward(false), 1500);
-      } else {
-        setScore(Math.max(0, score - 5));
-      }
+    setInteractionComplete(true);
+
+    const isCorrect = page.interactive?.correct === optionIndex;
+    if (isCorrect) {
+      setScore(score + 15);
+      setShowReward(true);
+      setTimeout(() => setShowReward(false), 1500);
+    } else if (page.interactive?.correct !== undefined) {
+      setScore(Math.max(0, score - 5));
     } else {
       setScore(score + 10);
       setShowReward(true);
       setTimeout(() => setShowReward(false), 1500);
     }
-    
-    setInteractionComplete(true);
   };
 
   const goToNextPage = () => {
-    if (currentPage < adventure.pages.length - 1) {
+    if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
       setInteractionComplete(false);
       setSelectedOption(null);
     } else {
-      if (currentAdventure < adventures.length - 1) {
-        setCurrentAdventure(currentAdventure + 1);
-        setCurrentPage(0);
-        setInteractionComplete(false);
-        setSelectedOption(null);
-      } else {
-        setReadingComplete(true);
-      }
+      setShowMotivational(true);
     }
   };
 
@@ -214,167 +318,90 @@ export function MiniAventuras({ onBack, level }: MiniAventurasProps) {
       setCurrentPage(currentPage - 1);
       setInteractionComplete(false);
       setSelectedOption(null);
-    } else if (currentAdventure > 0) {
-      setCurrentAdventure(currentAdventure - 1);
-      setCurrentPage(adventures[currentAdventure - 1].pages.length - 1);
-      setInteractionComplete(false);
-      setSelectedOption(null);
     }
   };
 
-  const restartReading = () => {
+  const handleRestart = () => {
     setCurrentAdventure(0);
     setCurrentPage(0);
     setScore(0);
-    setReadingComplete(false);
-    setShowReward(false);
     setInteractionComplete(false);
     setSelectedOption(null);
+    setShowLevelComplete(false);
+    setShowMotivational(false);
   };
 
-  if (readingComplete) {
-    return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-purple-100 via-blue-100 to-teal-100">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="mb-4 bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver al dashboard
-        </Button>
-
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="max-w-2xl mx-auto text-center"
-        >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200">
-            <CardContent className="p-8">
-              <div className="text-6xl mb-4">🗺️</div>
-              
-              <h2 className="text-3xl mb-4 text-gray-800">
-                ¡Aventuras Completadas!
-              </h2>
-              
-              <div className="text-xl mb-6 text-gray-600">
-                Puntuación: {score} puntos
-              </div>
-              
-              <div className="text-gray-600 mb-6">
-                ¡Has completado todas las mini aventuras! Eres un verdadero explorador de historias.
-              </div>
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={restartReading}
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3"
-                >
-                  Leer de nuevo
-                </Button>
-                <Button
-                  onClick={onBack}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  Volver al dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    );
-  }
-
-  const getThemeGradient = (theme: string) => {
-    switch (theme) {
-      case 'pirates':
-        return 'from-amber-100 via-orange-100 to-red-100';
-      case 'space':
-        return 'from-indigo-100 via-purple-100 to-pink-100';
-      default:
-        return 'from-blue-100 via-purple-100 to-pink-100';
+  const handleNextLevel = () => {
+    if (currentAdventure < adventures.length - 1) {
+      setCurrentAdventure(currentAdventure + 1);
+      setCurrentPage(0);
+      setScore(0);
+      setShowLevelComplete(false);
+    } else {
+      onBack(); // Todas completadas
     }
   };
 
+  const getAnimalMessage = () => {
+    if (page.interactive?.type === 'choice') return "¡Elige lo que creas correcto!";
+    if (page.interactive?.type === 'question') return "¡Responde la pregunta!";
+    return "¡Lee con atención y disfruta la historia!";
+  };
+
+  const getThemeGradient = (theme: string) => {
+    switch (theme) {
+      case 'pirates': return 'from-amber-100 via-orange-100 to-red-100';
+      case 'space': return 'from-indigo-100 via-purple-100 to-pink-100';
+      case 'jungle': return 'from-green-100 via-lime-100 to-emerald-100';
+      default: return 'from-blue-100 via-purple-100 to-pink-100';
+    }
+  };
+
+  if (!gameStarted) {
+    return <StartScreenMiniAventuras onStart={() => setGameStarted(true)} onBack={onBack} />;
+  }
+
   return (
     <div className={`min-h-screen p-6 bg-gradient-to-br ${getThemeGradient(adventure.theme)}`}>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            onClick={onBack}
-            variant="outline"
-            className="bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="text-2xl text-gray-800 dyslexia-friendly">
-              🗺️ Mini Aventuras
-            </h1>
-            <div className="flex items-center gap-2 justify-center mt-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-gray-600">Puntos: {score}</span>
-            </div>
-          </div>
-          
-          <div className="text-right">
-            <div className="text-sm text-gray-600">
-              {adventure.title}
-            </div>
-            <div className="text-xs text-gray-500">
-              Página {currentPage + 1} de {adventure.pages.length}
-            </div>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
 
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <Progress value={progress} className="h-3 bg-white/50" />
-        </div>
+        <GameHeader
+          title="Mini Aventuras"
+          level={currentAdventure + 1}
+          score={score}
+          onBack={onBack}
+          onRestart={handleRestart}
+        />
 
-        {/* Adventure Title */}
-        <div className="text-center mb-6">
-          <Badge variant="secondary" className="mb-2">
-            <MapPin className="w-3 h-3 mr-1" />
-            Aventura {currentAdventure + 1}
-          </Badge>
-          <h2 className="text-2xl text-gray-800 dyslexia-friendly">
+        <ProgressBar
+          current={currentPage + 1}
+          total={totalPages}
+          progress={progress}
+        />
+
+        <AnimalGuide
+          animal="owl"
+          message={getAnimalMessage()}
+          onRepeat={playPageAudio}
+        />
+
+        <div className="text-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-800 dyslexia-friendly">
             {adventure.title}
           </h2>
         </div>
 
-        {/* Animal Guide */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="mb-6"
-        >
-          <AnimalGuide
-            animal="turtle"
-            message="¡Bienvenido a las mini aventuras! Lee con calma y participa en las actividades interactivas para ganar puntos extra."
-          />
-        </motion.div>
-
-        {/* Story Content */}
         <motion.div
           key={`${currentAdventure}-${currentPage}`}
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -50, opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          className="mb-6"
         >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-200 mb-6">
+          <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-200 text-black">
             <CardContent className="p-8">
               <div className="grid md:grid-cols-2 gap-8 items-center">
-                {/* Story Image */}
                 <div className="text-center">
                   <div className="text-9xl mb-4">{page.image}</div>
-                  
                   <Button
                     onClick={playPageAudio}
                     disabled={isPlaying}
@@ -385,42 +412,38 @@ export function MiniAventuras({ onBack, level }: MiniAventurasProps) {
                   </Button>
                 </div>
 
-                {/* Story Text */}
-                <div className="text-center md:text-left">
-                  <div className="text-lg leading-relaxed text-gray-800 dyslexia-friendly mb-6">
+                <div>
+                  <p className="text-lg leading-relaxed text-gray-800 dyslexia-friendly mb-6">
                     {page.text}
-                  </div>
+                  </p>
 
-                  {/* Interactive Element */}
+     
                   {page.interactive && (
                     <Card className="bg-yellow-50 border-2 border-yellow-200">
                       <CardContent className="p-4">
-                        <h4 className="text-lg mb-4 text-yellow-800">
+                        <h4 className="font-semibold mb-3 text-yellow-800">
                           {page.interactive.content}
                         </h4>
-                        
                         <div className="space-y-2">
-                          {page.interactive.options.map((option, index) => (
+                          {page.interactive.options.map((opt, i) => (
                             <Button
-                              key={index}
-                              onClick={() => handleInteraction(index)}
+                              key={i}
+                              onClick={() => handleInteraction(i)}
                               disabled={interactionComplete}
                               variant={
-                                selectedOption === index
-                                  ? page.interactive?.correct === index
-                                    ? "default"
-                                    : "destructive"
+                                selectedOption === i
+                                  ? (page.interactive?.correct === i ? "default" : "destructive")
                                   : "outline"
                               }
                               className={`w-full justify-start ${
-                                selectedOption === index
-                                  ? page.interactive?.correct === index
-                                    ? "bg-green-500 hover:bg-green-600"
-                                    : "bg-red-500 hover:bg-red-600"
+                                selectedOption === i
+                                  ? (page.interactive?.correct === i
+                                      ? "bg-green-500 hover:bg-green-600 text-black"
+                                      : "bg-red-500 hover:bg-red-600 text-black")
                                   : ""
                               }`}
                             >
-                              {option}
+                              {opt}
                             </Button>
                           ))}
                         </div>
@@ -433,55 +456,71 @@ export function MiniAventuras({ onBack, level }: MiniAventurasProps) {
           </Card>
         </motion.div>
 
-        {/* Navigation */}
         <div className="flex justify-between items-center">
           <Button
             onClick={goToPreviousPage}
             disabled={currentPage === 0 && currentAdventure === 0}
             variant="outline"
-            className="bg-white/80 backdrop-blur-sm"
+            className="bg-green-500 backdrop-blur-sm"
           >
             <ChevronLeft className="w-4 h-4 mr-2" />
             Anterior
           </Button>
-          
+
           <div className="flex gap-2">
-            {adventure.pages.map((_, index) => (
+            {adventure.pages.map((_, i) => (
               <div
-                key={index}
+                key={i}
                 className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentPage
-                    ? 'bg-blue-500'
-                    : index < currentPage
-                    ? 'bg-green-400'
-                    : 'bg-gray-300'
+                  i === currentPage ? 'bg-blue-500' : i < currentPage ? 'bg-green-400' : 'bg-gray-300'
                 }`}
               />
             ))}
           </div>
-          
+
           <Button
             onClick={goToNextPage}
             disabled={page.interactive && !interactionComplete}
             className="bg-blue-500 hover:bg-blue-600 text-white"
           >
-            {currentPage === adventure.pages.length - 1 && currentAdventure === adventures.length - 1 
-              ? "Finalizar" 
-              : "Siguiente"
-            }
+            {currentPage === totalPages - 1 ? "Finalizar" : "Siguiente"}
             <ChevronRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
 
-        {/* Reward Animation */}
-        {showReward && (
-          <RewardAnimation
-            type="star"
-            show={showReward}
-            message="¡Excelente respuesta!"
-            onComplete={() => setShowReward(false)}
+
+        <RewardAnimation
+          type="star"
+          show={showReward}
+          message="¡Respuesta correcta!"
+          onComplete={() => setShowReward(false)}
+        />
+
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={totalPages * 10}
+            customMessage="¡Has leído toda la aventura!"
+            customSubtitle="Completaste todas las páginas con éxito"
+            onComplete={() => {
+              setShowMotivational(false);
+              setShowLevelComplete(true);
+            }}
           />
         )}
+
+        {showLevelComplete && (
+          <LevelCompleteModal
+            score={score}
+            total={totalPages * 10}
+            level={currentAdventure + 1}
+            isLastLevel={currentAdventure >= adventures.length - 1}
+            onNextLevel={handleNextLevel}
+            onRestart={handleRestart}
+            onExit={onBack}
+          />
+        )}
+
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { Play, Pause } from 'lucide-react';
 import { Button } from '../ui/button';
 
 interface AudioPlayerProps {
@@ -20,20 +20,17 @@ export function AudioPlayer({
   onEnd, 
   className = "",
   disabled = false,
-  autoPlay = false,
   voice = 'child'
 }: AudioPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  
-  // Calcular duración basada en el texto (aprox. 150 palabras por minuto)
+
   const calculateDuration = (text: string) => {
     const words = text.split(' ').length;
     const wordsPerMinute = voice === 'child' ? 100 : voice === 'adult' ? 130 : 80;
-    const baseDuration = Math.max((words / wordsPerMinute) * 60000, 2000); // Mínimo 2 segundos
-    // Añadir tiempo para pausas naturales
+    const baseDuration = Math.max((words / wordsPerMinute) * 60000, 2000); 
     const sentences = text.split(/[.!?]/).length;
-    const pauseTime = sentences * 300; // 300ms por pausa
+    const pauseTime = sentences * 300;
     return baseDuration + pauseTime;
   };
   
@@ -54,7 +51,6 @@ export function AudioPlayer({
     let interval: ReturnType<typeof setInterval> | undefined;
     
     if (isPlaying) {
-      // Llamar onPlay cuando empiece a reproducir
       if (onPlay) {
         onPlay();
       }
@@ -69,7 +65,6 @@ export function AudioPlayer({
         if (progressPercent >= 100) {
           setIsPlaying(false);
           setProgress(0);
-          // Llamar onEnd cuando termine
           if (onEnd) {
             onEnd();
           }
@@ -83,17 +78,6 @@ export function AudioPlayer({
       }
     };
   }, [isPlaying, audioDuration]);
-  
-  // AutoPlay effect (deshabilitado temporalmente para evitar problemas)
-  // useEffect(() => {
-  //   if (autoPlay && !disabled && !isPlaying) {
-  //     const timer = setTimeout(() => {
-  //       setIsPlaying(true);
-  //       setProgress(0);
-  //     }, 500);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [autoPlay, disabled, isPlaying]);
 
   const getVoiceColor = () => {
     switch (voice) {

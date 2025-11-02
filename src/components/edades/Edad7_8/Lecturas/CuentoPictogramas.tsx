@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Volume2, Star, ChevronLeft, ChevronRight, Trophy, ArrowRight } from 'lucide-react';
+import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from "../../../ui/button";
 import { Card, CardContent } from "../../../ui/card";
-import { Progress } from '../../../ui/progress';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from "../../../others/RewardAnimation";
+import { GameHeader } from "../../../others/GameHeader";
+import { ProgressBar } from "../../../others/ProgressBar";
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { StartScreenCuentoPictogramas } from "../IniciosJuegosLecturas/StartScreenCuentoPictogramas/StartScreenCuentoPictogramas";
 
-interface CuentoPictogramasProps {
+interface CuentoPictogramas {
   onBack: () => void;
   level: number;
   onNextLevel: () => void;
@@ -179,6 +183,7 @@ const storyPagesLevel3: StoryPage[] = [
 ];
 
 export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
+  const [gameStarted, setGameStarted] = useState(false);
   const [level, setLevel] = useState(1);
   const [currentPage, setCurrentPage] = useState(0);
   const [score, setScore] = useState(0);
@@ -188,7 +193,8 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
   const [clickedPictograms, setClickedPictograms] = useState<Set<string>>(new Set());
   const [showWarning, setShowWarning] = useState(false);
   const [currentProgress, setCurrentProgress] = useState(0); // Estado para progreso incremental
-
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
 
   let storyPages: StoryPage[] = [];
   switch (level) {
@@ -214,7 +220,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
   const requiredClicks = Math.ceil(currentStoryPage.pictograms.length * 0.75);
   const hasEnoughClicks = clickedPictograms.size >= requiredClicks;
 
-  // progreso incremental
+
   const updateProgress = () => {
     const newProgress = baseProgress + (clickedPictograms.size * incrementPerPictogram);
     setCurrentProgress(Math.min(newProgress, baseProgress + maxPageProgress)); // Limita al progreso máximo de la página
@@ -299,6 +305,18 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
         setShowWarning(false);
       } else {
         setReadingComplete(true);
+        setShowReward(true);
+
+        // Secuencia: Recompensa → motivacional → modal
+        setTimeout(() => {
+          setShowReward(false);
+          setShowMotivational(true);
+        }, 1500);
+
+        setTimeout(() => {
+          setShowMotivational(false);
+          setShowLevelComplete(true);
+        }, 4500);
       }
     } else {
       setShowWarning(true);
@@ -322,6 +340,8 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
     setShowReward(false);
     setClickedPictograms(new Set());
     setCurrentProgress(0);
+    setShowMotivational(false);
+    setShowLevelComplete(false);
   };
 
   const goToNextLevel = () => {
@@ -333,160 +353,95 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
       setShowReward(false);
       setClickedPictograms(new Set());
       setCurrentProgress(0);
+      setShowMotivational(false);
+      setShowLevelComplete(false);
     }
   };
 
-  /* pantalla final*/
-  if (readingComplete) {
-    const isLastLevel = level === 3;
-
-    return (
-      <div
-        className="min-h-screen p-6"
-        style={{
-          background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
-        }}
-      >
-        <RewardAnimation type="star" show={showReward} />
-
-        {/* Level Complete Message */}
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black/50"
-        >
-          <Card className="bg-white/95 backdrop-blur-sm max-w-md mx-auto">
-            <CardContent className="p-8 text-center">
-              <div className="text-6xl mb-4">🎉</div>
-              <h2 className="text-2xl mb-4 text-gray-800">
-                ¡Bien hecho!
-              </h2>
-              <p className="text-gray-600 mb-4">
-                {isLastLevel
-                  ? `¡Has completado todos los niveles con ${score} puntos!`
-                  : `¡Has completado el nivel ${level}!`}
-              </p>
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <Trophy className="w-5 h-5 text-yellow-500" />
-                <span className="font-semibold text-yellow-600">+{score} XP ganados</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                {!isLastLevel && (
-                  <Button
-                    onClick={goToNextLevel}
-                    className="bg-green-500 hover:bg-green-600 w-full"
-                  >
-                    <ArrowRight className="w-4 h-4 mr-2" />
-                    Siguiente Nivel ({level + 1})
-                  </Button>
-                )}
-                <div className="flex gap-2">
-                  <Button onClick={restartReading} className="bg-purple-500 hover:bg-purple-600 flex-1">
-                    Repetir Nivel
-                  </Button>
-                  <Button onClick={onBack} variant="outline" className="flex-1">
-                    Salir
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    );
+  if (!gameStarted) {
+    return <StartScreenCuentoPictogramas onStart={() => setGameStarted(true)} onBack={onBack} />;
   }
 
-  /* pantalla principal*/
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-100 via-purple-100 to-green-100">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-10">
-          <Button onClick={onBack} variant="outline" className="bg-black/80 backdrop-blur-sm border-2 hover:bg-white">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
+    <div
+      className="min-h-screen p-6"
+      style={{
+        background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
+      }}
+    >
+      <RewardAnimation type="star" show={showReward} />
 
-          <div className="text-center">
-            <h1 className="text-2xl text-gray-800 dyslexia-friendly">🖼️ Cuento con Pictogramas Nivel - {level}</h1>
-            <div className="flex items-center gap-2 justify-center mt-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-gray-600">Puntos: {score}</span>
-            </div>
-          </div>
+      {/* HEADER */}
+      <GameHeader
+        title="Cuento con Pictogramas"
+        level={level}
+        score={score}
+        onBack={onBack}
+        onRestart={restartReading}
+      />
 
-          <div className="text-right text-sm text-gray-600">
-            Página {currentPage + 1} de {storyPages.length}
-          </div>
-        </div>
+      {/* PROGRESS BAR */}
+      <ProgressBar
+        current={currentPage + 1}
+        total={totalPages}
+        progress={currentProgress}
+        className="mb-6"
+      />
 
-        {/* Progreso*/}
-        <div className="mb-6">
-          <div className="h-4 bg-white/30 rounded-full overflow-hidden">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${currentProgress > 100 ? 100 : currentProgress}%` }}
-              transition={{ duration: 0.3 }} // Animación suave
-              className="h-full bg-gradient-to-r from-yellow-400 to-green-500 rounded-full"
-            />
-          </div>
-          <div className="text-center text-gray-600 mt-2">
-            Progreso: {currentProgress.toFixed(1)}%
-          </div>
-        </div>
+      {/* ANIMAL GUIDE */}
+      <div className="max-w-2xl mx-auto mb-6">
+        <AnimalGuide
+          animal="owl"
+          message="¡Lee la historia y haz clic en los pictogramas para descubrir su significado! Cada emoji te da puntos."
+        />
+      </div>
 
-        {/* animalguide*/}
-        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6">
-          <AnimalGuide
-            animal="owl"
-            message="¡Lee la historia y haz clic en los pictogramas para descubrir su significado! Cada emoji te da puntos."
-          />
-        </motion.div>
-
-        {/* Contenido */}
+      {/* JUEGO */}
+      {!readingComplete && !showMotivational && !showLevelComplete && (
         <motion.div
           key={currentPage}
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -50, opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          className="max-w-7xl mx-auto"
         >
           <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-200 mb-6">
             <CardContent className="p-8">
               <div className="grid md:grid-cols-2 gap-8 items-center">
+                {/* IMAGEN + AUDIO */}
                 <div className="text-center">
                   <div className="text-9xl mb-4">{currentStoryPage.image}</div>
                   <Button
                     onClick={playPageAudio}
                     disabled={isPlaying || !hasEnoughClicks}
-                    className={`transition-all ${isPlaying
+                    className={`w-full transition-all ${isPlaying
                       ? 'bg-green-500 text-white animate-pulse'
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
-                      }`}
-                  >
-                    <Volume2 className={`w-4 h-4 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
-                    {isPlaying ? '🔊 Narrando...' : 'Escuchar Historia'}
+                      }`}>
+                    <Volume2 className={`w-5 h-5 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
+                    {isPlaying ? 'Narrando...' : 'Escuchar Historia'}
                   </Button>
                 </div>
 
+                {/* TEXTO CON PICTOGRAMAS */}
                 <div className="text-center md:text-left">
-                  <div className="text-xl leading-relaxed text-gray-800 dyslexia-friendly">
+                  <div className="text-xl leading-relaxed text-gray-800 font-[OpenDyslexic]">
                     {renderTextWithPictograms(currentStoryPage.text, currentStoryPage.pictograms)}
                   </div>
 
-                  <div className="mt-8 p-8 bg-yellow-50 rounded-lg border-2 border-yellow-200">
-                    <h4 className="text-sm text-gray-600 mb-2">Pictogramas en esta página:</h4>
-                    <div className="flex flex-wrap gap-3">
+                  <div className="mt-8 p-6 bg-yellow-50 rounded-lg border-2 border-yellow-200">
+                    <h4 className="text-sm text-gray-600 mb-3">Pictogramas en esta página:</h4>
+                    <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                       {currentStoryPage.pictograms.map(({ word, emoji }) => (
                         <div
                           key={word}
-                          className={`flex items-center gap-1 px-2 py-1 rounded text-sm ${clickedPictograms.has(word)
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-600'
+                          className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all
+                          ${clickedPictograms.has(word)
+                              ? 'bg-green-100 text-green-700 border-2 border-green-300'
+                              : 'bg-gray-100 text-gray-600 border-2 border-gray-300'
                             }`}
                         >
-                          <span>{emoji}</span>
-                          {clickedPictograms.has(word) && <span>{word}</span>}
+                          <span className="text-xl">{emoji}</span>
+                          {clickedPictograms.has(word) && <span className="ml-1">{word}</span>}
                         </div>
                       ))}
                     </div>
@@ -495,51 +450,80 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
 
-        {/* Navegación */}
-        <div className="flex justify-between items-center">
-          <Button onClick={goToPreviousPage} disabled={currentPage === 0} variant="outline" className="bg-white/80">
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            Anterior
-          </Button>
+          {/* NAVEGACIÓN */}
+          <div className="flex justify-between items-center mt-6">
+            <Button
+              onClick={goToPreviousPage}
+              disabled={currentPage === 0}
+              variant="outline"
+              className="bg-green-500"
+            >
+              <ChevronLeft className="w-5 h-5 mr-2" />
+              Anterior
+            </Button>
 
-          <div className="flex gap-2">
-            {storyPages.map((_, index) => (
-              <div
-                key={index}
-                className={`w-3 h-3 rounded-full ${index === currentPage ? 'bg-blue-500' : index < currentPage ? 'bg-green-400' : 'bg-gray-300'
-                  }`}
-              />
-            ))}
+            <div className="flex gap-2">
+              {storyPages.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-all
+                  ${index === currentPage ? 'bg-blue-500 w-8' : index < currentPage ? 'bg-green-400' : 'bg-gray-300'
+                    }`}
+                />
+              ))}
+            </div>
+
+            <Button
+              onClick={goToNextPage}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+              disabled={!hasEnoughClicks}
+            >
+              {currentPage === storyPages.length - 1 ? 'Finalizar' : 'Siguiente'}
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Button>
           </div>
 
-          <Button onClick={goToNextPage} className="bg-blue-500 hover:bg-blue-600 text-white" disabled={!hasEnoughClicks}>
-            {currentPage === storyPages.length - 1 ? 'Finalizar' : 'Siguiente'}
-            <ChevronRight className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+          {/* ADVERTENCIA */}
+          {showWarning && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-100 border-2 border-yellow-300 p-4 rounded-xl shadow-lg text-center text-yellow-800 font-medium"
+            >
+              ¡Haz clic en al menos {requiredClicks} pictogramas para continuar!
+            </motion.div>
+          )}
+        </motion.div>
+      )}
 
-        {showReward && (
-          <RewardAnimation
-            type="star"
-            show={showReward}
-            message="¡Muy bien!"
-            onComplete={() => setShowReward(false)}
-          />
-        )}
+      {/* MENSAJE MOTIVACIONAL */}
+      {showMotivational && (
+        <MotivationalMessage
+          score={score}
+          total={totalPages * 10}
+          customMessage="¡Eres un lector increíble!"
+          customSubtitle="Descubriste todos los pictogramas del cuento"
+          onComplete={() => {
+            setShowMotivational(false);
+            setShowLevelComplete(true);
+          }}
+        />
+      )}
 
-        {showWarning && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-yellow-100 border-2 border-yellow-300 p-4 rounded-lg shadow-lg text-center text-gray-700"
-          >
-
-          </motion.div>
-        )}
-      </div>
+      {/* MODAL FINAL */}
+      {showLevelComplete && (
+        <LevelCompleteModal
+          score={score}
+          total={totalPages * 10}
+          level={level}
+          isLastLevel={level >= 3}
+          onNextLevel={goToNextLevel}
+          onRestart={restartReading}
+          onExit={onBack}
+        />
+      )}
     </div>
   );
 }

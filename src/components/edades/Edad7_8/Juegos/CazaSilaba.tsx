@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Volume2, Star, RotateCcw, Trophy, ArrowRight } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 import { Button } from "../../../ui/button";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
+import { GameHeader } from "../../../others/GameHeader";
+import { ProgressBar } from "../../../others/ProgressBar";
 import { RewardAnimation } from "../../../others/RewardAnimation";
-import { AudioPlayer } from '../../../others/AudioPlayer';
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { StartScreenCazaSilaba } from "../IniciosJuegosLecturas/StartScreenCazaSilaba";
 import solImg from '../../../../assets/7_8/images/sol.png';
 import gatoImg from '../../../../assets/7_8/images/gato.png';
 import florImg from '../../../../assets/7_8/images/flor.png';
@@ -48,6 +52,7 @@ const gameData = {
 };
 
 export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
+  const [gameStarted, setGameStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showReward, setShowReward] = useState(false);
@@ -55,14 +60,13 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
   const [isCorrectDrop, setIsCorrectDrop] = useState<boolean | null>(null);
   const [completed, setCompleted] = useState<boolean[]>([]);
   const [currentLevel, setCurrentLevel] = useState(level);
+  const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
-  const [showMotivationalScore, setShowMotivationalScore] = useState(false);
-  const [currentProgress, setCurrentProgress] = useState(0); // Estado para progreso incremental
+  const [currentProgress, setCurrentProgress] = useState(0);
 
   const QUESTIONS_PER_LEVEL = 5;
   const data = gameData[currentLevel as keyof typeof gameData] || gameData[1];
 
-  // Only render if we have valid data and index
   if (!data || currentIndex >= data.length) {
     return null;
   }
@@ -70,15 +74,13 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
   const currentItem = data[currentIndex];
   const isPhrase = 'phrase' in currentItem;
 
-  // Calcular progreso
-  const baseProgress = (currentIndex / QUESTIONS_PER_LEVEL) * 100; // Progreso base por pregunta
-  const incrementPerCorrect = 100 / QUESTIONS_PER_LEVEL; // Incremento por respuesta correcta
-  const maxPageProgress = 100 / QUESTIONS_PER_LEVEL; // Máximo progreso por pregunta
+  const baseProgress = (currentIndex / QUESTIONS_PER_LEVEL) * 100;
+  const incrementPerCorrect = 100 / QUESTIONS_PER_LEVEL;
+  const maxPageProgress = 100 / QUESTIONS_PER_LEVEL;
 
-  // Actualizar progreso incremental
   const updateProgress = () => {
     const newProgress = baseProgress + (completed[currentIndex] ? incrementPerCorrect : 0);
-    setCurrentProgress(Math.min(newProgress, baseProgress + maxPageProgress)); // Limita al progreso máximo de la pregunta
+    setCurrentProgress(Math.min(newProgress, baseProgress + maxPageProgress));
   };
 
   const speakText = (text: string) => {
@@ -90,7 +92,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
     }
   };
 
-  const handleDrop = (syllable: string) => {
+  const handleDrop = () => {
     const isCorrect = draggedItem === currentItem.correct;
     setIsCorrectDrop(isCorrect);
     const newScore = isCorrect ? score + 1 : score;
@@ -98,9 +100,10 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
     const newCompleted = [...completed];
     newCompleted[currentIndex] = isCorrect;
     setCompleted(newCompleted);
+
     if (isCorrect) {
       setShowReward(true);
-      updateProgress(); // Actualiza el progreso al responder correctamente
+      updateProgress();
     }
 
     setTimeout(() => {
@@ -108,22 +111,21 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
       setDraggedItem(null);
       setIsCorrectDrop(null);
 
-      // Check if we completed 5 questions
       if (currentIndex + 1 >= QUESTIONS_PER_LEVEL) {
-        setShowMotivationalScore(true);
-        const passed = newScore >= 4;
-
+        setShowMotivational(true);
         setTimeout(() => {
-          setShowMotivationalScore(false);
+          setShowMotivational(false);
           setShowLevelComplete(true);
+          const finalScore = score + (isCorrect ? 1 : 0);
+          const passed = finalScore >= 4;
+
           onFinishLevel(currentLevel, passed);
         }, 3000);
       } else {
-        // Continue to next question
         setCurrentIndex(currentIndex + 1);
-        setCurrentProgress(((currentIndex + 1) / QUESTIONS_PER_LEVEL) * 100); // Reinicia progreso a la nueva pregunta
+        setCurrentProgress(((currentIndex + 1) / QUESTIONS_PER_LEVEL) * 100);
       }
-    }, isCorrect ? 2000 : 1000); // Menor retraso para incorrectas
+    }, isCorrect ? 2000 : 1000);
   };
 
   const handleRestart = () => {
@@ -133,8 +135,8 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
     setDraggedItem(null);
     setIsCorrectDrop(null);
     setShowLevelComplete(false);
-    setShowMotivationalScore(false);
-    setCurrentProgress(0); // Reinicia el progreso
+    setShowMotivational(false);
+    setCurrentProgress(0);
   };
 
   const handleNextLevel = () => {
@@ -146,88 +148,53 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
       setDraggedItem(null);
       setIsCorrectDrop(null);
       setShowLevelComplete(false);
-      setShowMotivationalScore(false);
-      setCurrentProgress(0); // Reinicia el progreso al nuevo nivel
+      setShowMotivational(false);
+      setCurrentProgress(0);
       onFinishLevel(currentLevel, true);
     }
   };
 
-  const getMotivationalMessage = () => {
-    const percentage = (score / QUESTIONS_PER_LEVEL) * 100;
-    if (percentage === 100) return "¡Perfecto! ¡Eres increíble! 🌟";
-    if (percentage >= 80) return "¡Excelente trabajo! ¡Casi perfecto! 🎉";
-    if (percentage >= 60) return "¡Muy bien! ¡Sigue así! 👏";
-    return "¡Buen intento! ¡Puedes hacerlo mejor! 💪";
-  };
+  if (!gameStarted) {
+    return <StartScreenCazaSilaba onStart={() => setGameStarted(true)} onBack={onBack} />;
+  }
 
   return (
-    <div 
+    <div
       className="min-h-screen p-6"
       style={{
         background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
       }}
     >
       <RewardAnimation type="star" show={showReward} />
-      
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="bg-black/80 backdrop-blur-sm"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver
-        </Button>
-        
-        <div className="text-center">
-          <h1 className="text-2xl text-white mb-2 dyslexia-friendly text-black">
-            🔍 Caza la Sílaba - Nivel {currentLevel}
-          </h1>
-          <div className="flex items-center gap-2 text-black">
-            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-            <span>Puntos: {score}</span>
-          </div>
-        </div>
-        
-        <Button
-          onClick={handleRestart}
-          variant="outline"
-          className="bg-black/80 backdrop-blur-sm"
-        >
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reiniciar
-        </Button>
-      </div>
+
+      {/* GameHeader */}
+      <GameHeader
+        title="Caza la Sílaba"
+        level={currentLevel}
+        score={score}
+        onBack={onBack}
+        onRestart={handleRestart}
+      />
 
       {/* Progress Bar */}
-      <div className="max-w-md mx-auto mb-6">
-        <div className="h-4 bg-white/30 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${currentProgress > 100 ? 100 : currentProgress}%` }}
-            transition={{ duration: 0.3 }}
-            className="h-full bg-gradient-to-r from-yellow-400 to-green-500 rounded-full"
-          />
-        </div>
-        <div className="text-center text-black mt-2">
-          Progreso: {currentProgress.toFixed(1)}% ({currentIndex + 1} de {QUESTIONS_PER_LEVEL})
-        </div>
-      </div>
+      <ProgressBar
+        current={currentIndex + 1}
+        total={QUESTIONS_PER_LEVEL}
+        progress={currentProgress}  
+      />
 
       {/* Animal Guide */}
       <div className="max-w-2xl mx-auto mb-8">
         <AnimalGuide
-          animal="owl"
+          animal="turtle"
           message={`${isPhrase ? 'Completa la frase' : 'Arrastra la sílaba correcta'} para la ${isPhrase ? 'palabra que falta' : 'imagen'}. ¡Tú puedes!`}
         />
       </div>
 
-      {/* Game Area */}
-      {!showLevelComplete && !showMotivationalScore && currentIndex < QUESTIONS_PER_LEVEL && (
-        <div className="max-w-4xl mx-auto">
+      {/* Area de juego */}
+      {!showLevelComplete && !showMotivational && currentIndex < QUESTIONS_PER_LEVEL && (
+        <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Left Side - Image/Phrase */}
             <motion.div
               key={currentIndex}
               initial={{ x: -50, opacity: 0 }}
@@ -244,12 +211,12 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                       <div className="text-2xl mb-6 p-4 bg-blue-50 rounded-lg">
                         {(currentItem as any).phrase}
                       </div>
-                      <Button 
+                      <Button
                         variant="outline"
-                        className="mb-4"
+                        className="mb-4 bg-blue-500 text-black"
                         onClick={() => speakText((currentItem as any).fullPhrase)}
                       >
-                        <Volume2 className="w-4 h-4 mr-2" />
+                        <Volume2 className="w-4 h-4 mr-2 text-black" />
                         Escuchar frase completa
                       </Button>
                     </div>
@@ -264,11 +231,12 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                       <h3 className="text-xl text-gray-700 mb-4">
                         {(currentItem as any).word}
                       </h3>
-                      <Button 
+                      <Button
                         variant="outline"
+                        className='text-black bg-blue-500'
                         onClick={() => speakText((currentItem as any).word)}
                       >
-                        <Volume2 className="w-4 h-4 mr-2" />
+                        <Volume2 className="w-4 h-4 mr-2 text-black" />
                         Escuchar palabra
                       </Button>
                     </div>
@@ -277,7 +245,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
               </Card>
             </motion.div>
 
-            {/* Right Side - Syllables/Options */}
+            {/* Opciones silabas */}
             <motion.div
               key={`options-${currentIndex}`}
               initial={{ x: 50, opacity: 0 }}
@@ -289,31 +257,27 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                   <h3 className="text-xl text-center mb-6 text-gray-700">
                     {isPhrase ? 'Elige la sílaba correcta:' : 'Arrastra la sílaba que corresponde:'}
                   </h3>
-                  
-                  {/* Drop Zone */}
-                  <div 
-                    className={`w-full h-20 border-4 border-dashed rounded-lg mb-6 flex items-center justify-center transition-all ${
-                      draggedItem
-                        ? isCorrectDrop === true
-                          ? 'border-green-400 bg-green-50'
-                          : isCorrectDrop === false
+                  <div
+                    className={`w-full h-20 border-4 border-dashed rounded-lg mb-6 flex items-center justify-center transition-all ${draggedItem
+                      ? isCorrectDrop === true
+                        ? 'border-green-400 bg-green-50'
+                        : isCorrectDrop === false
                           ? 'border-red-400 bg-red-50'
                           : 'border-blue-400 bg-blue-50'
-                        : 'border-gray-300 bg-gray-50'
-                    }`}
+                      : 'border-gray-300 bg-gray-50'
+                      }`}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => {
                       e.preventDefault();
                       if (draggedItem) {
-                        handleDrop(draggedItem);
+                        handleDrop();
                       }
                     }}
                   >
                     {draggedItem ? (
                       <span
-                        className={`text-2xl font-bold ${
-                          isCorrectDrop === true ? 'text-green-600' : isCorrectDrop === false ? 'text-red-600' : 'text-gray-600'
-                        }`}
+                        className={`text-2xl font-bold ${isCorrectDrop === true ? 'text-green-600' : isCorrectDrop === false ? 'text-red-600' : 'text-gray-600'
+                          }`}
                       >
                         {draggedItem}
                       </span>
@@ -322,7 +286,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                     )}
                   </div>
 
-                  {/* Syllable Options */}
+                  {/* Silabas */}
                   <div className="grid grid-cols-3 gap-4">
                     {(isPhrase ? (currentItem as any).options : (currentItem as any).syllables).map((syllable: string, index: number) => (
                       <motion.div
@@ -336,7 +300,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                         <div
                           draggable
                           onDragStart={() => setDraggedItem(syllable)}
-                          onDragEnd={() => {}}
+                          onDragEnd={() => { }}
                           className="cursor-grab active:cursor-grabbing p-4 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-lg text-center font-bold text-xl shadow-lg hover:shadow-xl transition-all"
                         >
                           {syllable}
@@ -350,79 +314,29 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
           </div>
         </div>
       )}
-
-      {/* Motivational Score Message */}
-      {showMotivationalScore && (
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black/50"
-        >
-          <Card className="bg-white/95 backdrop-blur-sm max-w-md mx-auto">
-            <CardContent className="p-8 text-center">
-              <div className="text-6xl mb-4">🌟</div>
-              <h2 className="text-2xl mb-4 text-gray-800">¡Nivel Completado!</h2>
-              <p className="text-lg mb-4 text-purple-600">
-                {getMotivationalMessage()}
-              </p>
-              <p className="text-gray-600 mb-4">
-                Respondiste {score} de {QUESTIONS_PER_LEVEL} preguntas correctamente
-              </p>
-              <div className="flex items-center justify-center gap-2">
-                <Trophy className="w-5 h-5 text-yellow-500" />
-                <span className="font-semibold text-yellow-600">+{score * 10} XP ganados</span>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+      {/* Mensaje Motivacional */}
+      {showMotivational && (
+        <MotivationalMessage
+          score={score + (isCorrectDrop ? 1 : 0)}
+          total={QUESTIONS_PER_LEVEL}
+          onComplete={() => {
+            setShowMotivational(false);
+            setShowLevelComplete(true);
+          }}
+        />
       )}
 
-      {/* Level Complete Message */}
+      {/* Modal Final de Nivel */}
       {showLevelComplete && (
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black/50"
-        >
-          <Card className="bg-white/95 backdrop-blur-sm max-w-md mx-auto">
-            <CardContent className="p-8 text-center">
-              <div className="text-6xl mb-4">🎉</div>
-              <h2 className="text-2xl mb-4 text-gray-800">
-                {score >= 4 ? '¡Bien hecho!' : '¡Inténtalo de nuevo!'}
-              </h2>
-              <p className="text-gray-600 mb-4">
-                {score >= 4
-                  ? currentLevel >= 3
-                    ? `¡Has completado todos los niveles con ${score} puntos!`
-                    : `¡Has completado el nivel ${currentLevel}!`
-                  : `Respondiste ${score} de ${QUESTIONS_PER_LEVEL}. Necesitas 4 para pasar.`}
-              </p>
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <Trophy className="w-5 h-5 text-yellow-500" />
-                <span className="font-semibold text-yellow-600">+{score * 10} XP ganados</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                {score >= 4 && currentLevel < 3 && (
-                  <Button 
-                    onClick={handleNextLevel} 
-                    className="bg-green-500 hover:bg-green-600 w-full"
-                  >
-                    <ArrowRight className="w-4 h-4 mr-2" />
-                    Siguiente Nivel ({currentLevel + 1})
-                  </Button>
-                )}
-                <div className="flex gap-2">
-                  <Button onClick={handleRestart} className="bg-purple-500 hover:bg-purple-600 flex-1">
-                    {score >= 4 ? 'Repetir Nivel' : 'Intentar de nuevo'}
-                  </Button>
-                  <Button onClick={onBack} variant="outline" className="flex-1">
-                    Salir
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+        <LevelCompleteModal
+          score={score + (isCorrectDrop ? 1 : 0)}
+          total={QUESTIONS_PER_LEVEL}
+          level={currentLevel}
+          isLastLevel={currentLevel >= 3}
+          onNextLevel={handleNextLevel}
+          onRestart={handleRestart}
+          onExit={onBack}
+        />
       )}
     </div>
   );

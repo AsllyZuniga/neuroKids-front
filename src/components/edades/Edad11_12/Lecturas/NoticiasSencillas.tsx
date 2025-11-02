@@ -1,17 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, Newspaper, Volume2, Calendar, Eye, Share2, ThumbsUp } from 'lucide-react';
+import { Newspaper, Volume2, VolumeX, Calendar, Eye, Share2, ThumbsUp } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
 import { Progress } from '../../../ui/progress';
 import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
-import { AudioPlayer } from '../../../others/AudioPlayer';
+import { GameHeader } from '../../../others/GameHeader';
+import { ProgressBar } from '../../../others/ProgressBar';
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { StartScreenNoticiasSencillas } from '../IniciosJuegosLecturas/StartScreenNoticiasSencillas/StartScreenNoticiasSencillas';
+
 
 interface NoticiasSencillasProps {
   onBack: () => void;
-  level: number;
+  level?: number;
 }
 
 interface NewsArticle {
@@ -31,229 +36,266 @@ interface NewsArticle {
   }[];
 }
 
-export function NoticiasSencillas({ onBack, level }: NoticiasSencillasProps) {
-  const [currentNews, setCurrentNews] = useState(0);
-  const [score, setScore] = useState(0);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
-  const [showReward, setShowReward] = useState(false);
-  const [answered, setAnswered] = useState(false);
-  const [newsRead, setNewsRead] = useState(false);
-  const [showQuestions, setShowQuestions] = useState(false);
-
-
   const newsArticles: NewsArticle[] = [
-    {
-      id: 1,
-      title: "🐼 Nace un bebé panda en el zoológico",
-      summary: "Una mamá panda tuvo un bebé muy pequeñito en el zoológico de la ciudad.",
-      content: "Ayer por la mañana, la mamá panda Mei-Mei tuvo un bebé panda. El bebé es muy pequeño, como del tamaño de tu mano. Los veterinarios están muy contentos porque los bebés pandas son muy especiales. El bebé va a estar con su mamá por muchos meses antes de que la gente pueda visitarlo. Los pandas son animales muy tiernos que vienen de China.",
-      category: "Animales",
-      date: "Hoy",
-      likes: 247,
-      difficulty: 1,
-      image: "🐼",
-      questions: [
-        {
-          question: "¿Cómo se llama la mamá panda?",
-          options: ["Mei-Mei", "Lin-Lin", "Bao-Bao", "Chi-Chi"],
-          correct: 0
-        },
-        {
-          question: "¿Cuándo nació el bebé panda?",
-          options: ["Hace una semana", "Hoy", "Ayer por la mañana", "Anteayer"],
-          correct: 2
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: "🚀 Niños construyen cohete de cartón que vuela",
-      summary: "Estudiantes de una escuela hicieron un cohete con materiales reciclados.",
-      content: "Los niños de la escuela San Martín trabajaron todo el mes para construir un cohete especial. Usaron cajas de cartón, botellas plásticas y globos. Su maestra de ciencias, la señora Carmen, los ayudó con las instrucciones. Ayer probaron el cohete en el patio de la escuela. ¡El cohete voló 10 metros de alto! Todos los niños gritaron de alegría. Ahora quieren hacer uno más grande para la feria de ciencias.",
-      category: "Ciencia",
-      date: "Ayer",
-      likes: 189,
-      difficulty: 2,
-      image: "🚀",
-      questions: [
-        {
-          question: "¿Cómo se llama la escuela?",
-          options: ["San José", "San Martín", "Santa María", "San Pedro"],
-          correct: 1
-        },
-        {
-          question: "¿Qué tan alto voló el cohete?",
-          options: ["5 metros", "15 metros", "10 metros", "20 metros"],
-          correct: 2
-        }
-      ]
-    },
-    {
-      id: 3,
-      title: "🌍 Niña de 8 años ayuda a limpiar el planeta",
-      summary: "Una niña organiza campañas para cuidar el medio ambiente en su ciudad.",
-      content: "Sofía tiene 8 años y vive en México. Hace seis meses decidió ayudar a cuidar nuestro planeta. Cada sábado organiza jornadas de limpieza en el parque cerca de su casa. Ya ha conseguido que 50 familias participen. También creó un club en su escuela para enseñar a otros niños sobre el reciclaje. Su papá la ayuda a hacer carteles y su mamá prepara limonada para todos los voluntarios. Sofía dice que quiere ser científica para seguir cuidando la Tierra.",
-      category: "Medio Ambiente",
-      date: "Esta semana",
-      likes: 356,
-      difficulty: 3,
-      image: "🌍",
-      questions: [
-        {
-          question: "¿Cuántas familias participan ya en las jornadas?",
-          options: ["30", "40", "50", "60"],
-          correct: 2
-        },
-        {
-          question: "¿Qué quiere ser Sofía cuando sea grande?",
-          options: ["Maestra", "Doctora", "Científica", "Artista"],
-          correct: 2
-        }
-      ]
-    }
+    // === NIVEL 1 ===
+    { id: 1, title: "Nace un bebé panda", summary: "¡Un panda pequeñito llegó al mundo!", content: "Mei-Mei es una mamá panda. Ayer tuvo un bebé muy chiquito. El bebé es del tamaño de una mano. Los doctores del zoológico están felices. El bebé va a dormir con su mamá muchos días.", category: "Animales", date: "Hoy", likes: 247, difficulty: 1, image: "🐼", questions: [ { question: "¿Cómo se llama la mamá?", options: ["Mei-Mei", "Lola", "Pipo", "Tita"], correct: 0 }, { question: "¿Cuándo nació el bebé?", options: ["Ayer", "Mañana", "La semana pasada", "En un mes"], correct: 0 } ] },
+    { id: 2, title: "Fiesta de globos", summary: "¡Muchos globos de colores en el parque!", content: "El sábado hubo una fiesta. Niños y niñas trajeron globos rojos, azules y amarillos. Jugaron a reventarlos. Todos reían. Al final soltaron los globos al cielo. ¡Fue muy divertido!", category: "Diversión", date: "Sábado", likes: 189, difficulty: 1, image: "🎈", questions: [ { question: "¿Dónde fue la fiesta?", options: ["En la escuela", "En el parque", "En la playa", "En casa"], correct: 1 }, { question: "¿Qué hicieron al final?", options: ["Los guardaron", "Los soltaron", "Los pintaron", "Los comieron"], correct: 1 } ] },
+    { id: 3, title: "Manzana gigante", summary: "¡Una manzana más grande que una pelota!", content: "Don Pepe tiene un árbol. Dio una manzana gigante. Es más grande que una pelota. Los niños vinieron a verla. Cortaron la manzana y la compartieron. ¡Estaba muy dulce!", category: "Naturaleza", date: "Ayer", likes: 312, difficulty: 1, image: "🍎", questions: [ { question: "¿Cómo es la manzana?", options: ["Pequeña", "Gigante", "Amarga", "Verde"], correct: 1 }, { question: "¿Qué hicieron con ella?", options: ["La tiraron", "La compartieron", "La pintaron", "La guardaron"], correct: 1 } ] },
+    // === NIVEL 2 ===
+    { id: 4, title: "Cohete de cartón", summary: "¡Niños hicieron un cohete que vuela!", content: "Los niños de la escuela San Martín hicieron un cohete. Usaron cartón y botellas. Lo lanzaron en el patio. ¡Voló 10 metros! Todos gritaron de alegría. Quieren hacer uno más grande.", category: "Ciencia", date: "Ayer", likes: 189, difficulty: 2, image: "🚀", questions: [ { question: "¿Qué usaron para el cohete?", options: ["Madera", "Cartón", "Metal", "Vidrio"], correct: 1 }, { question: "¿Cuánto voló?", options: ["5 metros", "10 metros", "20 metros", "50 metros"], correct: 1 } ] },
+    { id: 5, title: "Dibujo ganador", summary: "¡Lucas ganó con un pulpo de colores!", content: "Hubo un concurso de dibujos. El tema era el mar. Lucas dibujó un pulpo con 8 brazos de colores. Ganó el primer lugar. Su premio fue un set de lápices. Todos aplaudieron.", category: "Arte", date: "Hace 3 días", likes: 278, difficulty: 2, image: "🎨", questions: [ { question: "¿Quién ganó?", options: ["Ana", "Lucas", "Pedro", "María"], correct: 1 }, { question: "¿Qué dibujó Lucas?", options: ["Un pez", "Un pulpo", "Un barco", "Una nube"], correct: 1 } ] },
+    { id: 6, title: "Bicicleteada", summary: "¡300 personas en bici por la ciudad!", content: "El domingo hubo una bicicleteada. Salieron del parque. Dieron una vuelta grande. Había niños y abuelos. Al final recibieron medallas y jugo. ¡Fue un día sano!", category: "Deporte", date: "Domingo", likes: 403, difficulty: 2, image: "🚲", questions: [ { question: "¿Cuántas personas fueron?", options: ["100", "200", "300", "400"], correct: 2 }, { question: "¿Qué recibieron al final?", options: ["Un libro", "Una medalla", "Una pelota", "Un helado"], correct: 1 } ] },
+    // === NIVEL 3 ===
+    { id: 7, title: "Sofía limpia el parque", summary: "¡Una niña cuida el planeta!", content: "Sofía tiene 8 años. Cada sábado limpia el parque. Ya van 50 familias. También enseña a reciclar en su escuela. Su papá hace carteles. Quiere ser científica cuando crezca.", category: "Medio Ambiente", date: "Esta semana", likes: 356, difficulty: 3, image: "🌎", questions: [ { question: "¿Cuántas familias ayudan?", options: ["20", "30", "50", "60"], correct: 2 }, { question: "¿Qué quiere ser Sofía?", options: ["Doctora", "Maestra", "Científica", "Artista"], correct: 2 } ] },
+    { id: 8, title: "Nueva estrella", summary: "¡Encontraron una estrella que baila!", content: "Los científicos vieron una estrella nueva. Parpadea como si bailara. La llaman 'Estrella Danza'. Está muy lejos. Usaron un telescopio grande. Los niños están emocionados.", category: "Ciencia", date: "Hace 2 días", likes: 512, difficulty: 3, image: "🔭", questions: [ { question: "¿Cómo se llama la estrella?", options: ["Estrella Luz", "Estrella Danza", "Estrella Sol", "Estrella Luna"], correct: 1 }, { question: "¿Qué usaron para verla?", options: ["Lupa", "Telescopio", "Cámara", "Ojo"], correct: 1 } ] },
+    { id: 9, title: "Robot recoge basura", summary: "¡Mateo inventó un robot limpiador!", content: "Mateo tiene 10 años. Hizo un robot con ruedas. Recoge latas y papeles. Lo probó en el parque. Recogió 5 kilos en una hora. Ganó un premio. Quiere mejorar su robot.", category: "Tecnología", date: "Ayer", likes: 689, difficulty: 3, image: "🤖", questions: [ { question: "¿Qué edad tiene Mateo?", options: ["8", "9", "10", "11"], correct: 2 }, { question: "¿Cuántos kilos recogió?", options: ["3", "4", "5", "6"], correct: 2 } ] }
   ];
 
-  const filteredNews = newsArticles.filter(news => news.difficulty <= level);
-  const currentArticle = filteredNews[currentNews];
+const MAX_LEVEL = 3;
+
+export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasSencillasProps) {
+    const [gameStarted, setGameStarted] = useState(false);
+  const [currentLevel, setCurrentLevel] = useState(initialLevel);
+  const [currentNews, setCurrentNews] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showResult, setShowResult] = useState(false);
+  const [answered, setAnswered] = useState(false);
+  const [showQuestions, setShowQuestions] = useState(false);
+  const [canAnswer, setCanAnswer] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showReward, setShowReward] = useState(false);
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+
+  const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
+
+ 
+  const prevInitialLevelRef = useRef(initialLevel);
+  useEffect(() => {
+    if (prevInitialLevelRef.current === initialLevel) return;
+    prevInitialLevelRef.current = initialLevel;
+    setCurrentLevel(initialLevel);
+    setCurrentNews(0);
+    setCurrentQuestion(0);
+    setScore(0);
+    setShowQuestions(false);
+    setCanAnswer(false);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setAnswered(false);
+    setShowMotivational(false);
+    setLevelComplete(false);
+    if (synth) synth.cancel();
+    setIsSpeaking(false);
+  }, [initialLevel]);
+
+  const filteredNews = newsArticles.filter(n => n.difficulty === currentLevel);
+  
+  if (filteredNews.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
+        <div className="text-center">
+          <p className="text-gray-600 text-xl mb-4">No hay noticias disponibles para este nivel.</p>
+          <Button onClick={onBack} variant="outline">Volver</Button>
+        </div>
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    if (filteredNews.length > 0 && currentNews >= filteredNews.length) {
+      setCurrentNews(0);
+    }
+  }, [filteredNews.length, currentNews]);
+
+  const safeCurrentNews = currentNews >= 0 && currentNews < filteredNews.length ? currentNews : 0;
+  const currentArticle = filteredNews[safeCurrentNews];
+  
+  if (!currentArticle) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
+        <div className="text-center">
+          <p className="text-gray-600 text-xl mb-4">Cargando artículo...</p>
+          <Button onClick={onBack} variant="outline">Volver</Button>
+        </div>
+      </div>
+    );
+  }
+  
+  const totalQuestions = currentArticle.questions.length;
+  const progress = (safeCurrentNews / filteredNews.length) * 100;
 
 
+  useEffect(() => {
+    if (!currentArticle || showQuestions) return;
+    
+    setCanAnswer(false);
 
-  const handleReadComplete = () => {
-    setNewsRead(true);
-    setShowQuestions(true);
+    const words = currentArticle.content.split(' ').length;
+    const readingTime = Math.max(8000, Math.ceil(words / 12) * 1000);
+
+    const timer = setTimeout(() => {
+      if (!isSpeaking) setCanAnswer(true);
+    }, readingTime);
+
+    return () => clearTimeout(timer);
+  }, [currentNews, isSpeaking, showQuestions, currentArticle]);
+
+
+  useEffect(() => {
+    setShowQuestions(false);
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setAnswered(false);
+    if (synth) synth.cancel();
+    setIsSpeaking(false);
+  }, [currentNews, synth]);
+
+  
+  const playSound = (type: 'correct' | 'wrong') => {
+    const audio = new Audio();
+    const ding = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZURE=';
+    const buzzer = 'data:audio/wav;base64,UklGRiQCAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQJCAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZURE=';
+    audio.src = type === 'correct' ? ding : buzzer;
+    audio.volume = 0.6;
+    audio.play().catch(() => {});
   };
 
-  const handleAnswerSelect = (answerIndex: number) => {
+  
+  const speak = (text: string) => {
+    if (!synth || isSpeaking) return;
+    synth.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    utterance.rate = 0.9;
+    utterance.pitch = 1.1;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => { setIsSpeaking(false); setCanAnswer(true); };
+    utterance.onerror = () => { setIsSpeaking(false); setCanAnswer(true); };
+    synth.speak(utterance);
+  };
+
+  const handleListen = () => {
+    const fullText = `${currentArticle.title}. ${currentArticle.summary}. ${currentArticle.content}`;
+    speak(fullText);
+  };
+
+  const handleAnswerSelect = (index: number) => {
     if (answered) return;
-    
-    setSelectedAnswer(answerIndex);
+    setSelectedAnswer(index);
     setAnswered(true);
-    
-    const isCorrect = answerIndex === currentArticle.questions[currentQuestion].correct;
-    
+    const isCorrect = index === currentArticle.questions[currentQuestion].correct;
+
     if (isCorrect) {
-      setScore(prev => prev + 10);
+      setScore(s => s + 10);
       setShowReward(true);
+      playSound('correct');
       setTimeout(() => setShowReward(false), 1500);
+    } else {
+      playSound('wrong');
     }
-    
+
     setTimeout(() => {
       setShowResult(true);
       setTimeout(() => {
-        if (currentQuestion < currentArticle.questions.length - 1) {
-          setCurrentQuestion(prev => prev + 1);
+        if (currentQuestion < totalQuestions - 1) {
+          setCurrentQuestion(q => q + 1);
           setSelectedAnswer(null);
           setShowResult(false);
           setAnswered(false);
         } else {
-          // Fin del artículo
-          setTimeout(() => {
-            if (currentNews < filteredNews.length - 1) {
-              setCurrentNews(prev => prev + 1);
-              setCurrentQuestion(0);
-              setSelectedAnswer(null);
-              setShowResult(false);
-              setAnswered(false);
-              setNewsRead(false);
-              setShowQuestions(false);
-            }
-          }, 2000);
+          if (currentNews < filteredNews.length - 1) {
+            setCurrentNews(n => n + 1);
+          } else {
+            setShowMotivational(true);
+          }
         }
       }, 1500);
     }, 1000);
   };
 
-  const handleLike = () => {
-    setScore(prev => prev + 5);
+  const restartLevel = () => {
+    setCurrentNews(0);
+    setCurrentQuestion(0);
+    setScore(0);
+    setShowQuestions(false);
+    setCanAnswer(false);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setAnswered(false);
+    setLevelComplete(false);
+    setShowMotivational(false);
+    if (synth) synth.cancel();
+    setIsSpeaking(false);
   };
 
-  const isLastNews = currentNews === filteredNews.length - 1;
-  const isLastQuestion = currentQuestion === currentArticle.questions.length - 1;
+  const loadNextLevel = () => {
+    if (currentLevel < MAX_LEVEL) {
+      setCurrentLevel(currentLevel + 1);
+      setCurrentNews(0);
+      setCurrentQuestion(0);
+      setScore(0);
+      setShowQuestions(false);
+      setCanAnswer(false);
+      setLevelComplete(false);
+    } else {
+      onBack();
+    }
+  };
+  if (!gameStarted) {
+    return <StartScreenNoticiasSencillas onStart={() => setGameStarted(true)} onBack={onBack} />;
+  }
+
+  const maxPoints = filteredNews.length * 20;
 
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {showReward && (
-          <RewardAnimation
-            type="star"
-            show={showReward}
-            message="¡Correcto!"
-            onComplete={() => setShowReward(false)}
-          />
-        )}
-      
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <Button 
-            onClick={onBack}
-            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Volver
-          </Button>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
-              <Star className="w-5 h-5 text-yellow-500" />
-              <span className="font-semibold">{score} puntos</span>
-            </div>
-            
-            <Badge variant="outline" className="bg-blue-100">
-              Noticia {currentNews + 1}/{filteredNews.length}
-            </Badge>
-          </div>
-        </div>
+      <div className="max-w-6xl mx-auto">
 
-        <div className="mb-6">
-          <AnimalGuide 
-            animal="monkey"
-            message="¡Hola reportero curioso! Lee las noticias importantes y responde las preguntas. ¡Mantente informado!"
-          />
-        </div>
+        <GameHeader
+          title={`Noticias Sencillas`}
+          level={currentLevel}
+          score={score}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Lista de noticias */}
+        <ProgressBar
+          current={currentNews + 1}
+          total={filteredNews.length}
+          progress={progress}
+        />
+
+        <AnimalGuide
+          animal="monkey"
+          message="¡Lee o escucha la noticia y responde las preguntas!"
+        />
+
+        <div className="grid md:grid-cols-3 gap-6 mt-6">
           <div className="md:col-span-1">
             <Card className="h-fit">
               <CardContent className="p-4">
-                <h3 className="flex items-center gap-2 mb-4">
-                  <Newspaper className="w-5 h-5 text-blue-600" />
-                  Noticias del Día
+                <h3 className="flex items-center gap-2 mb-4 text-black">
+                  <Newspaper className="w-5 h-5 text-blue-600" /> Noticias
                 </h3>
-                
                 <div className="space-y-3">
-                  {filteredNews.map((news, index) => (
+                  {filteredNews.map((news, i) => (
                     <motion.div
                       key={news.id}
-                      className={`p-3 rounded-lg cursor-pointer transition-all ${
-                        index === currentNews 
-                          ? 'bg-blue-100 border-2 border-blue-300' 
-                          : 'bg-gray-50 hover:bg-gray-100'
-                      }`}
-                      onClick={() => {
-                        setCurrentNews(index);
-                        setCurrentQuestion(0);
-                        setSelectedAnswer(null);
-                        setShowResult(false);
-                        setAnswered(false);
-                        setNewsRead(false);
-                        setShowQuestions(false);
-                      }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      className={`p-3 rounded-lg cursor-pointer transition-all ${i === currentNews ? 'bg-blue-100 border-2 border-blue-300' : 'bg-gray-50 hover:bg-gray-100'}`}
+                      onClick={() => setCurrentNews(i)}
+                      whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                     >
                       <div className="flex items-start gap-2">
                         <span className="text-2xl">{news.image}</span>
                         <div className="flex-1">
-                          <p className="text-sm font-medium line-clamp-2">
-                            {news.title}
-                          </p>
+                          <p className="text-sm font-medium text-black line-clamp-2">{news.title}</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="secondary" className="text-xs">
-                              {news.category}
-                            </Badge>
-                            <span className="text-xs text-gray-500">{news.date}</span>
+                            <Badge variant="secondary" className="text-xs text-black">{news.category}</Badge>
+                            <span className="text-xs text-gray-600">{news.date}</span>
                           </div>
                         </div>
                       </div>
@@ -264,140 +306,105 @@ export function NoticiasSencillas({ onBack, level }: NoticiasSencillasProps) {
             </Card>
           </div>
 
-          {/* Artículo principal */}
+    
           <div className="md:col-span-2">
             <Card className="h-fit">
               <CardContent className="p-6">
                 {!showQuestions ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="space-y-4"
-                  >
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <Badge className="bg-blue-100 text-blue-700">
-                        {currentArticle.category}
-                      </Badge>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <Calendar className="w-4 h-4" />
-                        {currentArticle.date}
+                      <Badge className="bg-blue-100 text-blue-700">{currentArticle.category}</Badge>
+                      <div className="flex items-center gap-2 text-sm text-black">
+                        <Calendar className="w-4 h-4" /> {currentArticle.date}
                       </div>
                     </div>
 
-                    <h1 className="text-2xl font-bold text-gray-800">
-                      {currentArticle.title}
-                    </h1>
+                    <h1 className="text-2xl font-bold text-black">{currentArticle.title}</h1>
 
                     <div className="flex items-center gap-4 py-2">
-                      <AudioPlayer 
-                        text={currentArticle.content}
-                        autoPlay={false}
-                      />
-                      <div className="flex items-center gap-2">
+                      <Button
+                        onClick={handleListen}
+                        disabled={isSpeaking}
+                        className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white"
+                      >
+                        {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                        {isSpeaking ? "Escuchando..." : "Escuchar"}
+                      </Button>
+                      <div className="flex items-center gap-2 text-black">
                         <Eye className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm text-gray-500">124 lecturas</span>
+                        <span className="text-sm">124 lecturas</span>
                       </div>
                     </div>
 
-                    <div className="text-lg leading-relaxed text-gray-700 space-y-4">
-                      <p className="font-medium text-blue-700 bg-blue-50 p-3 rounded-lg">
-                        {currentArticle.summary}
-                      </p>
-                      <p className="dyslexia-friendly">
-                        {currentArticle.content}
-                      </p>
+                    <div className="text-lg leading-relaxed text-black space-y-4">
+                      <p className="font-medium text-blue-700 bg-blue-50 p-3 rounded-lg">{currentArticle.summary}</p>
+                      <div className="max-h-96 overflow-y-auto p-4 bg-white rounded-lg border">
+                        <p className="text-base">{currentArticle.content}</p>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-4 pt-4 border-t">
-                      <Button
-                        onClick={handleLike}
-                        variant="outline"
-                        className="flex items-center gap-2"
-                      >
-                        <ThumbsUp className="w-4 h-4" />
-                        Me gusta ({currentArticle.likes})
+                      <Button variant="outline" className="flex items-center gap-2 text-black border-gray-300">
+                        <ThumbsUp className="w-4 h-4" /> Me gusta ({currentArticle.likes})
                       </Button>
-                      
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                      >
-                        <Share2 className="w-4 h-4" />
-                        Compartir
+                      <Button variant="outline" className="flex items-center gap-2 text-black border-gray-300">
+                        <Share2 className="w-4 h-4" /> Compartir
                       </Button>
                     </div>
 
-                    <div className="pt-4">
-                      <Button 
-                        onClick={handleReadComplete}
-                        className="w-full bg-green-500 hover:bg-green-600 text-white"
-                        disabled={!newsRead && false}
-                      >
-                        ¡Terminé de leer! Responder preguntas
-                      </Button>
-                    </div>
+                    <Button
+                      onClick={() => setShowQuestions(true)}
+                      disabled={!canAnswer}
+                      className="w-full bg-green-500 hover:bg-green-600 text-white"
+                    >
+                      {canAnswer ? "¡Responder preguntas!" : "Espera un momento..."}
+                    </Button>
                   </motion.div>
                 ) : (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
-                  >
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
                     <div className="text-center">
-                      <h2 className="text-xl font-bold text-blue-700 mb-2">
-                        Pregunta {currentQuestion + 1} de {currentArticle.questions.length}
-                      </h2>
-                      <Progress 
-                        value={((currentQuestion + 1) / currentArticle.questions.length) * 100} 
-                        className="w-full max-w-md mx-auto"
-                      />
+                      <h2 className="text-xl font-bold text-black mb-2">Pregunta {currentQuestion + 1} de {totalQuestions}</h2>
+                      <Progress value={((currentQuestion + 1) / totalQuestions) * 100} className="w-full max-w-md mx-auto" />
                     </div>
 
                     <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
                       <CardContent className="p-6">
-                        <h3 className="text-lg font-semibold mb-4 text-center">
+                        <h3 className="text-lg font-semibold mb-4 text-center text-black">
                           {currentArticle.questions[currentQuestion].question}
                         </h3>
-                        
                         <div className="grid gap-3">
-                          {currentArticle.questions[currentQuestion].options.map((option, index) => (
+                          {currentArticle.questions[currentQuestion].options.map((opt, i) => (
                             <motion.button
-                              key={index}
-                              onClick={() => handleAnswerSelect(index)}
+                              key={i}
+                              onClick={() => handleAnswerSelect(i)}
                               disabled={answered}
-                              className={`p-4 rounded-lg text-left transition-all border-2 ${
-                                selectedAnswer === index
+                              className={`p-4 rounded-lg text-left transition-all border-2 text-black ${
+                                selectedAnswer === i
                                   ? selectedAnswer === currentArticle.questions[currentQuestion].correct
-                                    ? 'bg-green-100 border-green-300 text-green-800'
-                                    : 'bg-red-100 border-red-300 text-red-800'
-                                  : showResult && index === currentArticle.questions[currentQuestion].correct
-                                    ? 'bg-green-100 border-green-300 text-green-800'
+                                    ? 'bg-green-100 border-green-300'
+                                    : 'bg-red-100 border-red-300'
+                                  : showResult && i === currentArticle.questions[currentQuestion].correct
+                                    ? 'bg-green-100 border-green-300'
                                     : 'bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50'
                               }`}
                               whileHover={!answered ? { scale: 1.02 } : {}}
                               whileTap={!answered ? { scale: 0.98 } : {}}
                             >
-                              <span className="font-medium">
-                                {String.fromCharCode(65 + index)}. {option}
-                              </span>
+                              <span className="font-medium">{String.fromCharCode(65 + i)}. {opt}</span>
                             </motion.button>
                           ))}
                         </div>
 
                         {showResult && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mt-4 text-center"
-                          >
+                          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 text-center">
                             {selectedAnswer === currentArticle.questions[currentQuestion].correct ? (
                               <div className="text-green-600">
-                                <div className="text-4xl mb-2">🎉</div>
-                                <p className="font-semibold">¡Correcto! +10 puntos</p>
+                                <div className="text-4xl mb-2">Correcto</div>
+                                <p className="font-semibold">¡Muy bien! +10 puntos</p>
                               </div>
                             ) : (
-                              <div className="text-orange-600">
-                                <div className="text-4xl mb-2">📚</div>
+                              <div className="text-red-600">
+                                <div className="text-4xl mb-2">Incorrecto</div>
                                 <p className="font-semibold">¡Inténtalo de nuevo!</p>
                               </div>
                             )}
@@ -405,35 +412,44 @@ export function NoticiasSencillas({ onBack, level }: NoticiasSencillasProps) {
                         )}
                       </CardContent>
                     </Card>
-
-                    {showResult && isLastQuestion && isLastNews && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="text-center bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg border-2 border-green-300"
-                      >
-                        <div className="text-6xl mb-4">📰</div>
-                        <h3 className="text-xl font-bold text-green-700 mb-2">
-                          ¡Excelente trabajo, reportero!
-                        </h3>
-                        <p className="text-green-600 mb-4">
-                          Has leído todas las noticias y respondido las preguntas.
-                          Puntuación final: {score} puntos
-                        </p>
-                        <Button 
-                          onClick={onBack}
-                          className="bg-green-500 hover:bg-green-600 text-white"
-                        >
-                          ¡Continuar aprendiendo!
-                        </Button>
-                      </motion.div>
-                    )}
                   </motion.div>
                 )}
               </CardContent>
             </Card>
           </div>
         </div>
+
+        <RewardAnimation
+          type="star"
+          show={showReward}
+          message="¡Correcto!"
+          onComplete={() => setShowReward(false)}
+        />
+
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={maxPoints}
+            customMessage="¡Has leído todas las noticias del nivel!"
+            customSubtitle="Completaste todas las lecturas y preguntas"
+            onComplete={() => {
+              setShowMotivational(false);
+              setLevelComplete(true);
+            }}
+          />
+        )}
+
+        {levelComplete && !showMotivational && (
+          <LevelCompleteModal
+            score={score}
+            total={maxPoints}
+            level={currentLevel}
+            isLastLevel={currentLevel >= MAX_LEVEL}
+            onNextLevel={loadNextLevel}
+            onRestart={restartLevel}
+            onExit={onBack}
+          />
+        )}
       </div>
     </div>
   );

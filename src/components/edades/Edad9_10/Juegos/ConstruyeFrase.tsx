@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, Wrench, CheckCircle, RotateCcw, Lightbulb } from 'lucide-react';
+import { Wrench, CheckCircle, RotateCcw, Lightbulb } from 'lucide-react';
 import { Button } from "../../../ui/button";
 import { Card, CardContent } from "../../../ui/card";
-import { Progress } from '../../../ui/progress';
 import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from "../../../others/RewardAnimation";
-import { AudioPlayer } from '../../../others/AudioPlayer';
+import { GameHeader } from "../../../others/GameHeader";
+import { ProgressBar } from "../../../others/ProgressBar";
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
+import { StartScreenConstruyeFrase } from "../IniciosJuegosLecturas/StartScreenConstruyeFrase/StartScreenConstruyeFrase";
 
 interface ConstruyeFraseProps {
   onBack: () => void;
@@ -21,83 +25,108 @@ interface SentenceChallenge {
   words: string[];
   hint: string;
   image: string;
-  difficulty: number;
 }
 
-const challenges: SentenceChallenge[] = [
+interface Level {
+  level: number;
+  challenges: SentenceChallenge[];
+}
+
+const levels: Level[] = [
   {
-    id: 1,
-    theme: "Animales",
-    correctSentence: "El gato negro duerme en el sofá cómodo",
-    words: ["El", "gato", "negro", "duerme", "en", "el", "sofá", "cómodo"],
-    hint: "¿Dónde duerme el gato negro?",
-    image: "🐱",
-    difficulty: 1
+    level: 1,
+    challenges: [
+      {
+        id: 1,
+        theme: "Animales",
+        correctSentence: "El gato negro duerme en el sofá cómodo",
+        words: ["El", "gato", "negro", "duerme", "en", "el", "sofá", "cómodo"],
+        hint: "¿Dónde duerme el gato negro?",
+        image: "🐱",
+      },
+      {
+        id: 2,
+        theme: "Naturaleza",
+        correctSentence: "Las flores coloridas crecen en el jardín hermoso",
+        words: ["Las", "flores", "coloridas", "crecen", "en", "el", "jardín", "hermoso"],
+        hint: "¿Dónde crecen las flores coloridas?",
+        image: "🌸",
+      },
+    ],
   },
   {
-    id: 2,
-    theme: "Naturaleza",
-    correctSentence: "Las flores coloridas crecen en el jardín hermoso",
-    words: ["Las", "flores", "coloridas", "crecen", "en", "el", "jardín", "hermoso"],
-    hint: "¿Dónde crecen las flores coloridas?",
-    image: "🌸",
-    difficulty: 1
+    level: 2,
+    challenges: [
+      {
+        id: 3,
+        theme: "Familia",
+        correctSentence: "Mi abuela cocina deliciosos pasteles todos los domingos",
+        words: ["Mi", "abuela", "cocina", "deliciosos", "pasteles", "todos", "los", "domingos"],
+        hint: "¿Qué hace mi abuela los domingos?",
+        image: "👵",
+      },
+      {
+        id: 4,
+        theme: "Deportes",
+        correctSentence: "Los niños juegan fútbol con mucha energía y alegría",
+        words: ["Los", "niños", "juegan", "fútbol", "con", "mucha", "energía", "y", "alegría"],
+        hint: "¿Cómo juegan fútbol los niños?",
+        image: "⚽",
+      },
+    ],
   },
   {
-    id: 3,
-    theme: "Familia",
-    correctSentence: "Mi abuela cocina deliciosos pasteles todos los domingos",
-    words: ["Mi", "abuela", "cocina", "deliciosos", "pasteles", "todos", "los", "domingos"],
-    hint: "¿Qué hace mi abuela los domingos?",
-    image: "👵",
-    difficulty: 2
+    level: 3,
+    challenges: [
+      {
+        id: 5,
+        theme: "Aventura",
+        correctSentence: "El valiente explorador descubrió tesoros antiguos en la cueva misteriosa",
+        words: ["El", "valiente", "explorador", "descubrió", "tesoros", "antiguos", "en", "la", "cueva", "misteriosa"],
+        hint: "¿Qué descubrió el explorador en la cueva?",
+        image: "🗺️",
+      },
+      {
+        id: 6,
+        theme: "Ciencia",
+        correctSentence: "Los científicos estudian planetas lejanos con telescopios muy potentes",
+        words: ["Los", "científicos", "estudian", "planetas", "lejanos", "con", "telescopios", "muy", "potentes"],
+        hint: "¿Cómo estudian los científicos los planetas lejanos?",
+        image: "🔬",
+      },
+    ],
   },
-  {
-    id: 4,
-    theme: "Deportes",
-    correctSentence: "Los niños juegan fútbol con mucha energía y alegría",
-    words: ["Los", "niños", "juegan", "fútbol", "con", "mucha", "energía", "y", "alegría"],
-    hint: "¿Cómo juegan fútbol los niños?",
-    image: "⚽",
-    difficulty: 2
-  },
-  {
-    id: 5,
-    theme: "Aventura",
-    correctSentence: "El valiente explorador descubrió tesoros antiguos en la cueva misteriosa",
-    words: ["El", "valiente", "explorador", "descubrió", "tesoros", "antiguos", "en", "la", "cueva", "misteriosa"],
-    hint: "¿Qué descubrió el explorador en la cueva?",
-    image: "🗺️",
-    difficulty: 3
-  },
-  {
-    id: 6,
-    theme: "Ciencia",
-    correctSentence: "Los científicos estudian planetas lejanos con telescopios muy potentes",
-    words: ["Los", "científicos", "estudian", "planetas", "lejanos", "con", "telescopios", "muy", "potentes"],
-    hint: "¿Cómo estudian los científicos los planetas lejanos?",
-    image: "🔬",
-    difficulty: 3
-  }
 ];
 
-export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
+export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFraseProps) {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [currentLevel, setCurrentLevel] = useState(initialLevel);
   const [currentChallenge, setCurrentChallenge] = useState(0);
   const [userSentence, setUserSentence] = useState<string[]>([]);
   const [availableWords, setAvailableWords] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [attempts, setAttempts] = useState(0);
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [showLevelCompleteModal, setShowLevelCompleteModal] = useState(false);
 
-  const challenge = challenges[currentChallenge];
-  const progress = ((currentChallenge + 1) / challenges.length) * 100;
+  const currentLevelData = levels.find(l => l.level === currentLevel);
+  const challenges = currentLevelData?.challenges || [];
+  const challenge = challenges[currentChallenge] || {};
+  const totalChallenges = challenges.length;
+  const progress = totalChallenges > 0 ? (currentChallenge / totalChallenges) * 100 : 0;
 
   useEffect(() => {
+    if (!currentLevelData || challenges.length === 0) {
+      onBack();
+      return;
+    }
     resetChallenge();
-  }, [currentChallenge]);
+  }, [currentChallenge, currentLevel]);
 
   const resetChallenge = () => {
     const shuffledWords = [...challenge.words].sort(() => Math.random() - 0.5);
@@ -110,14 +139,12 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
 
   const addWordToSentence = (word: string, wordIndex: number) => {
     if (showResult) return;
-    
     setUserSentence([...userSentence, word]);
     setAvailableWords(availableWords.filter((_, index) => index !== wordIndex));
   };
 
   const removeWordFromSentence = (wordIndex: number) => {
     if (showResult) return;
-    
     const word = userSentence[wordIndex];
     setAvailableWords([...availableWords, word]);
     setUserSentence(userSentence.filter((_, index) => index !== wordIndex));
@@ -127,133 +154,89 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
     setAttempts(attempts + 1);
     const userSentenceText = userSentence.join(' ');
     const isCorrect = userSentenceText === challenge.correctSentence;
-    
+
     setShowResult(true);
-    
+
     if (isCorrect) {
-      const baseScore = challenge.difficulty * 20;
+      const baseScore = currentLevel * 20;
       const attemptBonus = Math.max(10 - attempts * 2, 0);
       const hintPenalty = showHint ? -5 : 0;
       const totalScore = baseScore + attemptBonus + hintPenalty;
-      
-      setScore(score + Math.max(totalScore, 5));
+
+      setScore(prev => prev + Math.max(totalScore, 5));
       setShowReward(true);
-      
+
       setTimeout(() => {
         setShowReward(false);
         if (currentChallenge < challenges.length - 1) {
           setCurrentChallenge(currentChallenge + 1);
         } else {
-          setGameComplete(true);
+          if (currentLevel < levels.length) {
+            setLevelComplete(true);
+            setShowMotivational(true);
+          } else {
+            setGameComplete(true);
+            setShowMotivational(true);
+          }
         }
       }, 3000);
     } else {
-      setTimeout(() => {
-        setShowResult(false);
-      }, 2000);
+      setTimeout(() => setShowResult(false), 2000);
     }
   };
 
-  const restartGame = () => {
+  const restartLevel = () => {
     setCurrentChallenge(0);
     setScore(0);
+    setLevelComplete(false);
     setGameComplete(false);
     setShowReward(false);
+    setShowMotivational(false);
+    setShowLevelCompleteModal(false);
     resetChallenge();
   };
 
-  if (gameComplete) {
-    return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-orange-100 via-yellow-100 to-amber-100">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="mb-4 bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver al dashboard
-        </Button>
+  const nextLevel = () => {
+    if (currentLevel < levels.length) {
+      setCurrentLevel(currentLevel + 1);
+      setCurrentChallenge(0);
+      setScore(0);
+      setLevelComplete(false);
+      setShowReward(false);
+      setShowMotivational(false);
+      setShowLevelCompleteModal(false);
+      resetChallenge();
+    }
+  };
 
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="max-w-2xl mx-auto text-center"
-        >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200">
-            <CardContent className="p-8">
-              <div className="text-6xl mb-4">🔧</div>
-              
-              <h2 className="text-3xl mb-4 text-gray-800">
-                ¡Constructor de Frases Maestro!
-              </h2>
-              
-              <div className="text-xl mb-6 text-gray-600">
-                Puntuación final: {score} puntos
-              </div>
-              
-              <div className="text-gray-600 mb-6">
-                ¡Has construido todas las frases correctamente! Tienes un gran dominio del lenguaje.
-              </div>
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={restartGame}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3"
-                >
-                  Construir más frases
-                </Button>
-                <Button
-                  onClick={onBack}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  Volver al dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    );
+  if (!gameStarted) {
+    return <StartScreenConstruyeFrase onStart={() => setGameStarted(true)} onBack={onBack} />;
   }
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-orange-100 via-yellow-100 to-amber-100">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            onClick={onBack}
-            variant="outline"
-            className="bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="text-2xl text-gray-800 dyslexia-friendly">
-              🔧 Construye la Frase
-            </h1>
-            <div className="flex items-center gap-2 justify-center mt-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-gray-600">Puntos: {score}</span>
-            </div>
-          </div>
-          
-          <div className="text-right">
-            <div className="text-sm text-gray-600">
-              Frase {currentChallenge + 1} de {challenges.length}
-            </div>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <ConfettiExplosion show={showReward} />
+        <RewardAnimation type="confetti" show={showReward} />
 
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <Progress value={progress} className="h-3 bg-white/50" />
-        </div>
+        {/* HEADER */}
+        <GameHeader
+          title="Construye la Frase"
+          level={currentLevel}
+          score={score}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
 
-        {/* Animal Guide */}
+        {/* BARRA DE PROGRESO */}
+        <ProgressBar
+          current={currentChallenge}
+          total={totalChallenges}
+          progress={progress}
+          className="mb-6"
+        />
+
+        {/* GUÍA DEL ANIMAL */}
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -266,7 +249,6 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Challenge Info */}
           <div className="lg:col-span-1">
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-yellow-200 mb-4">
               <CardContent className="p-6">
@@ -278,22 +260,13 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
                   <h3 className="text-lg text-gray-800">Desafío {currentChallenge + 1}</h3>
                 </div>
 
-                <div className="mb-4">
-                  <AudioPlayer
-                    text="Reproduciendo pista..."
-                    duration={1500}
-                  />
-                </div>
-
                 <div className="space-y-3">
                   <div className="text-sm text-gray-600">
-                    Dificultad: {Array.from({ length: challenge.difficulty }, (_, i) => '⭐').join('')}
+                    Dificultad: {Array.from({ length: currentLevel }, () => '⭐').join('')}
                   </div>
-                  
                   <div className="text-sm text-gray-600">
-                    Palabras: {challenge.words.length}
+                    Palabras: {challenge.words?.length || 0}
                   </div>
-                  
                   <div className="text-sm text-gray-600">
                     Intentos: {attempts}
                   </div>
@@ -302,7 +275,7 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
                 <Button
                   onClick={() => setShowHint(!showHint)}
                   variant="outline"
-                  className="w-full mt-4 bg-white/80"
+                  className="w-full mt-4 bg-purple-500"
                 >
                   <Lightbulb className="w-4 h-4 mr-2" />
                   {showHint ? 'Ocultar' : 'Ver'} Pista
@@ -323,23 +296,21 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
             <Button
               onClick={resetChallenge}
               variant="outline"
-              className="w-full bg-white/80 backdrop-blur-sm"
+              className="w-full bg-green-500 backdrop-blur-sm"
             >
               <RotateCcw className="w-4 h-4 mr-2" />
               Reiniciar
             </Button>
           </div>
 
-          {/* Construction Area */}
           <div className="lg:col-span-2">
-            {/* User Sentence */}
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 mb-6">
               <CardContent className="p-6">
                 <h3 className="text-lg mb-4 text-gray-800 flex items-center gap-2">
                   <Wrench className="w-5 h-5 text-orange-500" />
                   Tu frase construida:
                 </h3>
-                
+
                 <div className="min-h-[80px] p-4 bg-orange-50 rounded-lg border-2 border-orange-200 border-dashed">
                   {userSentence.length === 0 ? (
                     <div className="text-gray-500 text-center py-4">
@@ -366,12 +337,12 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
 
                 <div className="flex justify-between items-center mt-4">
                   <div className="text-sm text-gray-600">
-                    Palabras usadas: {userSentence.length} / {challenge.words.length}
+                    Palabras usadas: {userSentence.length} / {challenge.words?.length || 0}
                   </div>
-                  
+
                   <Button
                     onClick={checkSentence}
-                    disabled={userSentence.length !== challenge.words.length || showResult}
+                    disabled={userSentence.length !== (challenge.words?.length || 0) || showResult}
                     className="bg-green-500 hover:bg-green-600 text-white"
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
@@ -381,11 +352,11 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
               </CardContent>
             </Card>
 
-            {/* Available Words */}
+            {/* PALABRAS DISPONIBLES */}
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-amber-200">
               <CardContent className="p-6">
                 <h3 className="text-lg mb-4 text-gray-800">Palabras disponibles:</h3>
-                
+
                 <div className="flex flex-wrap gap-3">
                   {availableWords.map((word, index) => (
                     <motion.div
@@ -408,7 +379,7 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
               </CardContent>
             </Card>
 
-            {/* Result Display */}
+          
             {showResult && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -428,16 +399,14 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
                           <span className="text-green-800">¡Frase correcta!</span>
                         </>
                       ) : (
-                        <>
-                          <span className="text-red-800">Intenta de nuevo.</span>
-                        </>
+                        <span className="text-red-800">Intenta de nuevo.</span>
                       )}
                     </div>
-                    
+
                     <div className="text-sm text-gray-700">
                       <strong>Frase correcta:</strong> {challenge.correctSentence}
                     </div>
-                    
+
                     {userSentence.join(' ') !== challenge.correctSentence && (
                       <div className="text-sm text-gray-700 mt-1">
                         <strong>Tu frase:</strong> {userSentence.join(' ')}
@@ -449,17 +418,33 @@ export function ConstruyeFrase({ onBack, level }: ConstruyeFraseProps) {
             )}
           </div>
         </div>
-
-        {/* Reward Animation */}
-        {showReward && (
-          <RewardAnimation
-            type="confetti"
-            show={showReward}
-            message="¡Frase perfecta!"
-            onComplete={() => setShowReward(false)}
-          />
-        )}
       </div>
+
+      {/* MODALES */}
+      {showMotivational && (
+        <MotivationalMessage
+          score={score}
+          total={levels.reduce((acc, l) => acc + l.challenges.length, 0) * 30}
+          customMessage={gameComplete ? "¡Eres un arquitecto de palabras!" : "¡Nivel completado!"}
+          customSubtitle={gameComplete ? "Completaste todos los niveles con maestría" : "Construiste todas las frases con precisión"}
+          onComplete={() => {
+            setShowMotivational(false);
+            setShowLevelCompleteModal(true);
+          }}
+        />
+      )}
+
+      {showLevelCompleteModal && (
+        <LevelCompleteModal
+          score={score}
+          total={gameComplete ? levels.reduce((acc, l) => acc + l.challenges.length, 0) * 30 : challenges.length * 30}
+          level={currentLevel}
+          isLastLevel={currentLevel >= levels.length}
+          onNextLevel={nextLevel}
+          onRestart={restartLevel}
+          onExit={onBack}
+        />
+      )}
     </div>
   );
 }

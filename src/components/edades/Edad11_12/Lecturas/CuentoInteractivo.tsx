@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, BookOpen, Users, Brain, Heart } from 'lucide-react';
+import {BookOpen, Users, Brain, Volume2 } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
 import { Progress } from '../../../ui/progress';
@@ -8,6 +8,11 @@ import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
 import { AudioPlayer } from '../../../others/AudioPlayer';
+import { GameHeader } from '../../../others/GameHeader';
+import { ProgressBar } from '../../../others/ProgressBar';
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { StartScreenCuentoInteractivo } from '../IniciosJuegosLecturas/StartScreenCuentoInteractivo/StartScreenCuentoInteractivo';
 
 interface CuentoInteractivoProps {
   onBack: () => void;
@@ -52,27 +57,9 @@ const stories: InteractiveStory[] = [
         character: "Alex",
         emotion: "conflicted",
         choices: [
-          {
-            text: "Devolver inmediatamente la billetera a Sam",
-            consequence: "Alex se sintió bien consigo mismo y Sam le agradeció enormemente",
-            emotionalImpact: "positive",
-            nextSection: 2,
-            points: 20
-          },
-          {
-            text: "Quedarse con el dinero y devolver solo la billetera vacía",
-            consequence: "Alex se sintió culpable y Sam se puso muy triste",
-            emotionalImpact: "negative",
-            nextSection: 3,
-            points: 5
-          },
-          {
-            text: "Buscar a un maestro para entregar la billetera",
-            consequence: "El maestro elogió a Alex por su honestidad",
-            emotionalImpact: "positive",
-            nextSection: 4,
-            points: 15
-          }
+          { text: "Devolver inmediatamente la billetera a Sam", consequence: "Alex se sintió bien consigo mismo y Sam le agradeció enormemente", emotionalImpact: "positive", nextSection: 2, points: 20 },
+          { text: "Quedarse con el dinero y devolver solo la billetera vacía", consequence: "Alex se sintió culpable y Sam se puso muy triste", emotionalImpact: "negative", nextSection: 3, points: 5 },
+          { text: "Buscar a un maestro para entregar la billetera", consequence: "El maestro elogió a Alex por su honestidad", emotionalImpact: "positive", nextSection: 4, points: 15 }
         ],
         reflectionQuestion: "¿Qué harías tú en el lugar de Alex? ¿Por qué?"
       },
@@ -82,20 +69,8 @@ const stories: InteractiveStory[] = [
         character: "Sam",
         emotion: "grateful",
         choices: [
-          {
-            text: "Alex le cuenta a Sam sobre la tentación que sintió",
-            consequence: "Sam aprecia aún más la honestidad de Alex",
-            emotionalImpact: "positive",
-            nextSection: 5,
-            points: 25
-          },
-          {
-            text: "Alex no dice nada sobre la tentación",
-            consequence: "Alex se queda con sus sentimientos para sí mismo",
-            emotionalImpact: "neutral",
-            nextSection: 6,
-            points: 10
-          }
+          { text: "Alex le cuenta a Sam sobre la tentación que sintió", consequence: "Sam aprecia aún más la honestidad de Alex", emotionalImpact: "positive", nextSection: 5, points: 25 },
+          { text: "Alex no dice nada sobre la tentación", consequence: "Alex se queda con sus sentimientos para sí mismo", emotionalImpact: "neutral", nextSection: 6, points: 10 }
         ]
       },
       {
@@ -104,20 +79,8 @@ const stories: InteractiveStory[] = [
         character: "Sam",
         emotion: "sad",
         choices: [
-          {
-            text: "Alex confiesa lo que hizo",
-            consequence: "Sam se sintió herido pero apreció la honestidad tardía",
-            emotionalImpact: "neutral",
-            nextSection: 7,
-            points: 15
-          },
-          {
-            text: "Alex sigue mintiendo",
-            consequence: "Alex se sintió cada vez peor y la amistad se dañó",
-            emotionalImpact: "negative",
-            nextSection: 8,
-            points: 0
-          }
+          { text: "Alex confiesa lo que hizo", consequence: "Sam se sintió herido pero apreció la honestidad tardía", emotionalImpact: "neutral", nextSection: 7, points: 15 },
+          { text: "Alex sigue mintiendo", consequence: "Alex se sintió cada vez más solo", emotionalImpact: "negative", nextSection: 8, points: 0 }
         ]
       },
       {
@@ -126,13 +89,7 @@ const stories: InteractiveStory[] = [
         character: "Maestra Williams",
         emotion: "proud",
         choices: [
-          {
-            text: "Alex se siente motivado a seguir siendo honesto",
-            consequence: "Alex desarrolló una reputación de persona confiable",
-            emotionalImpact: "positive",
-            nextSection: 9,
-            points: 20
-          }
+          { text: "Alex se siente motivado a seguir siendo honesto", consequence: "Alex desarrolló una reputación de persona confiable", emotionalImpact: "positive", nextSection: 9, points: 20 }
         ]
       },
       {
@@ -141,14 +98,51 @@ const stories: InteractiveStory[] = [
         character: "Sam",
         emotion: "admiring",
         choices: [
-          {
-            text: "Alex y Sam hacen un pacto de honestidad mutua",
-            consequence: "Su amistad se volvió inquebrantable",
-            emotionalImpact: "positive",
-            nextSection: 10,
-            points: 30
-          }
+          { text: "Alex y Sam hacen un pacto de honestidad mutua", consequence: "Su amistad se volvió inquebrantable", emotionalImpact: "positive", nextSection: 10, points: 30 }
         ]
+      },
+      {
+        id: 6,
+        text: "Aunque Alex no mencionó la tentación, Sam seguía muy agradecido. Los dos amigos pasaron el resto del recreo jugando juntos, pero Alex guardó un pequeño secreto en su corazón.",
+        character: "Alex",
+        emotion: "thoughtful",
+        choices: [
+          { text: "Alex decide ser más abierto en el futuro", consequence: "Aprendió que compartir sentimientos fortalece la amistad", emotionalImpact: "positive", nextSection: 10, points: 15 }
+        ]
+      },
+      {
+        id: 7,
+        text: "Sam se quedó en silencio por un momento. 'Me duele que hayas hecho eso, pero gracias por decírmelo ahora', respondió. Con el tiempo, la amistad se recuperó gracias a la honestidad.",
+        character: "Sam",
+        emotion: "hurt",
+        choices: [
+          { text: "Sam y Alex hablan sobre cómo reconstruir la confianza", consequence: "Aprendieron que la honestidad repara errores", emotionalImpact: "positive", nextSection: 10, points: 20 }
+        ]
+      },
+      {
+        id: 8,
+        text: "Los días siguientes fueron incómodos. Sam evitaba a Alex, y Alex se sentía cada vez más solo. Finalmente, Alex entendió que una mentira pequeña puede causar un daño grande.",
+        character: "Alex",
+        emotion: "regretful",
+        choices: [
+          { text: "Alex decide confesar la verdad más tarde", consequence: "Aunque tardío, el arrepentimiento ayudó a sanar", emotionalImpact: "neutral", nextSection: 10, points: 10 }
+        ]
+      },
+      {
+        id: 9,
+        text: "Desde ese día, otros niños empezaron a confiar en Alex con sus secretos. Ser honesto una vez abrió la puerta a muchas oportunidades de amistad.",
+        character: "Alex",
+        emotion: "confident",
+        choices: [
+          { text: "Alex se convierte en un líder positivo en la clase", consequence: "Su ejemplo inspiró a otros", emotionalImpact: "positive", nextSection: 10, points: 25 }
+        ]
+      },
+      {
+        id: 10,
+        text: "Al final del día, Alex y Sam se sentaron juntos en el autobús. Habían aprendido que la verdadera amistad sobrevive a los errores cuando hay honestidad y perdón. Alex sonrió: valía más que cualquier libro.",
+        character: "Narrador",
+        emotion: "hopeful",
+        choices: []
       }
     ]
   },
@@ -164,27 +158,9 @@ const stories: InteractiveStory[] = [
         character: "Maya",
         emotion: "careless",
         choices: [
-          {
-            text: "Ir inmediatamente a la escuela a regar las plantas",
-            consequence: "Las plantas estuvieron bien y Maya se sintió responsable",
-            emotionalImpact: "positive",
-            nextSection: 2,
-            points: 20
-          },
-          {
-            text: "Decidir ir al día siguiente",
-            consequence: "Maya pospuso la responsabilidad",
-            emotionalImpact: "neutral",
-            nextSection: 3,
-            points: 10
-          },
-          {
-            text: "Olvidarse completamente de las plantas",
-            consequence: "Las plantas comenzaron a marchitarse",
-            emotionalImpact: "negative",
-            nextSection: 4,
-            points: 0
-          }
+          { text: "Ir inmediatamente a la escuela a regar las plantas", consequence: "Las plantas estuvieron bien y Maya se sintió responsable", emotionalImpact: "positive", nextSection: 2, points: 20 },
+          { text: "Decidir ir al día siguiente", consequence: "Maya pospuso la responsabilidad", emotionalImpact: "neutral", nextSection: 3, points: 10 },
+          { text: "Olvidarse completamente de las plantas", consequence: "Las plantas comenzaron a marchitarse", emotionalImpact: "negative", nextSection: 4, points: 0 }
         ],
         reflectionQuestion: "¿Cómo manejas tus responsabilidades cuando hay cosas más divertidas que hacer?"
       },
@@ -194,35 +170,244 @@ const stories: InteractiveStory[] = [
         character: "Maya",
         emotion: "responsible",
         choices: [
-          {
-            text: "Maya crea un horario fijo para cuidar las plantas",
-            consequence: "Las plantas florecieron espectacularmente",
-            emotionalImpact: "positive",
-            nextSection: 5,
-            points: 25
-          }
+          { text: "Maya crea un horario fijo para cuidar las plantas", consequence: "Las plantas florecieron espectacularmente", emotionalImpact: "positive", nextSection: 5, points: 25 },
+          { text: "Maya sigue yendo cuando se acuerda", consequence: "Algunas plantas sufrieron un poco", emotionalImpact: "neutral", nextSection: 6, points: 10 }
         ]
+      },
+      {
+        id: 3,
+        text: "Al día siguiente, Maya se dio cuenta de que había olvidado ir. Corrió a la escuela y vio que algunas hojas estaban un poco secas. 'Mañana sin falta', se prometió a sí misma.",
+        character: "Maya",
+        emotion: "worried",
+        choices: [
+          { text: "Maya va todos los días desde entonces", consequence: "Recuperó el control y las plantas se salvaron", emotionalImpact: "positive", nextSection: 5, points: 20 },
+          { text: "Maya sigue posponiendo", consequence: "El daño fue mayor", emotionalImpact: "negative", nextSection: 7, points: 5 }
+        ]
+      },
+      {
+        id: 4,
+        text: "Cuando Maya finalmente recordó, varias plantas estaban marchitas. El proyecto científico estaba en peligro. Se sintió terrible al ver el daño causado por su descuido.",
+        character: "Maya",
+        emotion: "guilty",
+        choices: [
+          { text: "Maya intenta salvar lo que pueda", consequence: "Algunas plantas sobrevivieron gracias a su esfuerzo", emotionalImpact: "neutral", nextSection: 8, points: 15 },
+          { text: "Maya se rinde y no hace nada", consequence: "El proyecto fracasó por completo", emotionalImpact: "negative", nextSection: 9, points: 0 }
+        ]
+      },
+      {
+        id: 5,
+        text: "Gracias al horario de Maya, todas las plantas crecieron fuertes y saludables. En la presentación del proyecto, la clase recibió el primer lugar. Maya se sintió orgullosa de su compromiso.",
+        character: "Maya",
+        emotion: "proud",
+        choices: [
+          { text: "Maya ofrece ayudar en futuros proyectos", consequence: "Se convirtió en una líder responsable", emotionalImpact: "positive", nextSection: 10, points: 30 }
+        ]
+      },
+      {
+        id: 6,
+        text: "Algunas plantas sufrieron por la inconsistencia de Maya, pero la mayoría sobrevivió. Aprendió que la responsabilidad requiere constancia, no solo buenas intenciones.",
+        character: "Maya",
+        emotion: "reflective",
+        choices: [
+          { text: "Maya mejora su organización", consequence: "Mejoró sus hábitos con el tiempo", emotionalImpact: "positive", nextSection: 10, points: 20 }
+        ]
+      },
+      {
+        id: 7,
+        text: "El daño fue irreversible para varias plantas. Maya se disculpó con la clase y prometió no volver a fallar en una responsabilidad.",
+        character: "Maya",
+        emotion: "remorseful",
+        choices: [
+          { text: "Maya se ofrece a replantar las perdidas", consequence: "Mostró compromiso real", emotionalImpact: "positive", nextSection: 10, points: 25 }
+        ]
+      },
+      {
+        id: 8,
+        text: "Maya trabajó duro regando, podando y cuidando las plantas sobrevivientes. Aunque no todas se salvaron, su esfuerzo fue reconocido por sus compañeros.",
+        character: "Maya",
+        emotion: "determined",
+        choices: [
+          { text: "La clase aprende sobre segundas oportunidades", consequence: "El proyecto tuvo un final agridulce pero valioso", emotionalImpact: "neutral", nextSection: 10, points: 15 }
+        ]
+      },
+      {
+        id: 9,
+        text: "El proyecto fracasó y la clase se sintió decepcionada. Maya entendió que las consecuencias de la irresponsabilidad afectan a todo un equipo.",
+        character: "Clase",
+        emotion: "disappointed",
+        choices: [
+          { text: "Maya promete cambiar y cumple", consequence: "Redimió su error en el futuro", emotionalImpact: "positive", nextSection: 10, points: 20 }
+        ]
+      },
+      {
+        id: 10,
+        text: "Al final de las vacaciones, Maya miró las plantas y reflexionó sobre su viaje. Había aprendido que la responsabilidad no es solo una tarea, sino un compromiso con los demás y consigo misma.",
+        character: "Narrador",
+        emotion: "wise",
+        choices: []
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "La Aventura de Carlos",
+    theme: "Coraje y Amabilidad",
+    moralLesson: "Ser valiente no significa no tener miedo, sino hacer lo correcto a pesar de él",
+    sections: [
+      {
+        id: 1,
+        text: "Carlos vio a un niño nuevo siendo acosado en el recreo. Nadie más parecía notarlo. Carlos sintió miedo de intervenir, pero sabía que era lo correcto.",
+        character: "Carlos",
+        emotion: "fearful",
+        choices: [
+          { text: "Intervenir y defender al niño", consequence: "Carlos hizo un nuevo amigo y se sintió valiente", emotionalImpact: "positive", nextSection: 2, points:20 },
+          { text: "Ignorar la situación", consequence: "Carlos se sintió mal después", emotionalImpact: "negative", nextSection: 3, points: 0 },
+          { text: "Buscar ayuda de un adulto primero", consequence: "Se resolvió de forma segura", emotionalImpact: "neutral", nextSection: 4, points: 15 }
+        ],
+        reflectionQuestion: "¿Has visto alguna vez una situación injusta? ¿Qué hiciste?"
+      },
+      {
+        id: 2,
+        text: "El niño nuevo, Tom, agradeció a Carlos. Juntos reportaron el acoso al maestro. Carlos aprendió que la amabilidad requiere coraje.",
+        character: "Tom",
+        emotion: "grateful",
+        choices: [
+          { text: "Carlos y Tom se hacen amigos inseparables", consequence: "Formaron un vínculo duradero", emotionalImpact: "positive", nextSection: 5, points: 25 },
+          { text: "Se ayudan mutuamente en clase", consequence: "Mejoraron juntos académicamente", emotionalImpact: "positive", nextSection: 6, points: 20 }
+        ]
+      },
+      {
+        id: 3,
+        text: "Más tarde, Carlos se arrepintió de no ayudar. Decidió que la próxima vez sería diferente. El remordimiento le pesaba en el corazón.",
+        character: "Carlos",
+        emotion: "regretful",
+        choices: [
+          { text: "Carlos habla con Tom al día siguiente", consequence: "Reparó su error con acción", emotionalImpact: "positive", nextSection: 7, points: 20 },
+          { text: "Carlos evita a Tom por vergüenza", consequence: "Perdió una oportunidad de amistad", emotionalImpact: "negative", nextSection: 8, points: 5 }
+        ]
+      },
+      {
+        id: 4,
+        text: "El maestro intervino rápidamente y detuvo el acoso. Carlos se sintió aliviado de haber actuado de forma inteligente.",
+        character: "Maestro",
+        emotion: "authoritative",
+        choices: [
+          { text: "Carlos recibe reconocimiento por su madurez", consequence: "Se convirtió en un ejemplo a seguir", emotionalImpact: "positive", nextSection: 9, points: 20 }
+        ]
+      },
+      {
+        id: 5,
+        text: "Carlos y Tom empezaron a almorzar juntos todos los días. Compartían risas, juegos y se apoyaban en los momentos difíciles. El coraje de Carlos creó una amistad para toda la vida.",
+        character: "Carlos y Tom",
+        emotion: "happy",
+        choices: [
+          { text: "Organizan un club anti-acoso en la escuela", consequence: "Cambian la cultura escolar", emotionalImpact: "positive", nextSection: 10, points: 35 }
+        ]
+      },
+      {
+        id: 6,
+        text: "Tom ayudó a Carlos con matemáticas y Carlos ayudó a Tom con lectura. Juntos, ambos mejoraron sus notas y su confianza.",
+        character: "Carlos y Tom",
+        emotion: "supportive",
+        choices: [
+          { text: "Se convierten en compañeros de estudio permanentes", consequence: "El éxito académico fue mutuo", emotionalImpact: "positive", nextSection: 10, points: 25 }
+        ]
+      },
+      {
+        id: 7,
+        text: "'Lo siento por no ayudarte ayer', dijo Carlos. Tom sonrió: 'Gracias por venir hoy'. Su amistad comenzó con una disculpa sincera.",
+        character: "Tom",
+        emotion: "understanding",
+        choices: [
+          { text: "Se ayudan a enfrentar futuros desafíos", consequence: "Su vínculo creció con el tiempo", emotionalImpact: "positive", nextSection: 10, points: 30 }
+        ]
+      },
+      {
+        id: 8,
+        text: "Carlos se sentía avergonzado cada vez que veía a Tom. Perdió la oportunidad de hacer un amigo por miedo a enfrentar su error.",
+        character: "Carlos",
+        emotion: "ashamed",
+        choices: [
+          { text: "Carlos finalmente se disculpa semanas después", consequence: "Aunque tardío, fue un paso valiente", emotionalImpact: "neutral", nextSection: 10, points: 15 }
+        ]
+      },
+      {
+        id: 9,
+        text: "El maestro destacó a Carlos en la asamblea escolar como ejemplo de 'coraje inteligente'. Otros niños empezaron a buscar su consejo.",
+        character: "Maestro",
+        emotion: "inspiring",
+        choices: [
+          { text: "Carlos se convierte en mentor de nuevos estudiantes", consequence: "Ayudó a muchos a adaptarse", emotionalImpact: "positive", nextSection: 10, points: 30 }
+        ]
+      },
+      {
+        id: 10,
+        text: "Carlos miró hacia atrás y sonrió. Un pequeño acto de coraje había cambiado no solo su vida, sino la de muchos otros. Ser valiente vale la pena.",
+        character: "Narrador",
+        emotion: "inspirational",
+        choices: []
       }
     ]
   }
 ];
 
-export function CuentoInteractivo({ onBack, level }: CuentoInteractivoProps) {
-  const [currentStory, setCurrentStory] = useState(0);
-  const [currentSection, setCurrentSection] = useState(1);
-  const [storyPath, setStoryPath] = useState<string[]>([]);
-  const [score, setScore] = useState(0);
-  const [readingComplete, setReadingComplete] = useState(false);
-  const [showReward, setShowReward] = useState(false);
-  const [reflections, setReflections] = useState<string[]>([]);
+const MAX_LEVEL = stories.length;
 
-  const story = stories[currentStory];
+export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInteractivoProps) {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [currentLevel, setCurrentLevel] = useState(initialLevel);
+  const [currentSection, setCurrentSection] = useState(1);
+  const [currentPath, setCurrentPath] = useState<string[]>([]);
+  const [currentScore, setCurrentScore] = useState(0);
+  const [levelPaths, setLevelPaths] = useState<string[][]>(() => Array.from({ length: MAX_LEVEL }, () => []));
+  const [levelScores, setLevelScores] = useState<number[]>(() => Array.from({ length: MAX_LEVEL }, () => 0));
+  const [showReward, setShowReward] = useState(false);
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+  const [highlightedWord, setHighlightedWord] = useState(-1);
+  const [isPlayingFinal, setIsPlayingFinal] = useState(false);
+
+  const story = stories[currentLevel - 1];
   const section = story.sections.find(s => s.id === currentSection);
+  const isLastSection = section?.id === Math.max(...story.sections.map(s => s.id));
+  const totalScore = levelScores.reduce((a, b) => a + b, 0) + currentScore;
+
+
+  useEffect(() => {
+    setCurrentLevel(initialLevel);
+    setCurrentSection(1);
+    setCurrentPath([]);
+    setCurrentScore(0);
+    setShowMotivational(false);
+    setLevelComplete(false);
+    setIsPlayingFinal(false);
+  }, [initialLevel]);
+
+  useEffect(() => {
+    if (!section) return;
+    const words = section.text.split(/\s+/);
+    setHighlightedWord(-1);
+    if (words.length === 0) return;
+
+    const duration = 4000;
+    const intervalTime = duration / words.length;
+    let i = 0;
+    const interval = setInterval(() => {
+      setHighlightedWord(i);
+      i++;
+      if (i > words.length) clearInterval(interval);
+    }, intervalTime);
+
+    return () => clearInterval(interval);
+  }, [currentSection]);
 
   const makeChoice = (choice: StoryChoice) => {
-    setStoryPath([...storyPath, choice.consequence]);
-    setScore(score + choice.points);
-    
+    const newPath = [...currentPath, choice.consequence];
+    const newScore = currentScore + choice.points;
+
+    setCurrentPath(newPath);
+    setCurrentScore(newScore);
+
     if (choice.emotionalImpact === 'positive') {
       setShowReward(true);
       setTimeout(() => setShowReward(false), 1500);
@@ -232,196 +417,125 @@ export function CuentoInteractivo({ onBack, level }: CuentoInteractivoProps) {
       if (choice.nextSection && story.sections.find(s => s.id === choice.nextSection)) {
         setCurrentSection(choice.nextSection);
       } else {
-        if (currentStory < stories.length - 1) {
-          setCurrentStory(currentStory + 1);
-          setCurrentSection(1);
-        } else {
-          setReadingComplete(true);
-        }
+        setIsPlayingFinal(true);
       }
     }, 2000);
   };
 
-  const restartReading = () => {
-    setCurrentStory(0);
-    setCurrentSection(1);
-    setStoryPath([]);
-    setScore(0);
-    setReadingComplete(false);
-    setReflections([]);
-    setShowReward(false);
+  const handleFinalNarrationComplete = () => {
+    setIsPlayingFinal(false);
+
+    setLevelPaths(prev => {
+      const newPaths = [...prev];
+      newPaths[currentLevel - 1] = [...currentPath];
+      return newPaths;
+    });
+    setLevelScores(prev => {
+      const newScores = [...prev];
+      newScores[currentLevel - 1] = currentScore;
+      return newScores;
+    });
+
+    setShowMotivational(true);
   };
 
-  const getEmotionColor = (emotion: string) => {
-    switch (emotion) {
-      case 'happy': return 'bg-green-100 border-green-300';
-      case 'sad': return 'bg-blue-100 border-blue-300';
-      case 'angry': return 'bg-red-100 border-red-300';
-      case 'conflicted': return 'bg-yellow-100 border-yellow-300';
-      case 'grateful': return 'bg-purple-100 border-purple-300';
-      case 'proud': return 'bg-indigo-100 border-indigo-300';
-      default: return 'bg-gray-100 border-gray-300';
+  const startFinalNarration = () => {
+    setIsPlayingFinal(true);
+  };
+
+  const restartLevel = () => {
+    setCurrentSection(1);
+    setCurrentPath([]);
+    setCurrentScore(0);
+    setLevelComplete(false);
+    setShowMotivational(false);
+    setIsPlayingFinal(false);
+  };
+
+  const loadNextLevel = () => {
+    if (currentLevel < MAX_LEVEL) {
+      setCurrentLevel(currentLevel + 1);
+      setCurrentSection(1);
+      setCurrentPath([]);
+      setCurrentScore(0);
+      setLevelComplete(false);
+      setShowMotivational(false);
+      setIsPlayingFinal(false);
+    } else {
+      setLevelComplete(false);
     }
+  };
+
+  const restartAll = () => {
+    setCurrentLevel(1);
+    setCurrentSection(1);
+    setCurrentPath([]);
+    setCurrentScore(0);
+    setLevelPaths(Array.from({ length: MAX_LEVEL }, () => []));
+    setLevelScores(Array.from({ length: MAX_LEVEL }, () => 0));
+    setLevelComplete(false);
+  };
+
+  if (!gameStarted) {
+    return <StartScreenCuentoInteractivo onStart={() => setGameStarted(true)} onBack={onBack} />;
+  }
+
+  const getEmotionColor = (emotion: string) => {
+    const map: Record<string, string> = {
+      happy: 'bg-green-100 border-green-300',
+      sad: 'bg-blue-100 border-blue-300',
+      conflicted: 'bg-yellow-100 border-yellow-300',
+      grateful: 'bg-purple-100 border-purple-300',
+      proud: 'bg-indigo-100 border-indigo-300',
+      inspirational: 'bg-gradient-to-r from-purple-100 to-pink-100 border-purple-300'
+    };
+    return map[emotion] || 'bg-gray-100 border-gray-300';
   };
 
   const getEmotionEmoji = (emotion: string) => {
-    switch (emotion) {
-      case 'happy': return '😊';
-      case 'sad': return '😢';
-      case 'angry': return '😠';
-      case 'conflicted': return '😕';
-      case 'grateful': return '🙏';
-      case 'proud': return '😌';
-      case 'responsible': return '💪';
-      case 'admiring': return '😍';
-      case 'careless': return '😅';
-      default: return '😐';
-    }
+    const map: Record<string, string> = {
+      happy: '☺️',
+      sad: '☹️',
+      conflicted: '🤔',
+      inspirational: '🤭'
+    };
+    return map[emotion] || 'neutral face';
   };
 
-  if (readingComplete) {
-    return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-purple-100 via-blue-100 to-green-100">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="mb-4 bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver al dashboard
-        </Button>
+  const progress = (currentSection / story.sections.length) * 100;
 
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="max-w-3xl mx-auto"
-        >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200">
-            <CardContent className="p-8">
-              <div className="text-center mb-6">
-                <div className="text-6xl mb-4">📖</div>
-                <h2 className="text-3xl mb-4 text-gray-800">
-                  ¡Cuentos Interactivos Completados!
-                </h2>
-                <div className="text-xl mb-6 text-gray-600">
-                  Puntuación total: {score} puntos
-                </div>
-              </div>
 
-              {/* Story Summary */}
-              <div className="mb-6">
-                <h3 className="text-lg mb-4 text-gray-800">Tu camino en las historias:</h3>
-                <div className="space-y-3 max-h-48 overflow-y-auto">
-                  {storyPath.map((path, index) => (
-                    <div key={index} className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                      <div className="flex items-start gap-2">
-                        <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
-                          {index + 1}
-                        </div>
-                        <p className="text-blue-800 text-sm">{path}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+  const maxPoints = story.sections.length * 50;
 
-              {/* Moral Lessons */}
-              <div className="mb-6">
-                <h3 className="text-lg mb-4 text-gray-800">Lecciones aprendidas:</h3>
-                <div className="space-y-2">
-                  {stories.slice(0, currentStory + 1).map((story, index) => (
-                    <div key={index} className="bg-green-50 p-3 rounded-lg border border-green-200">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Heart className="w-4 h-4 text-green-600" />
-                        <span className="text-green-800 font-medium">{story.theme}</span>
-                      </div>
-                      <p className="text-green-700 text-sm">{story.moralLesson}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={restartReading}
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3"
-                >
-                  Leer Más Cuentos
-                </Button>
-                <Button
-                  onClick={onBack}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  Volver al dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    );
-  }
+  if (!section) return <div>Error: Sección no encontrada</div>;
 
-  if (!section) {
-    return <div>Error: Sección no encontrada</div>;
-  }
+  const words = section.text.split(/\s+/);
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-purple-100 via-blue-100 to-green-100">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            onClick={onBack}
-            variant="outline"
-            className="bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="text-2xl text-gray-800 dyslexia-friendly">
-              📚 Cuento Corto Interactivo
-            </h1>
-            <div className="flex items-center gap-2 justify-center mt-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-gray-600">Puntos: {score}</span>
-            </div>
-          </div>
-          
-          <div className="text-right">
-            <Badge variant="secondary" className="mb-1">
-              {story.theme}
-            </Badge>
-            <div className="text-sm text-gray-600">
-              Sección {currentSection}
-            </div>
-          </div>
-        </div>
+      <div className="max-w-6xl mx-auto">
 
-        {/* Story Title */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl text-gray-800 dyslexia-friendly">
-            {story.title}
-          </h2>
-        </div>
+        <GameHeader
+          title={`Cuento Interactivo`}
+          level={currentLevel}
+          score={totalScore}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
 
-        {/* Animal Guide */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="mb-6"
-        >
-          <AnimalGuide
-            animal="monkey"
-            message="¡En estos cuentos tú decides qué pasa! Cada elección tiene consecuencias. Piensa bien antes de decidir y aprende sobre valores importantes."
-          />
-        </motion.div>
+        <ProgressBar
+          current={currentSection+1}
+          total={story.sections.length}
+          progress={progress}
+        />
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Story Content */}
+        <AnimalGuide
+          animal="monkey"
+          message="¡Tú decides el final! Cada elección enseña una lección valiosa."
+        />
+
+        <div className="grid lg:grid-cols-3 gap-8 mt-6">
+
           <div className="lg:col-span-2">
             <motion.div
               key={currentSection}
@@ -431,120 +545,135 @@ export function CuentoInteractivo({ onBack, level }: CuentoInteractivoProps) {
             >
               <Card className={`bg-white/90 backdrop-blur-sm border-2 ${getEmotionColor(section.emotion)}`}>
                 <CardContent className="p-8">
-                  {/* Character & Emotion */}
                   <div className="flex items-center gap-3 mb-6">
                     <div className="text-4xl">{getEmotionEmoji(section.emotion)}</div>
                     <div>
-                      <h3 className="text-lg text-gray-800">{section.character}</h3>
-                      <Badge variant="secondary" className="text-xs">
-                        {section.emotion}
-                      </Badge>
+                      <h3 className="text-lg text-black">{section.character}</h3>
+                      <Badge variant="secondary" className="text-xs">{section.emotion}</Badge>
                     </div>
                   </div>
 
-                  {/* Audio Player */}
-                  <div className="mb-6">
-                    <AudioPlayer
-                      text="Reproduciendo parte del cuento..."
-                      duration={4000}
-                    />
-                  </div>
+         
+                  {!isLastSection && !isPlayingFinal && (
+                    <div className="mb-6">
+                      <AudioPlayer text="Reproduciendo..." duration={4000} />
+                    </div>
+                  )}
 
-                  {/* Story Text */}
+  
+                  {isLastSection && isPlayingFinal && (
+                    <div className="mb-6">
+                      <AudioPlayer
+                        text={section.text}
+                        onEnd={handleFinalNarrationComplete}
+                        voice="child"
+                        autoPlay
+                      />
+                    </div>
+                  )}
+
                   <div className="bg-white/80 p-6 rounded-lg border border-gray-200 mb-6">
-                    <p className="text-lg leading-relaxed text-gray-800 dyslexia-friendly">
-                      {section.text}
+                    <p className="text-lg leading-relaxed text-black">
+                      {words.map((word, i) => (
+                        <span key={i} className={highlightedWord === i ? 'bg-yellow-200' : ''}>
+                          {word}{' '}
+                        </span>
+                      ))}
                     </p>
                   </div>
 
-                  {/* Reflection Question */}
                   {section.reflectionQuestion && (
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-6">
                       <div className="flex items-center gap-2 mb-2">
                         <Brain className="w-5 h-5 text-blue-500" />
                         <h4 className="text-lg text-blue-800">Reflexiona:</h4>
                       </div>
-                      <p className="text-blue-700 dyslexia-friendly">
-                        {section.reflectionQuestion}
-                      </p>
+                      <p className="text-blue-700">{section.reflectionQuestion}</p>
                     </div>
                   )}
 
-                  {/* Choices */}
-                  <div className="space-y-4">
-                    <h4 className="text-lg text-gray-800 flex items-center gap-2">
-                      <Users className="w-5 h-5 text-purple-500" />
-                      ¿Qué decides?
-                    </h4>
-                    
-                    {section.choices.map((choice, index) => (
-                      <motion.div
-                        key={index}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+        
+                  {isLastSection && !isPlayingFinal && section.choices.length === 0 && (
+                    <div className="text-center mt-6">
+                      <Button
+                        onClick={startFinalNarration}
+                        className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-6 text-lg font-semibold shadow-lg"
                       >
-                        <Button
-                          onClick={() => makeChoice(choice)}
-                          variant="outline"
-                          className="w-full justify-start text-left p-6 h-auto bg-white/80 hover:bg-white border-2 hover:border-purple-300 transition-all"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-1">
-                              {String.fromCharCode(65 + index)}
-                            </div>
-                            <div className="flex-1">
-                              <div className="text-lg dyslexia-friendly text-gray-800 mb-1">
-                                {choice.text}
+                        <Volume2 className="w-6 h-6 mr-3" />
+                        Escuchar el Final
+                      </Button>
+                    </div>
+                  )}
+
+                  {section.choices.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="text-lg text-black flex items-center gap-2">
+                        <Users className="w-5 h-5 text-purple-500" /> ¿Qué decides?
+                      </h4>
+                      {section.choices.map((choice, i) => (
+                        <motion.div key={i} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                          <Button
+                            onClick={() => makeChoice(choice)}
+                            variant="outline"
+                            className="w-full justify-start text-left p-6 h-auto bg-white/80 hover:bg-white border-2 hover:border-purple-300"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm mt-1">
+                                {String.fromCharCode(65 + i)}
                               </div>
-                              <div className="text-sm text-purple-600">
-                                +{choice.points} puntos • {choice.emotionalImpact === 'positive' ? '😊' : choice.emotionalImpact === 'negative' ? '😔' : '😐'}
+                              <div className="flex-1">
+                                <div className="text-lg text-black mb-1">{choice.text}</div>
+                                <div className="text-sm text-purple-600">
+                                  +{choice.points} pts • {choice.emotionalImpact === 'positive' ? 'smiling face' : choice.emotionalImpact === 'negative' ? 'sad face' : 'neutral face'}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Button>
-                      </motion.div>
-                    ))}
-                  </div>
+                          </Button>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
           </div>
 
-          {/* Story Info Panel */}
+ 
           <div className="lg:col-span-1">
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-200">
               <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-gray-800 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-green-500" />
-                  Sobre esta Historia
+                <h3 className="text-lg mb-4 text-black flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-green-500" /> Sobre esta Historia
                 </h3>
-                
                 <div className="space-y-4">
                   <div>
-                    <h4 className="text-sm text-gray-600 mb-1">Tema Principal:</h4>
-                    <p className="text-gray-800 dyslexia-friendly">{story.theme}</p>
+                    <h4 className="text-sm text-gray-600 mb-1">Tema:</h4>
+                    <p className="text-black">{story.theme}</p>
                   </div>
-                  
                   <div>
-                    <h4 className="text-sm text-gray-600 mb-1">Lección Moral:</h4>
-                    <p className="text-gray-800 text-sm dyslexia-friendly">{story.moralLesson}</p>
+                    <h4 className="text-sm text-gray-600 mb-1">Lección:</h4>
+                    <p className="text-black text-sm">{story.moralLesson}</p>
+                  </div>
+                  <div>
+                    <h4 className="text-sm text-gray-600 mb-1">Progreso:</h4>
+                    <Progress value={progress} className="h-2" />
+                    <p className="text-xs text-gray-500 mt-1">{currentSection} de {story.sections.length}</p>
                   </div>
                 </div>
 
-                {/* Story Path */}
-                {storyPath.length > 0 && (
+                {currentPath.length > 0 && (
                   <div className="mt-6">
-                    <h4 className="text-sm text-gray-600 mb-2">Tu camino en la historia:</h4>
+                    <h4 className="text-sm text-gray-600 mb-2">Tu camino:</h4>
                     <div className="space-y-2 max-h-32 overflow-y-auto">
-                      {storyPath.map((path, index) => (
-                        <div key={index} className="text-xs bg-gray-50 p-2 rounded border">
+                      {currentPath.map((p, i) => (
+                        <div key={i} className="text-xs bg-gray-50 p-2 rounded border">
                           <div className="flex items-center gap-1 mb-1">
                             <div className="w-4 h-4 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs">
-                              {index + 1}
+                              {i + 1}
                             </div>
-                            <span className="text-gray-600">Decisión {index + 1}</span>
+                            <span className="text-gray-600">Decisión</span>
                           </div>
-                          <p className="text-gray-700">{path}</p>
+                          <p className="text-black">{p}</p>
                         </div>
                       ))}
                     </div>
@@ -555,13 +684,37 @@ export function CuentoInteractivo({ onBack, level }: CuentoInteractivoProps) {
           </div>
         </div>
 
-        {/* Reward Animation */}
-        {showReward && (
-          <RewardAnimation
-            type="star"
-            show ={showReward}
-            message="¡Excelente decisión!"
-            onComplete={() => setShowReward(false)}
+        <RewardAnimation
+          type="star"
+          show={showReward}
+          message="¡Buena decisión!"
+          onComplete={() => setShowReward(false)}
+        />
+
+        {/* MENSAJE MOTIVACIONAL */}
+        {showMotivational && (
+          <MotivationalMessage
+            score={currentScore}
+            total={maxPoints}
+            customMessage="¡Tu historia ha terminado!"
+            customSubtitle="Completaste todas las secciones del cuento"
+            onComplete={() => {
+              setShowMotivational(false);
+              setLevelComplete(true);
+            }}
+          />
+        )}
+
+        {/* MODAL FINAL */}
+        {levelComplete && !showMotivational && (
+          <LevelCompleteModal
+            score={currentScore}
+            total={maxPoints}
+            level={currentLevel}
+            isLastLevel={currentLevel >= MAX_LEVEL}
+            onNextLevel={loadNextLevel}
+            onRestart={restartLevel}
+            onExit={onBack}
           />
         )}
       </div>

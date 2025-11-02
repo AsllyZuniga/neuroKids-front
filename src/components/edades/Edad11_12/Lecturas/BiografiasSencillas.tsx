@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, ChevronLeft, ChevronRight, Calendar, Award, MapPin, Book } from 'lucide-react';
+import {  ChevronLeft, ChevronRight, Calendar, Award, MapPin, Book, CheckCircle } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
-import { Progress } from '../../../ui/progress';
 import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
 import { AudioPlayer } from '../../../others/AudioPlayer';
+import { GameHeader } from '../../../others/GameHeader';
+import { ProgressBar } from '../../../others/ProgressBar';
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { StartScreenBiografiasSencillas } from '../IniciosJuegosLecturas/StartScreenBiografiasSencillas/StartScreenBiografiasSencillas';
 
 interface BiografiasSencillasProps {
   onBack: () => void;
-  level: number;
+  level?: number;
 }
 
 interface Biography {
@@ -38,7 +42,7 @@ interface Biography {
   funFacts: string[];
 }
 
-const biographies: Biography[] = [
+const biographiesLevel1: Biography[] = [
   {
     id: 1,
     name: "Marie Curie",
@@ -182,31 +186,338 @@ const biographies: Biography[] = [
   }
 ];
 
-export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps) {
+const biographiesLevel2: Biography[] = [
+  {
+    id: 5,
+    name: "Albert Einstein",
+    title: "El Genio de la Física",
+    birthYear: 1879,
+    country: "Alemania",
+    category: "Ciencia",
+    emoji: "🧠",
+    mainAchievement: "Desarrolló la teoría de la relatividad que cambió nuestra comprensión del universo",
+    story: "Albert Einstein nació en Alemania y desde niño era muy curioso sobre cómo funcionaba el mundo. No le gustaba mucho la escuela tradicional, pero amaba aprender por su cuenta. Desarrolló ideas revolucionarias sobre el espacio, el tiempo y la energía. Su famosa ecuación E=mc² explica cómo la materia se convierte en energía. Einstein ganó el Premio Nobel y se convirtió en uno de los científicos más famosos del mundo. Tuvo que huir de su país por la guerra, pero siempre promovió la paz y el conocimiento.",
+    timeline: [
+      { age: 5, event: "Recibió una brújula que despertó su curiosidad por la física" },
+      { age: 26, event: "Publicó la teoría de la relatividad especial" },
+      { age: 36, event: "Publicó la teoría de la relatividad general" },
+      { age: 42, event: "Ganó el Premio Nobel de Física" },
+      { age: 54, event: "Se mudó a Estados Unidos huyendo del nazismo" }
+    ],
+    inspiration: "Einstein nos enseña que la imaginación es más importante que el conocimiento y que debemos cuestionar todo.",
+    quiz: {
+      question: "¿Cuál es la ecuación más famosa de Einstein?",
+      options: [
+        "a² + b² = c²",
+        "E=mc²",
+        "F=ma",
+        "V=IR"
+      ],
+      correct: 1,
+      explanation: "E=mc² es la ecuación que relaciona energía y masa, parte de la teoría de la relatividad."
+    },
+    funFacts: [
+      "De niño hablaba poco y sus maestros pensaban que no era inteligente",
+      "Tocaba el violín para relajarse y pensar en problemas científicos",
+      "Rechazó ser presidente de Israel"
+    ]
+  },
+  {
+    id: 6,
+    name: "Malala Yousafzai",
+    title: "La Defensora de la Educación",
+    birthYear: 1997,
+    country: "Pakistán",
+    category: "Derechos Humanos",
+    emoji: "📚",
+    mainAchievement: "Luchó por el derecho de las niñas a la educación y ganó el Premio Nobel de la Paz",
+    story: "Malala nació en Pakistán, donde algunos grupos no querían que las niñas fueran a la escuela. Desde pequeña, escribió un blog sobre su vida y la importancia de estudiar. A los 15 años, fue atacada por defender la educación, pero sobrevivió y continuó su lucha. Se convirtió en la persona más joven en ganar el Premio Nobel. Hoy, viaja por el mundo promoviendo la educación para todos los niños.",
+    timeline: [
+      { age: 11, event: "Comenzó a escribir un blog sobre educación" },
+      { age: 15, event: "Sobrevivió a un ataque por su activismo" },
+      { age: 17, event: "Ganó el Premio Nobel de la Paz" },
+      { age: 20, event: "Comenzó a estudiar en la Universidad de Oxford" },
+      { age: 23, event: "Publicó su autobiografía" }
+    ],
+    inspiration: "Malala nos muestra que una voz joven puede cambiar el mundo y que la educación es un derecho para todos.",
+    quiz: {
+      question: "¿Por qué Malala ganó el Premio Nobel?",
+      options: [
+        "Por inventar algo",
+        "Por su lucha por la educación de las niñas",
+        "Por ser una gran deportista",
+        "Por escribir novelas"
+      ],
+      correct: 1,
+      explanation: "Malala ganó el Nobel por defender el derecho a la educación, especialmente para las niñas."
+    },
+    funFacts: [
+      "Es la ganadora más joven del Premio Nobel",
+      "Su libro 'Yo soy Malala' es un best-seller",
+      "Fundó una organización para ayudar a niñas en educación"
+    ]
+  },
+  {
+    id: 7,
+    name: "Steve Jobs",
+    title: "El Visionario de la Tecnología",
+    birthYear: 1955,
+    country: "Estados Unidos",
+    category: "Tecnología",
+    emoji: "💻",
+    mainAchievement: "Fundó Apple y revolucionó la computación personal, los teléfonos y la músicaデジタル",
+    story: "Steve Jobs fue adoptado y creció en California. Abandonó la universidad pero fundó Apple en un garaje con su amigo. Crearon la primera computadora personal accesible. Aunque fue despedido de su propia compañía, regresó y creó productos innovadores como el iPhone y el iPad. Steve enfatizaba el diseño simple y hermoso en la tecnología.",
+    timeline: [
+      { age: 21, event: "Fundó Apple con Steve Wozniak" },
+      { age: 24, event: "Lanzó la Apple II" },
+      { age: 30, event: "Fue despedido de Apple" },
+      { age: 42, event: "Regresó a Apple como CEO" },
+      { age: 52, event: "Lanzó el iPhone" }
+    ],
+    inspiration: "Jobs nos enseña a pensar diferente y a combinar tecnología con arte para crear productos que cambien vidas.",
+    quiz: {
+      question: "¿Qué compañía fundó Steve Jobs?",
+      options: [
+        "Microsoft",
+        "Google",
+        "Apple",
+        "Amazon"
+      ],
+      correct: 2,
+      explanation: "Steve Jobs fundó Apple, que revolucionó la tecnología personal."
+    },
+    funFacts: [
+      "Vivió en India por un tiempo buscando iluminación",
+      "Su sueldo en Apple era de 1 dólar al año",
+      "Amaba el diseño minimalista inspirado en el zen"
+    ]
+  },
+  {
+    id: 8,
+    name: "Jane Goodall",
+    title: "La Protectora de los Chimpancés",
+    birthYear: 1934,
+    country: "Reino Unido",
+    category: "Ciencia",
+    emoji: "🦍",
+    mainAchievement: "Estudió a los chimpancés y promovió la conservación de la vida silvestre",
+    story: "Jane Goodall soñaba con África desde niña. A los 26 años, viajó a Tanzania para estudiar chimpancés en la naturaleza. Descubrió que usan herramientas y tienen emociones similares a los humanos. Fundó institutos para proteger animales y educar sobre el medio ambiente. Aún hoy, viaja promoviendo la conservación.",
+    timeline: [
+      { age: 23, event: "Viajó a África por primera vez" },
+      { age: 26, event: "Comenzó su estudio de chimpancés en Gombe" },
+      { age: 34, event: "Publicó sus descubrimientos clave" },
+      { age: 41, event: "Fundó el Instituto Jane Goodall" },
+      { age: 70, event: "Recibió honores por su trabajo en conservación" }
+    ],
+    inspiration: "Jane nos enseña que podemos marcar la diferencia protegiendo la naturaleza y entendiendo a los animales.",
+    quiz: {
+      question: "¿Qué descubrió Jane Goodall sobre los chimpancés?",
+      options: [
+        "Que vuelan",
+        "Que usan herramientas",
+        "Que viven bajo el agua",
+        "Que hablan humano"
+      ],
+      correct: 1,
+      explanation: "Jane descubrió que los chimpancés usan herramientas, cambiando nuestra visión de los animales."
+    },
+    funFacts: [
+      "Llevaba un peluche de chimpancé de niña",
+      "Vivió sola en la jungla durante años",
+      "Es mensajera de la paz de la ONU"
+    ]
+  }
+];
+
+const biographiesLevel3: Biography[] = [
+ 
+  {
+    id: 9,
+    name: "Martin Luther King Jr.",
+    title: "El Luchador por los Derechos Civiles",
+    birthYear: 1929,
+    country: "Estados Unidos",
+    category: "Derechos Humanos",
+    emoji: "🕊️",
+    mainAchievement: "Lideró el movimiento por los derechos civiles usando la no violencia",
+    story: "Martin Luther King nació en una época de segregación racial en EE.UU. Como pastor, lideró protestas pacíficas contra la discriminación. Su famoso discurso 'Tengo un sueño' inspiró a millones. Ganó el Premio Nobel de la Paz y ayudó a pasar leyes por la igualdad. Trágicamente, fue asesinado, pero su legado vive.",
+    timeline: [
+      { age: 26, event: "Lideró el boicot a los autobuses en Montgomery" },
+      { age: 34, event: "Pronunció 'Tengo un sueño'" },
+      { age: 35, event: "Ganó el Premio Nobel de la Paz" },
+      { age: 36, event: "Apoyó la Ley de Derechos Civiles" },
+      { age: 39, event: "Marcha de Selma a Montgomery" }
+    ],
+    inspiration: "King nos enseña que la no violencia y el amor pueden vencer al odio y la injusticia.",
+    quiz: {
+      question: "¿Cuál fue el famoso discurso de Martin Luther King?",
+      options: [
+        "Tengo un sueño",
+        "Sí, podemos",
+        "Paz en la tierra",
+        "Libertad ahora"
+      ],
+      correct: 0,
+      explanation: "'Tengo un sueño' es el discurso icónico sobre igualdad racial."
+    },
+    funFacts: [
+      "Fue el ganador más joven del Nobel de la Paz en su momento",
+      "Estudió las enseñanzas de Gandhi",
+      "Hay un feriado nacional en su honor en EE.UU."
+    ]
+  },
+  {
+    id: 10,
+    name: "Amelia Earhart",
+    title: "La Pionera de la Aviación",
+    birthYear: 1897,
+    country: "Estados Unidos",
+    category: "Aventura",
+    emoji: "✈️",
+    mainAchievement: "Fue la primera mujer en volar sola sobre el Atlántico",
+    story: "Amelia Earhart amaba la aventura. Aprendió a volar y rompió récords en aviación. Cruzó el Atlántico sola, inspirando a mujeres a entrar en campos dominados por hombres. Desapareció en un vuelo alrededor del mundo, pero su espíritu valiente perdura.",
+    timeline: [
+      { age: 23, event: "Tomó su primera lección de vuelo" },
+      { age: 30, event: "Cruzó el Atlántico como pasajera" },
+      { age: 34, event: "Voló sola sobre el Atlántico" },
+      { age: 37, event: "Voló sola de Hawái a California" },
+      { age: 39, event: "Intentó volar alrededor del mundo" }
+    ],
+    inspiration: "Amelia nos muestra que las mujeres pueden lograr hazañas audaces y romper barreras.",
+    quiz: {
+      question: "¿Qué hazaña hizo Amelia Earhart?",
+      options: [
+        "Primera en el espacio",
+        "Primera en volar sola sobre el Atlántico",
+        "Primera en conducir un auto",
+        "Primera en escalar el Everest"
+      ],
+      correct: 1,
+      explanation: "Amelia fue la primera mujer en volar sola sobre el Atlántico."
+    },
+    funFacts: [
+      "Llevaba un diario de vuelos",
+      "Diseñó ropa para aviadoras",
+      "Su avión se llamó 'Electra'"
+    ]
+  },
+  {
+    id: 11,
+    name: "Stephen Hawking",
+    title: "El Científico del Universo",
+    birthYear: 1942,
+    country: "Reino Unido",
+    category: "Ciencia",
+    emoji: "🌌",
+    mainAchievement: "Explicó los agujeros negros y el Big Bang pese a su enfermedad",
+    story: "Stephen Hawking fue diagnosticado con una enfermedad que lo dejó en silla de ruedas, pero su mente brilló. Escribió libros sobre el universo accesibles para todos. Su trabajo sobre agujeros negros cambió la física. Comunicaba con una computadora y inspiró a muchos con su determinación.",
+    timeline: [
+      { age: 21, event: "Diagnosticado con ELA" },
+      { age: 32, event: "Propuso la radiación de Hawking" },
+      { age: 46, event: "Publicó 'Una breve historia del tiempo'" },
+      { age: 59, event: "Ganó premios científicos" },
+      { age: 70, event: "Continuó trabajando en cosmología" }
+    ],
+    inspiration: "Hawking nos enseña que las limitaciones físicas no detienen una mente curiosa.",
+    quiz: {
+      question: "¿Qué libro famoso escribió Stephen Hawking?",
+      options: [
+        "El origen de las especies",
+        "Una breve historia del tiempo",
+        "1984",
+        "El principito"
+      ],
+      correct: 1,
+      explanation: "'Una breve historia del tiempo' explica el universo de manera simple."
+    },
+    funFacts: [
+      "Apareció en Los Simpsons y Star Trek",
+      "Su voz era generada por computadora",
+      "Vivió mucho más de lo predicho por su enfermedad"
+    ]
+  },
+  {
+    id: 12,
+    name: "Rosa Parks",
+    title: "La Madre del Movimiento por los Derechos Civiles",
+    birthYear: 1913,
+    country: "Estados Unidos",
+    category: "Derechos Humanos",
+    emoji: "🚌",
+    mainAchievement: "Se negó a ceder su asiento en un bus, iniciando el boicot de Montgomery",
+    story: "Rosa Parks creció en una era de segregación. Como costurera, un día se negó a dar su asiento a un hombre blanco en un bus, lo que la arrestaron. Esto encendió el movimiento por derechos civiles. Trabajó con Martin Luther King y luchó por la igualdad toda su vida.",
+    timeline: [
+      { age: 19, event: "Se unió a la NAACP" },
+      { age: 42, event: "Se negó a ceder su asiento en el bus" },
+      { age: 43, event: "Inició el boicot a los autobuses" },
+      { age: 50, event: "Trabajó en el Congreso" },
+      { age: 81, event: "Recibió la Medalla Presidencial de la Libertad" }
+    ],
+    inspiration: "Rosa nos enseña que un acto de coraje puede iniciar grandes cambios sociales.",
+    quiz: {
+      question: "¿Qué acción famosa hizo Rosa Parks?",
+      options: [
+        "Volar un avión",
+        "Negarse a ceder su asiento en un bus",
+        "Escribir un libro",
+        "Ganar una carrera"
+      ],
+      correct: 1,
+      explanation: "Su negativa inició el boicot y el movimiento por derechos civiles."
+    },
+    funFacts: [
+      "Era costurera de profesión",
+      "Hay estatuas y museos en su honor",
+      "Vivió hasta los 92 años"
+    ]
+  }
+];
+
+const allBiographies = [biographiesLevel1, biographiesLevel2, biographiesLevel3];
+const MAX_LEVEL = 3;
+
+export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: BiografiasSencillasProps) {
+  const [gameStarted, setGameStarted] = useState(false);
+  const [currentLevel, setCurrentLevel] = useState(initialLevel);
   const [currentBio, setCurrentBio] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [score, setScore] = useState(0);
-  const [readingComplete, setReadingComplete] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
+  const [showMotivational, setShowMotivational] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [readBiographies, setReadBiographies] = useState<Set<number>>(new Set());
 
+  const biographies = allBiographies[currentLevel - 1];
   const biography = biographies[currentBio];
-  const progress = ((currentBio + 1) / biographies.length) * 100;
+  const progress = (currentBio  / biographies.length) * 100;
+
+
+  useEffect(() => {
+    setCurrentLevel(initialLevel);
+    setCurrentBio(0);
+    setScore(0);
+    setLevelComplete(false);
+    setShowMotivational(false);
+    setReadBiographies(new Set());
+    setShowQuiz(false);
+    setSelectedAnswer(null);
+    setShowReward(false);
+  }, [initialLevel]);
 
   const finishReading = () => {
     setReadBiographies(prev => new Set([...prev, currentBio]));
-    setScore(score + 30);
+    setScore(prev => prev + 30);
     setShowQuiz(true);
   };
 
   const handleQuizAnswer = (answerIndex: number) => {
     if (selectedAnswer !== null) return;
-    
+
     setSelectedAnswer(answerIndex);
-    
+
     if (answerIndex === biography.quiz.correct) {
-      setScore(score + 20);
+      setScore(prev => prev + 20);
       setShowReward(true);
       setTimeout(() => setShowReward(false), 1500);
     }
@@ -215,10 +526,14 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
       if (currentBio < biographies.length - 1) {
         nextBiography();
       } else {
-        setReadingComplete(true);
+        setShowMotivational(true);
       }
     }, 3000);
   };
+
+  if (!gameStarted) {
+    return <StartScreenBiografiasSencillas onStart={() => setGameStarted(true)} onBack={onBack} />;
+  }
 
   const nextBiography = () => {
     setCurrentBio(currentBio + 1);
@@ -234,120 +549,68 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
     }
   };
 
-  const restartReading = () => {
+  const restartLevel = () => {
     setCurrentBio(0);
     setScore(0);
-    setReadingComplete(false);
+    setLevelComplete(false);
+    setShowMotivational(false);
     setReadBiographies(new Set());
     setShowQuiz(false);
     setSelectedAnswer(null);
     setShowReward(false);
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'Ciencia': return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'Arte e Inventos': return 'bg-purple-100 text-purple-700 border-purple-300';
-      case 'Arte': return 'bg-pink-100 text-pink-700 border-pink-300';
-      case 'Derechos Humanos': return 'bg-green-100 text-green-700 border-green-300';
-      default: return 'bg-gray-100 text-gray-700 border-gray-300';
+  const loadNextLevel = () => {
+    if (currentLevel < MAX_LEVEL) {
+      setCurrentLevel(currentLevel + 1);
+      setCurrentBio(0);
+      setScore(0);
+      setLevelComplete(false);
+      setShowMotivational(false);
+      setReadBiographies(new Set());
+      setShowQuiz(false);
+      setSelectedAnswer(null);
+      setShowReward(false);
+    } else {
+      setLevelComplete(false);
     }
   };
 
-  if (readingComplete) {
-    return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="mb-4 bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver al dashboard
-        </Button>
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
+      'Ciencia': 'bg-blue-100 text-blue-700 border-blue-300',
+      'Arte e Inventos': 'bg-purple-100 text-purple-700 border-purple-300',
+      'Arte': 'bg-pink-100 text-pink-700 border-pink-300',
+      'Derechos Humanos': 'bg-green-100 text-green-700 border-green-300',
+      'Tecnología': 'bg-orange-100 text-orange-700 border-orange-300',
+      'Aventura': 'bg-red-100 text-red-700 border-red-300',
+    };
+    return colors[category] || 'bg-gray-100 text-gray-700 border-gray-300';
+  };
 
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="max-w-2xl mx-auto text-center"
-        >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200">
-            <CardContent className="p-8">
-              <div className="text-6xl mb-4">👥</div>
-              
-              <h2 className="text-3xl mb-4 text-gray-800">
-                ¡Biografías Completadas!
-              </h2>
-              
-              <div className="text-xl mb-6 text-gray-600">
-                Puntuación: {score} puntos de inspiración
-              </div>
-              
-              <div className="mb-6">
-                <div className="text-gray-600 mb-4">
-                  Has conocido a {readBiographies.size} persona{readBiographies.size !== 1 ? 's' : ''} extraordinaria{readBiographies.size !== 1 ? 's' : ''}
-                </div>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-indigo-50 p-4 rounded-lg">
-                    <div className="text-2xl text-indigo-600 mb-1">{readBiographies.size}</div>
-                    <div className="text-sm text-indigo-700">Biografías Leídas</div>
-                  </div>
-                  <div className="bg-purple-50 p-4 rounded-lg">
-                    <div className="text-2xl text-purple-600 mb-1">{score}</div>
-                    <div className="text-sm text-purple-700">Puntos de Inspiración</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-gray-600 mb-6">
-                ¡Has conocido vidas extraordinarias! Estas personas nos enseñan que con determinación y trabajo duro podemos cambiar el mundo.
-              </div>
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={restartReading}
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3"
-                >
-                  Conocer Más Personas
-                </Button>
-                <Button
-                  onClick={onBack}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  Volver al dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    );
-  }
 
-  if (showQuiz) {
+  const maxPoints = biographies.length * 50;
+
+
+  if (showQuiz && !showMotivational && !levelComplete) {
     return (
       <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl text-gray-800 dyslexia-friendly">
-              📝 Quiz sobre {biography.name}
-            </h1>
-            <div className="flex items-center gap-2 justify-center mt-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-gray-600">Puntos: {score}</span>
-            </div>
-          </div>
+          <GameHeader
+            title={`Quiz: ${biography.name} - Nivel ${currentLevel}`}
+            score={score}
+            onBack={onBack}
+            onRestart={restartLevel}
+          />
 
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            className="mt-8"
           >
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200">
               <CardContent className="p-8">
-                <h3 className="text-xl mb-6 text-gray-800 dyslexia-friendly">
-                  {biography.quiz.question}
-                </h3>
+                <h3 className="text-xl mb-6 text-black">{biography.quiz.question}</h3>
 
                 <div className="grid gap-4">
                   {biography.quiz.options.map((option, index) => (
@@ -367,16 +630,19 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
                             ? index === biography.quiz.correct
                               ? 'bg-green-100 border-green-400 text-green-800'
                               : 'bg-red-100 border-red-400 text-red-800'
-                            : index === biography.quiz.correct
+                            : index === biography.quiz.correct && selectedAnswer !== null
                             ? 'bg-green-100 border-green-400 text-green-800'
                             : 'bg-gray-100 border-gray-300 text-gray-500'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">
+                          <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm">
                             {String.fromCharCode(65 + index)}
                           </div>
-                          <span className="text-lg dyslexia-friendly">{option}</span>
+                          <span className="text-lg text-black flex-1">{option}</span>
+                          {selectedAnswer !== null && index === biography.quiz.correct && (
+                            <CheckCircle className="w-5 h-5 text-green-600" />
+                          )}
                         </div>
                       </Button>
                     </motion.div>
@@ -397,6 +663,33 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
             </Card>
           </motion.div>
         </div>
+
+        {/* MENSAJE MOTIVACIONAL*/}
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={maxPoints}
+            customMessage="¡Has leído todas las biografías!"
+            customSubtitle="Completaste todas las lecturas del nivel"
+            onComplete={() => {
+              setShowMotivational(false);
+              setLevelComplete(true);
+            }}
+          />
+        )}
+
+        {/* MODAL FINAL  */}
+        {levelComplete && !showMotivational && (
+          <LevelCompleteModal
+            score={score}
+            total={maxPoints}
+            level={currentLevel}
+            isLastLevel={currentLevel >= MAX_LEVEL}
+            onNextLevel={loadNextLevel}
+            onRestart={restartLevel}
+            onExit={onBack}
+          />
+        )}
       </div>
     );
   }
@@ -404,52 +697,27 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            onClick={onBack}
-            variant="outline"
-            className="bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="text-2xl text-gray-800 dyslexia-friendly">
-              👤 Biografías Sencillas
-            </h1>
-            <div className="flex items-center gap-2 justify-center mt-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-gray-600">Puntos: {score}</span>
-            </div>
-          </div>
-          
-          <div className="text-right">
-            <div className="text-sm text-gray-600">
-              Biografía {currentBio + 1} de {biographies.length}
-            </div>
-          </div>
-        </div>
 
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <Progress value={progress} className="h-3 bg-white/50" />
-        </div>
+        <GameHeader
+          title={`Biografías Sencillas`}
+          level={currentLevel}
+          score={score}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
 
-        {/* Animal Guide */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="mb-6"
-        >
-          <AnimalGuide
-            animal="monkey"
-            message="¡Conoce personas extraordinarias que cambiaron el mundo! Sus historias nos inspiran a ser mejores y a seguir nuestros sueños."
-          />
-        </motion.div>
+        <ProgressBar
+          current={currentBio + 1}
+          total={biographies.length}
+          progress={progress}
+        />
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <AnimalGuide
+          animal="monkey"
+          message="¡Conoce personas extraordinarias que cambiaron el mundo! Sus historias nos inspiran a ser mejores."
+        />
+
+        <div className="grid lg:grid-cols-3 gap-8 mt-6">
           {/* Main Biography */}
           <div className="lg:col-span-2">
             <motion.div
@@ -458,25 +726,22 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              {/* Biography Header */}
               <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-6 mb-6">
                     <div className="text-8xl">{biography.emoji}</div>
                     <div className="flex-1">
-                      <h2 className="text-3xl text-gray-800 dyslexia-friendly mb-2">
-                        {biography.name}
-                      </h2>
-                      <p className="text-xl text-gray-600 mb-3">{biography.title}</p>
+                      <h2 className="text-3xl text-black mb-2">{biography.name}</h2>
+                      <p className="text-xl text-black mb-3">{biography.title}</p>
                       <div className="flex flex-wrap items-center gap-3">
                         <Badge className={`${getCategoryColor(biography.category)} border`}>
                           {biography.category}
                         </Badge>
-                        <div className="flex items-center gap-1 text-gray-600">
+                        <div className="flex items-center gap-1 text-black">
                           <Calendar className="w-4 h-4" />
                           <span>{biography.birthYear}</span>
                         </div>
-                        <div className="flex items-center gap-1 text-gray-600">
+                        <div className="flex items-center gap-1 text-black">
                           <MapPin className="w-4 h-4" />
                           <span>{biography.country}</span>
                         </div>
@@ -484,42 +749,32 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
                     </div>
                   </div>
 
-                  {/* Achievement */}
                   <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200 mb-6">
                     <div className="flex items-center gap-2 mb-2">
                       <Award className="w-5 h-5 text-yellow-600" />
                       <h3 className="text-lg text-yellow-800">Principal Logro:</h3>
                     </div>
-                    <p className="text-yellow-700 dyslexia-friendly">{biography.mainAchievement}</p>
+                    <p className="text-yellow-700">{biography.mainAchievement}</p>
                   </div>
 
-                  {/* Audio Player */}
                   <div className="mb-6">
-                    <AudioPlayer
-                      text={`Reproduciendo biografía de ${biography.name}...`}
-                      duration={5000}
-                    />
+                    <AudioPlayer text={`Reproduciendo biografía de ${biography.name}...`} duration={5000} />
                   </div>
 
-                  {/* Biography Story */}
                   <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-200 mb-6">
-                    <p className="text-lg leading-relaxed text-gray-800 dyslexia-friendly">
-                      {biography.story}
-                    </p>
+                    <p className="text-lg leading-relaxed text-black">{biography.story}</p>
                   </div>
 
-                  {/* Inspiration */}
                   <div className="bg-green-50 p-4 rounded-lg border-2 border-green-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-2xl">💡</span>
+                      <span className="text-2xl">Lightbulb</span>
                       <h4 className="text-lg text-green-800">Inspiración:</h4>
                     </div>
-                    <p className="text-green-700 dyslexia-friendly italic">"{biography.inspiration}"</p>
+                    <p className="text-green-700 italic">"{biography.inspiration}"</p>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Read Button */}
               {!readBiographies.has(currentBio) && (
                 <div className="text-center mb-6">
                   <Button
@@ -534,43 +789,37 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
             </motion.div>
           </div>
 
-          {/* Sidebar */}
+    
           <div className="lg:col-span-1">
-            {/* Timeline */}
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 mb-6">
               <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-gray-800 flex items-center gap-2">
+                <h3 className="text-lg mb-4 text-black flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-purple-500" />
                   Cronología de Vida
                 </h3>
-                
                 <div className="space-y-4">
                   {biography.timeline.map((event, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0">
+                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm">
                         {event.age}
                       </div>
-                      <div className="flex-1">
-                        <p className="text-gray-700 text-sm dyslexia-friendly">{event.event}</p>
-                      </div>
+                      <p className="text-black text-sm">{event.event}</p>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Fun Facts */}
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200">
               <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-gray-800 flex items-center gap-2">
-                  <span className="text-orange-500">🤔</span>
+                <h3 className="text-lg mb-4 text-black flex items-center gap-2">
+                  <span className="text-orange-500">Thinking Face</span>
                   Datos Curiosos
                 </h3>
-                
                 <div className="space-y-3">
                   {biography.funFacts.map((fact, index) => (
                     <div key={index} className="bg-orange-50 p-3 rounded-lg border border-orange-200">
-                      <p className="text-orange-800 text-sm dyslexia-friendly">{fact}</p>
+                      <p className="text-orange-800 text-sm">{fact}</p>
                     </div>
                   ))}
                 </div>
@@ -579,7 +828,7 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
           </div>
         </div>
 
-        {/* Navigation */}
+   
         <div className="flex justify-between items-center mt-8">
           <Button
             onClick={previousBiography}
@@ -588,9 +837,9 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
             className="bg-white/80 backdrop-blur-sm"
           >
             <ChevronLeft className="w-4 h-4 mr-2" />
-            Biografía Anterior
+            Anterior
           </Button>
-          
+
           <div className="flex gap-2">
             {biographies.map((_, index) => (
               <div
@@ -605,24 +854,48 @@ export function BiografiasSencillas({ onBack, level }: BiografiasSencillasProps)
               />
             ))}
           </div>
-          
+
           <Button
             onClick={nextBiography}
             disabled={currentBio === biographies.length - 1 || !readBiographies.has(currentBio)}
             className="bg-indigo-500 hover:bg-indigo-600 text-white"
           >
-            {currentBio === biographies.length - 1 ? "Finalizar" : "Siguiente Biografía"}
+            {currentBio === biographies.length - 1 ? "Finalizar Nivel" : "Siguiente"}
             <ChevronRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
 
-        {/* Reward Animation */}
-        {showReward && (
-          <RewardAnimation
-            type="star"
-            show={showReward}
-            message="¡Respuesta correcta!"
-            onComplete={() => setShowReward(false)}
+        <RewardAnimation
+          type="star"
+          show={showReward}
+          message="¡Respuesta correcta!"
+          onComplete={() => setShowReward(false)}
+        />
+
+        {/* MENSAJE MOTIVACIONAL */}
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={maxPoints}
+            customMessage="¡Has conocido vidas inspiradoras!"
+            customSubtitle="Completaste todas las lecturas del nivel"
+            onComplete={() => {
+              setShowMotivational(false);
+              setLevelComplete(true);
+            }}
+          />
+        )}
+
+        {/* MODAL FINAL */}
+        {levelComplete && !showMotivational && (
+          <LevelCompleteModal
+            score={score}
+            total={maxPoints}
+            level={currentLevel}
+            isLastLevel={currentLevel >= MAX_LEVEL}
+            onNextLevel={loadNextLevel}
+            onRestart={restartLevel}
+            onExit={onBack}
           />
         )}
       </div>

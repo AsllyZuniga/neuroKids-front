@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
+import {  RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
-import { Progress } from '../../../ui/progress';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
+import { GameHeader } from '../../../others/GameHeader';
+import { ProgressBar } from '../../../others/ProgressBar';
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
+import { StartScreenOrdenaHistoria } from "../IniciosJuegosLecturas/StartScreenOrdenaHistoria/StartScreenOrdenaHistoria";
 
 interface OrdenaHistoriaProps {
   onBack: () => void;
-  level: number;
 }
 
 interface StoryFragment {
@@ -19,33 +23,193 @@ interface StoryFragment {
   currentPosition?: number;
 }
 
-const stories = [
+interface Story {
+  title: string;
+  fragments: StoryFragment[];
+}
+
+interface Level {
+  level: number;
+  stories: Story[];
+}
+
+const levels: Level[] = [
   {
-    title: "El día en el parque",
-    fragments: [
-      { id: 1, text: "María se despertó muy temprano en la mañana.", correctOrder: 1 },
-      { id: 2, text: "Desayunó cereal con leche y se vistió rápidamente.", correctOrder: 2 },
-      { id: 3, text: "Salió de casa con su pelota favorita.", correctOrder: 3 },
-      { id: 4, text: "En el parque encontró a sus amigos jugando.", correctOrder: 4 },
-      { id: 5, text: "Jugaron fútbol toda la tarde hasta que se hizo de noche.", correctOrder: 5 },
-      { id: 6, text: "Regresó a casa feliz y cansada del día.", correctOrder: 6 }
+    level: 1,
+    stories: [
+      {
+        title: "El día en el parque",
+        fragments: [
+          { id: 1, text: "María se despertó muy temprano en la mañana.", correctOrder: 1 },
+          { id: 2, text: "Desayunó cereal con leche y se vistió rápidamente.", correctOrder: 2 },
+          { id: 3, text: "Salió de casa con su pelota favorita.", correctOrder: 3 },
+          { id: 4, text: "En el parque encontró a sus amigos jugando.", correctOrder: 4 },
+          { id: 5, text: "Jugaron fútbol toda la tarde hasta que se hizo de noche.", correctOrder: 5 },
+          { id: 6, text: "Regresó a casa feliz y cansada del día.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "La visita al zoológico",
+        fragments: [
+          { id: 1, text: "Ana y su familia planearon un viaje al zoológico.", correctOrder: 1 },
+          { id: 2, text: "Llegaron temprano y compraron entradas.", correctOrder: 2 },
+          { id: 3, text: "Vieron primero a los leones rugiendo fuerte.", correctOrder: 3 },
+          { id: 4, text: "Luego alimentaron a las jirafas con hojas.", correctOrder: 4 },
+          { id: 5, text: "Tomaron un descanso para comer helado.", correctOrder: 5 },
+          { id: 6, text: "Regresaron a casa con fotos y recuerdos felices.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "El día de la bicicleta",
+        fragments: [
+          { id: 1, text: "Pedro decidió salir a andar en bicicleta.", correctOrder: 1 },
+          { id: 2, text: "Se puso su casco y revisó las llantas.", correctOrder: 2 },
+          { id: 3, text: "Pedaleó hasta el parque por un camino soleado.", correctOrder: 3 },
+          { id: 4, text: "Encontró a su amigo Luis practicando trucos.", correctOrder: 4 },
+          { id: 5, text: "Juntos corrieron carreras y rieron mucho.", correctOrder: 5 },
+          { id: 6, text: "Volvió a casa antes de que anocheciera.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "La búsqueda del tesoro",
+        fragments: [
+          { id: 1, text: "Sofía encontró un mapa del tesoro en el ático.", correctOrder: 1 },
+          { id: 2, text: "Leyó las pistas con su hermano menor.", correctOrder: 2 },
+          { id: 3, text: "Buscaron en el jardín cerca del roble grande.", correctOrder: 3 },
+          { id: 4, text: "Cavaron y hallaron una caja de madera.", correctOrder: 4 },
+          { id: 5, text: "Dentro encontraron monedas de chocolate.", correctOrder: 5 },
+          { id: 6, text: "Compartieron el tesoro con sus amigos.", correctOrder: 6 }
+        ]
+      }
     ]
   },
   {
-    title: "La aventura del gatito",
-    fragments: [
-      { id: 1, text: "Un pequeño gatito se perdió en el bosque.", correctOrder: 1 },
-      { id: 2, text: "Caminó durante horas buscando el camino a casa.", correctOrder: 2 },
-      { id: 3, text: "Se encontró con un búho sabio en un árbol.", correctOrder: 3 },
-      { id: 4, text: "El búho le enseñó el camino correcto.", correctOrder: 4 },
-      { id: 5, text: "El gatito siguió las indicaciones cuidadosamente.", correctOrder: 5 },
-      { id: 6, text: "Finalmente llegó a casa donde lo esperaba su familia.", correctOrder: 6 }
+    level: 2,
+    stories: [
+      {
+        title: "La aventura del gatito",
+        fragments: [
+          { id: 1, text: "Un pequeño gatito se perdió en el bosque.", correctOrder: 1 },
+          { id: 2, text: "Caminó durante horas buscando el camino a casa.", correctOrder: 2 },
+          { id: 3, text: "Se encontró con un búho sabio en un árbol.", correctOrder: 3 },
+          { id: 4, text: "El búho le enseñó el camino correcto.", correctOrder: 4 },
+          { id: 5, text: "El gatito siguió las indicaciones cuidadosamente.", correctOrder: 5 },
+          { id: 6, text: "Finalmente llegó a casa donde lo esperaba su familia.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "El viaje al mar",
+        fragments: [
+          { id: 1, text: "La familia empacó sus maletas para las vacaciones.", correctOrder: 1 },
+          { id: 2, text: "Viajaron en auto durante varias horas.", correctOrder: 2 },
+          { id: 3, text: "Llegaron a la playa y se instalaron en el hotel.", correctOrder: 3 },
+          { id: 4, text: "Nadaron en el mar y construyeron castillos de arena.", correctOrder: 4 },
+          { id: 5, text: "Vieron un hermoso atardecer.", correctOrder: 5 },
+          { id: 6, text: "Regresaron a casa con lindos recuerdos.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "El festival de cometas",
+        fragments: [
+          { id: 1, text: "Clara y sus amigos planearon ir al festival de cometas.", correctOrder: 1 },
+          { id: 2, text: "Construyeron una cometa con papel de colores.", correctOrder: 2 },
+          { id: 3, text: "Llegaron al campo donde había mucho viento.", correctOrder: 3 },
+          { id: 4, text: "Hicieron volar su cometa más alto que las demás.", correctOrder: 4 },
+          { id: 5, text: "Ganaron un premio por la cometa más creativa.", correctOrder: 5 },
+          { id: 6, text: "Celebraron con un picnic bajo el sol.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "La receta secreta",
+        fragments: [
+          { id: 1, text: "La abuela invitó a Lucía a cocinar galletas.", correctOrder: 1 },
+          { id: 2, text: "Buscaron los ingredientes en la despensa.", correctOrder: 2 },
+          { id: 3, text: "Mezclaron harina, azúcar y huevos en un tazón.", correctOrder: 3 },
+          { id: 4, text: "Formaron las galletas y las pusieron en el horno.", correctOrder: 4 },
+          { id: 5, text: "El aroma llenó la casa mientras se horneaban.", correctOrder: 5 },
+          { id: 6, text: "Todos disfrutaron las galletas calientes.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "El día de la limpieza",
+        fragments: [
+          { id: 1, text: "La familia decidió limpiar el garaje un sábado.", correctOrder: 1 },
+          { id: 2, text: "Sacaron cajas viejas y barrieron el polvo.", correctOrder: 2 },
+          { id: 3, text: "Encontraron un viejo álbum de fotos.", correctOrder: 3 },
+          { id: 4, text: "Se detuvieron para mirar las fotos y reír.", correctOrder: 4 },
+          { id: 5, text: "Organizaron todo y dejaron el garaje impecable.", correctOrder: 5 },
+          { id: 6, text: "Celebraron con limonada en el patio.", correctOrder: 6 }
+        ]
+      }
+    ]
+  },
+  {
+    level: 3,
+    stories: [
+      {
+        title: "La fiesta de cumpleaños",
+        fragments: [
+          { id: 1, text: "Juan invitó a sus amigos a su fiesta.", correctOrder: 1 },
+          { id: 2, text: "Decoraron la casa con globos y guirnaldas.", correctOrder: 2 },
+          { id: 3, text: "Prepararon una deliciosa torta.", correctOrder: 3 },
+          { id: 4, text: "Los invitados llegaron con regalos.", correctOrder: 4 },
+          { id: 5, text: "Jugaron juegos y cantaron feliz cumpleaños.", correctOrder: 5 },
+          { id: 6, text: "Juan abrió sus regalos al final de la fiesta.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "El rescate del perrito",
+        fragments: [
+          { id: 1, text: "Un perrito quedó atrapado en un árbol.", correctOrder: 1 },
+          { id: 2, text: "Los niños del vecindario lo escucharon ladrar.", correctOrder: 2 },
+          { id: 3, text: "Llamaron a los bomberos para que ayudaran.", correctOrder: 3 },
+          { id: 4, text: "Los bomberos trajeron una escalera alta.", correctOrder: 4 },
+          { id: 5, text: "Rescataron al perrito con cuidado.", correctOrder: 5 },
+          { id: 6, text: "El perrito agradeció moviendo la cola.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "La excursión a la montaña",
+        fragments: [
+          { id: 1, text: "El grupo escolar planearon una excursión a la montaña.", correctOrder: 1 },
+          { id: 2, text: "Empacaron mochilas con agua y bocadillos.", correctOrder: 2 },
+          { id: 3, text: "Caminaron por un sendero rodeado de pinos.", correctOrder: 3 },
+          { id: 4, text: "Descubrieron una cueva escondida detrás de unas rocas.", correctOrder: 4 },
+          { id: 5, text: "Exploraron la cueva con linternas y cuidado.", correctOrder: 5 },
+          { id: 6, text: "Regresaron al campamento contando historias.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "El misterio del libro perdido",
+        fragments: [
+          { id: 1, text: "Emma notó que su libro favorito había desaparecido.", correctOrder: 1 },
+          { id: 2, text: "Buscó en su cuarto debajo de la cama.", correctOrder: 2 },
+          { id: 3, text: "Preguntó a su hermano si lo había visto.", correctOrder: 3 },
+          { id: 4, text: "Encontró una pista en la sala: una nota rara.", correctOrder: 4 },
+          { id: 5, text: "La nota la llevó al armario donde estaba el libro.", correctOrder: 5 },
+          { id: 6, text: "Celebró leyendo el libro con su hermano.", correctOrder: 6 }
+        ]
+      },
+      {
+        title: "El huerto de la escuela",
+        fragments: [
+          { id: 1, text: "Los estudiantes decidieron crear un huerto escolar.", correctOrder: 1 },
+          { id: 2, text: "Sembraron semillas de zanahorias y tomates.", correctOrder: 2 },
+          { id: 3, text: "Regaron las plantas todos los días con cuidado.", correctOrder: 3 },
+          { id: 4, text: "Vieron cómo crecían las primeras hojas verdes.", correctOrder: 4 },
+          { id: 5, text: "Cosecharon los vegetales después de semanas.", correctOrder: 5 },
+          { id: 6, text: "Prepararon una ensalada para compartir en clase.", correctOrder: 6 }
+        ]
+      }
     ]
   }
 ];
 
-export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
-  const [currentStory, setCurrentStory] = useState(0);
+export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
+  const [gameStarted, setGameStarted] = useState(false);
+  const MAX_LEVEL = 3;
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [fragments, setFragments] = useState<StoryFragment[]>([]);
   const [userOrder, setUserOrder] = useState<StoryFragment[]>([]);
   const [score, setScore] = useState(0);
@@ -53,15 +217,17 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
   const [gameComplete, setGameComplete] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [showReward, setShowReward] = useState(false);
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
   useEffect(() => {
     initializeStory();
-  }, [currentStory]);
+  }, [currentLevel, currentStoryIndex]);
 
   const initializeStory = () => {
-    const story = stories[currentStory];
-    const shuffledFragments = [...story.fragments].sort(() => Math.random() - 0.5);
+    const currentStory = levels[currentLevel - 1].stories[currentStoryIndex];
+    const shuffledFragments = [...currentStory.fragments].sort(() => Math.random() - 0.5);
     setFragments(shuffledFragments);
     setUserOrder([]);
     setShowResult(false);
@@ -81,24 +247,17 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
     if (!draggedFragment) return;
 
     const newUserOrder = [...userOrder];
-    
-    // Remove fragment from its current position if it exists
     const existingIndex = newUserOrder.findIndex(f => f.id === draggedFragment.id);
     if (existingIndex !== -1) {
       newUserOrder.splice(existingIndex, 1);
     }
-
-    // Insert fragment at new position
     newUserOrder.splice(position, 0, draggedFragment);
     setUserOrder(newUserOrder);
-
-    // Remove from available fragments
     setFragments(fragments.filter(f => f.id !== draggedFragment.id));
     setDraggedFragment(null);
   };
 
   const handleFragmentClick = (fragment: StoryFragment) => {
-    // Move fragment to user order
     setUserOrder([...userOrder, fragment]);
     setFragments(fragments.filter(f => f.id !== fragment.id));
   };
@@ -112,7 +271,7 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
   };
 
   const checkOrder = () => {
-    if (userOrder.length !== stories[currentStory].fragments.length) {
+    if (userOrder.length !== levels[currentLevel - 1].stories[currentStoryIndex].fragments.length) {
       alert("Debes ordenar todas las frases antes de verificar.");
       return;
     }
@@ -124,80 +283,64 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
 
     if (isCorrect) {
       const points = Math.max(30 - (attempts * 5), 10);
-      setScore(score + points);
+      setScore(prev => prev + points);
       setShowReward(true);
-      
       setTimeout(() => {
         setShowReward(false);
-        if (currentStory < stories.length - 1) {
-          setCurrentStory(currentStory + 1);
+        if (currentStoryIndex < levels[currentLevel - 1].stories.length - 1) {
+          setCurrentStoryIndex(prev => prev + 1);
         } else {
-          setGameComplete(true);
+          setShowMotivational(true);
         }
-      }, 2000);
+      }, 3000);
     } else {
       setShowResult(true);
-      setTimeout(() => {
-        setShowResult(false);
-      }, 2000);
+      setTimeout(() => setShowResult(false), 2000);
     }
   };
 
-  const resetStory = () => {
+  const handleNextLevel = () => {
+    if (currentLevel < MAX_LEVEL) {
+      setCurrentLevel(prev => prev + 1);
+      setCurrentStoryIndex(0);
+    } else {
+      setGameComplete(true);
+    }
+    setShowMotivational(false);
+    setShowLevelComplete(false);
+  };
+
+  const handleRepeatLevel = () => {
+    setCurrentStoryIndex(0);
+    setScore(0);
+    setShowMotivational(false);
+    setShowLevelComplete(false);
     initializeStory();
   };
 
-  const restartGame = () => {
-    setCurrentStory(0);
+  const handleRestartGame = () => {
+    setCurrentLevel(1);
+    setCurrentStoryIndex(0);
     setScore(0);
     setGameComplete(false);
-    setShowReward(false);
+    setShowMotivational(false);
+    setShowLevelComplete(false);
     initializeStory();
   };
 
   if (gameComplete) {
     return (
       <div className="min-h-screen p-6 bg-gradient-to-br from-green-100 via-blue-100 to-purple-100">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="mb-4 bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver al dashboard
-        </Button>
-
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="max-w-2xl mx-auto text-center"
-        >
+        <ConfettiExplosion show={true} />
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto text-center">
           <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-200">
             <CardContent className="p-8">
-              <div className="text-6xl mb-4">🏆</div>
-              
-              <h2 className="text-3xl mb-4 text-gray-800">
-                ¡Todas las historias completadas!
-              </h2>
-              
-              <div className="text-xl mb-6 text-gray-600">
-                Puntuación final: {score} puntos
-              </div>
-              
+              <div className="text-6xl mb-4">Trophy</div>
+              <h2 className="text-3xl mb-4 text-black">¡Has completado todos los niveles!</h2>
+              <div className="text-xl mb-6 text-black">Puntuación final: {score} puntos</div>
               <div className="flex justify-center gap-4">
-                <Button
-                  onClick={restartGame}
-                  className="bg-green-500 hover:bg-green-600 text-white px-6 py-3"
-                >
-                  Jugar de nuevo
-                </Button>
-                <Button
-                  onClick={onBack}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  Volver al dashboard
-                </Button>
+                <Button onClick={handleRestartGame} className="bg-green-500 hover:bg-green-600 text-white px-6 py-3">Jugar de nuevo</Button>
+                <Button onClick={onBack} variant="outline" className="px-6 py-3">Volver al dashboard</Button>
               </div>
             </CardContent>
           </Card>
@@ -206,67 +349,46 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
     );
   }
 
-  const progress = ((currentStory + 1) / stories.length) * 100;
+  const currentStories = levels[currentLevel - 1].stories;
+  const progress = ((currentStoryIndex) / currentStories.length) * 100;
+
+  if (!gameStarted) {
+    return <StartScreenOrdenaHistoria onStart={() => setGameStarted(true)} onBack={onBack} />;
+  }
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-green-100 via-blue-100 to-purple-100">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            onClick={onBack}
-            variant="outline"
-            className="bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="text-2xl text-gray-800 dyslexia-friendly">
-              📋 Ordena la Historia
-            </h1>
-            <div className="flex items-center gap-2 justify-center mt-1">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-gray-600">Puntos: {score}</span>
-            </div>
-          </div>
-          
-          <div className="text-right">
-            <div className="text-sm text-gray-600">
-              Historia {currentStory + 1} de {stories.length}
-            </div>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        {/* HEADER */}
+        <GameHeader
+          title="Ordena la Historia"
+          level={currentLevel}
+          score={score}
+          onBack={onBack}
+          onRestart={handleRepeatLevel}
+        />
 
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <Progress value={progress} className="h-3 bg-white/50" />
-        </div>
-
-        {/* Animal Guide */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+        <ProgressBar
+          current={currentStoryIndex + 1}
+          total={currentStories.length}
+          progress={progress}
           className="mb-6"
-        >
+        />
+
+        <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6">
           <AnimalGuide
             animal="turtle"
             message="Lee cada frase con paciencia y ordénalas para formar una historia completa. ¡Puedes arrastrar las frases o hacer clic en ellas!"
           />
         </motion.div>
 
-        {/* Story Title */}
         <div className="text-center mb-6">
-          <h2 className="text-2xl text-gray-800 dyslexia-friendly">
-            "{stories[currentStory].title}"
-          </h2>
+          <h2 className="text-2xl text-black">"{currentStories[currentStoryIndex].title}"</h2>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Available Fragments */}
           <div>
-            <h3 className="text-lg mb-4 text-gray-700">Frases disponibles:</h3>
+            <h3 className="text-lg mb-4 text-black">Frases disponibles:</h3>
             <div className="space-y-3">
               {fragments.map((fragment) => (
                 <motion.div
@@ -283,9 +405,7 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
                     onClick={() => handleFragmentClick(fragment)}
                   >
                     <CardContent className="p-4">
-                      <p className="text-gray-800 dyslexia-friendly leading-relaxed">
-                        {fragment.text}
-                      </p>
+                      <p className="text-black leading-relaxed">{fragment.text}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -293,21 +413,14 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
             </div>
           </div>
 
-          {/* Story Order */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg text-gray-700">Tu historia ordenada:</h3>
-              <Button
-                onClick={resetStory}
-                variant="outline"
-                size="sm"
-                className="bg-white/80"
-              >
+              <h3 className="text-lg text-black">Tu historia ordenada:</h3>
+              <Button onClick={initializeStory} variant="outline" size="sm" className="bg-blue-500">
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reiniciar
               </Button>
             </div>
-            
             <div className="space-y-3 min-h-[400px]">
               {userOrder.map((fragment, index) => (
                 <motion.div
@@ -324,40 +437,24 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
                         <div className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
                           {index + 1}
                         </div>
-                        <p className="text-gray-800 dyslexia-friendly leading-relaxed flex-1">
-                          {fragment.text}
-                        </p>
-                        <Button
-                          onClick={() => handleRemoveFromOrder(fragment.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          ✕
-                        </Button>
+                        <p className="text-black leading-relaxed flex-1">{fragment.text}</p>
+                        <Button onClick={() => handleRemoveFromOrder(fragment.id)} variant="ghost" size="sm" className="text-red-500 hover:text-red-700">X</Button>
                       </div>
                     </CardContent>
                   </Card>
                 </motion.div>
               ))}
-              
-              {/* Drop zone for empty order */}
               {userOrder.length === 0 && (
-                <div
-                  className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500"
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, 0)}
-                >
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 0)}>
                   Arrastra las frases aquí para ordenar la historia
                 </div>
               )}
             </div>
 
-            {/* Check Button */}
             <div className="mt-6 text-center">
               <Button
                 onClick={checkOrder}
-                disabled={userOrder.length !== stories[currentStory].fragments.length}
+                disabled={userOrder.length !== currentStories[currentStoryIndex].fragments.length}
                 className="bg-green-500 hover:bg-green-600 text-white px-8 py-3"
               >
                 <CheckCircle className="w-5 h-5 mr-2" />
@@ -367,25 +464,37 @@ export function OrdenaHistoria({ onBack, level }: OrdenaHistoriaProps) {
           </div>
         </div>
 
-        {/* Result Messages */}
         {showResult && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="fixed bottom-4 right-4 bg-red-100 border-2 border-red-300 rounded-lg p-4 flex items-center gap-2"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fixed bottom-4 right-4 bg-red-100 border-2 border-red-300 rounded-lg p-4 flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-red-500" />
             <span className="text-red-700">No es el orden correcto. ¡Inténtalo de nuevo!</span>
           </motion.div>
         )}
 
-        {/* Reward Animation */}
-        {showReward && (
-          <RewardAnimation
-            type="confetti"
-            show={showReward}
-            message="¡Historia ordenada correctamente!"
-            onComplete={() => setShowReward(false)}
+        <RewardAnimation type="confetti" show={showReward} message="¡Historia ordenada correctamente!" />
+
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={currentStories.length * 100}
+            customMessage="¡Eres un maestro de las historias!"
+            customSubtitle="¡Has ordenado todas las historias del nivel!"
+            onComplete={() => {
+              setShowMotivational(false);
+              setShowLevelComplete(true);
+            }}
+          />
+        )}
+
+        {showLevelComplete && (
+          <LevelCompleteModal
+            score={score}
+            total={currentStories.length * 100}
+            level={currentLevel}
+            isLastLevel={currentLevel >= MAX_LEVEL}
+            onNextLevel={handleNextLevel}
+            onRestart={handleRepeatLevel}
+            onExit={onBack}
           />
         )}
       </div>

@@ -56,7 +56,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
   const [progress, setProgress] = useState<UserProgress>(getInitialProgress);
 
-  // Cargar progreso del localStorage al montar el componente
+  
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(`neurokids-progress-${userAge}`);
@@ -73,7 +73,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
   const [selectedTab, setSelectedTab] = useState<'overview' | 'achievements' | 'goals'>('overview');
 
-  // Guardar progreso en localStorage cuando cambie
+ 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(`neurokids-progress-${userAge}`, JSON.stringify(progress));
@@ -85,21 +85,21 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
     setProgress(prev => {
       const newProgress = { ...prev };
       
-      // Actualizar puntos totales
+
       newProgress.totalPoints += points;
       newProgress.experiencePoints += points;
       
-      // Actualizar contadores
+  
       if (type === 'game') {
         newProgress.gamesCompleted += 1;
       } else {
         newProgress.readingsCompleted += 1;
       }
       
-      // Actualizar progreso semanal
+     
       newProgress.weeklyProgress += 1;
       
-      // Actualizar racha
+
       const today = new Date().toISOString().split('T')[0];
       const lastDate = new Date(newProgress.lastActivityDate);
       const todayDate = new Date(today);
@@ -108,9 +108,9 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
       if (daysDiff === 1) {
         newProgress.currentStreak += 1;
       } else if (daysDiff === 0) {
-        // Mismo día, no cambiar racha
+      // Mismo día, no cambiar racha
       } else {
-        newProgress.currentStreak = 1; // Reiniciar racha
+        newProgress.currentStreak = 1;// Reiniciar racha
       }
       
       if (newProgress.currentStreak > newProgress.longestStreak) {
@@ -119,13 +119,12 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
       
       newProgress.lastActivityDate = today;
       
-      // Verificar subida de nivel
-      while (newProgress.experiencePoints >= newProgress.nextLevelXP) {
+         while (newProgress.experiencePoints >= newProgress.nextLevelXP) {
         newProgress.experiencePoints -= newProgress.nextLevelXP;
         newProgress.level += 1;
         newProgress.nextLevelXP = Math.floor(newProgress.nextLevelXP * 1.5); // Incremento exponencial
         
-        // Agregar logro por subir de nivel
+       
         const levelAchievement: Achievement = {
           id: `level-${newProgress.level}`,
           name: `Nivel ${newProgress.level}`,
@@ -139,7 +138,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
         newProgress.achievements.push(levelAchievement);
       }
       
-      // Verificar otros logros
+
       checkAchievements(newProgress);
       
       return newProgress;
@@ -149,7 +148,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
   const checkAchievements = (currentProgress: UserProgress) => {
     const newAchievements: Achievement[] = [];
     
-    // Logros por primeras actividades
+
     if (currentProgress.gamesCompleted === 1 && !currentProgress.achievements.find(a => a.id === 'first-game')) {
       newAchievements.push({
         id: 'first-game',
@@ -174,7 +173,6 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
       });
     }
     
-    // Logros por rachas
     if (currentProgress.currentStreak >= 7 && !currentProgress.achievements.find(a => a.id === 'week-streak')) {
       newAchievements.push({
         id: 'week-streak',
@@ -187,7 +185,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
       });
     }
     
-    // Logros por cantidad de actividades
+   
     if (currentProgress.gamesCompleted >= 10 && !currentProgress.achievements.find(a => a.id === 'game-master')) {
       newAchievements.push({
         id: 'game-master',
@@ -212,7 +210,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
       });
     }
     
-    // Agregar nuevos logros
+
     if (newAchievements.length > 0) {
       currentProgress.achievements.push(...newAchievements);
     }
@@ -242,10 +240,6 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
     return 'bg-blue-500';
   };
 
-  // Hacer la función updateProgress disponible globalmente (deshabilitado temporalmente)
-  // useEffect(() => {
-  //   (window as any).updateNeurokidsProgress = updateProgress;
-  // }, []);
 
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-blue-50 via-purple-50 to-green-50">
@@ -277,7 +271,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
           </div>
         </div>
 
-        {/* Tabs de navegación */}
+ 
         <div className="flex gap-2 mb-6">
           {[
             { id: 'overview', label: 'Resumen', icon: TrendingUp },
@@ -299,10 +293,10 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
           ))}
         </div>
 
-        {/* Contenido de tabs */}
+      
         {selectedTab === 'overview' && (
           <div className="grid lg:grid-cols-3 gap-6">
-            {/* Estadísticas principales */}
+         
             <div className="lg:col-span-2 space-y-6">
               <Card>
                 <CardContent className="p-6">
@@ -370,7 +364,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
               </div>
             </div>
 
-            {/* Logros recientes */}
+    
             <div>
               <Card>
                 <CardContent className="p-6">

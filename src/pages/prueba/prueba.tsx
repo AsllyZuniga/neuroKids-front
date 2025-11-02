@@ -7,8 +7,7 @@ import "./prueba.scss";
 export default function Prueba({
   nivel,
   imagen,
-  lecturas,
-  games,
+
 }: {
   nivel: number;
   imagen: string;
@@ -18,42 +17,40 @@ export default function Prueba({
   const navigate = useNavigate();
   const variant = `nivel${nivel}` as "nivel1" | "nivel2" | "nivel3";
 
-  // 🎮 Nombres de juegos y lecturas (nivel 7–8 años)
   const juegosNivel1 = [
-    { id: 1, nombre: "Bingo de Palabras" },
-    { id: 2, nombre: "Caza la Sílaba" },
-    { id: 3, nombre: "Escucha y Elige" },
+    { id: 1, nombre: "Bingo de Palabras 😎" },
+    { id: 2, nombre: "Caza la Sílaba 🔤" },
+    { id: 3, nombre: "Escucha y Elige 👂" },
   ];
 
   const lecturasNivel1 = [
-    { id: 1, nombre: "Cuento con Pictogramas" },
-    { id: 2, nombre: "Frases Mágicas" },
-    { id: 3, nombre: "Primera Palabra" },
+    { id: 1, nombre: "Cuento con Pictogramas 🌆" },
+    { id: 2, nombre: "Frases Mágicas 🪄" },
+    { id: 3, nombre: "Primera Palabra 🔠" },
   ];
 
-  // 🎮 Nombres de juegos y lecturas (nivel 9–10 años)
   const juegosNivel2 = [
-    { id: 1, nombre: "Construye Frases" },
-    { id: 2, nombre: "Laberinto Lector" },
-    { id: 3, nombre: "Ordena la historia" },
+    { id: 1, nombre: "Construye Frases 🆎" },
+    { id: 2, nombre: "Laberinto Lector 🌀" },
+    { id: 3, nombre: "Ordena la historia 📍" },
   ];
 
   const lecturasNivel2 = [
-    { id: 1, nombre: "Historias interactivas" },
-    { id: 2, nombre: "Mini Aventuras" },
-    { id: 3, nombre: "Revista Infantil" },
+    { id: 1, nombre: "Historias interactivas 📚" },
+    { id: 2, nombre: "Mini Aventuras 🗺️" },
+    { id: 3, nombre: "Revista Infantil 📒" },
   ];
 
   const juegosNivel3 = [
-    { id: 1, nombre: "Construye Frases" },
-    { id: 2, nombre: "Laberinto Lector" },
-    { id: 3, nombre: "Ordena la historia" },
+    { id: 1, nombre: "Cohete Lector 🚀" },
+    { id: 2, nombre: "Detective de palabras 🔎" },
+    { id: 3, nombre: "Preguntas Inferenciales 🧠" },
   ];
 
   const lecturasNivel3 = [
-    { id: 1, nombre: "Historias interactivas" },
-    { id: 2, nombre: "Mini Aventuras" },
-    { id: 3, nombre: "Revista Infantil" },
+    { id: 1, nombre: "Biografias Sencillas 📖" },
+    { id: 2, nombre: "Cuento Interactivo 📗" },
+    { id: 3, nombre: "Noticias Sencillas 📰" },
   ];
 
 
@@ -61,7 +58,7 @@ export default function Prueba({
     <div className={`prueba-page nivel${nivel}`}>
       <Header />
 
-      {/* 🧩 HEADER */}
+      {/* HEADER */}
       <div className="prueba-header">
         <img src={imagen} alt={`Nivel ${nivel}`} className="prueba-img" />
         <div className="prueba-buttons">
@@ -86,13 +83,13 @@ export default function Prueba({
         </div>
       </div>
 
-      {/* 🧠 CONTENIDO */}
+      {/* CONTENIDO */}
       {nivel === 1 ? (
         <>
           {/* 🎮 Juegos */}
           <section className="prueba-cards">
             <h2>Juegos disponibles</h2>
-            <div className="cards-container">
+            <div className="cards-container text-black">
               {juegosNivel1.map((juego, index) => (
                 <Card
                   key={juego.id}
@@ -106,10 +103,10 @@ export default function Prueba({
             </div>
           </section>
 
-          {/* 📚 Lecturas */}
+          {/* Lecturas */}
           <section className="prueba-cards">
             <h2>Lecturas disponibles</h2>
-            <div className="cards-container">
+            <div className="cards-container text-black">
               {lecturasNivel1.map((lectura, index) => (
                 <Card
                   key={lectura.id}
@@ -125,10 +122,10 @@ export default function Prueba({
         </>
       ) : nivel === 2 ? (
         <>
-          {/* 🎮 Juegos */}
+          {/* Juegos */}
           <section className="prueba-cards">
             <h2>Juegos disponibles</h2>
-            <div className="cards-container">
+            <div className="cards-container text-black">
               {juegosNivel2.map((juego, index) => (
                 <Card
                   key={juego.id}
@@ -142,10 +139,10 @@ export default function Prueba({
             </div>
           </section>
 
-          {/* 📚 Lecturas */}
+          {/*  Lecturas */}
           <section className="prueba-cards">
             <h2>Lecturas disponibles</h2>
-            <div className="cards-container">
+            <div className="cards-container text-black">
               {lecturasNivel2.map((lectura, index) => (
                 <Card
                   key={lectura.id}
@@ -164,7 +161,7 @@ export default function Prueba({
           {/* juegos*/}
           <section className="prueba-cards">
             <h2>Juegos disponibles</h2>
-            <div className="cards-container">
+            <div className="cards-container  text-black">
               {juegosNivel3.map((juego, index) => (
                 <Card
                   key={juego.id}
@@ -181,7 +178,7 @@ export default function Prueba({
           {/* lecturas*/}
           <section className="prueba-cards">
             <h2>Lecturas disponibles</h2>
-            <div className="cards-container">
+            <div className="cards-container text-black">
               {lecturasNivel3.map((lectura, index) => (
                 <Card
                   key={lectura.id}

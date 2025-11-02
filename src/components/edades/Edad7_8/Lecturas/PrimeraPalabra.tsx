@@ -1,10 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Volume2, ChevronLeft, ChevronRight, Star, BookOpen } from 'lucide-react';
+import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from "../../../ui/button";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from "../../../others/RewardAnimation";
+import { GameHeader } from "../../../others/GameHeader";
+import { ProgressBar } from "../../../others/ProgressBar";
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
+import { StartScreenPrimeraPalabra } from "../IniciosJuegosLecturas/StartScreenPrimeraPalabra/StartScreenPrimeraPalabra";
 
 interface PrimeraPalabraProps {
   onBack: () => void;
@@ -125,18 +131,11 @@ const readingData: Record<number, any[]> = {
     }
   ]
 };
-
 const normalize = (s: string) =>
-  s
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s]/g, '')
-    .trim();
+  s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, '').trim();
 
 function levenshtein(a: string, b: string) {
-  const m = a.length;
-  const n = b.length;
+  const m = a.length, n = b.length;
   const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
   for (let i = 0; i <= m; i++) dp[i][0] = i;
   for (let j = 0; j <= n; j++) dp[0][j] = j;
@@ -153,15 +152,17 @@ function levenshtein(a: string, b: string) {
 }
 
 export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
+  const [gameStarted, setGameStarted] = useState(false);
   const MAX_LEVEL = 3;
-  const MIN_SCORE_LEVEL_3 = 10; // 80% de 12 preguntas (6 historias * 2 preguntas)
-  const [currentLevel, setCurrentLevel] = useState<number>(Math.min(Math.max(level, 1), MAX_LEVEL));
+  const [currentLevel, setCurrentLevel] = useState(Math.min(Math.max(level, 1), MAX_LEVEL));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showReward, setShowReward] = useState(false);
   const [completedItems, setCompletedItems] = useState<boolean[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [levelCompleted, setLevelCompleted] = useState(false);
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [listening, setListening] = useState(false);
   const [recognizedText, setRecognizedText] = useState<string | null>(null);
   const [pronunciationCorrect, setPronunciationCorrect] = useState<boolean | null>(null);
@@ -172,7 +173,6 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const data = readingData[currentLevel] ?? readingData[1];
   const currentItem = data[currentIndex];
 
-  // Calcular progreso
   const totalItems = data.length;
   const baseProgress = (currentIndex / totalItems) * 100;
   const maxItemProgress = 100 / totalItems;
@@ -189,11 +189,9 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     setCurrentProgress(Math.min(newProgress, 100));
   };
 
-  // Función para reiniciar estados al cambiar de nivel
   const resetLevel = (newLevel: number) => {
     const currentData = readingData[newLevel];
     if (!currentData) {
-      console.error(`No se encontraron datos para el nivel ${newLevel}. Volviendo al nivel 1.`);
       setCurrentLevel(1);
       setCurrentIndex(0);
       setCurrentQuestion(0);
@@ -205,9 +203,10 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
       setLevelCompleted(false);
       setCompletedItems(Array(readingData[1].length).fill(false));
       setCurrentProgress(0);
+      setShowMotivational(false);
+      setShowLevelComplete(false);
       return;
     }
-    console.log(`Cambiando al nivel ${newLevel}, datos:`, currentData);
     setCurrentLevel(newLevel);
     setCurrentIndex(0);
     setCurrentQuestion(0);
@@ -219,6 +218,8 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     setLevelCompleted(false);
     setCompletedItems(Array(currentData.length).fill(false));
     setCurrentProgress(0);
+    setShowMotivational(false);
+    setShowLevelComplete(false);
   };
 
   useEffect(() => {
@@ -228,6 +229,12 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   useEffect(() => {
     updateProgress();
   }, [currentIndex, completedItems, currentQuestion]);
+
+  useEffect(() => {
+    if (levelCompleted && !showMotivational) {
+      setTimeout(() => setShowMotivational(true), 800);
+    }
+  }, [levelCompleted, showMotivational]);
 
   const handleSpeak = (text: string) => {
     if ('speechSynthesis' in window) {
@@ -239,7 +246,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   };
 
   const handleNext = () => {
-    if (currentIndex < data.length - 1) {
+    if (currentIndex < data.length - 1 && completedItems[currentIndex]) {
       setCurrentIndex(ci => ci + 1);
       setCurrentQuestion(0);
       setRecognizedText(null);
@@ -259,10 +266,11 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const handleAnswer = (answerIndex: number) => {
     const item = currentItem as any;
     if (item.questions && item.questions[currentQuestion]) {
-      if (answerIndex === item.questions[currentQuestion].correct) {
+      const isCorrect = answerIndex === item.questions[currentQuestion].correct;
+      if (isCorrect) {
         setScore(s => s + 1);
         setShowReward(true);
-        setTimeout(() => setShowReward(false), 1400);
+        setTimeout(() => setShowReward(false), 1500);
       }
       if (currentQuestion < item.questions.length - 1) {
         setCurrentQuestion(q => q + 1);
@@ -275,28 +283,20 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const markCompleted = (index: number) => {
     setCompletedItems(prev => {
       const copy = [...prev];
-      copy[index] = true;
+      if (!copy[index]) {
+        copy[index] = true;
+      }
       return copy;
     });
+
+    // Verificar si el nivel está completado
+    const allCompleted = data.every((_, i) => completedItems[i] || i === index);
+    if (allCompleted) {
+      setLevelCompleted(true);
+    }
   };
 
-  useEffect(() => {
-    if (completedItems.length === 0) return;
-    const allItemsCompleted = completedItems.every(Boolean);
-    if (allItemsCompleted) {
-      if (currentLevel === 3) {
-        // Nivel 3: Requiere 80% de respuestas correctas (10/12)
-        const totalQuestions = data.length * 2; // 6 historias * 2 preguntas = 12
-        setLevelCompleted(score >= MIN_SCORE_LEVEL_3);
-      } else {
-        // Niveles 1 y 2: Completar todos los ítems
-        setLevelCompleted(allItemsCompleted);
-      }
-    }
-  }, [completedItems, score, currentLevel]);
-
   const handleNextLevel = () => {
-    console.log(`Intentando avanzar al nivel ${currentLevel + 1}`);
     const nextLevel = currentLevel < MAX_LEVEL ? currentLevel + 1 : 1;
     resetLevel(nextLevel);
   };
@@ -305,6 +305,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     resetLevel(currentLevel);
   };
 
+  // MICRÓFONO
   const startRecognition = (expectedText: string) => {
     setRecognizedText(null);
     setPronunciationCorrect(null);
@@ -313,117 +314,97 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
       alert('Tu navegador no soporta reconocimiento de voz.');
       return;
     }
-    try {
-      const rec = new SpeechRecognition();
-      recognitionRef.current = rec;
-      rec.lang = 'es-CO';
-      rec.interimResults = false;
-      rec.maxAlternatives = 3;
-      rec.continuous = false;
-      rec.onstart = () => setListening(true);
-      rec.onresult = (event: any) => {
-        const transcript = Array.from(event.results)
-          .map((r: any) => r[0].transcript)
-          .join(' ')
-          .trim();
-        setRecognizedText(transcript);
-        const expectedNorm = normalize(expectedText);
-        const gotNorm = normalize(transcript);
 
-        let isComplete = true;
-        if (currentLevel === 2) {
-          const expectedWords = expectedNorm.split(' ');
-          const gotWords = gotNorm.split(' ');
-          isComplete = expectedWords.every(word => gotWords.includes(word)) && expectedWords.length === gotWords.length;
-        }
+    const rec = new SpeechRecognition();
+    recognitionRef.current = rec;
+    rec.lang = 'es-ES';
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.maxAlternatives = 3;
 
-        const dist = levenshtein(expectedNorm, gotNorm);
-        const maxLen = Math.max(expectedNorm.length, gotNorm.length, 1);
-        const similarity = 1 - dist / maxLen;
-        const similarityThreshold = currentLevel === 2 ? 0.75 : 0.60;
-        const ok = isComplete && (similarity >= similarityThreshold || expectedNorm === gotNorm);
-        setPronunciationCorrect(ok);
-        if (ok) {
-          setShowReward(true);
-          setTimeout(() => setShowReward(false), 1500);
-          markCompleted(currentIndex);
-        }
-        if ('speechSynthesis' in window) {
-          const feed = ok
-            ? `¡Muy bien! Dijiste: ${transcript}`
-            : isComplete
-              ? `Intenta de nuevo. Escuché: ${transcript}`
-              : `¡Falta algo! Di toda la frase: ${expectedText}`;
-          handleSpeak(feed);
-        }
-      };
-      rec.onerror = (e: any) => {
-        console.error('Speech recognition error', e);
-        setListening(false);
-        setRecognizedText(null);
-        setPronunciationCorrect(false);
-        if ('speechSynthesis' in window) {
-          handleSpeak('Error al reconocer la voz. Verifica tu micrófono e intenta de nuevo.');
-        }
-      };
-      rec.onend = () => setListening(false);
-      rec.start();
-    } catch (err) {
-      console.error('No se pudo iniciar reconocimiento', err);
-      alert('Error al iniciar reconocimiento de voz. Verifica tu micrófono y permisos.');
+    setListening(true);
+
+    rec.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript.trim();
+      setRecognizedText(transcript);
+
+      const expectedNorm = normalize(expectedText);
+      const gotNorm = normalize(transcript);
+
+      let isComplete = true;
+      if (currentLevel === 2) {
+        const expectedWords = expectedNorm.split(' ');
+        const gotWords = gotNorm.split(' ');
+        isComplete = expectedWords.every(w => gotWords.includes(w)) && expectedWords.length === gotWords.length;
+      }
+
+      const dist = levenshtein(expectedNorm, gotNorm);
+      const similarity = 1 - dist / Math.max(expectedNorm.length, gotNorm.length, 1);
+      const threshold = currentLevel === 2 ? 0.75 : 0.60;
+      const ok = isComplete && (similarity >= threshold || expectedNorm === gotNorm);
+
+      setPronunciationCorrect(ok);
+
+      if (ok) {
+        setScore(s => s + 1);
+        setShowReward(true);
+        setTimeout(() => setShowReward(false), 1500);
+        markCompleted(currentIndex);
+      }
+
+      const feedback = ok ? '¡Perfecto!' : 'Intenta de nuevo.';
+      handleSpeak(feedback);
+    };
+
+    rec.onerror = () => {
       setListening(false);
-    }
+      setPronunciationCorrect(false);
+      handleSpeak('Error. Intenta de nuevo.');
+    };
+
+    rec.onend = () => setListening(false);
+    rec.start();
   };
 
-  const stopRecognition = () => {
-    try {
-      const rec = recognitionRef.current;
-      if (rec && typeof rec.stop === 'function') rec.stop();
-    } catch (e) { }
-    setListening(false);
-  };
-
+  // RENDER LEVEL 1
   const renderLevel1 = () => {
     const item = currentItem as any;
     return (
-      <div className="grid md:grid-cols-2 gap-8">
-        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.45 }}>
+      <div className="grid md:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
           <Card className="bg-white/90 backdrop-blur-sm h-full">
             <CardContent className="p-8 text-center">
               <div className="text-8xl mb-6">{item.image}</div>
-              <div className="text-4xl font-bold text-blue-600 mb-4 dyslexia-friendly">{item.word}</div>
-              <div className="text-lg text-gray-600 mb-4">{item.pronunciation}</div>
+              <div className="text-4xl font-bold text-black mb-4">{item.word}</div>
+              <div className="text-lg text-black mb-4">{item.pronunciation}</div>
               <div className="flex justify-center gap-3">
-                <Button onClick={() => handleSpeak(item.word)} className="bg-green-500 hover:bg-green-600">
+                <Button onClick={() => handleSpeak(item.word)} className="bg-green-500 hover:bg-green-600 text-white">
                   <Volume2 className="w-4 h-4 mr-2" /> Escuchar
                 </Button>
-                <Button onClick={() => startRecognition(item.word)} variant="outline" className='text-black bg-gray-100'>
-                  🎤 Ahora dilo tú
+                <Button onClick={() => startRecognition(item.word)} variant="outline" className="text-black border-black hover:bg-gray-100">
+                  Ahora dilo tú
                 </Button>
               </div>
-              {listening && <div className="mt-4 text-sm text-gray-600">Escuchando… habla ahora</div>}
+              {listening && <div className="mt-4 text-sm text-black animate-pulse">Escuchando…</div>}
               {recognizedText !== null && (
-                <div className="mt-4">
-                  <div className="text-sm">Has dicho: <strong>{recognizedText}</strong></div>
-                  <div className={`mt-2 font-semibold ${pronunciationCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                    {pronunciationCorrect ? '¡Buen trabajo!' : 'Intenta nuevamente'}
+                <div className="mt-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <div className="text-sm text-black">Dijiste: <strong>{recognizedText}</strong></div>
+                  <div className={`mt-1 font-bold ${pronunciationCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                    {pronunciationCorrect ? '¡Excelente!' : 'Intenta otra vez'}
                   </div>
                 </div>
               )}
             </CardContent>
           </Card>
         </motion.div>
-        <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.45, delay: 0.1 }}>
+        <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
           <Card className="bg-white/90 backdrop-blur-sm h-full">
             <CardContent className="p-8">
-              <h3 className="text-xl mb-4 text-center text-gray-700">Significado:</h3>
-              <p className="text-lg text-gray-600 text-center leading-relaxed">{item.meaning}</p>
-              <div className="mt-6 text-center flex justify-center gap-3">
-                <Button onClick={() => handleSpeak(item.meaning)} variant="outline" className='text-black'>
-                  <Volume2 className="w-4 h-4 mr-2" /> Escuchar explicación
-                </Button>
-                <Button onClick={() => markCompleted(currentIndex)} variant="ghost">
-
+              <h3 className="text-xl mb-4 text-center text-black font-semibold">Significado:</h3>
+              <p className="text-lg text-black text-center leading-relaxed">{item.meaning}</p>
+              <div className="mt-6 text-center">
+                <Button onClick={() => handleSpeak(item.meaning)} variant="outline" className="text-black border-black hover:bg-gray-100">
+                  <Volume2 className="w-4 h-4 mr-2" /> Escuchar
                 </Button>
               </div>
             </CardContent>
@@ -433,35 +414,33 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     );
   };
 
+  // RENDER LEVEL 2
   const renderLevel2 = () => {
     const item = currentItem as any;
     return (
-      <div className="max-w-8xl mx-auto">
-        <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.45 }}>
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
           <Card className="bg-white/90 backdrop-blur-sm mb-8">
             <CardContent className="p-8 text-center">
               <div className="text-6xl mb-6">{item.image}</div>
-              <div className="text-3xl mb-6 text-blue-600 dyslexia-friendly">{item.sentence}</div>
+              <div className="text-3xl mb-6 text-black font-bold">{item.sentence}</div>
               <div className="flex justify-center gap-3 mb-4">
-                <Button onClick={() => handleSpeak(item.sentence)} className="bg-green-500 hover:bg-green-600">
+                <Button onClick={() => handleSpeak(item.sentence)} className="bg-green-500 hover:bg-green-600 text-white">
                   <Volume2 className="w-4 h-4 mr-2" /> Escuchar
                 </Button>
-                <Button onClick={() => startRecognition(item.sentence)} variant="outline">
-                  🎤 Dilo tú (toda la frase)
+                <Button onClick={() => startRecognition(item.sentence)} variant="outline" className="text-black border-black hover:bg-gray-100">
+                  Di toda la frase
                 </Button>
               </div>
-              {listening && <div className="mt-4 text-sm text-gray-600">Escuchando… di toda la frase</div>}
+              {listening && <div className="mt-4 text-sm text-black animate-pulse">Escuchando toda la frase…</div>}
               {recognizedText !== null && (
-                <div className="mt-4">
-                  <div>Reconocido: <strong>{recognizedText}</strong></div>
-                  <div className={`mt-2 font-semibold ${pronunciationCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                    {pronunciationCorrect ? '¡Perfecto!' : 'Intenta decir toda la frase'}
+                <div className="mt-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                  <div className="text-black">Reconocido: <strong>{recognizedText}</strong></div>
+                  <div className={`mt-1 font-bold ${pronunciationCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                    {pronunciationCorrect ? '¡Perfecto!' : 'Di toda la frase'}
                   </div>
                 </div>
               )}
-              <div className="mt-4">
-                <Button onClick={() => markCompleted(currentIndex)} variant="ghost"></Button>
-              </div>
             </CardContent>
           </Card>
         </motion.div>
@@ -469,29 +448,30 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     );
   };
 
+  // RENDER LEVEL 3
   const renderLevel3 = () => {
     const item = currentItem as any;
     return (
-      <div className="max-w-8xl mx-auto">
-        <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.45 }}>
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
           <Card className="bg-white/90 backdrop-blur-sm mb-8">
             <CardContent className="p-8 text-center">
               <div className="text-6xl mb-6">{item.image}</div>
-              <div className="text-xl mb-6 text-gray-700 leading-relaxed dyslexia-friendly">{item.story}</div>
-              <Button onClick={() => handleSpeak(item.story)} className="bg-green-500 hover:bg-green-600">
+              <div className="text-xl mb-6 text-black leading-relaxed">{item.story}</div>
+              <Button onClick={() => handleSpeak(item.story)} className="bg-green-500 hover:bg-green-600 text-white">
                 <Volume2 className="w-4 h-4 mr-2" /> Escuchar historia
               </Button>
             </CardContent>
           </Card>
         </motion.div>
         {item.questions && currentQuestion < item.questions.length && (
-          <motion.div key={currentQuestion} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.45 }}>
+          <motion.div key={currentQuestion} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
             <Card className="bg-white/90 backdrop-blur-sm">
               <CardContent className="p-8">
-                <h3 className="text-xl mb-6 text-center text-gray-700">{item.questions[currentQuestion].q}</h3>
+                <h3 className="text-xl mb-6 text-center text-black font-semibold">{item.questions[currentQuestion].q}</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   {item.questions[currentQuestion].options.map((option: string, index: number) => (
-                    <Button key={index} onClick={() => handleAnswer(index)} variant="outline" className="p-4 h-auto text-center hover:bg-blue-50">
+                    <Button key={index} onClick={() => handleAnswer(index)} variant="outline" className="p-4 h-auto text-center text-black border-black hover:bg-gray-100">
                       {option}
                     </Button>
                   ))}
@@ -500,21 +480,21 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
             </Card>
           </motion.div>
         )}
-        <div className="mt-4 text-center">
-          <Button onClick={() => markCompleted(currentIndex)} variant="ghost"></Button>
-        </div>
       </div>
     );
   };
 
+  if (!gameStarted) {
+    return <StartScreenPrimeraPalabra onStart={() => setGameStarted(true)} onBack={onBack} />;
+  }
+
   if (!data || !currentItem) {
     return (
-      <div className="min-h-screen p-6 flex items-center justify-center text-center">
+      <div className="min-h-screen p-6 flex items-center justify-center">
         <Card>
-          <CardContent className="p-8">
-            <h2 className="text-2xl text-red-600">Error: No se encontraron datos para el nivel {currentLevel}</h2>
-            <Button onClick={() => resetLevel(1)} className="mt-4">Volver al Nivel 1</Button>
-            <Button onClick={onBack} variant="outline" className="mt-4 ml-2">Salir</Button>
+          <CardContent className="p-8 text-center">
+            <h2 className="text-2xl text-red-600 mb-4">Error: Nivel no encontrado</h2>
+            <Button onClick={() => resetLevel(1)}>Volver al Nivel 1</Button>
           </CardContent>
         </Card>
       </div>
@@ -522,144 +502,100 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   }
 
   return (
-    <div
-      className="min-h-screen p-6"
-      style={{
-        background: 'linear-gradient(135deg, #E6F3FF 0%, #B3E5FC 100%)'
-      }}
-    >
+    <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg, #E6F3FF 0%, #B3E5FC 100%)' }}>
+      {/* RECOMPENSAS */}
       <RewardAnimation type="star" show={showReward} />
+      <ConfettiExplosion show={showLevelComplete} />
 
+      {/* HEADER */}
+      <GameHeader
+        title={`Mi Primera Palabra`}
+        level={currentLevel}
+        score={score}
+        onBack={onBack}
+        onRestart={() => resetLevel(currentLevel)}
+      />
 
-      {levelCompleted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/50"
-        >
-          <Card className="bg-white rounded-2xl shadow-2xl p-8 w-11/12 max-w-md text-center">
-            <CardContent className="p-8">
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="text-6xl mb-3">🎉</div>
-                {currentLevel === 3 && score < MIN_SCORE_LEVEL_3 ? (
-                  <>
-                    <h2 className="text-2xl font-bold mb-2 text-red-600">¡No alcanzaste el puntaje!</h2>
-                    <p className="text-gray-600 mb-6">
-                      Puntos: {score} de {data.length * 2}. Necesitas al menos {MIN_SCORE_LEVEL_3} para pasar.
-                    </p>
-                    <div className="flex justify-center gap-3">
-                      <Button onClick={handleRepeatLevel} className="bg-blue-500 hover:bg-blue-600">
-                        Repetir Nivel 3
-                      </Button>
-                      <Button onClick={onBack} variant="outline">
-                        Salir
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <h2 className="text-2xl font-bold mb-2">¡Nivel {currentLevel} completado!</h2>
-                    <p className="text-gray-600 mb-6">
-                      Puntos: {score} de {currentLevel === 3 ? data.length * 2 : data.length}
-                    </p>
-                    <div className="flex justify-center gap-3">
-                      {currentLevel < MAX_LEVEL ? (
-                        <Button
-                          onClick={handleNextLevel}
-                          className="bg-blue-500 hover:bg-blue-600"
-                        >
-                          Siguiente nivel ({currentLevel + 1})
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={handleNextLevel}
-                          className="bg-green-500 hover:bg-green-600"
-                        >
-                          Volver al inicio
-                        </Button>
-                      )}
-                      <Button onClick={handleRepeatLevel} variant="outline">
-                        Repetir nivel
-                      </Button>
-                      <Button onClick={onBack} variant="outline">
-                        Salir
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </motion.div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
+      {/* PROGRESO */}
+      <ProgressBar
+        current={currentIndex + 1}
+        total={data.length}
+        progress={currentProgress}
+        className="mb-8"
+      />
 
-
-      <div className="flex items-center justify-between mb-6">
-        <Button onClick={onBack} variant="outline" className="bg-black/80 backdrop-blur-sm">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Volver
-        </Button>
-        <div className="text-center">
-          <h1 className="text-2xl text-blue-800 mb-2 dyslexia-friendly">📖 Mi Primera Palabra - Nivel {currentLevel}</h1>
-          <div className="flex items-center gap-2 text-blue-700 justify-center">
-            <BookOpen className="w-4 h-4" />
-            <span>{currentIndex + 1} de {data.length}</span>
-            <Star className="w-4 h-4 text-yellow-500 fill-current ml-2" />
-            <span>Puntos: {score}</span>
-          </div>
-        </div>
-        <div className="w-24"></div>
-      </div>
-
-
-      <div className="max-w-md mx-auto mb-10">
-        <div className="h-4 bg-white/30 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${currentProgress > 100 ? 100 : currentProgress}%` }}
-            transition={{ duration: 0.3 }}
-            className="h-full bg-gradient-to-r from-yellow-400 to-green-500 rounded-full"
-          />
-        </div>
-        <div className="text-center text-gray-600 mt-2">
-          Progreso: {currentProgress.toFixed(1)}%
-        </div>
-      </div>
-
-
+      {/* GUÍA */}
       <div className="max-w-6xl mx-auto mb-8">
         <AnimalGuide
           animal="owl"
           message={
             currentLevel === 1
-              ? 'Aprende esta palabra nueva. Escucha y repite.'
+              ? 'Escucha y repite la palabra.'
               : currentLevel === 2
-                ? 'Di toda la frase completa de una vez.'
-                : 'Escucha la historia y responde las preguntas.'
+                ? 'Di toda la frase completa.'
+                : 'Responde las preguntas.'
           }
         />
       </div>
 
-
+      {/* CONTENIDO */}
       <div className="mb-8">
         {currentLevel === 1 && renderLevel1()}
         {currentLevel === 2 && renderLevel2()}
         {currentLevel === 3 && renderLevel3()}
       </div>
 
-
+      {/* NAVEGACIÓN - CORREGIDA */}
       <div className="flex justify-center gap-4">
-        <Button onClick={handlePrevious} disabled={currentIndex === 0} variant="outline" className="bg-white/80 backdrop-blur-sm">
+        <Button 
+          onClick={handlePrevious} 
+          disabled={currentIndex === 0} 
+          variant="outline" 
+          className="bg-white/80 text-black border-black hover:bg-gray-100"
+        >
           <ChevronLeft className="w-4 h-4 mr-2" /> Anterior
         </Button>
-        <Button onClick={handleNext} disabled={currentIndex === data.length - 1} className="bg-blue-500 hover:bg-blue-600">
-          Siguiente
+
+        <Button 
+          onClick={handleNext} 
+          disabled={!completedItems[currentIndex]}
+          className={`text-white transition-all ${
+            completedItems[currentIndex] 
+              ? 'bg-green-500 hover:bg-green-600' 
+              : 'bg-gray-400 cursor-not-allowed'
+          }`}
+        >
+          {completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
           <ChevronRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
+
+      {/* MOTIVACIONAL */}
+      {showMotivational && (
+        <MotivationalMessage
+          score={score}
+          total={currentLevel === 3 ? data.length * 2 : data.length}
+          customMessage="¡Eres un lector increíble!"
+          customSubtitle="¡Completaste todo el nivel!"
+          onComplete={() => {
+            setShowMotivational(false);
+            setShowLevelComplete(true);
+          }}
+        />
+      )}
+
+      {/* MODAL FINAL */}
+      {showLevelComplete && (
+        <LevelCompleteModal
+          score={score}
+          total={currentLevel === 3 ? data.length * 2 : data.length}
+          level={currentLevel}
+          isLastLevel={currentLevel >= 3}
+          onNextLevel={handleNextLevel}
+          onRestart={handleRepeatLevel}
+          onExit={onBack}
+        />
+      )}
     </div>
   );
 }

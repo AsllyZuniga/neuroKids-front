@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, Rocket, Target, Zap, Clock } from 'lucide-react';
+import { Target, Clock } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
-import { Progress } from '../../../ui/progress';
 import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
 import { AudioPlayer } from '../../../others/AudioPlayer';
+import { GameHeader } from '../../../others/GameHeader';
+import { ProgressBar } from '../../../others/ProgressBar';
+import { MotivationalMessage } from '../../../others/MotivationalMessage';
+import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { StartScreenCoheteLector } from '../IniciosJuegosLecturas/StartScreenCoheteLector/StartScreenCoheteLector';
+
 
 interface CoheteLectorProps {
   onBack: () => void;
+  onNextLevel?: () => void;
   level: number;
 }
 
@@ -26,7 +32,7 @@ interface Challenge {
   timeLimit: number;
 }
 
-const challenges: Challenge[] = [
+const allChallenges: Challenge[] = [
   {
     id: 1,
     type: 'comprehension',
@@ -118,10 +124,112 @@ const challenges: Challenge[] = [
     explanation: "El sujeto es 'los árboles del parque', ya que es quien realiza la acción de moverse.",
     points: 95,
     timeLimit: 30
+  },
+  {
+    id: 7,
+    type: 'comprehension',
+    text: "La energía renovable, como la solar y la eólica, se está utilizando cada vez más para reducir la dependencia de los combustibles fósiles. Estas fuentes de energía son sostenibles porque no se agotan y generan menos contaminación.",
+    question: "¿Qué ventaja principal de las energías renovables menciona el texto?",
+    options: [
+      "Son más baratas que los combustibles fósiles",
+      "No se agotan y generan menos contaminación",
+      "Producen más energía que las fuentes tradicionales",
+      "No necesitan mantenimiento"
+    ],
+    correct: 1,
+    explanation: "El texto destaca que las energías renovables son sostenibles porque no se agotan y generan menos contaminación.",
+    points: 100,
+    timeLimit: 30
+  },
+  {
+    id: 8,
+    type: 'vocabulary',
+    question: "¿Qué significa la palabra 'efímero'?",
+    options: [
+      "Que dura poco tiempo",
+      "Que es muy fuerte",
+      "Que ocurre con frecuencia",
+      "Que es invisible"
+    ],
+    correct: 0,
+    explanation: "'Efímero' se refiere a algo que tiene una duración breve o pasajera.",
+    points: 80,
+    timeLimit: 20
+  },
+  {
+    id: 9,
+    type: 'grammar',
+    question: "En la oración 'María y Juan corrieron al parque rápidamente', ¿cuál es el complemento circunstancial?",
+    options: [
+      "María y Juan",
+      "corrieron",
+      "al parque rápidamente",
+      "rápidamente"
+    ],
+    correct: 2,
+    explanation: "El complemento circunstancial indica las circunstancias de la acción (lugar y manera), en este caso 'al parque rápidamente'.",
+    points: 90,
+    timeLimit: 25
+  },
+  {
+    id: 10,
+    type: 'comprehension',
+    text: "Los arrecifes de coral son ecosistemas marinos muy diversos que albergan miles de especies. Sin embargo, están amenazados por el calentamiento global, la contaminación y la pesca excesiva.",
+    question: "¿Cuáles son las amenazas a los arrecifes de coral mencionadas en el texto?",
+    options: [
+      "Terremotos y huracanes",
+      "Calentamiento global, contaminación y pesca excesiva",
+      "Construcción de puertos y turismo",
+      "Cambio de corrientes marinas"
+    ],
+    correct: 1,
+    explanation: "El texto menciona específicamente el calentamiento global, la contaminación y la pesca excesiva como amenazas.",
+    points: 100,
+    timeLimit: 35
+  },
+  {
+    id: 11,
+    type: 'vocabulary',
+    question: "¿Cuál es el antónimo más adecuado para 'meticuloso'?",
+    options: [
+      "Cuidadoso",
+      "Descuidadoso",
+      "Rápido",
+      "Eficiente"
+    ],
+    correct: 1,
+    explanation: "'Meticuloso' significa cuidadoso o detallista, por lo que su antónimo es 'descuidadoso'.",
+    points: 85,
+    timeLimit: 20
+  },
+  {
+    id: 12,
+    type: 'grammar',
+    question: "En la oración 'El libro que leí ayer era fascinante', ¿qué tipo de oración es 'que leí ayer'?",
+    options: [
+      "Oración principal",
+      "Oración subordinada adjetiva",
+      "Oración subordinada sustantiva",
+      "Oración coordinada"
+    ],
+    correct: 1,
+    explanation: "'Que leí ayer' es una oración subordinada adjetiva porque describe al sustantivo 'libro'.",
+    points: 95,
+    timeLimit: 30
   }
 ];
 
+const CHALLENGES_PER_LEVEL = 4;
+const MAX_LEVEL = 3;
+
+function getChallengesForLevel(level: number): Challenge[] {
+  const start = (level - 1) * CHALLENGES_PER_LEVEL;
+  return allChallenges.slice(start, start + CHALLENGES_PER_LEVEL);
+}
+
 export function CoheteLector({ onBack, level }: CoheteLectorProps) {
+  const [currentLevel, setCurrentLevel] = useState(level);
+  const [currentChallenges, setCurrentChallenges] = useState(getChallengesForLevel(level));
   const [currentChallenge, setCurrentChallenge] = useState(0);
   const [rocketHeight, setRocketHeight] = useState(0);
   const [score, setScore] = useState(0);
@@ -129,14 +237,31 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   const [timeLeft, setTimeLeft] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [gameComplete, setGameComplete] = useState(false);
+  const [levelComplete, setLevelComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
+  const [showMotivational, setShowMotivational] = useState(false);
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  const challenge = challenges[currentChallenge];
+  const challenge = currentChallenges[currentChallenge];
   const maxHeight = 100;
-  const heightPerQuestion = maxHeight / challenges.length;
+  const heightPerQuestion = maxHeight / currentChallenges.length;
+  const progress = (currentChallenge / currentChallenges.length) * 100;
 
+  useEffect(() => {
+    setCurrentLevel(level);
+    setCurrentChallenges(getChallengesForLevel(level));
+    setCurrentChallenge(0);
+    setRocketHeight(0);
+    setScore(0);
+    setStreak(0);
+    setLevelComplete(false);
+    setShowMotivational(false);
+    setShowLevelComplete(false);
+
+  }, [level]);
+
+  // Timer
   useEffect(() => {
     if (gameStarted && timeLeft > 0 && !showResult) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -147,12 +272,12 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   }, [timeLeft, gameStarted, showResult]);
 
   useEffect(() => {
-    if (gameStarted) {
+    if (gameStarted && challenge) {
       setTimeLeft(challenge.timeLimit);
       setSelectedAnswer(null);
       setShowResult(false);
     }
-  }, [currentChallenge, gameStarted]);
+  }, [currentChallenge, gameStarted, challenge]);
 
   const startGame = () => {
     setGameStarted(true);
@@ -160,40 +285,33 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   };
 
   const handleTimeUp = () => {
-    setSelectedAnswer(-1); // Marca como tiempo agotado
+    setSelectedAnswer(-1);
     setStreak(0);
     setShowResult(true);
-    
-    setTimeout(() => {
-      nextChallenge();
-    }, 3000);
+    setTimeout(nextChallenge, 3000);
   };
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null || showResult) return;
-    
+
     setSelectedAnswer(answerIndex);
     setShowResult(true);
-    
+
     if (answerIndex === challenge.correct) {
-      // Cálculo de puntos con bonificaciones
       let points = challenge.points;
       const timeBonus = Math.floor(timeLeft / 2) * 5;
       const streakBonus = streak * 10;
       const totalPoints = points + timeBonus + streakBonus;
-      
+
       setScore(score + totalPoints);
       setStreak(streak + 1);
-      
-      // Subir el cohete
       const newHeight = Math.min(rocketHeight + heightPerQuestion, maxHeight);
       setRocketHeight(newHeight);
-      
       setShowReward(true);
     } else {
       setStreak(0);
     }
-    
+
     setTimeout(() => {
       setShowReward(false);
       nextChallenge();
@@ -201,23 +319,44 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   };
 
   const nextChallenge = () => {
-    if (currentChallenge < challenges.length - 1) {
+    if (currentChallenge < currentChallenges.length - 1) {
       setCurrentChallenge(currentChallenge + 1);
     } else {
-      setGameComplete(true);
+      setShowMotivational(true);
     }
   };
 
-  const restartGame = () => {
+  const restartLevel = () => {
     setCurrentChallenge(0);
     setRocketHeight(0);
     setScore(0);
     setStreak(0);
-    setGameComplete(false);
+    setLevelComplete(false);
+    setShowMotivational(false);
+    setShowLevelComplete(false);
     setGameStarted(false);
-    setSelectedAnswer(null);
-    setShowResult(false);
-    setShowReward(false);
+  };
+
+  const loadNextLevel = () => {
+    setShowLevelComplete(false);
+    if (currentLevel < MAX_LEVEL) {
+      const nextLevel = currentLevel + 1;
+      setCurrentLevel(nextLevel);
+      setCurrentChallenges(getChallengesForLevel(nextLevel));
+      setCurrentChallenge(0);
+      setRocketHeight(0);
+      setScore(0);
+      setStreak(0);
+      setLevelComplete(false);
+      setShowMotivational(false);
+      setShowLevelComplete(false);
+      setGameStarted(false); 
+    } else {
+
+      setLevelComplete(false);
+      setShowLevelComplete(false);
+      setGameStarted(false);
+    }
   };
 
   const getTypeColor = (type: string) => {
@@ -238,245 +377,58 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
     }
   };
 
-  if (gameComplete) {
-    const reachedSpace = rocketHeight >= maxHeight;
-    const accuracy = Math.round((score / challenges.reduce((sum, c) => sum + c.points, 0)) * 100);
-    
-    return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-blue-900 via-purple-900 to-black text-white">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="mb-4 bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white/30"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Volver al dashboard
-        </Button>
-
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="max-w-2xl mx-auto text-center"
-        >
-          <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20">
-            <CardContent className="p-8">
-              <div className="text-6xl mb-4">
-                {reachedSpace ? '🚀🌟' : '🚀'}
-              </div>
-              
-              <h2 className="text-3xl mb-4 text-white">
-                {reachedSpace ? '¡Has Llegado al Espacio!' : '¡Misión Completada!'}
-              </h2>
-              
-              <div className="grid md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-blue-500/20 p-4 rounded-lg">
-                  <div className="text-2xl text-blue-200 mb-1">{score}</div>
-                  <div className="text-sm text-blue-300">Puntos Totales</div>
-                </div>
-                <div className="bg-purple-500/20 p-4 rounded-lg">
-                  <div className="text-2xl text-purple-200 mb-1">{Math.round(rocketHeight)}%</div>
-                  <div className="text-sm text-purple-300">Altura Alcanzada</div>
-                </div>
-                <div className="bg-green-500/20 p-4 rounded-lg">
-                  <div className="text-2xl text-green-200 mb-1">{accuracy}%</div>
-                  <div className="text-sm text-green-300">Precisión</div>
-                </div>
-              </div>
-
-              {reachedSpace && (
-                <div className="bg-yellow-500/20 p-4 rounded-lg mb-6 border border-yellow-400/30">
-                  <div className="text-yellow-200">¡Bonus Espacial: +500 puntos por llegar al espacio!</div>
-                </div>
-              )}
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={restartGame}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3"
-                >
-                  Nueva Misión
-                </Button>
-                <Button
-                  onClick={onBack}
-                  variant="outline"
-                  className="px-6 py-3 border-white/30 text-white hover:bg-white/10"
-                >
-                  Volver al dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    );
-  }
+  const maxPoints = currentChallenges.reduce((sum, c) => sum + c.points, 0);
 
   if (!gameStarted) {
-    return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-blue-900 via-purple-900 to-black text-white">
-        <div className="max-w-4xl mx-auto">
-          <Button
-            onClick={onBack}
-            variant="outline"
-            className="mb-4 bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white/30"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="text-center"
-          >
-            <div className="text-6xl mb-6">🚀</div>
-            <h1 className="text-3xl mb-4 text-white dyslexia-friendly">
-              El Cohete Lector
-            </h1>
-            
-            <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20 mb-6">
-              <CardContent className="p-8">
-                <h2 className="text-xl mb-4 text-white">Misión: ¡Llegar al Espacio!</h2>
-                <div className="space-y-4 text-left">
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-0.5">1</div>
-                    <p className="text-gray-300">Responde preguntas de comprensión, vocabulario y gramática</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-0.5">2</div>
-                    <p className="text-gray-300">Cada respuesta correcta eleva tu cohete hacia el espacio</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-0.5">3</div>
-                    <p className="text-gray-300">Responde rápido para obtener bonificaciones de tiempo</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-0.5">4</div>
-                    <p className="text-gray-300">Mantén una racha de respuestas correctas para bonificaciones extra</p>
-                  </div>
-                </div>
-
-                <div className="mt-6 grid md:grid-cols-3 gap-4">
-                  <div className="bg-blue-500/20 p-3 rounded-lg border border-blue-400/30">
-                    <div className="text-blue-200 mb-1">Comprensión</div>
-                    <div className="text-sm text-blue-300">Lee y analiza textos</div>
-                  </div>
-                  <div className="bg-green-500/20 p-3 rounded-lg border border-green-400/30">
-                    <div className="text-green-200 mb-1">Vocabulario</div>
-                    <div className="text-sm text-green-300">Significados y sinónimos</div>
-                  </div>
-                  <div className="bg-purple-500/20 p-3 rounded-lg border border-purple-400/30">
-                    <div className="text-purple-200 mb-1">Gramática</div>
-                    <div className="text-sm text-purple-300">Estructura del lenguaje</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Button
-              onClick={startGame}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg"
-            >
-              <Rocket className="w-5 h-5 mr-2" />
-              ¡Iniciar Despegue!
-            </Button>
-          </motion.div>
-        </div>
-      </div>
-    );
+    return <StartScreenCoheteLector onStart={startGame} onBack={onBack} />;
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-900 via-purple-900 to-black text-white">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            onClick={onBack}
-            variant="outline"
-            className="bg-white/20 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white/30"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="text-2xl text-white dyslexia-friendly">
-              🚀 El Cohete Lector
-            </h1>
-            <div className="flex items-center gap-4 justify-center mt-1">
-              <div className="flex items-center gap-1">
-                <Star className="w-4 h-4 text-yellow-400" />
-                <span className="text-gray-300">Puntos: {score}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Zap className="w-4 h-4 text-blue-400" />
-                <span className="text-gray-300">Racha: {streak}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4 text-red-400" />
-                <span className={`${timeLeft <= 10 ? 'text-red-400' : 'text-gray-300'}`}>
-                  {timeLeft}s
-                </span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="text-right">
-            <div className="text-sm text-gray-300">
-              Pregunta {currentChallenge + 1} de {challenges.length}
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-200 via-purple-400 text-white"> 
+      <div className="max-w-7xl mx-auto">
+        <GameHeader
+          title={`Cohete Lector`}
+          level={currentLevel}
+          score={score}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
 
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Rocket Display */}
+        <ProgressBar
+          current={currentChallenge + 1}
+          total={currentChallenges.length}
+          progress={progress}
+        />
+
+        <AnimalGuide
+          animal="turtle"
+          message="¡Responde rápido para elevar el cohete!"
+        />
+
+        <div className="grid lg:grid-cols-4 gap-8 mt-6">
           <div className="lg:col-span-1">
             <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20">
               <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-white text-center">Progreso del Cohete</h3>
-                
+                <h3 className="text-lg mb-4 text-center">Progreso del Cohete</h3>
                 <div className="relative h-64 bg-gradient-to-t from-blue-900 to-black rounded-lg border border-white/20 overflow-hidden">
-                  {/* Stars background */}
-                  <div className="absolute inset-0">
-                    {[...Array(20)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
-                        style={{
-                          left: `${Math.random() * 100}%`,
-                          top: `${Math.random() * 100}%`,
-                          animationDelay: `${Math.random() * 2}s`
-                        }}
-                      />
-                    ))}
-                  </div>
-                  
-                  {/* Rocket */}
                   <motion.div
                     animate={{ bottom: `${rocketHeight}%` }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
                     className="absolute left-1/2 transform -translate-x-1/2 text-2xl"
                     style={{ bottom: `${rocketHeight}%` }}
                   >
                     🚀
                   </motion.div>
-                  
-                  {/* Space line */}
                   <div className="absolute top-0 left-0 right-0 h-0.5 bg-yellow-400">
                     <div className="text-xs text-yellow-400 absolute right-0 -top-4">ESPACIO</div>
                   </div>
                 </div>
-                
                 <div className="mt-4 text-center">
-                  <div className="text-sm text-gray-300">Altura: {Math.round(rocketHeight)}%</div>
-                  <Progress value={rocketHeight} className="h-2 mt-2" />
+                  <div className="text-sm">Altura: {Math.round(rocketHeight)}%</div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Question Area */}
           <div className="lg:col-span-3">
             <motion.div
               key={currentChallenge}
@@ -491,27 +443,24 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
                     </Badge>
                     <div className="flex items-center gap-1">
                       <Target className="w-4 h-4 text-yellow-400" />
-                      <span className="text-gray-300">{challenge.points} puntos</span>
+                      <span>{challenge.points} puntos</span>
+                    </div>
+                    <div className="flex items-center gap-1 ml-auto">
+                      <Clock className="w-4 h-4 text-red-400" />
+                      <span className={timeLeft <= 10 ? 'text-red-400' : ''}>{timeLeft}s</span>
                     </div>
                   </div>
 
                   {challenge.text && (
                     <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
                       <div className="mb-3">
-                        <AudioPlayer
-                          text="Reproduciendo texto..."
-                          duration={3000}
-                        />
+                        <AudioPlayer text="Reproduciendo texto..." duration={3000} />
                       </div>
-                      <p className="text-gray-200 leading-relaxed dyslexia-friendly">
-                        {challenge.text}
-                      </p>
+                      <p className="text-gray-200 leading-relaxed">{challenge.text}</p>
                     </div>
                   )}
 
-                  <h3 className="text-xl mb-6 text-white dyslexia-friendly">
-                    {challenge.question}
-                  </h3>
+                  <h3 className="text-xl mb-6">{challenge.question}</h3>
 
                   <div className="grid gap-4">
                     {challenge.options.map((option, index) => (
@@ -526,17 +475,17 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
                           variant="outline"
                           className={`w-full justify-start text-left p-6 h-auto transition-all ${
                             selectedAnswer === null
-                              ? 'bg-white/10 hover:bg-white/20 border-white/30 text-white'
+                              ? 'bg-white/10 hover:bg-white/20 border-white/30'
                               : selectedAnswer === index
                               ? index === challenge.correct
-                                ? 'bg-green-500/30 border-green-400 text-green-100'
-                                : 'bg-red-500/30 border-red-400 text-red-100'
+                                ? 'bg-green-500/30 border-green-400'
+                                : 'bg-red-500/30 border-red-400'
                               : index === challenge.correct && showResult
-                              ? 'bg-green-500/30 border-green-400 text-green-100'
-                              : 'bg-white/5 border-white/20 text-gray-400'
+                              ? 'bg-green-500/30 border-green-400'
+                              : 'bg-white/5 border-white/20'
                           }`}
                         >
-                          <span className="text-lg dyslexia-friendly">{option}</span>
+                          <span>{option}</span>
                         </Button>
                       </motion.div>
                     ))}
@@ -558,16 +507,41 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
           </div>
         </div>
 
-        {/* Reward Animation */}
-        {showReward && (
-          <RewardAnimation
-            type="star"
-            show={showReward}
-            message="¡El cohete sube!"
-            onComplete={() => setShowReward(false)}
+        <RewardAnimation
+          type="star"
+          show={showReward}
+          message="¡El cohete sube!"
+          onComplete={() => setShowReward(false)}
+        />
+
+        {/* MENSAJE MOTIVACIONAL */}
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={currentChallenges.reduce((sum, c) => sum + c.points, 0)}
+            customMessage="¡Has completado el nivel!"
+            customSubtitle="Resolviste todos los desafíos del cohete"
+            onComplete={() => {
+              setShowMotivational(false);
+              setShowLevelComplete(true);
+            }}
+          />
+        )}
+
+        {/* MODAL FINAL */}
+        {showLevelComplete && (
+          <LevelCompleteModal
+            score={score}
+            total={maxPoints}
+            level={currentLevel}
+            isLastLevel={currentLevel >= MAX_LEVEL}
+            onNextLevel={loadNextLevel}
+            onRestart={restartLevel}
+            onExit={onBack}
           />
         )}
       </div>
     </div>
   );
 }
+

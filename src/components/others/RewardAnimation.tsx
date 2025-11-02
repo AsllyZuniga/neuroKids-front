@@ -4,7 +4,7 @@ import { Star, Rocket, Award, Sparkles } from 'lucide-react';
 interface RewardAnimationProps {
   type: 'star' | 'rocket' | 'medal' | 'confetti' | 'magic' | 'emoji' | 'points' | 'correct';
   show: boolean;
-  message?: string; // <-- agregado
+  message?: string; 
   onComplete?: () => void;
 }
 
@@ -55,7 +55,6 @@ export function RewardAnimation({ type, show, message, onComplete }: RewardAnima
         {message && <div className="text-white text-lg mt-2 text-center">{message}</div>}
       </div>
 
-      {/* Simple particles effect */}
       <div className="absolute inset-0 flex items-center justify-center">
         {[...Array(8)].map((_, i) => (
           <motion.div
