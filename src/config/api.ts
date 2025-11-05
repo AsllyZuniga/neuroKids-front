@@ -5,9 +5,9 @@ export const API_CONFIG = {
         ADMIN_LOGIN: "/admin/login",
 
         // Endpoints para estudiantes
-        STUDENT_LOGIN: "/students/login",
+        STUDENT_LOGIN: "/estudiantes/iniciar-sesion",
         STUDENT_REGISTER: "/students/register",
-        STUDENT_INSTITUCIONES: "/students/instituciones",
+        STUDENT_INSTITUCIONES: "/estudiantes/instituciones",
 
         // Endpoints comunes
         LOGOUT: "/logout",
