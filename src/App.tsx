@@ -46,15 +46,15 @@ function App() {
 
           <Route
             path="/nivel1"
-            element={<Prueba nivel={1} imagen="/niveles/nivel1.webp" lecturas={3} games={3} />}
+            element={<Prueba nivel={1} imagen="/niveles/nivel1.png" lecturas={3} games={3} />}
           />
           <Route
             path="/nivel2"
-            element={<Prueba nivel={2} imagen="/niveles/nivel2.webp" lecturas={3} games={3} />}
+            element={<Prueba nivel={2} imagen="/niveles/nivel2.png" lecturas={3} games={3} />}
           />
           <Route
             path="/nivel3"
-            element={<Prueba nivel={3} imagen="/niveles/nivel3.webp" lecturas={3} games={3} />}
+            element={<Prueba nivel={3} imagen="/niveles/nivel3.png" lecturas={3} games={3} />}
           />
 
           <Route path="/nivel1/juego1" element={<BingoPalabras onBack={() => window.history.back()} />} />

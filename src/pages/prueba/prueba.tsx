@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { Home } from "lucide-react";
 import Header from "../../components/header/header";
 import Card from "../../shared/components/Card/Card";
-import Button from "../../shared/components/Button/Button";
 import "./prueba.scss";
 
 export default function Prueba({
   nivel,
   imagen,
-
 }: {
   nivel: number;
   imagen: string;
@@ -15,7 +14,6 @@ export default function Prueba({
   games: number;
 }) {
   const navigate = useNavigate();
-  const variant = `nivel${nivel}` as "nivel1" | "nivel2" | "nivel3";
 
   const juegosNivel1 = [
     { id: 1, nombre: "Bingo de Palabras 😎" },
@@ -48,11 +46,10 @@ export default function Prueba({
   ];
 
   const lecturasNivel3 = [
-    { id: 1, nombre: "Biografias Sencillas 📖" },
+    { id: 1, nombre: "Biografías Sencillas 📖" },
     { id: 2, nombre: "Cuento Interactivo 📗" },
     { id: 3, nombre: "Noticias Sencillas 📰" },
   ];
-
 
   return (
     <div className={`prueba-page nivel${nivel}`}>
@@ -61,32 +58,20 @@ export default function Prueba({
       {/* HEADER */}
       <div className="prueba-header">
         <img src={imagen} alt={`Nivel ${nivel}`} className="prueba-img" />
-        <div className="prueba-buttons">
-          <Button
-            label="Edad de 7 a 8 años"
-            variant={variant}
-            size="large"
-            onClick={() => navigate("/nivel1")}
-          />
-          <Button
-            label="Edad de 9 a 10 años"
-            variant={variant}
-            size="large"
-            onClick={() => navigate("/nivel2")}
-          />
-          <Button
-            label="Edad de 11 a 12 años"
-            variant={variant}
-            size="large"
-            onClick={() => navigate("/nivel3")}
-          />
-        </div>
+
+        {/* 🏠 Botón de inicio mejorado */}
+        <button
+          className="home-button"
+          onClick={() => navigate("/")}
+          title="Volver al inicio"
+        >
+          <Home size={28} />
+        </button>
       </div>
 
       {/* CONTENIDO */}
       {nivel === 1 ? (
         <>
-          {/* 🎮 Juegos */}
           <section className="prueba-cards">
             <h2>Juegos disponibles</h2>
             <div className="cards-container text-black">
@@ -103,7 +88,6 @@ export default function Prueba({
             </div>
           </section>
 
-          {/* Lecturas */}
           <section className="prueba-cards">
             <h2>Lecturas disponibles</h2>
             <div className="cards-container text-black">
@@ -122,7 +106,6 @@ export default function Prueba({
         </>
       ) : nivel === 2 ? (
         <>
-          {/* Juegos */}
           <section className="prueba-cards">
             <h2>Juegos disponibles</h2>
             <div className="cards-container text-black">
@@ -139,7 +122,6 @@ export default function Prueba({
             </div>
           </section>
 
-          {/*  Lecturas */}
           <section className="prueba-cards">
             <h2>Lecturas disponibles</h2>
             <div className="cards-container text-black">
@@ -158,10 +140,9 @@ export default function Prueba({
         </>
       ) : nivel === 3 ? (
         <>
-          {/* juegos*/}
           <section className="prueba-cards">
             <h2>Juegos disponibles</h2>
-            <div className="cards-container  text-black">
+            <div className="cards-container text-black">
               {juegosNivel3.map((juego, index) => (
                 <Card
                   key={juego.id}
@@ -175,7 +156,6 @@ export default function Prueba({
             </div>
           </section>
 
-          {/* lecturas*/}
           <section className="prueba-cards">
             <h2>Lecturas disponibles</h2>
             <div className="cards-container text-black">
@@ -193,7 +173,6 @@ export default function Prueba({
           </section>
         </>
       ) : null}
-
     </div>
   );
 }

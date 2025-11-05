@@ -38,20 +38,20 @@
 
   /* ==== VARIANTES ==== */
   &--primary {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #c8e2df;
+    color: #008081;
 
     &:hover {
-      background-color: #45a049;
+      background-color: #c8e2df;
     }
   }
 
   &--secondary {
-    background-color: #2196F3;
-    color: white;
+    background-color: #adcde7;
+    color: #1976D2;
 
     &:hover {
-      background-color: #1976D2;
+      background-color: #adcde7;
     }
   }
 
@@ -63,30 +63,6 @@
     &:hover {
       background-color: rgba(0, 0, 0, 0.05);
       color: #333;
-    }
-  }
-
-  &--nivel1 {
-    background-color: #adce36;
-
-    &:hover {
-      background-color: #5873af;
-    }
-  }
-
-  &--nivel2 {
-    background-color: #3fc661;
-
-    &:hover {
-      background-color: #fbc223;
-    }
-  }
-
-  &--nivel3 {
-    background-color: #008f7d;
-
-    &:hover {
-      background-color: #403da8;
     }
   }
 }

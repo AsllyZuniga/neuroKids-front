@@ -5,7 +5,6 @@
   font-family: "OpenDyslexic";
   min-height: 100vh;
   width: 100%;
-  
 }
 
 /* HEADER */
@@ -22,6 +21,42 @@
   object-fit: cover;
 }
 
+/* 🏠 BOTÓN DE VOLVER AL INICIO */
+.home-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #c8e2df; /* color suave */
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  color: #2d5b57; /* color del ícono */
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: #b3d4d0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover svg {
+    transform: translateY(-2px);
+  }
+}
 
 /* CONTENEDOR DE BOTONES */
 .prueba-buttons {
@@ -42,21 +77,20 @@
     height: 60px;
     padding: 0;
     font-size: 18px;
-
   }
 }
 
+/* COLORES DE FONDO POR NIVEL */
 .prueba-page.nivel1 {
   background-color: #c7e1df;
-
 }
 .prueba-page.nivel2 {
   background-color: #b0dfd2;
 }
-
 .prueba-page.nivel3 {
-  background-color: #0cd177;
+  background-color: #0cd278;
 }
+
 /* SECCIÓN DE CARDS */
 .prueba-cards {
   margin-top: 2rem;
@@ -70,7 +104,6 @@
   font-size: 1.8rem;
   color: #333;
   font-family: "OpenDyslexic";
-
 }
 
 .prueba-cards .cards-container {
@@ -99,15 +132,23 @@
       font-size: 16px;
     }
   }
+
+  .home-button {
+    top: 15px;
+    left: 15px;
+    width: 45px;
+    height: 45px;
+  }
 }
+
 /* Celulares grandes */
 @media (max-width: 768px) {
   .prueba-buttons {
     position: static; /* debajo de la imagen */
     transform: none;
     margin-top: 0.8rem;
-    flex-direction: row; /* 👈 siguen en fila */
-    flex-wrap: wrap; /* si no caben, bajan a la siguiente línea */
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
 
@@ -120,6 +161,13 @@
     }
   }
 
+  .home-button {
+    top: 10px;
+    left: 10px;
+    width: 42px;
+    height: 42px;
+  }
+
   .prueba-cards {
     margin-top: 1.2rem;
 
@@ -129,7 +177,7 @@
     }
 
     .cards-container {
-      grid-template-columns: repeat(2, 1fr); /* 👈 2 columnas en celulares */
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.8rem;
     }
 
@@ -154,6 +202,13 @@
     }
   }
 
+  .home-button {
+    top: 8px;
+    left: 8px;
+    width: 40px;
+    height: 40px;
+  }
+
   .prueba-cards {
     h2 {
       font-size: 1.1rem;
@@ -161,7 +216,7 @@
     }
 
     .cards-container {
-      grid-template-columns: repeat(2, 1fr); /* 👈 también 2 columnas */
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.6rem;
     }
 
