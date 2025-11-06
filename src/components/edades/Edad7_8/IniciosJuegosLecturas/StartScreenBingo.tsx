@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Sparkles, Play, ArrowLeft } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { Sparkles, Play, ArrowLeft, Volume2 } from "lucide-react";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
+import { speakText } from "../../../../utils/textToSpeech";
 
 interface StartScreenProps {
   onStart: () => void;
@@ -10,6 +11,13 @@ interface StartScreenProps {
 export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
   const title = "BINGO DE PALABRAS";
   const letters = title.split('');
+  const instructions = "¡Escucha palabras y marca tu cartón de bingo!";
+  const howToPlay = "Completa el tablero de bingo encontrando las palabras correctas. ¡Haz clic en las letras para formar palabras!";
+
+  // Leer instrucciones al cargar
+  const handleReadInstructions = () => {
+    speakText(instructions + ". " + howToPlay);
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -73,14 +81,15 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
       }}
     >
 
-      <Button
+      <ButtonWithAudio
         onClick={onBack}
         variant="outline"
+        audioText="Volver"
         className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
-      </Button>
+      </ButtonWithAudio>
 
 
       <motion.div
@@ -191,8 +200,28 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2 }}
         >
-              ¡Escucha palabras y marca tu cartón de bingo! 🎯
+          {instructions} 🎯
         </motion.p>
+
+        {/* Botón para escuchar instrucciones */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4 }}
+          className="mb-8"
+        >
+          <ButtonWithAudio
+            onClick={handleReadInstructions}
+            variant="outline"
+            audioText="Escuchar instrucciones"
+            playOnHover={false}
+            playOnClick={true}
+            className="bg-white/80 text-purple-600 hover:bg-white border-2 border-purple-300"
+          >
+            <Volume2 className="w-5 h-5 mr-2" />
+            Escuchar instrucciones
+          </ButtonWithAudio>
+        </motion.div>
 
 
         <motion.div
@@ -202,14 +231,17 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
           whileHover="hover"
           whileTap="tap"
         >
-          <Button
+          <ButtonWithAudio
             onClick={onStart}
             size="lg"
+            audioText="Jugar"
+            playOnHover={true}
+            playOnClick={true}
             className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white px-12 py-6 rounded-full shadow-lg text-2xl dyslexia-friendly"
           >
             <Play className="mr-3" size={32} />
             ¡Jugar!
-          </Button>
+          </ButtonWithAudio>
         </motion.div>
 
 
@@ -221,8 +253,7 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
         >
           <h3 className="text-purple-600 mb-3 dyslexia-friendly">¿Cómo jugar?</h3>
           <p className="text-purple-800 text-sm md:text-base dyslexia-friendly">
-            Completa el tablero de bingo encontrando las palabras correctas. 
-            ¡Haz clic en las letras para formar palabras!
+            {howToPlay}
           </p>
         </motion.div>
       </motion.div>

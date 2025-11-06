@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
-import { Button } from "../../../ui/button";
+//import { Button } from "../../../ui/button";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
 import { Card } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { GameHeader } from "../../../others/GameHeader";
@@ -10,7 +11,10 @@ import { RewardAnimation } from "../../../others/RewardAnimation";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from "../../../others/ConfettiExplosion"; 
+import { LevelLock } from "../../../others/LevelLock";
 import { StartScreenBingo } from "../IniciosJuegosLecturas/StartScreenBingo";
+import { speakText, canSpeakOnHover } from "../../../../utils/textToSpeech";
+import { useLevelLock } from "../../../../hooks/useLevelLock";
 
 interface WordItem {
   word: string;
@@ -82,6 +86,7 @@ const gameData: Record<number, LevelData> = {
 export function BingoPalabras({ onBack }: { onBack: () => void }) {
   const [gameStarted, setGameStarted] = useState(false);
   const [level, setLevel] = useState(1);
+  const isLevelLocked = useLevelLock(level);
   const data = gameData[level];
   const [grid, setGrid] = useState<WordItem[]>([]);
   const [calledList, setCalledList] = useState<string[]>([]);
@@ -109,21 +114,16 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
     setShowBingo(false);
   }, [level, data]);
 
+  const speakCurrentWord = () => {
+    speakText(currentWord, { voiceType: 'child' });
+  };
+
   useEffect(() => {
     if (currentWord && !bingoAchieved) {
       speakCurrentWord();
     }
-  }, [calledIndex, bingoAchieved]);
-
-  const speakCurrentWord = () => {
-    if ("speechSynthesis" in window) {
-      const msg = new SpeechSynthesisUtterance(currentWord);
-      msg.lang = "es-ES";
-      msg.rate = 0.6;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(msg);
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calledIndex, bingoAchieved, currentWord]);
 
   const handleCellClick = (word: string) => {
     if (word === currentWord && !bingoAchieved) {
@@ -187,8 +187,9 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
     return <StartScreenBingo onStart={() => setGameStarted(true)} onBack={onBack} />;
   }
 
-
+  // Envolver el juego con LevelLock
   return (
+    <LevelLock level={level} isLocked={isLevelLocked}>
     <div
       className="min-h-screen p-4 sm:p-6 relative overflow-hidden"
       style={{
@@ -251,26 +252,28 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
               </div>
             )}
 
-            <Button
+            <ButtonWithAudio
               onClick={goToNextWord}
               disabled={isWordOnCard}
+              audioText="Siguiente palabra"
               className={`w-full ${isWordOnCard
                 ? "bg-blue-600 cursor-not-allowed text-black"
                 : "bg-green-500 hover:bg-green-400 text-black"
                 }`}
             >
               Siguiente palabra
-            </Button>
+            </ButtonWithAudio>
 
-            <Button
+            <ButtonWithAudio
               onClick={speakCurrentWord}
               variant="outline"
               size="sm"
+              audioText="Repetir palabra"
               className="mt-3 w-full bg-purple-500 text-black"
             >
               <Volume2 className="w-4 h-4 mr-2 text-black" />
               Repetir
-            </Button>
+            </ButtonWithAudio>
           </motion.div>
 
           <div className="md:col-span-2 bg-white/90 p-4 rounded-2xl shadow-lg">
@@ -292,6 +295,12 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
                     rotate: [0, 10, -10, 0],
                     transition: { duration: 0.6 }
                   } : {}}
+                  onMouseEnter={() => {
+                    // Reproducir el audio de la palabra al hacer hover
+                    if (!cell.matched && canSpeakOnHover()) {
+                      speakText(cell.word, { voiceType: 'child' });
+                    }
+                  }}
                 >
                   <Card
                     onClick={() => handleCellClick(cell.word)}
@@ -347,5 +356,6 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
         />
       )}
     </div>
+    </LevelLock>
   );
 }
