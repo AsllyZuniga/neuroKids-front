@@ -55,7 +55,7 @@ export const speakText = (text: string, options: SpeechOptions = {}): void => {
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text.trim());
-  
+
   // Configurar velocidad y tono
   if (options.voiceType === 'child') {
     utterance.rate = 0.85;
@@ -67,7 +67,7 @@ export const speakText = (text: string, options: SpeechOptions = {}): void => {
     utterance.rate = options.rate || 0.9;
     utterance.pitch = options.pitch || 1.1;
   }
-  
+
   utterance.volume = options.volume || 1;
 
   const speakNow = () => {
@@ -141,7 +141,7 @@ export const initVoices = (): void => {
   if ('speechSynthesis' in window) {
     // Cargar voces
     window.speechSynthesis.getVoices();
-    
+
     // En algunos navegadores las voces se cargan de forma asíncrona
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
       window.speechSynthesis.onvoiceschanged = () => {

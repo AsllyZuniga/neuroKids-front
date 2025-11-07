@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from "../../../ui/button";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from "../../../others/RewardAnimation";
@@ -11,6 +11,9 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenPrimeraPalabra } from "../IniciosJuegosLecturas/StartScreenPrimeraPalabra/StartScreenPrimeraPalabra";
+import { LevelLock } from "../../../others/LevelLock";
+import { useLevelLock } from "../../../../hooks/useLevelLock";
+import { speakText } from "../../../../utils/textToSpeech";
 
 interface PrimeraPalabraProps {
   onBack: () => void;
@@ -168,6 +171,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const [pronunciationCorrect, setPronunciationCorrect] = useState<boolean | null>(null);
   const [currentProgress, setCurrentProgress] = useState(0);
 
+  const locked = useLevelLock(currentLevel);
   const recognitionRef = useRef<any>(null);
 
   const data = readingData[currentLevel] ?? readingData[1];
@@ -224,10 +228,12 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
 
   useEffect(() => {
     resetLevel(currentLevel);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     updateProgress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, completedItems, currentQuestion]);
 
   useEffect(() => {
@@ -235,15 +241,6 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
       setTimeout(() => setShowMotivational(true), 800);
     }
   }, [levelCompleted, showMotivational]);
-
-  const handleSpeak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-ES';
-      utterance.rate = 0.85;
-      speechSynthesis.speak(utterance);
-    }
-  };
 
   const handleNext = () => {
     if (currentIndex < data.length - 1 && completedItems[currentIndex]) {
@@ -353,13 +350,13 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
       }
 
       const feedback = ok ? '¡Perfecto!' : 'Intenta de nuevo.';
-      handleSpeak(feedback);
+      speakText(feedback, { voiceType: 'child' });
     };
 
     rec.onerror = () => {
       setListening(false);
       setPronunciationCorrect(false);
-      handleSpeak('Error. Intenta de nuevo.');
+      speakText('Error. Intenta de nuevo.', { voiceType: 'child' });
     };
 
     rec.onend = () => setListening(false);
@@ -378,12 +375,25 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
               <div className="text-4xl font-bold text-black mb-4">{item.word}</div>
               <div className="text-lg text-black mb-4">{item.pronunciation}</div>
               <div className="flex justify-center gap-3">
-                <Button onClick={() => handleSpeak(item.word)} className="bg-green-500 hover:bg-green-600 text-white">
+                <ButtonWithAudio 
+                  onClick={() => speakText(item.word, { voiceType: 'child' })} 
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                  audioText="Escuchar"
+                  playOnHover={true}
+                  playOnClick={false}
+                >
                   <Volume2 className="w-4 h-4 mr-2" /> Escuchar
-                </Button>
-                <Button onClick={() => startRecognition(item.word)} variant="outline" className="text-black border-black hover:bg-gray-100">
+                </ButtonWithAudio>
+                <ButtonWithAudio 
+                  onClick={() => startRecognition(item.word)} 
+                  variant="outline" 
+                  className="text-black border-black hover:bg-gray-100"
+                  audioText="Ahora dilo tú"
+                  playOnHover={true}
+                  playOnClick={false}
+                >
                   Ahora dilo tú
-                </Button>
+                </ButtonWithAudio>
               </div>
               {listening && <div className="mt-4 text-sm text-black animate-pulse">Escuchando…</div>}
               {recognizedText !== null && (
@@ -403,9 +413,16 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
               <h3 className="text-xl mb-4 text-center text-black font-semibold">Significado:</h3>
               <p className="text-lg text-black text-center leading-relaxed">{item.meaning}</p>
               <div className="mt-6 text-center">
-                <Button onClick={() => handleSpeak(item.meaning)} variant="outline" className="text-black border-black hover:bg-gray-100">
+                <ButtonWithAudio 
+                  onClick={() => speakText(item.meaning, { voiceType: 'child' })} 
+                  variant="outline" 
+                  className="text-black border-black hover:bg-gray-100"
+                  audioText="Escuchar"
+                  playOnHover={true}
+                  playOnClick={false}
+                >
                   <Volume2 className="w-4 h-4 mr-2" /> Escuchar
-                </Button>
+                </ButtonWithAudio>
               </div>
             </CardContent>
           </Card>
@@ -425,12 +442,25 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
               <div className="text-6xl mb-6">{item.image}</div>
               <div className="text-3xl mb-6 text-black font-bold">{item.sentence}</div>
               <div className="flex justify-center gap-3 mb-4">
-                <Button onClick={() => handleSpeak(item.sentence)} className="bg-green-500 hover:bg-green-600 text-white">
+                <ButtonWithAudio 
+                  onClick={() => speakText(item.sentence, { voiceType: 'child' })} 
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                  audioText="Escuchar"
+                  playOnHover={true}
+                  playOnClick={false}
+                >
                   <Volume2 className="w-4 h-4 mr-2" /> Escuchar
-                </Button>
-                <Button onClick={() => startRecognition(item.sentence)} variant="outline" className="text-black border-black hover:bg-gray-100">
+                </ButtonWithAudio>
+                <ButtonWithAudio 
+                  onClick={() => startRecognition(item.sentence)} 
+                  variant="outline" 
+                  className="text-black border-black hover:bg-gray-100"
+                  audioText="Di toda la frase"
+                  playOnHover={true}
+                  playOnClick={false}
+                >
                   Di toda la frase
-                </Button>
+                </ButtonWithAudio>
               </div>
               {listening && <div className="mt-4 text-sm text-black animate-pulse">Escuchando toda la frase…</div>}
               {recognizedText !== null && (
@@ -458,9 +488,15 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
             <CardContent className="p-8 text-center">
               <div className="text-6xl mb-6">{item.image}</div>
               <div className="text-xl mb-6 text-black leading-relaxed">{item.story}</div>
-              <Button onClick={() => handleSpeak(item.story)} className="bg-green-500 hover:bg-green-600 text-white">
+              <ButtonWithAudio 
+                onClick={() => speakText(item.story, { voiceType: 'child' })} 
+                className="bg-green-500 hover:bg-green-600 text-white"
+                audioText="Escuchar historia"
+                playOnHover={true}
+                playOnClick={false}
+              >
                 <Volume2 className="w-4 h-4 mr-2" /> Escuchar historia
-              </Button>
+              </ButtonWithAudio>
             </CardContent>
           </Card>
         </motion.div>
@@ -471,9 +507,17 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
                 <h3 className="text-xl mb-6 text-center text-black font-semibold">{item.questions[currentQuestion].q}</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   {item.questions[currentQuestion].options.map((option: string, index: number) => (
-                    <Button key={index} onClick={() => handleAnswer(index)} variant="outline" className="p-4 h-auto text-center text-black border-black hover:bg-gray-100">
+                    <ButtonWithAudio 
+                      key={index} 
+                      onClick={() => handleAnswer(index)} 
+                      variant="outline" 
+                      className="p-4 h-auto text-center text-black border-black hover:bg-gray-100"
+                      audioText={option}
+                      playOnHover={true}
+                      playOnClick={false}
+                    >
                       {option}
-                    </Button>
+                    </ButtonWithAudio>
                   ))}
                 </div>
               </CardContent>
@@ -485,7 +529,11 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   };
 
   if (!gameStarted) {
-    return <StartScreenPrimeraPalabra onStart={() => setGameStarted(true)} onBack={onBack} />;
+    return (
+      <LevelLock level={currentLevel} isLocked={locked} onLoginRequired={onBack}>
+        <StartScreenPrimeraPalabra onStart={() => setGameStarted(true)} onBack={onBack} />
+      </LevelLock>
+    );
   }
 
   if (!data || !currentItem) {
@@ -494,7 +542,14 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
         <Card>
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl text-red-600 mb-4">Error: Nivel no encontrado</h2>
-            <Button onClick={() => resetLevel(1)}>Volver al Nivel 1</Button>
+            <ButtonWithAudio 
+              onClick={() => resetLevel(1)}
+              audioText="Volver al Nivel 1"
+              playOnHover={true}
+              playOnClick={true}
+            >
+              Volver al Nivel 1
+            </ButtonWithAudio>
           </CardContent>
         </Card>
       </div>
@@ -502,10 +557,11 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   }
 
   return (
-    <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg, #E6F3FF 0%, #B3E5FC 100%)' }}>
-      {/* RECOMPENSAS */}
-      <RewardAnimation type="star" show={showReward} />
-      <ConfettiExplosion show={showLevelComplete} />
+    <LevelLock level={currentLevel} isLocked={locked} onLoginRequired={onBack}>
+      <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg, #E6F3FF 0%, #B3E5FC 100%)' }}>
+        {/* RECOMPENSAS */}
+        <RewardAnimation type="star" show={showReward} />
+        <ConfettiExplosion show={showLevelComplete} />
 
       {/* HEADER */}
       <GameHeader
@@ -547,16 +603,19 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
 
       {/* NAVEGACIÓN - CORREGIDA */}
       <div className="flex justify-center gap-4">
-        <Button 
+        <ButtonWithAudio
           onClick={handlePrevious} 
           disabled={currentIndex === 0} 
           variant="outline" 
           className="bg-white/80 text-black border-black hover:bg-gray-100"
+          audioText="Anterior"
+          playOnHover={true}
+          playOnClick={true}
         >
           <ChevronLeft className="w-4 h-4 mr-2" /> Anterior
-        </Button>
+        </ButtonWithAudio>
 
-        <Button 
+        <ButtonWithAudio
           onClick={handleNext} 
           disabled={!completedItems[currentIndex]}
           className={`text-white transition-all ${
@@ -564,10 +623,13 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
               ? 'bg-green-500 hover:bg-green-600' 
               : 'bg-gray-400 cursor-not-allowed'
           }`}
+          audioText={completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
+          playOnHover={true}
+          playOnClick={true}
         >
           {completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
           <ChevronRight className="w-4 h-4 ml-2" />
-        </Button>
+        </ButtonWithAudio>
       </div>
 
       {/* MOTIVACIONAL */}
@@ -596,6 +658,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
           onExit={onBack}
         />
       )}
-    </div>
+      </div>
+    </LevelLock>
   );
 }

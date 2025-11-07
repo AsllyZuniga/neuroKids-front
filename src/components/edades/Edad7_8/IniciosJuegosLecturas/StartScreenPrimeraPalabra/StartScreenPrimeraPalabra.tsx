@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Play, ArrowLeft } from "lucide-react";
-import { Button } from "../../../../ui/button";
+import { ButtonWithAudio } from "../../../../ui/ButtonWithAudio";
+import { speakText } from "../../../../../utils/textToSpeech";
 import { FloatingLetter } from "./FloatingLetter";
 
 interface StartScreenPrimeraPalabraProps {
@@ -9,6 +10,8 @@ interface StartScreenPrimeraPalabraProps {
 }
 
 export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimeraPalabraProps) {
+  const instructions = `Bienvenido a Mi Primera Palabra. En cada nivel aprenderás palabras nuevas. Escucha la palabra, repítela en voz alta usando el micrófono. ¡Vamos a aprender juntos!`;
+  
   const letters = [
     { letter: 'A', color: '#FFB5E8', x: 10, y: 20 },
     { letter: 'B', color: '#B5DEFF', x: 75, y: 15 },
@@ -24,14 +27,29 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-blue-50 to-purple-50 overflow-hidden relative">
-      <Button
+      <ButtonWithAudio
         onClick={onBack}
         variant="outline"
         className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        audioText="Volver"
+        playOnHover={true}
+        playOnClick={true}
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
-      </Button>
+      </ButtonWithAudio>
+
+      <ButtonWithAudio
+        onClick={() => speakText(instructions, { voiceType: 'child' })}
+        variant="outline"
+        className="absolute top-4 right-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        audioText="Escuchar instrucciones"
+        playOnHover={true}
+        playOnClick={false}
+      >
+        <Play className="w-4 h-4 mr-2" />
+        Escuchar instrucciones
+      </ButtonWithAudio>
 
       <motion.div 
         className="fixed inset-0 flex items-center justify-center pointer-events-none z-10"
@@ -72,14 +90,17 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
             transition={{ delay: 0.8 }}
             className="pointer-events-auto"
           >
-            <Button 
+            <ButtonWithAudio
               onClick={onStart}
               size="lg"
               className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white rounded-full px-12 py-8 text-3xl shadow-2xl border-4 border-white transform hover:scale-105 transition-transform dyslexia-friendly"
+              audioText="Comenzar Juego"
+              playOnHover={true}
+              playOnClick={true}
             >
               <Play className="w-8 h-8 mr-3" />
               Comenzar Juego
-            </Button>
+            </ButtonWithAudio>
           </motion.div>
         </div>
       </motion.div>
