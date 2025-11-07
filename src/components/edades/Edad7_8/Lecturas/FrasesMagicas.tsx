@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from "../../../ui/button";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from "../../../others/RewardAnimation";
@@ -10,6 +10,9 @@ import { ProgressBar } from "../../../others/ProgressBar";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
+import { LevelLock } from '../../../others/LevelLock';
+import { useLevelLock } from '../../../../hooks/useLevelLock';
+import { speakText } from '../../../../utils/textToSpeech';
 import { StartScreenFrasesMagicas } from "../IniciosJuegosLecturas/StartScreenFrasesMagicas/StartScreenFrasesMagicas";
 
 interface FrasesMagicasProps {
@@ -131,6 +134,7 @@ const magicSentencesLevel3: MagicSentence[] = [
 export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProps) {
   const [gameStarted, setGameStarted] = useState(false);
   const [level, setLevel] = useState(initialLevel);
+  const isLevelLocked = useLevelLock(level);
   const [currentSentence, setCurrentSentence] = useState(0);
   const [showMagic, setShowMagic] = useState(false);
   const [magicActivated, setMagicActivated] = useState(false);
@@ -176,6 +180,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
   useEffect(() => {
     updateProgress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [magicActivated, currentSentence]);
 
 
@@ -187,21 +192,12 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
 
   const playSentenceAudio = () => {
-    if (!('speechSynthesis' in window)) {
-      console.warn('La síntesis de voz no está soportada en este navegador.');
-      setIsPlaying(false);
-      return;
-    }
-
+    if (isPlaying) return;
     setIsPlaying(true);
-    const utterance = new SpeechSynthesisUtterance(sentence.sentence);
-    utterance.lang = 'es-ES';
-    utterance.rate = 0.8;
-    utterance.onend = () => setIsPlaying(false);
-    window.speechSynthesis.speak(utterance);
-
-
-    console.log(`🔊 Leyendo: ${sentence.sentence}`);
+    speakText(sentence.sentence, { voiceType: 'child' });
+    const words = sentence.sentence.split(/\s+/).filter(Boolean).length;
+    const duration = Math.max(words * 350, 1800);
+    setTimeout(() => setIsPlaying(false), duration);
   };
 
 
@@ -307,15 +303,15 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   const calculateSimilarity = (str1: string, str2: string): number => {
     str1 = str1.toLowerCase();
     str2 = str2.toLowerCase();
-    let longer = str1.length > str2.length ? str1 : str2;
-    let shorter = str1.length > str2.length ? str2 : str1;
-    let longerLength = longer.length;
+    const longer = str1.length > str2.length ? str1 : str2;
+    const shorter = str1.length > str2.length ? str2 : str1;
+    const longerLength = longer.length;
     if (longerLength === 0) return 1;
     return (longerLength - editDistance(longer, shorter)) / longerLength;
   };
 
   const editDistance = (s1: string, s2: string): number => {
-    let dp: number[][] = Array(s1.length + 1).fill(null).map(() => Array(s2.length + 1).fill(null));
+    const dp: number[][] = Array(s1.length + 1).fill(null).map(() => Array(s2.length + 1).fill(null));
     for (let i = 0; i <= s1.length; i++) dp[i][0] = i;
     for (let j = 0; j <= s2.length; j++) dp[0][j] = j;
     for (let i = 1; i <= s1.length; i++) {
@@ -381,10 +377,15 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   };
 
   if (!gameStarted) {
-    return <StartScreenFrasesMagicas onStart={() => setGameStarted(true)} onBack={onBack} />;
+    return (
+      <LevelLock level={level} isLocked={isLevelLocked}>
+        <StartScreenFrasesMagicas onStart={() => setGameStarted(true)} onBack={onBack} />
+      </LevelLock>
+    );
   }
 
   return (
+    <LevelLock level={level} isLocked={isLevelLocked}>
     <div
       className="min-h-screen p-6 relative overflow-hidden"
       style={{ //cambiar color de fondo 
@@ -461,9 +462,12 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                   </div>
 
                   <div className="space-y-3">
-                    <Button
+                    <ButtonWithAudio
                       onClick={playSentenceAudio}
                       disabled={isPlaying}
+                      playOnClick
+                      playOnHover
+                      audioText={isPlaying ? 'Reproduciendo' : 'Escuchar Frase'}
                       className={`w-full text-lg py-6 ${isPlaying
                         ? 'bg-green-500 text-white animate-pulse'
                         : 'bg-blue-500 hover:bg-blue-600 text-white'
@@ -471,10 +475,13 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                     >
                       <Volume2 className={`w-5 h-5 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
                       {isPlaying ? 'Reproduciendo...' : 'Escuchar Frase'}
-                    </Button>
-                    <Button
+                    </ButtonWithAudio>
+                    <ButtonWithAudio
                       onClick={startListening}
                       disabled={isListening || magicActivated}
+                      playOnClick
+                      playOnHover={!magicActivated}
+                      audioText={magicActivated ? 'Magia activada' : isListening ? 'Escuchando' : 'Activar micrófono'}
                       className={`w-full text-lg py-6 ${magicActivated
                         ? 'bg-gray-400 cursor-not-allowed'
                         : isListening
@@ -489,7 +496,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                       ) : (
                         <>Activar micrófono</>
                       )}
-                    </Button>
+                    </ButtonWithAudio>
 
                     <p className="text-purple-700 text-center font-medium bg-purple-50 p-3 rounded-lg">
                       {message}
@@ -525,24 +532,29 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
           {/* NAVEGACIÓN */}
           <div className="flex justify-between items-center mt-6">
-            <Button
+            <ButtonWithAudio
               onClick={goToPreviousSentence}
               disabled={currentSentence === 0}
+              playOnHover
+              playOnClick
               variant="outline"
               className="bg-green-500"
             >
               <ChevronLeft className="w-5 h-5 mr-2" />
               Anterior
-            </Button>
+            </ButtonWithAudio>
 
-            <Button
+            <ButtonWithAudio
               onClick={goToNextSentence}
               disabled={!magicActivated}
+              playOnHover
+              playOnClick
+              audioText="Siguiente"
               className="bg-purple-500 hover:bg-purple-600 text-white"
             >
               Siguiente
               <ChevronRight className="w-5 h-5 ml-2" />
-            </Button>
+            </ButtonWithAudio>
           </div>
         </motion.div>
       )}
@@ -574,5 +586,6 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
         />
       )}
     </div>
+    </LevelLock>
   );
 }

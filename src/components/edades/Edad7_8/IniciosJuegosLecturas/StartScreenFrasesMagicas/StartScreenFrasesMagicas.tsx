@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Wand2, ArrowLeft } from "lucide-react";
-import { Button } from "../../../../ui/button";
+import { ButtonWithAudio } from "../../../../ui/ButtonWithAudio";
+import { speakText } from "../../../../../utils/textToSpeech";
 import { AnimatedLetter } from "../StartScreenCuentoPictogramas/AnimatedLetter";
 import { FloatingEmojiMagico } from "./FloatingEmojiMagico";
 
@@ -11,6 +12,7 @@ interface StartScreenFrasesMagicasProps {
 
 export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesMagicasProps) {
   const title = "Frases Mágicas";
+  const instructions = `Bienvenido a Frases Mágicas. Escucha la frase completa y luego activa el micrófono. Di la palabra mágica con voz clara para activar la magia. ¡Vamos a practicar tu pronunciación!`;
   
   const floatingEmojis = [
     { emoji: '🪄', x: '10%', delay: 0, duration: 8 },
@@ -27,14 +29,16 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 overflow-hidden relative">
-      <Button
+      <ButtonWithAudio
         onClick={onBack}
+        playOnHover
+        playOnClick
         variant="outline"
         className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
-      </Button>
+      </ButtonWithAudio>
 
       {floatingEmojis.map((item, index) => (
         <FloatingEmojiMagico
@@ -113,20 +117,33 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 2, type: "spring" as const, stiffness: 200 }}
-          className="flex justify-center"
+          className="flex flex-col items-center gap-4"
         >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full max-w-md">
+            <ButtonWithAudio
+              onClick={() => speakText(instructions, { voiceType: 'child' })}
+              playOnClick
+              playOnHover={false}
+              variant="outline"
+              className="w-full bg-orange-500/90 text-white text-xl px-8 py-4 rounded-full shadow-lg dyslexia-friendly"
+            >
+              Escuchar instrucciones
+            </ButtonWithAudio>
+          </motion.div>
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button 
+            <ButtonWithAudio 
               onClick={onStart}
+              playOnHover
+              playOnClick
               size="lg"
               className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly"
             >
               <Sparkles className="mr-2 w-6 h-6" />
               ¡Empezar a Jugar!
-            </Button>
+            </ButtonWithAudio>
           </motion.div>
         </motion.div>
 
