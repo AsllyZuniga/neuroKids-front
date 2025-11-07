@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from "../../../ui/button";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from "../../../others/RewardAnimation";
@@ -10,6 +10,9 @@ import { ProgressBar } from "../../../others/ProgressBar";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenCuentoPictogramas } from "../IniciosJuegosLecturas/StartScreenCuentoPictogramas/StartScreenCuentoPictogramas";
+import { LevelLock } from '../../../others/LevelLock';
+import { useLevelLock } from '../../../../hooks/useLevelLock';
+import { speakText } from '../../../../utils/textToSpeech';
 
 interface CuentoPictogramas {
   onBack: () => void;
@@ -185,6 +188,7 @@ const storyPagesLevel3: StoryPage[] = [
 export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
   const [gameStarted, setGameStarted] = useState(false);
   const [level, setLevel] = useState(1);
+  const isLevelLocked = useLevelLock(level);
   const [currentPage, setCurrentPage] = useState(0);
   const [score, setScore] = useState(0);
   const [readingComplete, setReadingComplete] = useState(false);
@@ -228,30 +232,18 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
 
 
   const playPageAudio = () => {
+    if (isPlaying || !hasEnoughClicks) return;
     setIsPlaying(true);
     let finalText = currentStoryPage.text;
-
-    // Reemplazar los pictogramas descubiertos con sus nombres
     currentStoryPage.pictograms.forEach(({ word }) => {
       if (clickedPictograms.has(word) && hasEnoughClicks) {
         finalText = finalText.replace(`{${word}}`, word);
       }
     });
-
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(finalText);
-      utterance.lang = 'es-ES';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
-
-    const words = finalText.split(' ').length;
-    const duration = Math.max(words * 400, 2000);
-    console.log(`🔊 Leyendo: ${finalText}`);
-
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, duration);
+    speakText(finalText, { voiceType: 'child' });
+    const words = finalText.split(/\s+/).filter(Boolean).length;
+    const duration = Math.max(words * 350, 1800);
+    setTimeout(() => setIsPlaying(false), duration);
   };
 
   const handlePictogramClick = (word: string) => {
@@ -265,6 +257,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
       setShowReward(true);
       setTimeout(() => setShowReward(false), 1000);
     }
+    speakText(word, { voiceType: 'child' });
   };
 
   const renderTextWithPictograms = (text: string, pictograms: { word: string; emoji: string }[]) => {
@@ -359,10 +352,15 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
   };
 
   if (!gameStarted) {
-    return <StartScreenCuentoPictogramas onStart={() => setGameStarted(true)} onBack={onBack} />;
+    return (
+      <LevelLock level={level} isLocked={isLevelLocked}>
+        <StartScreenCuentoPictogramas onStart={() => setGameStarted(true)} onBack={onBack} />
+      </LevelLock>
+    );
   }
 
   return (
+    <LevelLock level={level} isLocked={isLevelLocked}>
     <div
       className="min-h-screen p-6"
       style={{
@@ -410,16 +408,19 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
                 {/* IMAGEN + AUDIO */}
                 <div className="text-center">
                   <div className="text-9xl mb-4">{currentStoryPage.image}</div>
-                  <Button
+                  <ButtonWithAudio
                     onClick={playPageAudio}
+                    playOnClick
+                    playOnHover
                     disabled={isPlaying || !hasEnoughClicks}
+                    audioText={isPlaying ? 'Narrando' : 'Escuchar Historia'}
                     className={`w-full transition-all ${isPlaying
                       ? 'bg-green-500 text-white animate-pulse'
                       : 'bg-blue-500 hover:bg-blue-600 text-white'
                       }`}>
                     <Volume2 className={`w-5 h-5 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
                     {isPlaying ? 'Narrando...' : 'Escuchar Historia'}
-                  </Button>
+                  </ButtonWithAudio>
                 </div>
 
                 {/* TEXTO CON PICTOGRAMAS */}
@@ -453,15 +454,17 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
 
           {/* NAVEGACIÓN */}
           <div className="flex justify-between items-center mt-6">
-            <Button
+            <ButtonWithAudio
               onClick={goToPreviousPage}
               disabled={currentPage === 0}
+              playOnHover
+              playOnClick
               variant="outline"
               className="bg-green-500"
             >
               <ChevronLeft className="w-5 h-5 mr-2" />
               Anterior
-            </Button>
+            </ButtonWithAudio>
 
             <div className="flex gap-2">
               {storyPages.map((_, index) => (
@@ -474,14 +477,17 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
               ))}
             </div>
 
-            <Button
+            <ButtonWithAudio
               onClick={goToNextPage}
+              playOnHover
+              playOnClick
               className="bg-blue-500 hover:bg-blue-600 text-white"
               disabled={!hasEnoughClicks}
+              audioText={currentPage === storyPages.length - 1 ? 'Finalizar' : 'Siguiente'}
             >
               {currentPage === storyPages.length - 1 ? 'Finalizar' : 'Siguiente'}
               <ChevronRight className="w-5 h-5 ml-2" />
-            </Button>
+            </ButtonWithAudio>
           </div>
 
           {/* ADVERTENCIA */}
@@ -525,5 +531,6 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
         />
       )}
     </div>
+    </LevelLock>
   );
 }

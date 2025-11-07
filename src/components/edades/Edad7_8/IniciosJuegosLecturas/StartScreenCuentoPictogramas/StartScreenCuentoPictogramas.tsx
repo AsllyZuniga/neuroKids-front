@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, BookOpen, Play, ArrowLeft } from "lucide-react";
-import { Button } from "../../../../ui/button";
+import { ButtonWithAudio } from "../../../../ui/ButtonWithAudio";
+import { speakText } from "../../../../../utils/textToSpeech";
 import { FloatingEmoji } from "./FloatingEmoji";
 import { AnimatedTitle } from "./AnimatedTitle";
 
@@ -11,18 +12,21 @@ interface StartScreenCuentoPictogramasProps {
 
 export function StartScreenCuentoPictogramas({ onStart, onBack }: StartScreenCuentoPictogramasProps) {
   const floatingEmojis = ['📚', '✨', '🌟', '📖', '🎨', '🌈', '⭐', '💫', '🎭', '🎪', '🎨', '🌸', '🦋', '🌺', '🍀'];
+  const instructions = `Bienvenido a Cuento con pictogramas. Haz clic en los pictogramas para descubrir sus palabras. Cuando hayas descubierto suficientes, podrás escuchar la historia narrada. ¡Vamos a leer y aprender juntos!`;
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
       {/* Back Button */}
-      <Button
+      <ButtonWithAudio
         onClick={onBack}
+        playOnHover
+        playOnClick
         variant="outline"
         className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
-      </Button>
+      </ButtonWithAudio>
 
       <div className="absolute inset-0 overflow-hidden">
         {floatingEmojis.map((emoji, index) => (
@@ -96,14 +100,24 @@ export function StartScreenCuentoPictogramas({ onStart, onBack }: StartScreenCue
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.5, duration: 0.6 }}
-          className="flex justify-center"
+          className="flex flex-col items-center gap-4"
         >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button 
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full max-w-md">
+            <ButtonWithAudio
+              onClick={() => speakText(instructions, { voiceType: 'child' })}
+              playOnClick
+              playOnHover={false}
+              variant="outline"
+              className="w-full text-xl px-8 py-4 rounded-full shadow-lg dyslexia-friendly bg-orange-500/90 text-white"
+            >
+              Escuchar instrucciones
+            </ButtonWithAudio>
+          </motion.div>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <ButtonWithAudio 
               onClick={onStart}
+              playOnHover
+              playOnClick
               size="lg"
               className="text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly"
               style={{ 
@@ -113,7 +127,7 @@ export function StartScreenCuentoPictogramas({ onStart, onBack }: StartScreenCue
             >
               <Play className="mr-2 h-6 w-6" />
               Comenzar a Jugar
-            </Button>
+            </ButtonWithAudio>
           </motion.div>
         </motion.div>
 
