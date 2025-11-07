@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
-import { Button } from "../../../ui/button";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { GameHeader } from "../../../others/GameHeader";
@@ -9,7 +9,10 @@ import { ProgressBar } from "../../../others/ProgressBar";
 import { RewardAnimation } from "../../../others/RewardAnimation";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { LevelLock } from "../../../others/LevelLock";
 import { StartScreenCazaSilaba } from "../IniciosJuegosLecturas/StartScreenCazaSilaba";
+import { speakText, canSpeakOnHover } from "../../../../utils/textToSpeech";
+import { useLevelLock } from "../../../../hooks/useLevelLock";
 import solImg from '../../../../assets/7_8/images/sol.png';
 import gatoImg from '../../../../assets/7_8/images/gato.png';
 import florImg from '../../../../assets/7_8/images/flor.png';
@@ -27,7 +30,22 @@ interface CazaSilabaProps {
   onFinishLevel: (level: number, passed: boolean) => void;
 }
 
-const gameData = {
+interface ItemWord {
+  image: string;
+  word: string;
+  syllables: string[];
+  correct: string;
+}
+
+interface ItemPhrase {
+  phrase: string;
+  options: string[];
+  correct: string;
+  complete: string;
+  fullPhrase: string;
+}
+
+const gameData: Record<number, Array<ItemWord | ItemPhrase>> = {
   1: [
     { image: solImg, word: 'SOL', syllables: ['SO', 'LA', 'MI'], correct: 'SO' },
     { image: gatoImg, word: 'GATO', syllables: ['GA', 'PE', 'SO'], correct: 'GA' },
@@ -63,6 +81,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [currentProgress, setCurrentProgress] = useState(0);
+  const isLevelLocked = useLevelLock(currentLevel);
 
   const QUESTIONS_PER_LEVEL = 5;
   const data = gameData[currentLevel as keyof typeof gameData] || gameData[1];
@@ -71,7 +90,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
     return null;
   }
 
-  const currentItem = data[currentIndex];
+  const currentItem = data[currentIndex] as ItemWord | ItemPhrase;
   const isPhrase = 'phrase' in currentItem;
 
   const baseProgress = (currentIndex / QUESTIONS_PER_LEVEL) * 100;
@@ -83,14 +102,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
     setCurrentProgress(Math.min(newProgress, baseProgress + maxPageProgress));
   };
 
-  const speakText = (text: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'es-ES';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
+  // Se usa la utilidad global speakText importada, con voz infantil
 
   const handleDrop = () => {
     const isCorrect = draggedItem === currentItem.correct;
@@ -155,10 +167,15 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
   };
 
   if (!gameStarted) {
-    return <StartScreenCazaSilaba onStart={() => setGameStarted(true)} onBack={onBack} />;
+    return (
+      <LevelLock level={currentLevel} isLocked={isLevelLocked}>
+        <StartScreenCazaSilaba onStart={() => setGameStarted(true)} onBack={onBack} />
+      </LevelLock>
+    );
   }
 
   return (
+    <LevelLock level={currentLevel} isLocked={isLevelLocked}>
     <div
       className="min-h-screen p-6"
       style={{
@@ -209,36 +226,40 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                         Completa la frase:
                       </h3>
                       <div className="text-2xl mb-6 p-4 bg-blue-50 rounded-lg">
-                        {(currentItem as any).phrase}
+                        {(currentItem as ItemPhrase).phrase}
                       </div>
-                      <Button
+                      <ButtonWithAudio
                         variant="outline"
                         className="mb-4 bg-blue-500 text-black"
-                        onClick={() => speakText((currentItem as any).fullPhrase)}
+                        playOnClick
+                        playOnHover={false}
+                        onClick={() => speakText((currentItem as ItemPhrase).fullPhrase, { voiceType: 'child' })}
                       >
                         <Volume2 className="w-4 h-4 mr-2 text-black" />
                         Escuchar frase completa
-                      </Button>
+                      </ButtonWithAudio>
                     </div>
                   ) : (
                     <div>
-                      <img
-                        src={currentItem.image}
-                        alt={currentItem.word}
+                       <img
+                        src={(currentItem as ItemWord).image}
+                        alt={(currentItem as ItemWord).word}
                         style={{ width: '150px', height: '150px', objectFit: 'contain' }}
                         className="mb-6 mx-auto"
                       />
                       <h3 className="text-xl text-gray-700 mb-4">
-                        {(currentItem as any).word}
+                        {(currentItem as ItemWord).word}
                       </h3>
-                      <Button
+                      <ButtonWithAudio
                         variant="outline"
                         className='text-black bg-blue-500'
-                        onClick={() => speakText((currentItem as any).word)}
+                        playOnClick
+                        playOnHover={false}
+                        onClick={() => speakText((currentItem as ItemWord).word, { voiceType: 'child' })}
                       >
                         <Volume2 className="w-4 h-4 mr-2 text-black" />
                         Escuchar palabra
-                      </Button>
+                      </ButtonWithAudio>
                     </div>
                   )}
                 </CardContent>
@@ -288,7 +309,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
 
                   {/* Silabas */}
                   <div className="grid grid-cols-3 gap-4">
-                    {(isPhrase ? (currentItem as any).options : (currentItem as any).syllables).map((syllable: string, index: number) => (
+                    {(isPhrase ? (currentItem as ItemPhrase).options : (currentItem as ItemWord).syllables).map((syllable: string, index: number) => (
                       <motion.div
                         key={`${syllable}-${index}`}
                         initial={{ scale: 0 }}
@@ -299,8 +320,13 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                       >
                         <div
                           draggable
-                          onDragStart={() => setDraggedItem(syllable)}
+                          onDragStart={() => {
+                            setDraggedItem(syllable);
+                            speakText(syllable, { voiceType: 'child' });
+                          }}
                           onDragEnd={() => { }}
+                          onMouseEnter={() => { if (canSpeakOnHover()) speakText(syllable, { voiceType: 'child' }); }}
+                          onClick={() => speakText(syllable, { voiceType: 'child' })}
                           className="cursor-grab active:cursor-grabbing p-4 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-lg text-center font-bold text-xl shadow-lg hover:shadow-xl transition-all"
                         >
                           {syllable}
@@ -339,5 +365,6 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
         />
       )}
     </div>
+    </LevelLock>
   );
 }

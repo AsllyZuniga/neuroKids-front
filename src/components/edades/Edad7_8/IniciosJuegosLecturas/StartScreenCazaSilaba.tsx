@@ -1,5 +1,6 @@
 import { Gem, ArrowLeft } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
+import { speakText } from "../../../../utils/textToSpeech";
 
 interface StartScreenCazaSilabaProps {
   onStart: () => void;
@@ -7,6 +8,12 @@ interface StartScreenCazaSilabaProps {
 }
 
 export function StartScreenCazaSilaba({ onStart, onBack }: StartScreenCazaSilabaProps) {
+  const instructions = `
+    Bienvenido a Caza la Sílaba.
+    Escucha o lee la palabra o la frase y elige la sílaba correcta.
+    Arrastra la sílaba hasta el recuadro para completar la palabra o la frase.
+    ¡Vamos a aprender jugando!
+  `;
   return (
     <div 
       className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
@@ -14,14 +21,16 @@ export function StartScreenCazaSilaba({ onStart, onBack }: StartScreenCazaSilaba
         background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
       }}
     >
-      <Button
+      <ButtonWithAudio
         onClick={onBack}
+        playOnClick
+        playOnHover
         variant="outline"
         className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
-      </Button>
+      </ButtonWithAudio>
       <div className="relative w-full max-w-2xl mx-auto p-8">
         <div className="absolute top-0 left-10 animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }}>
           <Gem className="w-12 h-12 text-blue-300 fill-blue-200" />
@@ -70,14 +79,26 @@ export function StartScreenCazaSilaba({ onStart, onBack }: StartScreenCazaSilaba
               <p className="text-teal-700 text-2xl italic dyslexia-friendly">¡Arrastra sílabas para completar palabras y frases!</p>
           </div>
 
-          <div className="flex justify-center">
-            <Button
+          <div className="flex flex-col items-center gap-4">
+            <ButtonWithAudio
+              onClick={() => speakText(instructions, { voiceType: 'child' })}
+              playOnClick
+              playOnHover={false}
+              variant="outline"
+              className="bg-blue-500/90 text-white px-8 py-4 rounded-full text-xl shadow-xl border-2 border-blue-400 hover:scale-105 transform transition-transform duration-200"
+            >
+              Escuchar instrucciones
+            </ButtonWithAudio>
+
+            <ButtonWithAudio
               onClick={onStart}
+              playOnHover
+              playOnClick
               size="lg"
               className="bg-gradient-to-br from-teal-300 to-green-400 hover:from-teal-400 hover:to-green-500 text-white px-16 py-6 rounded-full text-4xl shadow-2xl border-4 border-teal-400 hover:scale-110 transform transition-transform duration-200 hover:shadow-3xl uppercase tracking-wide dyslexia-friendly"
             >
               Jugar
-            </Button>
+            </ButtonWithAudio>
           </div>
         </div>
       </div>
