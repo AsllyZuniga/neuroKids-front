@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
-import { Button } from "../../../ui/button";
+// import { Button } from "../../../ui/button"; // Reemplazado por ButtonWithAudio
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { GameHeader } from "../../../others/GameHeader";
@@ -9,7 +10,10 @@ import { ProgressBar } from "../../../others/ProgressBar";
 import { RewardAnimation } from "../../../others/RewardAnimation";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
+import { LevelLock } from "../../../others/LevelLock";
 import { StartScreenEscuchaElige } from "../IniciosJuegosLecturas/StartScreenEscuchaElige";
+import { speakText, canSpeakOnHover } from "../../../../utils/textToSpeech";
+import { useLevelLock } from "../../../../hooks/useLevelLock";
 
 import gatoAudio from "../../../../assets/sounds/gato_escuchaElige.mp3";
 import perroAudio from "../../../../assets/sounds/perro_escuchaElige.mp3";
@@ -68,7 +72,7 @@ const levelQuestions: Record<number, Question[]> = {
       id: 4, //corregir
       audio: aguaAudio,
       options: ["🚿 Ducha", "🚪 Puerta", "🧼 Jabón", "🚽 Inodoro"],
-      correct: 1,
+      correct: 0,
       soundLabel: "Reproducir sonido"
     },
     {
@@ -160,6 +164,7 @@ const levelQuestions: Record<number, Question[]> = {
 export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: EscuchaEligeProps) {
   const [gameStarted, setGameStarted] = useState(false);
   const [localLevel, setLocalLevel] = useState(initialLevel);
+  const isLevelLocked = useLevelLock(localLevel);
   const questions = levelQuestions[localLevel] || levelQuestions[1];
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -167,7 +172,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   const [gameComplete, setGameComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [currentProgress, setCurrentProgress] = useState(0);
   const [showMotivational, setShowMotivational] = useState(false);
@@ -178,22 +183,45 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   const baseProgress = (currentQuestion / totalQuestions) * 100;
   const incrementPerCorrect = 100 / totalQuestions;
 
+  // Reinicia estado del juego (estable: no depende de audio para evitar reinicios inesperados)
+  const restartGame = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setCurrentQuestion(0);
+    setScore(0);
+    setSelectedAnswer(null);
+    setGameComplete(false);
+    setShowReward(false);
+    setIsPlaying(false);
+    setCorrectAnswers(0);
+    setCurrentProgress(0);
+    setShowMotivational(false);
+    setShowLevelComplete(false);
+  }, []);
+
   useEffect(() => {
+    // Solo reinicia cuando cambia el nivel
     restartGame();
-  }, [localLevel]);
+  }, [localLevel, restartGame]);
 
   useEffect(() => {
     if (currentQ.audio) {
       const audioElement = new Audio(currentQ.audio);
-      setAudio(audioElement);
+      audioRef.current = audioElement;
       return () => {
         audioElement.pause();
         audioElement.currentTime = 0;
+        if (audioRef.current === audioElement) {
+          audioRef.current = null;
+        }
       };
     }
-  }, [currentQuestion]);
+  }, [currentQ.audio]);
 
   const playAudio = () => {
+    const audio = audioRef.current;
     if (audio && !isPlaying) {
       setIsPlaying(true);
       audio.play().then(() => {
@@ -211,6 +239,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
 
 
 
+    const audio = audioRef.current;
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
@@ -249,22 +278,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
     }, 2000);
   };
 
-  const restartGame = () => {
-    setCurrentQuestion(0);
-    setScore(0);
-    setSelectedAnswer(null);
-    setGameComplete(false);
-    setShowReward(false);
-    setIsPlaying(false);
-    setCorrectAnswers(0);
-    setCurrentProgress(0);
-    setShowMotivational(false);
-    setShowLevelComplete(false);
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-    }
-  };
+  // (restartGame ya definido con useCallback arriba)
 
   const handleNextLevel = () => {
     restartGame();
@@ -276,10 +290,15 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   };
 
   if (!gameStarted) {
-    return <StartScreenEscuchaElige onStart={() => setGameStarted(true)} onBack={onBack} />;
+    return (
+      <LevelLock level={localLevel} isLocked={isLevelLocked}>
+        <StartScreenEscuchaElige onStart={() => setGameStarted(true)} onBack={onBack} />
+      </LevelLock>
+    );
   }
 
   return (
+    <LevelLock level={localLevel} isLocked={isLevelLocked}>
     <div
       className="min-h-screen p-6"
       style={{
@@ -324,14 +343,17 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
           {/* BOTÓN DE SONIDO */}
           <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 flex items-center justify-center">
             <CardContent className="p-6">
-              <Button
+              <ButtonWithAudio
                 onClick={playAudio}
+                playOnClick
+                playOnHover
                 disabled={isPlaying}
+                audioText={currentQ.soundLabel}
                 className="bg-orange-500 hover:bg-orange-600 text-white text-xl px-10 py-6 w-full"
               >
                 <Volume2 className="w-8 h-8 mr-3" />
                 {isPlaying ? "Reproduciendo..." : currentQ.soundLabel}
-              </Button>
+              </ButtonWithAudio>
             </CardContent>
           </Card>
 
@@ -356,6 +378,8 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
                           : 'bg-gray-100 border-gray-300 text-black'
                     }`}
                   onClick={() => handleAnswerSelect(index)}
+                  onMouseEnter={() => { if (canSpeakOnHover()) speakText(option.replace(/^[^\p{L}\p{N}]+/u, ''), { voiceType: 'child' }); }}
+                  onFocus={() => { if (canSpeakOnHover()) speakText(option.replace(/^[^\p{L}\p{N}]+/u, ''), { voiceType: 'child' }); }}
                 >
                   <CardContent className="p-0">
                     {option}
@@ -394,5 +418,6 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
         />
       )}
     </div>
+    </LevelLock>
   );
 }

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Volume2, Play, Sparkles, ArrowLeft } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
+import { speakText } from "../../../../utils/textToSpeech";
 
 interface StartScreenEscuchaEligeProps {
   onStart: () => void;
@@ -10,6 +11,7 @@ interface StartScreenEscuchaEligeProps {
 export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaEligeProps) {
   const title = "ESCUCHA Y ELIGE";
   const letters = title.split('');
+  const instructions = `Bienvenido al juego Escucha y Elige. Primero presiona el botón reproducir sonido. Después escucha con mucha atención y elige la opción correcta. ¡Aprenderemos jugando!`;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -44,14 +46,16 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 flex items-center justify-center p-4 overflow-hidden relative">
-      <Button
+      <ButtonWithAudio
         onClick={onBack}
+        playOnClick
+        playOnHover
         variant="outline"
         className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
-      </Button>
+      </ButtonWithAudio>
 
       <motion.div
         className="absolute top-20 left-10 w-32 h-32 bg-pink-300/30 rounded-full blur-2xl"
@@ -192,19 +196,38 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
             ¡Escucha los sonidos con atención y elige la respuesta correcta! 👂
           </p>
 
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button
-              onClick={onStart}
-              size="lg"
-              className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white rounded-full px-12 py-8 text-2xl shadow-xl dyslexia-friendly"
+          <div className="flex flex-col items-center gap-4">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full"
             >
-              <Play className="w-8 h-8 mr-3 fill-white" />
-              ¡Comenzar a Jugar!
-            </Button>
-          </motion.div>
+              <ButtonWithAudio
+                onClick={() => speakText(instructions, { voiceType: 'child' })}
+                playOnClick
+                playOnHover={false}
+                variant="outline"
+                className="bg-orange-500/90 text-white rounded-full px-10 py-6 text-xl shadow-xl dyslexia-friendly w-full"
+              >
+                Escuchar instrucciones
+              </ButtonWithAudio>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ButtonWithAudio
+                onClick={onStart}
+                playOnHover
+                playOnClick
+                size="lg"
+                className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white rounded-full px-12 py-8 text-2xl shadow-xl dyslexia-friendly"
+              >
+                <Play className="w-8 h-8 mr-3 fill-white" />
+                ¡Comenzar a Jugar!
+              </ButtonWithAudio>
+            </motion.div>
+          </div>
         </motion.div>
 
         <motion.div
