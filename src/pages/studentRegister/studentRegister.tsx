@@ -429,7 +429,7 @@ export default function StudentRegister() {
                     className="student-register__choice-button student-register__choice-button--yes" 
                   />
                   <Button 
-                    label="❌ No, estoy solo" 
+                    label="❌ No, estoy solo/a" 
                     variant="secondary" 
                     size="large" 
                     onClick={() => handleParentChoice(false)} 
@@ -455,12 +455,16 @@ export default function StudentRegister() {
                 exit={{ opacity: 0, x: -50 }} 
                 className="student-register__step"
               >
-                <h2 className="student-register__step-title">¿Cómo te llamas?</h2>
+                <h2 className="student-register__step-title">
+                  {withParent ? '¿Cómo se llama tu hijo/a?' : '¿Cómo te llamas?'}
+                </h2>
                 <p className="student-register__step-description">
-                  Cuéntanos tu nombre completo
+                  {withParent ? 'Ingresa el nombre completo de tu hijo/a' : 'Cuéntanos tu nombre completo'}
                 </p>
                 <div className="student-register__field">
-                  <label className="student-register__label" htmlFor="nombre">Tu Nombre</label>
+                  <label className="student-register__label" htmlFor="nombre">
+                    {withParent ? 'Nombre de tu Hijo/a' : 'Tu Nombre'}
+                  </label>
                   <input 
                     type="text" 
                     id="nombre" 
@@ -473,7 +477,9 @@ export default function StudentRegister() {
                   />
                 </div>
                 <div className="student-register__field">
-                  <label className="student-register__label" htmlFor="apellido">Tu Apellido</label>
+                  <label className="student-register__label" htmlFor="apellido">
+                    {withParent ? 'Apellido de tu Hijo/a' : 'Tu Apellido'}
+                  </label>
                   <input 
                     type="text" 
                     id="apellido" 
@@ -500,12 +506,18 @@ export default function StudentRegister() {
                 exit={{ opacity: 0, x: -50 }} 
                 className="student-register__step"
               >
-                <h2 className="student-register__step-title">¿Cuántos años tienes?</h2>
+                <h2 className="student-register__step-title">
+                  {withParent ? '¿Cuál es la edad de tu hijo/a?' : '¿Cuántos años tienes?'}
+                </h2>
                 <p className="student-register__step-description">
-                  Dinos tu edad para personalizar tu experiencia. Si no la recuerdas puedes saltar este paso.
+                  {withParent 
+                    ? 'Ingresa la edad de tu Hijo/a para personalizar su experiencia' 
+                    : 'Dinos tu edad para personalizar tu experiencia. Si no la recuerdas puedes saltar este paso.'}
                 </p>
                 <div className="student-register__field">
-                  <label className="student-register__label" htmlFor="edad">Tu Edad</label>
+                  <label className="student-register__label" htmlFor="edad">
+                    {withParent ? 'Edad de tu Hijo/a' : 'Tu Edad'}
+                  </label>
                   <input 
                     type="number" 
                     id="edad" 
@@ -514,10 +526,10 @@ export default function StudentRegister() {
                     className="student-register__input student-register__input--number" 
                     placeholder="Ej: 10" 
                     min={7} 
-                    max={18} 
+                    max={14} 
                     autoFocus 
                   />
-                  <p className="student-register__hint">Entre 7 y 18 años {withParent ? '(obligatorio)' : '(opcional, puedes dejarlo vacío)'} </p>
+                  <p className="student-register__hint">Entre 7 y 14 años {withParent ? '(obligatorio)' : '(opcional, puedes dejarlo vacío)'} </p>
                 </div>
                 {error && <div className="student-register__error">{error}</div>}
                 <div className="student-register__buttons">
@@ -543,12 +555,16 @@ export default function StudentRegister() {
                 exit={{ opacity: 0, x: -50 }} 
                 className="student-register__step"
               >
-                <h2 className="student-register__step-title">¿A qué escuela vas?</h2>
+                <h2 className="student-register__step-title">
+                  {withParent ? '¿A qué escuela va tu Hijo/a?' : '¿A qué escuela vas?'}
+                </h2>
                 <p className="student-register__step-description">
-                  Selecciona tu escuela de la lista
+                  {withParent ? 'Selecciona la escuela de tu Hijo/a de la lista' : 'Selecciona tu escuela de la lista'}
                 </p>
                 <div className="student-register__field">
-                  <label className="student-register__label" htmlFor="institucion_id">Tu Escuela</label>
+                  <label className="student-register__label" htmlFor="institucion_id">
+                    {withParent ? 'Escuela de tu Hijo/a' : 'Tu Escuela'}
+                  </label>
                   <select 
                     id="institucion_id" 
                     value={formData.institucion_id} 
@@ -602,14 +618,12 @@ export default function StudentRegister() {
                 exit={{ opacity: 0, x: -50 }} 
                 className="student-register__step"
               >
-                <h2 className="student-register__step-title">Documento del Estudiante</h2>
+                <h2 className="student-register__step-title">Documento de tu Hijo/a</h2>
                 <p className="student-register__step-description">
-                  Ingresa el número de documento del estudiante (lo completa el adulto)
+                  Ingresa el número de documento de identidad de tu Hijo/a
                 </p>
                 <div className="student-register__field">
-                  <label className="student-register__label" htmlFor="num_documento">
-                    Número de Documento del Estudiante
-                  </label>
+                  <label className="student-register__label" htmlFor="num_documento">Documento de tu Hijo/a</label>
                   <input 
                     type="text" 
                     id="num_documento" 
@@ -620,7 +634,7 @@ export default function StudentRegister() {
                     maxLength={20} 
                     autoFocus 
                   />
-                  <p className="student-register__hint">Documento de identidad del estudiante</p>
+                  <p className="student-register__hint">El documento de identidad de tu Hijo/a</p>
                 </div>
                 {error && <div className="student-register__error">{error}</div>}
                 <div className="student-register__buttons">
@@ -638,14 +652,12 @@ export default function StudentRegister() {
                 exit={{ opacity: 0, x: -50 }} 
                 className="student-register__step"
               >
-                <h2 className="student-register__step-title">Correo de Contacto</h2>
+                <h2 className="student-register__step-title">Tu Correo de Contacto</h2>
                 <p className="student-register__step-description">
-                  Correo del adulto responsable para enviar información importante
+                  Tu correo como padre/tutor para recibir información importante sobre el progreso de tu Hijo/a
                 </p>
                 <div className="student-register__field">
-                  <label className="student-register__label" htmlFor="correo">
-                    Correo del Adulto
-                  </label>
+                  <label className="student-register__label" htmlFor="correo">Tu Correo</label>
                   <input 
                     type="email" 
                     id="correo" 
@@ -656,7 +668,7 @@ export default function StudentRegister() {
                     maxLength={100} 
                     autoFocus 
                   />
-                  <p className="student-register__hint">Correo del padre, madre o tutor</p>
+                  <p className="student-register__hint">Tu correo para recibir información del progreso</p>
                 </div>
                 {error && <div className="student-register__error">{error}</div>}
                 <div className="student-register__buttons">
