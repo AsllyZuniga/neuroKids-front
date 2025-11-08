@@ -6,7 +6,8 @@ export const API_CONFIG = {
 
         // Endpoints para estudiantes
         STUDENT_LOGIN: "/estudiantes/iniciar-sesion",
-        STUDENT_REGISTER: "/students/register",
+        // Coincide con ruta backend: POST /api/estudiantes/registro
+        STUDENT_REGISTER: "/estudiantes/registro",
         STUDENT_INSTITUCIONES: "/estudiantes/instituciones",
 
         // Endpoints comunes
