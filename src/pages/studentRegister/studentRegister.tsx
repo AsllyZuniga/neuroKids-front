@@ -332,6 +332,33 @@ export default function StudentRegister() {
 
   return (
     <div className="student-register">
+      {/* Floating decorative elements */}
+      <div className="student-register__floating-elements">
+        {['🎓', '📚', '✏️', '🌟', '🎨', '🚀', '💡', '🏆', '⭐', '🎯'].map((emoji, index) => (
+          <motion.div
+            key={index}
+            className="student-register__floating-emoji"
+            style={{
+              left: `${(index * 10) + 5}%`,
+              fontSize: index % 2 === 0 ? '2rem' : '2.5rem',
+            }}
+            animate={{
+              y: ['0vh', '100vh'],
+              rotate: [0, 360],
+              x: [0, Math.sin(index) * 30, 0],
+            }}
+            transition={{
+              duration: 15 + Math.random() * 10,
+              delay: index * 1.5,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          >
+            {emoji}
+          </motion.div>
+        ))}
+      </div>
+
       <div className="student-register__container">
         <Card className="student-register__card">
           {showConfetti && (
@@ -362,7 +389,7 @@ export default function StudentRegister() {
                 </div>
                 <h2 className="student-register__step-title">¡Bienvenido a NeuroKids!</h2>
                 <p className="student-register__step-description">
-                  Vamos a crear tu cuenta paso a paso 🚀
+                  Vamos a crear una cuenta paso a paso 🚀
                 </p>
                 <Button 
                   label="¡Comenzar!" 
@@ -389,9 +416,9 @@ export default function StudentRegister() {
                 exit={{ opacity: 0, x: -50 }} 
                 className="student-register__step"
               >
-                <h2 className="student-register__step-title">¿Estás con un adulto?</h2>
+                <h2 className="student-register__step-title">¿Estás con tus padres?</h2>
                 <p className="student-register__step-description">
-                  Necesitamos saber si estás acompañado por tus padres o un adulto
+                  Necesitamos saber si estás acompañado por tus padres.
                 </p>
                 <div className="student-register__choice-buttons">
                   <Button 
