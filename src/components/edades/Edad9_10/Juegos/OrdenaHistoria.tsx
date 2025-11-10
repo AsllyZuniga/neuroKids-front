@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from "framer-motion";
 import {  RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
-import { Button } from '../../../ui/button';
+import { ButtonWithAudio } from '../../../ui/ButtonWithAudio';
 import { Card, CardContent } from '../../../ui/card';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
@@ -11,6 +11,7 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenOrdenaHistoria } from "../IniciosJuegosLecturas/StartScreenOrdenaHistoria/StartScreenOrdenaHistoria";
+import { speakText, canSpeakOnHover } from '../../../../utils/textToSpeech';
 
 interface OrdenaHistoriaProps {
   onBack: () => void;
@@ -221,18 +222,18 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  useEffect(() => {
-    initializeStory();
-  }, [currentLevel, currentStoryIndex]);
-
-  const initializeStory = () => {
+  const initializeStory = useCallback(() => {
     const currentStory = levels[currentLevel - 1].stories[currentStoryIndex];
     const shuffledFragments = [...currentStory.fragments].sort(() => Math.random() - 0.5);
     setFragments(shuffledFragments);
     setUserOrder([]);
     setShowResult(false);
     setAttempts(0);
-  };
+  }, [currentLevel, currentStoryIndex]);
+
+  useEffect(() => {
+    initializeStory();
+  }, [initializeStory]);
 
   const handleDragStart = (fragment: StoryFragment) => {
     setDraggedFragment(fragment);
@@ -339,8 +340,8 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
               <h2 className="text-3xl mb-4 text-black">¡Has completado todos los niveles!</h2>
               <div className="text-xl mb-6 text-black">Puntuación final: {score} puntos</div>
               <div className="flex justify-center gap-4">
-                <Button onClick={handleRestartGame} className="bg-green-500 hover:bg-green-600 text-white px-6 py-3">Jugar de nuevo</Button>
-                <Button onClick={onBack} variant="outline" className="px-6 py-3">Volver al dashboard</Button>
+                <ButtonWithAudio onClick={handleRestartGame} className="bg-green-500 hover:bg-green-600 text-white px-6 py-3" playOnHover audioText="Jugar de nuevo">Jugar de nuevo</ButtonWithAudio>
+                <ButtonWithAudio onClick={onBack} variant="outline" className="px-6 py-3" playOnHover audioText="Volver al dashboard">Volver al dashboard</ButtonWithAudio>
               </div>
             </CardContent>
           </Card>
@@ -401,6 +402,19 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
                   <Card
                     className="cursor-move bg-white/80 hover:bg-white border-2 border-blue-200 hover:border-blue-400 transition-all"
                     draggable
+                    role="button"
+                    tabIndex={0}
+                    aria-label={fragment.text}
+                    onFocus={() => speakText(fragment.text, { voiceType: 'child' })}
+                    onMouseEnter={() => {
+                      if (canSpeakOnHover()) speakText(fragment.text, { voiceType: 'child' });
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleFragmentClick(fragment);
+                      }
+                    }}
                     onDragStart={() => handleDragStart(fragment)}
                     onClick={() => handleFragmentClick(fragment)}
                   >
@@ -416,10 +430,10 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg text-black">Tu historia ordenada:</h3>
-              <Button onClick={initializeStory} variant="outline" size="sm" className="bg-blue-500">
+              <ButtonWithAudio onClick={initializeStory} variant="outline" size="sm" className="bg-blue-500" playOnHover audioText="Reiniciar historia">
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reiniciar
-              </Button>
+              </ButtonWithAudio>
             </div>
             <div className="space-y-3 min-h-[400px]">
               {userOrder.map((fragment, index) => (
@@ -431,14 +445,22 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, index)}
                 >
-                  <Card className="bg-green-50 border-2 border-green-300">
+                  <Card
+                    className="bg-green-50 border-2 border-green-300"
+                    tabIndex={0}
+                    aria-label={fragment.text}
+                    onFocus={() => speakText(fragment.text, { voiceType: 'child' })}
+                    onMouseEnter={() => {
+                      if (canSpeakOnHover()) speakText(fragment.text, { voiceType: 'child' });
+                    }}
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
                         <div className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
                           {index + 1}
                         </div>
                         <p className="text-black leading-relaxed flex-1">{fragment.text}</p>
-                        <Button onClick={() => handleRemoveFromOrder(fragment.id)} variant="ghost" size="sm" className="text-red-500 hover:text-red-700">X</Button>
+                        <ButtonWithAudio onClick={() => handleRemoveFromOrder(fragment.id)} variant="ghost" size="sm" className="text-red-500 hover:text-red-700" playOnHover audioText="Quitar frase">X</ButtonWithAudio>
                       </div>
                     </CardContent>
                   </Card>
@@ -452,14 +474,16 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
             </div>
 
             <div className="mt-6 text-center">
-              <Button
+              <ButtonWithAudio
                 onClick={checkOrder}
                 disabled={userOrder.length !== currentStories[currentStoryIndex].fragments.length}
                 className="bg-green-500 hover:bg-green-600 text-white px-8 py-3"
+                playOnHover
+                audioText="Verificar orden"
               >
                 <CheckCircle className="w-5 h-5 mr-2" />
                 Verificar orden
-              </Button>
+              </ButtonWithAudio>
             </div>
           </div>
         </div>
