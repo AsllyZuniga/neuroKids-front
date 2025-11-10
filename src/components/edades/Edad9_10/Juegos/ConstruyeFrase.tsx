@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { Wrench, CheckCircle, RotateCcw, Lightbulb } from 'lucide-react';
 import { Button } from "../../../ui/button";
@@ -12,6 +13,8 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenConstruyeFrase } from "../IniciosJuegosLecturas/StartScreenConstruyeFrase/StartScreenConstruyeFrase";
+import { speakText, stopSpeech, isSpeechSupported } from '../../../../utils/textToSpeech';
+import { isUserAuthenticated } from '../../../../hooks/useLevelLock';
 
 interface ConstruyeFraseProps {
   onBack: () => void;
@@ -106,13 +109,16 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   const [availableWords, setAvailableWords] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [levelComplete, setLevelComplete] = useState(false);
+  // Eliminado levelComplete no utilizado tras refactors
   const [gameComplete, setGameComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelCompleteModal, setShowLevelCompleteModal] = useState(false);
+  const lastSpokenRef = useRef<string | null>(null);
+  const hoverTimeoutRef = useRef<number | null>(null);
+  const navigate = useNavigate();
 
   const currentLevelData = levels.find(l => l.level === currentLevel);
   const challenges = currentLevelData?.challenges || [];
@@ -125,8 +131,14 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
       onBack();
       return;
     }
+    // Si el juego inicia en un nivel > 1 y no está autenticado, pedir inicio de sesión
+    if (currentLevel > 1 && !isUserAuthenticated()) {
+      navigate('/estudiante/login');
+      return;
+    }
     resetChallenge();
-  }, [currentChallenge, currentLevel]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChallenge, currentLevel, currentLevelData, challenges.length, onBack]);
 
   const resetChallenge = () => {
     const shuffledWords = [...challenge.words].sort(() => Math.random() - 0.5);
@@ -135,6 +147,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
     setShowResult(false);
     setShowHint(false);
     setAttempts(0);
+    lastSpokenRef.current = null;
   };
 
   const addWordToSentence = (word: string, wordIndex: number) => {
@@ -149,6 +162,33 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
     setAvailableWords([...availableWords, word]);
     setUserSentence(userSentence.filter((_, index) => index !== wordIndex));
   };
+
+  const handleWordHover = (word: string) => {
+    if (!isSpeechSupported()) return;
+    // Evita repetir la misma palabra si ya se habló muy recientemente
+    if (lastSpokenRef.current === word) return;
+    lastSpokenRef.current = word;
+    // Cancela hover anterior programado
+    if (hoverTimeoutRef.current) {
+      window.clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    // Pequeño delay para evitar disparos accidentales al mover rápido el mouse
+    hoverTimeoutRef.current = window.setTimeout(() => {
+      stopSpeech();
+      speakText(word, { rate: 0.9, pitch: 1.05 });
+    }, 120);
+  };
+
+  useEffect(() => {
+    return () => {
+      // Limpieza al desmontar
+      if (hoverTimeoutRef.current) {
+        window.clearTimeout(hoverTimeoutRef.current);
+      }
+      stopSpeech();
+    };
+  }, []);
 
   const checkSentence = () => {
     setAttempts(attempts + 1);
@@ -172,7 +212,6 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
           setCurrentChallenge(currentChallenge + 1);
         } else {
           if (currentLevel < levels.length) {
-            setLevelComplete(true);
             setShowMotivational(true);
           } else {
             setGameComplete(true);
@@ -188,7 +227,6 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   const restartLevel = () => {
     setCurrentChallenge(0);
     setScore(0);
-    setLevelComplete(false);
     setGameComplete(false);
     setShowReward(false);
     setShowMotivational(false);
@@ -198,10 +236,15 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
 
   const nextLevel = () => {
     if (currentLevel < levels.length) {
-      setCurrentLevel(currentLevel + 1);
+      const next = currentLevel + 1;
+      if (next >= 2 && !isUserAuthenticated()) {
+        // Solicitar inicio de sesión
+        navigate('/estudiante/login');
+        return;
+      }
+      setCurrentLevel(next);
       setCurrentChallenge(0);
       setScore(0);
-      setLevelComplete(false);
       setShowReward(false);
       setShowMotivational(false);
       setShowLevelCompleteModal(false);
@@ -327,6 +370,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
                           whileTap={{ scale: 0.95 }}
                           className="bg-orange-200 text-orange-800 px-3 py-2 rounded-lg cursor-pointer border-2 border-orange-300 hover:bg-orange-300 transition-colors"
                           onClick={() => removeWordFromSentence(index)}
+                          onMouseEnter={() => handleWordHover(word)}
                         >
                           {word}
                         </motion.div>
@@ -365,6 +409,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
                       whileTap={{ scale: 0.95 }}
                       className="bg-amber-100 text-amber-800 px-4 py-3 rounded-lg cursor-pointer border-2 border-amber-200 hover:bg-amber-200 transition-colors dyslexia-friendly"
                       onClick={() => addWordToSentence(word, index)}
+                      onMouseEnter={() => handleWordHover(word)}
                     >
                       {word}
                     </motion.div>
