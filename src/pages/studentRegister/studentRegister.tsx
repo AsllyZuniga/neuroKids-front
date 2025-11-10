@@ -42,7 +42,7 @@ interface InstitucionesResponse {
   };
 }
 
-type RegistrationStep = 
+type RegistrationStep =
   | 'welcome'
   | 'withParent'
   | 'studentName'
@@ -97,7 +97,7 @@ export default function StudentRegister() {
   const playSuccess = () => {
     try {
       if (!successSfx.current) successSfx.current = new Audio(successMp3);
-      successSfx.current.play().catch(() => {});
+      successSfx.current.play().catch(() => { });
     } catch {
       // Ignorar errores de reproducción
     }
@@ -108,13 +108,13 @@ export default function StudentRegister() {
     try {
       const url = buildApiUrl(API_CONFIG.ENDPOINTS.STUDENT_INSTITUCIONES);
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error("HTTP error status: " + response.status);
       }
-      
+
       const data: InstitucionesResponse = await response.json();
-      
+
       if (data.success && data.data) {
         setInstituciones(data.data.instituciones);
       } else {
@@ -160,10 +160,10 @@ export default function StudentRegister() {
           }
         } else if (formData.edad) {
           // Si la ingresó voluntariamente, validar rango
-            if (parseInt(formData.edad) < 7 || parseInt(formData.edad) > 18) {
-              setError("La edad debe estar entre 7 y 18 años o déjala en blanco si no la recuerdas");
-              return false;
-            }
+          if (parseInt(formData.edad) < 7 || parseInt(formData.edad) > 18) {
+            setError("La edad debe estar entre 7 y 18 años o déjala en blanco si no la recuerdas");
+            return false;
+          }
         }
         break;
       case 'studentSchool':
@@ -208,7 +208,7 @@ export default function StudentRegister() {
     };
 
     const nextStep = stepFlow[currentStep];
-    
+
     if (nextStep === 'studentSchool' && instituciones.length === 0) {
       fetchInstituciones();
     }
@@ -306,7 +306,7 @@ export default function StudentRegister() {
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.estudiante));
         localStorage.setItem("userType", "estudiante");
-        
+
         setTimeout(() => {
           navigate("/bienvenida/estudiante");
         }, 800);
@@ -322,10 +322,10 @@ export default function StudentRegister() {
   };
 
   const getProgressPercentage = () => {
-    const steps: RegistrationStep[] = withParent 
+    const steps: RegistrationStep[] = withParent
       ? ['welcome', 'withParent', 'studentName', 'studentAge', 'studentSchool', 'parentDocument', 'parentEmail', 'confirm']
       : ['welcome', 'withParent', 'studentName', 'studentAge', 'studentSchool', 'confirm'];
-    
+
     const currentIndex = steps.indexOf(currentStep);
     return ((currentIndex + 1) / steps.length) * 100;
   };
@@ -368,7 +368,7 @@ export default function StudentRegister() {
           )}
           {currentStep !== 'welcome' && (
             <div className="student-register__progress">
-              <div 
+              <div
                 className="student-register__progress-bar"
                 style={{ width: getProgressPercentage() + "%" }}
               />
@@ -377,11 +377,11 @@ export default function StudentRegister() {
 
           <AnimatePresence mode="wait">
             {currentStep === 'welcome' && (
-              <motion.div 
-                key="welcome" 
-                initial={{ opacity: 0, y: 20 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                exit={{ opacity: 0, y: -20 }} 
+              <motion.div
+                key="welcome"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
                 className="student-register__step"
               >
                 <div className="student-register__icon">
@@ -391,29 +391,29 @@ export default function StudentRegister() {
                 <p className="student-register__step-description">
                   Vamos a crear una cuenta paso a paso 🚀
                 </p>
-                <Button 
-                  label="¡Comenzar!" 
-                  variant="primary" 
-                  size="large" 
-                  onClick={() => setCurrentStep('withParent')} 
-                  className="student-register__step-button" 
+                <Button
+                  label="¡Comenzar!"
+                  variant="primary"
+                  size="large"
+                  onClick={() => setCurrentStep('withParent')}
+                  className="student-register__step-button"
                 />
-                <Button 
-                  label="← Volver al inicio de sesión" 
-                  variant="text" 
-                  size="medium" 
-                  onClick={() => navigate("/estudiante/login")} 
-                  className="student-register__back-link" 
+                <Button
+                  label="← Volver al inicio de sesión"
+                  variant="text"
+                  size="medium"
+                  onClick={() => navigate("/estudiante/login")}
+                  className="student-register__back-link"
                 />
               </motion.div>
             )}
 
             {currentStep === 'withParent' && (
-              <motion.div 
-                key="withParent" 
-                initial={{ opacity: 0, x: 50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -50 }} 
+              <motion.div
+                key="withParent"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
                 className="student-register__step"
               >
                 <h2 className="student-register__step-title">¿Estás con tus padres?</h2>
@@ -421,38 +421,38 @@ export default function StudentRegister() {
                   Necesitamos saber si estás acompañado por tus padres.
                 </p>
                 <div className="student-register__choice-buttons">
-                  <Button 
-                    label="✅ Sí, estoy con mis padres" 
-                    variant="primary" 
-                    size="large" 
-                    onClick={() => handleParentChoice(true)} 
-                    className="student-register__choice-button student-register__choice-button--yes" 
+                  <Button
+                    label="✅ Sí, estoy con mis padres"
+                    variant="primary"
+                    size="large"
+                    onClick={() => handleParentChoice(true)}
+                    className="student-register__choice-button student-register__choice-button--yes"
                   />
-                  <Button 
-                    label="❌ No, estoy solo/a" 
-                    variant="secondary" 
-                    size="large" 
-                    onClick={() => handleParentChoice(false)} 
-                    className="student-register__choice-button student-register__choice-button--no" 
+                  <Button
+                    label="❌ No, estoy solo/a"
+                    variant="secondary"
+                    size="large"
+                    onClick={() => handleParentChoice(false)}
+                    className="student-register__choice-button student-register__choice-button--no"
                   />
                 </div>
                 {error && <div className="student-register__error">{error}</div>}
-                <Button 
-                  label="← Atrás" 
-                  variant="text" 
-                  size="small" 
-                  onClick={handleBack} 
-                  className="student-register__back-button" 
+                <Button
+                  label="← Atrás"
+                  variant="text"
+                  size="small"
+                  onClick={handleBack}
+                  className="student-register__back-button"
                 />
               </motion.div>
             )}
 
             {currentStep === 'studentName' && (
-              <motion.div 
-                key="studentName" 
-                initial={{ opacity: 0, x: 50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -50 }} 
+              <motion.div
+                key="studentName"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
                 className="student-register__step"
               >
                 <h2 className="student-register__step-title">
@@ -465,29 +465,29 @@ export default function StudentRegister() {
                   <label className="student-register__label" htmlFor="nombre">
                     {withParent ? 'Nombre de tu Hijo/a' : 'Tu Nombre'}
                   </label>
-                  <input 
-                    type="text" 
-                    id="nombre" 
-                    value={formData.nombre} 
-                    onChange={(e) => handleInputChange(e.target.value, 'nombre')} 
-                    className="student-register__input" 
-                    placeholder="Ej: María" 
-                    maxLength={50} 
-                    autoFocus 
+                  <input
+                    type="text"
+                    id="nombre"
+                    value={formData.nombre}
+                    onChange={(e) => handleInputChange(e.target.value, 'nombre')}
+                    className="student-register__input"
+                    placeholder="Ej: María"
+                    maxLength={50}
+                    autoFocus
                   />
                 </div>
                 <div className="student-register__field">
                   <label className="student-register__label" htmlFor="apellido">
                     {withParent ? 'Apellido de tu Hijo/a' : 'Tu Apellido'}
                   </label>
-                  <input 
-                    type="text" 
-                    id="apellido" 
-                    value={formData.apellido} 
-                    onChange={(e) => handleInputChange(e.target.value, 'apellido')} 
-                    className="student-register__input" 
-                    placeholder="Ej: García" 
-                    maxLength={50} 
+                  <input
+                    type="text"
+                    id="apellido"
+                    value={formData.apellido}
+                    onChange={(e) => handleInputChange(e.target.value, 'apellido')}
+                    className="student-register__input"
+                    placeholder="Ej: García"
+                    maxLength={50}
                   />
                 </div>
                 {error && <div className="student-register__error">{error}</div>}
@@ -499,35 +499,35 @@ export default function StudentRegister() {
             )}
 
             {currentStep === 'studentAge' && (
-              <motion.div 
-                key="studentAge" 
-                initial={{ opacity: 0, x: 50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -50 }} 
+              <motion.div
+                key="studentAge"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
                 className="student-register__step"
               >
                 <h2 className="student-register__step-title">
                   {withParent ? '¿Cuál es la edad de tu hijo/a?' : '¿Cuántos años tienes?'}
                 </h2>
                 <p className="student-register__step-description">
-                  {withParent 
-                    ? 'Ingresa la edad de tu Hijo/a para personalizar su experiencia' 
+                  {withParent
+                    ? 'Ingresa la edad de tu Hijo/a para personalizar su experiencia'
                     : 'Dinos tu edad para personalizar tu experiencia. Si no la recuerdas puedes saltar este paso.'}
                 </p>
                 <div className="student-register__field">
                   <label className="student-register__label" htmlFor="edad">
                     {withParent ? 'Edad de tu Hijo/a' : 'Tu Edad'}
                   </label>
-                  <input 
-                    type="number" 
-                    id="edad" 
-                    value={formData.edad} 
-                    onChange={(e) => handleInputChange(e.target.value, 'edad')} 
-                    className="student-register__input student-register__input--number" 
-                    placeholder="Ej: 10" 
-                    min={7} 
-                    max={14} 
-                    autoFocus 
+                  <input
+                    type="number"
+                    id="edad"
+                    value={formData.edad}
+                    onChange={(e) => handleInputChange(e.target.value, 'edad')}
+                    className="student-register__input student-register__input--number"
+                    placeholder="Ej: 10"
+                    min={7}
+                    max={14}
+                    autoFocus
                   />
                   <p className="student-register__hint">Entre 7 y 14 años {withParent ? '(obligatorio)' : '(opcional, puedes dejarlo vacío)'} </p>
                 </div>
@@ -535,11 +535,11 @@ export default function StudentRegister() {
                 <div className="student-register__buttons">
                   <Button label="← Atrás" variant="secondary" size="medium" onClick={handleBack} />
                   {!withParent && (
-                    <Button 
-                      label="No la recuerdo →" 
-                      variant="text" 
-                      size="medium" 
-                      onClick={() => { setFormData(prev => ({ ...prev, edad: '' })); setError(''); handleNext(); }} 
+                    <Button
+                      label="No la recuerdo →"
+                      variant="text"
+                      size="medium"
+                      onClick={() => { setFormData(prev => ({ ...prev, edad: '' })); setError(''); handleNext(); }}
                     />
                   )}
                   <Button label="Siguiente →" variant="primary" size="medium" onClick={handleNext} />
@@ -548,11 +548,11 @@ export default function StudentRegister() {
             )}
 
             {currentStep === 'studentSchool' && (
-              <motion.div 
-                key="studentSchool" 
-                initial={{ opacity: 0, x: 50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -50 }} 
+              <motion.div
+                key="studentSchool"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
                 className="student-register__step"
               >
                 <h2 className="student-register__step-title">
@@ -565,19 +565,19 @@ export default function StudentRegister() {
                   <label className="student-register__label" htmlFor="institucion_id">
                     {withParent ? 'Escuela de tu Hijo/a' : 'Tu Escuela'}
                   </label>
-                  <select 
-                    id="institucion_id" 
-                    value={formData.institucion_id} 
-                    onChange={(e) => handleInputChange(e.target.value, 'institucion_id')} 
-                    className="student-register__select" 
-                    disabled={loadingInstituciones} 
+                  <select
+                    id="institucion_id"
+                    value={formData.institucion_id}
+                    onChange={(e) => handleInputChange(e.target.value, 'institucion_id')}
+                    className="student-register__select"
+                    disabled={loadingInstituciones}
                     autoFocus
                   >
                     <option value="">
-                      {loadingInstituciones 
-                        ? "Cargando escuelas..." 
-                        : instituciones.length === 0 
-                          ? "No hay escuelas disponibles" 
+                      {loadingInstituciones
+                        ? "Cargando escuelas..."
+                        : instituciones.length === 0
+                          ? "No hay escuelas disponibles"
                           : "Selecciona tu escuela"}
                     </option>
                     {instituciones.map((institucion) => (
@@ -592,30 +592,30 @@ export default function StudentRegister() {
                 </div>
                 {error && <div className="student-register__error">{error}</div>}
                 <div className="student-register__buttons">
-                  <Button 
-                    label="← Atrás" 
-                    variant="secondary" 
-                    size="medium" 
-                    onClick={handleBack} 
-                    disabled={loadingInstituciones} 
+                  <Button
+                    label="← Atrás"
+                    variant="secondary"
+                    size="medium"
+                    onClick={handleBack}
+                    disabled={loadingInstituciones}
                   />
-                  <Button 
-                    label={withParent ? "Siguiente →" : "Confirmar →"} 
-                    variant="primary" 
-                    size="medium" 
-                    onClick={handleNext} 
-                    disabled={loadingInstituciones} 
+                  <Button
+                    label={withParent ? "Siguiente →" : "Confirmar →"}
+                    variant="primary"
+                    size="medium"
+                    onClick={handleNext}
+                    disabled={loadingInstituciones}
                   />
                 </div>
               </motion.div>
             )}
 
             {currentStep === 'parentDocument' && (
-              <motion.div 
-                key="parentDocument" 
-                initial={{ opacity: 0, x: 50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -50 }} 
+              <motion.div
+                key="parentDocument"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
                 className="student-register__step"
               >
                 <h2 className="student-register__step-title">Documento de tu Hijo/a</h2>
@@ -624,15 +624,15 @@ export default function StudentRegister() {
                 </p>
                 <div className="student-register__field">
                   <label className="student-register__label" htmlFor="num_documento">Documento de tu Hijo/a</label>
-                  <input 
-                    type="text" 
-                    id="num_documento" 
-                    value={formData.num_documento} 
-                    onChange={(e) => handleInputChange(e.target.value, 'num_documento')} 
-                    className="student-register__input" 
-                    placeholder="Ej: 12345678" 
-                    maxLength={20} 
-                    autoFocus 
+                  <input
+                    type="text"
+                    id="num_documento"
+                    value={formData.num_documento}
+                    onChange={(e) => handleInputChange(e.target.value, 'num_documento')}
+                    className="student-register__input"
+                    placeholder="Ej: 12345678"
+                    maxLength={20}
+                    autoFocus
                   />
                   <p className="student-register__hint">El documento de identidad de tu Hijo/a</p>
                 </div>
@@ -645,11 +645,11 @@ export default function StudentRegister() {
             )}
 
             {currentStep === 'parentEmail' && (
-              <motion.div 
-                key="parentEmail" 
-                initial={{ opacity: 0, x: 50 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -50 }} 
+              <motion.div
+                key="parentEmail"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
                 className="student-register__step"
               >
                 <h2 className="student-register__step-title">Tu Correo de Contacto</h2>
@@ -658,15 +658,15 @@ export default function StudentRegister() {
                 </p>
                 <div className="student-register__field">
                   <label className="student-register__label" htmlFor="correo">Tu Correo</label>
-                  <input 
-                    type="email" 
-                    id="correo" 
-                    value={formData.correo} 
-                    onChange={(e) => handleInputChange(e.target.value, 'correo')} 
-                    className="student-register__input" 
-                    placeholder="ejemplo@correo.com" 
-                    maxLength={100} 
-                    autoFocus 
+                  <input
+                    type="email"
+                    id="correo"
+                    value={formData.correo}
+                    onChange={(e) => handleInputChange(e.target.value, 'correo')}
+                    className="student-register__input"
+                    placeholder="ejemplo@correo.com"
+                    maxLength={100}
+                    autoFocus
                   />
                   <p className="student-register__hint">Tu correo para recibir información del progreso</p>
                 </div>
@@ -679,11 +679,11 @@ export default function StudentRegister() {
             )}
 
             {currentStep === 'confirm' && (
-              <motion.div 
-                key="confirm" 
-                initial={{ opacity: 0, scale: 0.95 }} 
-                animate={{ opacity: 1, scale: 1 }} 
-                exit={{ opacity: 0, scale: 0.95 }} 
+              <motion.div
+                key="confirm"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 className="student-register__step"
               >
                 <h2 className="student-register__step-title">¡Confirma tus datos!</h2>
@@ -723,20 +723,20 @@ export default function StudentRegister() {
                   </div>
                 )}
                 <div className="student-register__buttons">
-                  <Button 
-                    label="← Atrás" 
-                    variant="secondary" 
-                    size="medium" 
-                    onClick={handleBack} 
-                    disabled={loading} 
+                  <Button
+                    label="← Atrás"
+                    variant="secondary"
+                    size="medium"
+                    onClick={handleBack}
+                    disabled={loading}
                   />
-                  <Button 
-                    label={loading ? "Creando cuenta..." : "✅ ¡Crear mi cuenta!"} 
-                    variant="primary" 
-                    size="large" 
-                    onClick={handleSubmit} 
-                    disabled={loading} 
-                    className="student-register__submit-button" 
+                  <Button
+                    label={loading ? "Creando cuenta..." : "✅ ¡Crear mi cuenta!"}
+                    variant="primary"
+                    size="large"
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className="student-register__submit-button"
                   />
                 </div>
               </motion.div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../shared/components/Button/Button";
 import Card from "../../shared/components/Card/Card";
@@ -13,7 +13,7 @@ interface Institucion {
 
 interface LoginResponse {
   success: boolean;
-  message: string;
+  message?: string;
   data?: {
     estudiante: {
       id: number;
@@ -28,11 +28,12 @@ interface LoginResponse {
     token_type: string;
     expires_in: number;
   };
-  errors?: any;
+  errors?: Record<string, string[]>;
 }
 
 interface InstitucionesResponse {
   success: boolean;
+  message?: string;
   data?: {
     instituciones: Institucion[];
   };
@@ -73,8 +74,8 @@ export default function StudentLogin() {
         setInstituciones(data.data.instituciones);
         console.log("Instituciones cargadas:", data.data.instituciones.length);
       } else {
-        console.error("Error en la respuesta:", data.message || "Respuesta no exitosa");
-        setError(data.message || "Error al cargar las escuelas disponibles");
+        console.error("Error en la respuesta:", data.message ?? "Respuesta no exitosa");
+        setError(data.message ?? "Error al cargar las escuelas disponibles");
       }
     } catch (err) {
       console.error("Error al cargar instituciones:", err);
@@ -93,8 +94,27 @@ export default function StudentLogin() {
     if (error) setError("");
   };
 
+  const playClick = useCallback(() => {
+    try {
+  const AnyWindow = window as typeof window & { webkitAudioContext?: typeof AudioContext };
+  const ctx = new (window.AudioContext || AnyWindow.webkitAudioContext!)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 800; // subtle tone
+      gain.gain.value = 0.05; // soft volume
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.05); // very short
+    } catch {
+      // ignore audio errors silently
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    playClick();
     setLoading(true);
     setError("");
 
@@ -154,15 +174,24 @@ export default function StudentLogin() {
   };
 
   const handleBackToUserType = () => {
+    playClick();
     navigate("/tipo-usuario");
   };
 
   const handleGoToRegister = () => {
+    playClick();
     navigate("/estudiante/registro");
   };
 
   return (
     <div className="student-login">
+      <div className="student-login__floating">
+        <span className="item item--1">🚀</span>
+        <span className="item item--2">🧠</span>
+        <span className="item item--3">⭐</span>
+        <span className="item item--4">📚</span>
+        <span className="item item--5">✨</span>
+      </div>
       <div className="student-login__container">
         <Card className="student-login__card">
           <div className="student-login__header">
