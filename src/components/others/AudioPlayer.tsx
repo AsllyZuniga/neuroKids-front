@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Play, Pause } from 'lucide-react';
 import { Button } from '../ui/button';
+import { speakText, stopSpeech } from '../../utils/textToSpeech';
 
 interface AudioPlayerProps {
   text?: string;
@@ -41,9 +42,12 @@ export function AudioPlayer({
     if (isPlaying) {
       setIsPlaying(false);
       setProgress(0);
+      stopSpeech(); // Detener la voz si está hablando
     } else {
       setIsPlaying(true);
       setProgress(0);
+      // Iniciar la lectura del texto con voz (siempre usa 'child' que es compatible)
+      speakText(text, { voiceType: 'child' });
     }
   };
 
@@ -90,10 +94,10 @@ export function AudioPlayer({
   
   const getVoiceLabel = () => {
     switch (voice) {
-      case 'child': return '🧒 Escuchar';
-      case 'adult': return '👨‍🏫 Escuchar';
-      case 'robot': return '🤖 Escuchar';
-      default: return '🔊 Escuchar';
+      case 'child': return 'Escuchar';
+      case 'adult': return 'Escuchar';
+      case 'robot': return 'Escuchar';
+      default: return 'Escuchar';
     }
   };
 

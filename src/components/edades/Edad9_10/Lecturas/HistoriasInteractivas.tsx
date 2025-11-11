@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Brain, Users } from 'lucide-react';
-import { Button } from '../../../ui/button';
+import { ButtonWithAudio } from '../../../ui/ButtonWithAudio';
 import { Card, CardContent } from '../../../ui/card';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
@@ -646,6 +646,16 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   const part = story.parts[currentPart];
   const progress = (storyPath.length / 8) * 100;
 
+  // Función para mejorar la pronunciación de números con signos
+  const formatPointsForSpeech = (points: number): string => {
+    return points >= 0 ? `más ${Math.abs(points)} puntos` : `menos ${Math.abs(points)} puntos`;
+  };
+
+  // Función para limpiar emojis del texto antes de hablar
+  const removeEmojis = (text: string): string => {
+    return text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '').trim();
+  };
+
   useEffect(() => {
     setCurrentLevel(initialLevel);
   }, [initialLevel]);
@@ -747,7 +757,11 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                       {part.image}
                     </motion.div>
                   </div>
-                  <AudioPlayer text="Reproduciendo capítulo..." duration={3000} />
+                  <AudioPlayer 
+                    text={removeEmojis(part.text)} 
+                    duration={removeEmojis(part.text).length * 50}
+                    voice="child"
+                  />
                 </div>
 
                 <div className="text-center md:text-left">
@@ -790,7 +804,13 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                 <div className="space-y-3">
                   {part.choices.map((choice, index) => (
                     <motion.div key={index} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button onClick={() => makeChoice(index)} variant="outline" className="w-full justify-start text-left p-6 h-auto bg-white/80 hover:bg-white border-2 hover:border-purple-300 transition-all text-black">
+                      <ButtonWithAudio
+                        onClick={() => makeChoice(index)}
+                        variant="outline"
+                        className="w-full justify-start text-left p-6 h-auto bg-white/80 hover:bg-white border-2 hover:border-purple-300 transition-all text-black"
+                        playOnHover
+                        audioText={`${removeEmojis(choice.text)}. ${formatPointsForSpeech(choice.points)}`}
+                      >
                         <div className="flex items-start gap-3">
                           <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-1">
                             {String.fromCharCode(65 + index)}
@@ -800,7 +820,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                             <div className="text-sm text-purple-600 mt-1">+{choice.points} puntos</div>
                           </div>
                         </div>
-                      </Button>
+                      </ButtonWithAudio>
                     </motion.div>
                   ))}
                 </div>
