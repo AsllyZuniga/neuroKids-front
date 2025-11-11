@@ -1,262 +1,349 @@
 .student-welcome {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
-    &__container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
+  &__layout {
+    display: flex;
+    height: calc(100vh - 80px);
+  }
+
+  // Menú Lateral
+  &__sidebar {
+    width: 280px;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+
+    &-header {
+      padding: 0 1.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
     }
 
-    &__hero {
-        text-align: center;
-        margin-bottom: 3rem;
+    &-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0.5rem 0 0.25rem;
     }
 
-    &__hero-content {
-        background: white;
-        border-radius: 20px;
-        padding: 3rem 2rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
+    &-subtitle {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin: 0;
     }
 
-    &__avatar {
-        width: 100px;
-        height: 100px;
-        margin: 0 auto 2rem;
-        background: linear-gradient(135deg, #4CAF50, #45a049);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
-
-        img {
-            width: 60px;
-            height: 60px;
-            filter: brightness(0) invert(1);
-        }
+    &-nav {
+      flex: 1;
+      padding: 0 1rem;
     }
 
-    &__title {
-        font-size: 2.5rem;
-        color: #333;
-        margin-bottom: 1rem;
-        font-weight: bold;
-        font-family: "OpenDyslexic", sans-serif;
-    }
+    &-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+      margin-bottom: 0.5rem;
 
-    &__subtitle {
-        font-size: 1.2rem;
-        color: #666;
-        margin-bottom: 2rem;
-        font-family: "OpenDyslexic", sans-serif;
-    }
+      &:hover {
+        background: #f1f5f9;
+        color: #475569;
+      }
 
-    &__info {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-    }
+      &.active {
+        background: #e0e7ff;
+        color: #4f46e5;
+      }
 
-    &__info-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    &__info-label {
-        font-size: 0.9rem;
-        color: #888;
-        font-weight: 500;
-    }
-
-    &__info-value {
-        font-size: 1rem;
-        color: #333;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        background: #f8f9fa;
-        border-radius: 20px;
-        border: 2px solid #e9ecef;
-    }
-
-    &__actions {
-        margin-bottom: 3rem;
-    }
-
-    &__actions-title {
-        text-align: center;
-        font-size: 2rem;
-        color: white;
-        margin-bottom: 2rem;
-        font-weight: bold;
-        font-family: "OpenDyslexic", sans-serif;
-    }
-
-    &__cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        justify-items: center;
-    }
-
-    &__card {
-        background: white;
-        border-radius: 20px;
-        padding: 2.5rem 2rem;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        max-width: 350px;
-        width: 100%;
-
+      &.logout {
+        color: #ef4444;
+        
         &:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          background: #fee2e2;
         }
-
-        &--primary {
-            border-top: 4px solid #4CAF50;
-        }
-
-        &--secondary {
-            border-top: 4px solid #2196F3;
-        }
+      }
     }
 
-    &__card-icon {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 1.5rem;
+    &-footer {
+      padding: 0 1rem;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1rem;
+    }
+  }
+
+  &__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+    img {
+      width: 50px;
+      height: 50px;
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  // Contenido Principal
+  &__main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+  }
+
+  &__age-selector {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  &__age-btn {
+    padding: 0.75rem 2rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      background: white;
+      color: #667eea;
+      border-color: white;
+    }
+  }
+
+  // Mapa Interactivo
+  &__map-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 2rem;
+  }
+
+  &__map-path {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__activity {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+      
+      .student-welcome__activity-tooltip {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    &.locked {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    &-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      border: 4px solid white;
+    }
+
+    &.lectura &-icon {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    &.juego &-icon {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    &.locked &-icon {
+      background: #94a3b8;
+      color: white;
+    }
+
+    &-type {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      color: #667eea;
+    }
+
+    &-completed {
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #10b981;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    }
+
+    &-tooltip {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 10px;
+      padding: 0.5rem 1rem;
+      background: white;
+      color: #1e293b;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: 8px;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 10;
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-bottom-color: white;
+      }
+    }
+  }
+
+  &__motivational {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+  }
+
+  &__quote-text {
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-size: 1.5rem;
+    color: white;
+  }
+
+  .emoji {
+    font-style: normal;
+  }
+}
+
+@media (max-width: 768px) {
+  .student-welcome {
+    &__layout {
+      flex-direction: column;
+    }
+
+    &__sidebar {
+      width: 100%;
+      height: auto;
+      padding: 1rem 0;
+
+      &-nav {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        overflow-x: auto;
+        padding: 0 0.5rem;
+      }
 
-        img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
+      &-item {
+        flex-direction: column;
+        gap: 0.25rem;
+        font-size: 0.75rem;
+        padding: 0.5rem;
+        margin: 0 0.25rem;
+        min-width: 80px;
+
+        span {
+          display: block;
         }
+      }
+
+      &-footer {
+        display: none;
+      }
     }
 
-    &__card-title {
-        font-size: 1.5rem;
-        color: #333;
-        margin-bottom: 1rem;
-        font-weight: 600;
-        font-family: "OpenDyslexic", sans-serif;
+    &__main {
+      padding: 1rem;
     }
 
-    &__card-description {
-        font-size: 1rem;
-        color: #666;
-        margin-bottom: 2rem;
-        line-height: 1.5;
-        flex-grow: 1;
+    &__age-selector {
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
-    &__card-button {
-        width: 100%;
-        margin-top: auto;
-        font-family: "OpenDyslexic", sans-serif;
+    &__map-container {
+      height: 400px;
     }
-
-    &__motivational {
-        text-align: center;
-    }
-
-    &__quote {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 2rem;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    &__quote-icon {
-        width: 60px;
-        height: 60px;
-        filter: brightness(0) invert(1);
-        flex-shrink: 0;
-    }
-
-    &__quote-text {
-        font-size: 1.1rem;
-        color: white;
-        font-style: italic;
-        margin: 0;
-        line-height: 1.5;
-        font-family: "OpenDyslexic", sans-serif;
-    }
-
-    // Loading state
-    .loading {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-size: 1.2rem;
-        color: white;
-    }
-
-    // Responsive design
-    @media (max-width: 768px) {
-        &__container {
-            padding: 1rem;
-        }
-
-        &__hero-content {
-            padding: 2rem 1.5rem;
-        }
-
-        &__title {
-            font-size: 2rem;
-        }
-
-        &__subtitle {
-            font-size: 1rem;
-        }
-
-        &__info {
-            gap: 1rem;
-        }
-
-        &__actions-title {
-            font-size: 1.5rem;
-        }
-
-        &__cards {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        &__card {
-            padding: 2rem 1.5rem;
-        }
-
-        &__quote {
-            flex-direction: column;
-            text-align: center;
-            padding: 1.5rem;
-        }
-
-        &__quote-text {
-            font-size: 1rem;
-        }
-    }
+  }
 }

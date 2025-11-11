@@ -12,6 +12,7 @@ import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenOrdenaHistoria } from "../IniciosJuegosLecturas/StartScreenOrdenaHistoria/StartScreenOrdenaHistoria";
 import { speakText, canSpeakOnHover } from '../../../../utils/textToSpeech';
+import { useProgress } from '../../../../hooks/useProgress';
 
 interface OrdenaHistoriaProps {
   onBack: () => void;
@@ -207,6 +208,7 @@ const levels: Level[] = [
 ];
 
 export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
+  const { saveProgress } = useProgress();
   const [gameStarted, setGameStarted] = useState(false);
   const MAX_LEVEL = 3;
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -300,7 +302,19 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
     }
   };
 
-  const handleNextLevel = () => {
+  const handleNextLevel = async () => {
+    // Guardar progreso del nivel completado
+    await saveProgress({
+      activityId: 'ordena-historia',
+      activityName: 'Ordena la Historia',
+      activityType: 'juego',
+      ageGroup: '9-10',
+      level: currentLevel,
+      score: score,
+      maxScore: levels[currentLevel - 1].stories.length * 100,
+      completed: true
+    });
+
     if (currentLevel < MAX_LEVEL) {
       setCurrentLevel(prev => prev + 1);
       setCurrentStoryIndex(0);
