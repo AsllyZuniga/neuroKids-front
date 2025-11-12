@@ -9,7 +9,7 @@ El sistema de progreso permite guardar y recuperar el avance de los estudiantes 
 ### 1. Importar el hook
 
 ```typescript
-import { useProgress } from '../../../hooks/useProgress';
+import { useProgress } from "../../../hooks/useProgress";
 ```
 
 ### 2. Inicializar el hook en el componente
@@ -17,7 +17,7 @@ import { useProgress } from '../../../hooks/useProgress';
 ```typescript
 export function MiJuego({ onBack }: { onBack: () => void }) {
   const { saveProgress } = useProgress();
-  
+
   // ... resto del código
 }
 ```
@@ -27,15 +27,15 @@ export function MiJuego({ onBack }: { onBack: () => void }) {
 ```typescript
 const handleLevelComplete = async () => {
   await saveProgress({
-    activityId: 'bingo-palabras',           // ID único de la actividad
-    activityName: 'Bingo de Palabras',      // Nombre legible
-    activityType: 'juego',                  // 'juego' o 'lectura'
-    ageGroup: '7-8',                        // '7-8', '9-10', o '11-12'
-    level: currentLevel,                     // Nivel actual (1, 2, 3, etc.)
-    score: score,                            // Puntuación obtenida
-    maxScore: 100,                           // Puntuación máxima posible
-    completed: true,                         // Si completó el nivel
-    timeSpent: 120                           // Tiempo en segundos (opcional)
+    activityId: "bingo-palabras", // ID único de la actividad
+    activityName: "Bingo de Palabras", // Nombre legible
+    activityType: "juego", // 'juego' o 'lectura'
+    ageGroup: "7-8", // '7-8', '9-10', o '11-12'
+    level: currentLevel, // Nivel actual (1, 2, 3, etc.)
+    score: score, // Puntuación obtenida
+    maxScore: 100, // Puntuación máxima posible
+    completed: true, // Si completó el nivel
+    timeSpent: 120, // Tiempo en segundos (opcional)
   });
 };
 ```
@@ -43,7 +43,9 @@ const handleLevelComplete = async () => {
 ## 📊 IDs de Actividades por Grupo de Edad
 
 ### Grupo 7-8 años
+
 - **Lecturas:**
+
   - `primera-palabra` - Mi Primera Palabra
   - `cuento-pictogramas` - Cuento con Pictogramas
   - `frases-magicas` - Frases Mágicas
@@ -54,7 +56,9 @@ const handleLevelComplete = async () => {
   - `escucha-elige` - Escucha y Elige
 
 ### Grupo 9-10 años
+
 - **Lecturas:**
+
   - `mini-aventuras` - Mini Aventuras
   - `historias-interactivas` - Historias Interactivas
   - `revista-infantil` - Revista Infantil
@@ -65,7 +69,9 @@ const handleLevelComplete = async () => {
   - `construye-frase` - Construye la Frase
 
 ### Grupo 11-12 años
+
 - **Lecturas:**
+
   - `biografias-sencillas` - Biografías Sencillas
   - `cuento-interactivo` - Cuento Interactivo
   - `noticias-sencillas` - Noticias Sencillas
@@ -83,20 +89,20 @@ const handleLevelComplete = async () => {
 const handleGameComplete = async () => {
   // Mostrar animación de recompensa
   setShowReward(true);
-  
+
   // Guardar progreso
   await saveProgress({
-    activityId: 'ordena-historia',
-    activityName: 'Ordena la Historia',
-    activityType: 'juego',
-    ageGroup: '9-10',
+    activityId: "ordena-historia",
+    activityName: "Ordena la Historia",
+    activityType: "juego",
+    ageGroup: "9-10",
     level: currentLevel,
     score: score,
     maxScore: 300, // 100 puntos por nivel
     completed: true,
-    timeSpent: timeElapsed
+    timeSpent: timeElapsed,
   });
-  
+
   // Continuar con la lógica del juego
   setShowLevelComplete(true);
 };
@@ -108,17 +114,17 @@ const handleGameComplete = async () => {
 const handleLevelFail = async () => {
   // Guardar intento aunque no haya completado
   await saveProgress({
-    activityId: 'detective-palabras',
-    activityName: 'Detective de Palabras',
-    activityType: 'juego',
-    ageGroup: '11-12',
+    activityId: "detective-palabras",
+    activityName: "Detective de Palabras",
+    activityType: "juego",
+    ageGroup: "11-12",
     level: currentLevel,
     score: currentScore,
     maxScore: 100,
-    completed: false,  // No completado
-    timeSpent: timeElapsed
+    completed: false, // No completado
+    timeSpent: timeElapsed,
   });
-  
+
   // Mostrar mensaje de ánimo
   setShowMotivational(true);
 };
@@ -131,21 +137,21 @@ const { isActivityCompleted, getActivityProgress } = useProgress();
 
 useEffect(() => {
   const checkProgress = async () => {
-    const isCompleted = await isActivityCompleted('cohete-lector');
-    
+    const isCompleted = await isActivityCompleted("cohete-lector");
+
     if (isCompleted) {
       // Mostrar insignia o mensaje especial
       setShowCompletedBadge(true);
     }
-    
+
     // O obtener información detallada
-    const progress = await getActivityProgress('cohete-lector');
+    const progress = await getActivityProgress("cohete-lector");
     if (progress) {
       console.log(`Mejor puntuación: ${progress.score}`);
       console.log(`Intentos: ${progress.attempts}`);
     }
   };
-  
+
   checkProgress();
 }, []);
 ```
@@ -168,15 +174,19 @@ useEffect(() => {
 ## 🔧 Funciones Disponibles
 
 ### `saveProgress(params)`
+
 Guarda el progreso de una actividad.
 
 ### `getActivityProgress(activityId)`
+
 Obtiene el progreso de una actividad específica.
 
 ### `isActivityCompleted(activityId)`
+
 Verifica si una actividad está completada.
 
 ### `getStudentProgress()`
+
 Obtiene todo el progreso del estudiante.
 
 ## 📝 Notas Importantes
@@ -197,5 +207,5 @@ const progress = await progressService.getStudentProgress();
 console.log(progress);
 
 // Ver localStorage
-console.log(localStorage.getItem('neurokids-progress-1')); // 1 es el ID del estudiante
+console.log(localStorage.getItem("neurokids-progress-1")); // 1 es el ID del estudiante
 ```

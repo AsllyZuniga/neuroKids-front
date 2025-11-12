@@ -31,7 +31,7 @@ export function useProgress() {
         completed: params.completed,
         timeSpent: params.timeSpent
       });
-      
+
       console.log(`✅ Progreso guardado: ${params.activityName} - Nivel ${params.level}`);
       return true;
     } catch (error) {
