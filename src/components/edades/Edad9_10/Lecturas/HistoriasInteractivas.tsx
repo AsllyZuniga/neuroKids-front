@@ -838,6 +838,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
             total={1000}
             customMessage="¡Eres un narrador increíble!"
             customSubtitle="¡Completaste tu aventura interactiva!"
+            celebrationText="¡Que genial!"
             onComplete={() => {
               setShowMotivational(false);
               setShowLevelComplete(true);

@@ -879,6 +879,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
             total={maxPoints}
             customMessage="¡Has conocido vidas inspiradoras!"
             customSubtitle="Completaste todas las lecturas del nivel"
+            celebrationText="¡Excelente lector!"
             onComplete={() => {
               setShowMotivational(false);
               setLevelComplete(true);

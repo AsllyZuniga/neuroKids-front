@@ -517,6 +517,7 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
             total={currentStories.length * 100}
             customMessage="¡Eres un maestro de las historias!"
             customSubtitle="¡Has ordenado todas las historias del nivel!"
+            celebrationText="¡Eres increible!"
             onComplete={() => {
               setShowMotivational(false);
               setShowLevelComplete(true);

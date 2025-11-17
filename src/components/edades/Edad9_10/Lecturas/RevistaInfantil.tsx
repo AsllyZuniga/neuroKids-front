@@ -527,6 +527,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
             total={currentArticles.length * 50}
             customMessage="¡Has leído todos los artículos!"
             customSubtitle="Completaste todas las lecturas del nivel"
+            celebrationText="¡Eres un genio!"
             onComplete={() => {
               setShowMotivational(false);
               setLevelComplete(true);

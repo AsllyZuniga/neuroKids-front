@@ -698,6 +698,7 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
             total={maxPoints}
             customMessage="¡Tu historia ha terminado!"
             customSubtitle="Completaste todas las secciones del cuento"
+            celebrationText="¡Excelente!"
             onComplete={() => {
               setShowMotivational(false);
               setLevelComplete(true);

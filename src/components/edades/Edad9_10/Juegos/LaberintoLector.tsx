@@ -408,6 +408,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
             total={1000}
             customMessage="¡Eres un explorador increíble!"
             customSubtitle="¡Completaste el laberinto!"
+            celebrationText="¡Eres lo máximo!"
             onComplete={() => {
               setShowMotivational(false);
               setShowLevelComplete(true);

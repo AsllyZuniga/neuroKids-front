@@ -502,6 +502,7 @@ export function MiniAventuras({ onBack}: MiniAventurasProps) {
             total={totalPages * 10}
             customMessage="¡Has leído toda la aventura!"
             customSubtitle="Completaste todas las páginas con éxito"
+            celebrationText="¡Que habilidad!"
             onComplete={() => {
               setShowMotivational(false);
               setShowLevelComplete(true);

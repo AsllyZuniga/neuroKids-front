@@ -521,6 +521,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
             total={currentChallenges.reduce((sum, c) => sum + c.points, 0)}
             customMessage="¡Has completado el nivel!"
             customSubtitle="Resolviste todos los desafíos del cohete"
+            celebrationText="¡Increíble trabajo!"
             onComplete={() => {
               setShowMotivational(false);
               setShowLevelComplete(true);

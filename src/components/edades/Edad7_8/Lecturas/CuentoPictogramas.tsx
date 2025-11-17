@@ -511,6 +511,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
           total={totalPages * 10}
           customMessage="¡Eres un lector increíble!"
           customSubtitle="Descubriste todos los pictogramas del cuento"
+          celebrationText="¡Eres genial!"
           onComplete={() => {
             setShowMotivational(false);
             setShowLevelComplete(true);

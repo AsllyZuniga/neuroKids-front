@@ -343,8 +343,10 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
       {/* Mensaje Motivacional */}
       {showMotivational && (
         <MotivationalMessage
+         
           score={score + (isCorrectDrop ? 1 : 0)}
           total={QUESTIONS_PER_LEVEL}
+          celebrationText="¡Lo lograste!"
           onComplete={() => {
             setShowMotivational(false);
             setShowLevelComplete(true);

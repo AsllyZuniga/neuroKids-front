@@ -472,6 +472,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
           total={levels.reduce((acc, l) => acc + l.challenges.length, 0) * 30}
           customMessage={gameComplete ? "¡Eres un arquitecto de palabras!" : "¡Nivel completado!"}
           customSubtitle={gameComplete ? "Completaste todos los niveles con maestría" : "Construiste todas las frases con precisión"}
+          celebrationText="¡Felicitaciones!"
           onComplete={() => {
             setShowMotivational(false);
             setShowLevelCompleteModal(true);

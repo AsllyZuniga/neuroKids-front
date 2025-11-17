@@ -336,6 +336,7 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
           total={calledList.length}
           customMessage="¡Hiciste BINGO! ¡Increíble!"
           customSubtitle="Encontraste todas las palabras del cartón"
+          celebrationText="Felicitaciones"
           onComplete={() => {
             setShowMotivational(false);
             setShowLevelComplete(true);

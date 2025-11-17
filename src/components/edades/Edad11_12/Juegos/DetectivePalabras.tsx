@@ -537,6 +537,7 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
             total={maxPoints}
             customMessage="¡Has completado el nivel!"
             customSubtitle="Encontraste todas las palabras ocultas"
+            celebrationText="¡Eres un explorador"
             onComplete={() => {
               setShowMotivational(false);
               setShowLevelComplete(true);

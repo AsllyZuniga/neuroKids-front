@@ -566,6 +566,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
           total={totalSentences * 30}
           customMessage="¡Eres un mago de las palabras!"
           customSubtitle="Activaste toda la magia del nivel"
+          celebrationText="¡Lo lograste!"
           onComplete={() => {
             setShowMotivational(false);
             setShowLevelComplete(true);

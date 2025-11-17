@@ -432,6 +432,7 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
             total={maxPoints}
             customMessage="¡Has leído todas las noticias del nivel!"
             customSubtitle="Completaste todas las lecturas y preguntas"
+            celebrationText="¡Que hábil eres!"
             onComplete={() => {
               setShowMotivational(false);
               setLevelComplete(true);

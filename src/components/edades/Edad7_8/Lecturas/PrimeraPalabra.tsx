@@ -639,6 +639,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
           total={currentLevel === 3 ? data.length * 2 : data.length}
           customMessage="¡Eres un lector increíble!"
           customSubtitle="¡Completaste todo el nivel!"
+          celebrationText="¡Eres genial!"
           onComplete={() => {
             setShowMotivational(false);
             setShowLevelComplete(true);

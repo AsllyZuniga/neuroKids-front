@@ -571,6 +571,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
             total={challenges.reduce((sum, c) => sum + c.difficulty * 15, 0)}
             customMessage="¡Has completado el nivel!"
             customSubtitle="Resolviste todas las preguntas inferenciales"
+            celebrationText="¡Eres lo mejor!"
             onComplete={() => {
               setShowMotivational(false);
               setShowLevelComplete(true);

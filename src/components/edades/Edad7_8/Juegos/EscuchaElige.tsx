@@ -398,6 +398,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
           total={totalQuestions}
           customMessage="¡Excelente oído! ¡Eres un genio del sonido!"
           customSubtitle="Escuchaste y elegiste con precisión"
+          celebrationText="¡Eres increíble!"
           onComplete={() => {
             setShowMotivational(false);
             setShowLevelComplete(true);
