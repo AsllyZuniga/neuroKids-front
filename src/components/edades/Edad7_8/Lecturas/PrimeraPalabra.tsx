@@ -392,7 +392,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
                   playOnHover={true}
                   playOnClick={false}
                 >
-                  Ahora dilo tú
+                  🎤 Ahora dilo tú
                 </ButtonWithAudio>
               </div>
               {listening && <div className="mt-4 text-sm text-black animate-pulse">Escuchando…</div>}
@@ -558,7 +558,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
 
   return (
     <LevelLock level={currentLevel} isLocked={locked} onLoginRequired={onBack}>
-      <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg, #E6F3FF 0%, #B3E5FC 100%)' }}>
+      <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg,#B3E5FC 100%)' }}>
         {/* RECOMPENSAS */}
         <RewardAnimation type="star" show={showReward} />
         <ConfettiExplosion show={showLevelComplete} />

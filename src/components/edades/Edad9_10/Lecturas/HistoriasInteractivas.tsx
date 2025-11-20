@@ -10,7 +10,6 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenHistoriasInteractivas } from '../IniciosJuegosLecturas/StartScreenHistoriasInteractivas/StartScreenHistoriasInteractivas';
 
 interface HistoriasInteractivasProps {

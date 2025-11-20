@@ -31,7 +31,7 @@ export function StartScreenCazaSilaba({ onStart, onBack }: StartScreenCazaSilaba
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
       </ButtonWithAudio>
-      <div className="relative w-full max-w-2xl mx-auto p-8">
+      <div className="relative w-full max-w-7xl mx-auto p-8">
         <div className="absolute top-0 left-10 animate-bounce" style={{ animationDelay: '0s', animationDuration: '3s' }}>
           <Gem className="w-12 h-12 text-blue-300 fill-blue-200" />
         </div>
@@ -57,7 +57,7 @@ export function StartScreenCazaSilaba({ onStart, onBack }: StartScreenCazaSilaba
           <div className="absolute -bottom-3 -left-3 w-8 h-8 bg-green-300 rounded-full shadow-lg"></div>
           <div className="absolute -bottom-3 -right-3 w-8 h-8 bg-cyan-300 rounded-full shadow-lg"></div>
 
-          <div className="text-center mb-8">
+          <div className="text-center mb-20">
             <h1 className="text-6xl mb-4 transform -rotate-2">
               <span className="inline-block bg-rose-300 text-white px-4 py-2 rounded-lg shadow-lg transform rotate-3 mx-1">C</span>
               <span className="inline-block bg-purple-300 text-white px-4 py-2 rounded-lg shadow-lg transform -rotate-2 mx-1">a</span>
