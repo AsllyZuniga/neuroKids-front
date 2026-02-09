@@ -15,15 +15,14 @@ interface LevelCompleteModalProps {
 
 export function LevelCompleteModal({
   score,
-  total,
   level,
   isLastLevel,
   onNextLevel,
   onRestart,
   onExit
 }: LevelCompleteModalProps) {
-  const passed = score >= 4;
-  const required = 4;
+ const passed = true;
+
 
   return (
     <motion.div
@@ -36,7 +35,7 @@ export function LevelCompleteModal({
           <div className="text-6xl mb-4">
             {passed ? "🎉" : "🎊"}
           </div>
-          <h2 className="text-2xl mb-4 text-gray-800 font-bold">
+          <h2 className="text-2xl mb-4 text-gray-800">
             {passed ? '¡Bien hecho!' : '¡Inténtalo de nuevo!'}
           </h2>
           <p className="text-gray-600 mb-4">
@@ -44,11 +43,13 @@ export function LevelCompleteModal({
               ? isLastLevel
                 ? `¡Completaste todos los niveles con ${score} puntos!`
                 : `¡Has completado el nivel ${level}!`
-              : `Respondiste ${score} de ${total}. Necesitas ${required} para pasar.`}
+              : `Has terminado el nivel con ${score} puntos.`
+              }
+
           </p>
           <div className="flex items-center justify-center gap-2 mb-6">
             <Trophy className="w-5 h-5 text-yellow-500" />
-            <span className="font-semibold text-yellow-600">+{score * 10} XP ganados</span>
+            <span className="text-yellow-600">+{score * 10} XP ganados</span>
           </div>
 
           <div className="flex flex-col gap-3">

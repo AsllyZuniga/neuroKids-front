@@ -11,8 +11,16 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenRevistaInfantil } from "../IniciosJuegosLecturas/StartScreenRevistaInfantil/StartScreenRevistaInfantil";
-
+import { StartScreenRevistaInfantil } from "../IniciosJuegosLecturas/StartScreenRevistaInfantil";
+import delfin from '../../../../assets/9_10/revista_infantil/delfin1.svg';
+import planta from '../../../../assets/9_10/revista_infantil/planta2.svg';
+import volcan from '../../../../assets/9_10/revista_infantil/volcan3.svg';
+import robots from '../../../../assets/9_10/revista_infantil/robots4.svg';
+import sueños from '../../../../assets/9_10/revista_infantil/sueños5.svg';
+import musica from '../../../../assets/9_10/revista_infantil/musica6.svg';
+import abejas from '../../../../assets/9_10/revista_infantil/abejas7.svg';
+import planetas from '../../../../assets/9_10/revista_infantil/planetas8.svg';
+import ejercicio from '../../../../assets/9_10/revista_infantil/ejercicio9.svg';
 
 interface RevistaInfantilProps {
   onBack: () => void;
@@ -47,7 +55,7 @@ const articlesByLevel: Article[][] = [
       author: "Dr. Marina Azul",
       date: "15 de Marzo, 2024",
       content: "Los delfines son algunos de los animales más inteligentes del planeta. Pueden reconocerse a sí mismos en un espejo, algo que solo pueden hacer algunos animales muy listos como los humanos y los chimpancés. Los delfines hablan entre ellos usando clicks y silbidos especiales, casi como si tuvieran su propio idioma. Cada delfín tiene un silbido único, como si fuera su nombre. Además, son muy amigables y les gusta jugar. A menudo se les ve saltando fuera del agua solo por diversión.",
-      image: "🐬",
+      image: delfin,
       funFact: "Los delfines duermen con un ojo abierto para estar alerta a los peligros",
       quiz: {
         question: "¿Qué hace especiales a los delfines según el artículo?",
@@ -68,7 +76,7 @@ const articlesByLevel: Article[][] = [
       author: "Prof. Verde Natura",
       date: "22 de Marzo, 2024",
       content: "¿Sabías que algunas plantas comen insectos? Las plantas carnívoras son fascinantes porque pueden conseguir nutrientes de los animales pequeños que atrapan. La Venus atrapamoscas es la más famosa: tiene hojas que se cierran como una boca cuando un insecto las toca. Otras plantas carnívoras, como las plantas jarra, tienen formas de copa llena de líquido donde los insectos caen y no pueden salir. Estas plantas viven en lugares donde la tierra no tiene muchos nutrientes, por eso necesitan 'comer' insectos para obtener lo que necesitan para crecer.",
-      image: "🪲",
+      image: planta,
       funFact: "La Venus atrapamoscas puede contar: necesita que la toquen dos veces antes de cerrarse",
       quiz: {
         question: "¿Por qué las plantas carnívoras comen insectos?",
@@ -82,17 +90,39 @@ const articlesByLevel: Article[][] = [
         explanation: "Las plantas carnívoras viven en lugares donde la tierra no tiene muchos nutrientes, por eso necesitan obtenerlos de los insectos."
       }
     },
+    {
+      id: 3,
+      title: "Las Abejas: Pequeñas Heroínas de la Naturaleza",
+      category: "Animales",
+      author: "Dra. Miel Dorada",
+      date: "28 de Marzo, 2024",
+      content: "Las abejas son insectos muy pequeños pero súper importantes para el planeta. Mientras vuelan de flor en flor buscando néctar, ayudan a que las plantas se reproduzcan llevando polen. Gracias a ellas tenemos frutas, verduras y muchas flores bonitas. En una colmena, cada abeja tiene un trabajo: algunas limpian, otras cuidan a las crías y otras salen a buscar comida. Aunque tengan un aguijón, solo pican si se sienten en peligro. Sin las abejas, muchos alimentos desaparecerían.",
+      image: abejas,
+      funFact: "Una abeja puede visitar hasta 5,000 flores en un solo día",
+      quiz: {
+        question: "¿Por qué son tan importantes las abejas?",
+        options: [
+          "Porque vuelan muy alto",
+          "Porque ayudan a las plantas a reproducirse con el polen",
+          "Porque solo hacen miel",
+          "Porque viven solas"
+        ],
+        correct: 1,
+        explanation: "Las abejas transportan polen de flor en flor, ayudando a que las plantas puedan dar frutos y semillas."
+      }
+    },
+
   ],
   // Nivel 2
   [
     {
-      id: 3,
+      id: 4,
       title: "Los Volcanes: Montañas que Escupen Fuego",
       category: "Geografía",
       author: "Dra. Roca Fundida",
       date: "5 de Abril, 2024",
       content: "Los volcanes son como ventanas hacia el interior de nuestro planeta. Muy profundo bajo la tierra, hace tanto calor que las rocas se derriten y se convierten en lava. Cuando hay mucha presión, esta lava busca una salida y sube hasta la superficie a través del volcán. Cuando un volcán hace erupción, puede lanzar lava, ceniza y gases muy calientes. Aunque pueden ser peligrosos, los volcanes también crean islas nuevas y tierra muy fértil. Hawái es un ejemplo de islas creadas por volcanes que siguen activos hoy en día.",
-      image: "🌋",
+      image: volcan,
       funFact: "En el mundo hay más de 1,500 volcanes activos, y cada año erupcionan alrededor de 50",
       quiz: {
         question: "¿Qué hace que un volcán entre en erupción?",
@@ -107,13 +137,13 @@ const articlesByLevel: Article[][] = [
       }
     },
     {
-      id: 4,
+      id: 5,
       title: "Los Robots del Futuro: ¿Cómo Nos Ayudarán?",
       category: "Tecnología",
       author: "Ing. Chip Electrónico",
       date: "18 de Abril, 2024",
       content: "Los robots están en todas partes y cada vez son más útiles. En los hospitales, algunos robots ayudan a los doctores en operaciones muy precisas. En las casas, tenemos robots aspiradoras que limpian solos. Los científicos están creando robots que pueden caminar, correr e incluso jugar fútbol. En el futuro, los robots podrían ayudarnos con las tareas del hogar, cuidar a las personas mayores, e incluso explorar planetas lejanos donde los humanos no pueden ir. Lo más increíble es que algunos robots están aprendiendo a pensar y tomar decisiones por sí mismos.",
-      image: "🤖",
+      image: robots,
       funFact: "El primer robot de la historia se llamaba 'Unimate' y trabajaba en una fábrica de carros en 1961",
       quiz: {
         question: "Según el artículo, ¿qué pueden hacer los robots modernos?",
@@ -127,17 +157,39 @@ const articlesByLevel: Article[][] = [
         explanation: "El artículo menciona que los robots ayudan en hospitales, limpian casas, pueden jugar fútbol y muchas otras actividades."
       }
     },
+    {
+      id: 6,
+      title: "Los Planetas del Sistema Solar",
+      category: "Ciencia",
+      author: "Prof. Estrella Viajera",
+      date: "25 de Abril, 2024",
+      content: "Nuestro hogar está en el sistema solar, un conjunto de planetas que giran alrededor del Sol. Hay ocho planetas y cada uno es diferente. Mercurio es el más cercano al Sol y también el más pequeño. Júpiter es el más grande y tiene una gran mancha roja que es una tormenta gigante. Saturno es famoso por sus anillos brillantes. La Tierra es especial porque tiene agua y aire para que vivamos. Estudiar los planetas nos ayuda a entender mejor el universo.",
+      image: planetas,
+      funFact: "Júpiter es tan grande que podrían caber más de 1,300 Tierras dentro de él",
+      quiz: {
+        question: "¿Qué planeta es famoso por sus anillos?",
+        options: [
+          "Marte",
+          "Júpiter",
+          "Saturno",
+          "Mercurio"
+        ],
+        correct: 2,
+        explanation: "Saturno es conocido por sus grandes y brillantes anillos."
+      }
+    },
+
   ],
   // Nivel 3
   [
     {
-      id: 5,
+      id: 7,
       title: "El Fascinante Mundo de los Sueños",
       category: "Ciencia",
       author: "Dr. Sueño Profundo",
       date: "2 de Mayo, 2024",
       content: "Todas las noches, cuando dormimos, nuestro cerebro crea historias increíbles llamadas sueños. Los científicos han descubierto que soñamos principalmente durante una fase del sueño llamada REM, cuando nuestros ojos se mueven rápidamente. Durante los sueños, nuestro cerebro organiza la información del día y procesa nuestras emociones. Algunas personas recuerdan sus sueños claramente, mientras que otras los olvidan rápidamente. Los sueños pueden ser divertidos, extraños, o incluso ayudarnos a resolver problemas. Muchos inventores famosos han encontrado la solución a sus problemas en sueños.",
-      image: "💭",
+      image: sueños,
       funFact: "En promedio, una persona tiene entre 4 y 6 sueños por noche, pero olvida el 95% de ellos",
       quiz: {
         question: "¿Cuándo soñamos principalmente según el artículo?",
@@ -150,7 +202,50 @@ const articlesByLevel: Article[][] = [
         correct: 1,
         explanation: "El artículo explica que soñamos principalmente durante la fase REM, cuando nuestros ojos se mueven rápidamente."
       }
-    }
+    },
+    {
+      id: 8,
+      title: "La Magia de la Música",
+      category: "Arte",
+      author: "Prof. Sonido Alegre",
+      date: "20 de Mayo, 2024",
+      content: "La música está en todas partes y nos acompaña todos los días. La escuchamos en la radio, en películas, en videojuegos y hasta cuando alguien canta. La música se crea con sonidos organizados que tienen ritmo, melodía y armonía. Algunos instrumentos, como la guitarra o el piano, producen sonido cuando vibran sus cuerdas, mientras que otros, como los tambores, suenan al golpearlos. Escuchar música puede hacernos sentir felices, tranquilos o con mucha energía. También ayuda a mejorar la memoria y la concentración. Por eso, la música no solo es divertida, sino también muy importante para nuestro cerebro.",
+      image: musica,
+      funFact: "Escuchar música puede ayudar a que el cerebro aprenda más rápido y recuerde mejor",
+      quiz: {
+        question: "¿Qué puede provocar la música en las personas?",
+        options: [
+          "Solo cansancio",
+          "Sentimientos como alegría, calma o energía",
+          "Que no pensemos",
+          "Que olvidemos todo"
+        ],
+        correct: 1,
+        explanation: "El artículo explica que la música puede hacernos sentir felices, tranquilos o con mucha energía."
+      }
+    },
+    {
+      id: 9,
+      title: "El Poder del Ejercicio",
+      category: "Salud",
+      author: "Prof. Movimiento Feliz",
+      date: "30 de Mayo, 2024",
+      content: "Mover el cuerpo todos los días es muy importante para estar sanos. Cuando corremos, saltamos o jugamos, nuestros músculos se hacen más fuertes y el corazón trabaja mejor. El ejercicio también ayuda a que el cerebro esté feliz porque libera sustancias que mejoran el ánimo. No hace falta ser atleta: caminar, bailar o jugar fútbol ya es suficiente. Hacer ejercicio nos da más energía, mejora el sueño y nos ayuda a concentrarnos mejor en la escuela.",
+      image: ejercicio,
+      funFact: "Solo 20 minutos de ejercicio al día ayudan a mejorar la memoria y el humor",
+      quiz: {
+        question: "¿Qué beneficio trae el ejercicio?",
+        options: [
+          "Nos cansa todo el día",
+          "Hace que el cuerpo y el cerebro funcionen mejor",
+          "Evita que pensemos",
+          "Solo sirve para competir"
+        ],
+        correct: 1,
+        explanation: "El ejercicio fortalece el cuerpo y también mejora el ánimo y la concentración."
+      }
+    },
+
   ]
 ];
 
@@ -187,7 +282,6 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
 
   const markAsRead = () => {
     setReadArticles(prev => new Set([...prev, currentArticle]));
-    setScore(s => s + 20);
     setShowQuiz(true);
   };
 
@@ -324,15 +418,10 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
                         disabled={selectedAnswer !== null}
                         variant="outline"
                         className={`w-full justify-start text-left p-6 h-auto transition-all text-black ${selectedAnswer === null
-                            ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-blue-300'
-                            : selectedAnswer === index
-                              ? index === article.quiz.correct
-                                ? 'bg-green-100 border-green-400 text-green-800'
-                                : 'bg-red-100 border-red-400 text-red-800'
-                              : index === article.quiz.correct
-                                ? 'bg-green-100 border-green-400 text-green-800'
-                                : 'bg-gray-100 border-gray-300 text-gray-500'
+                          ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-blue-300'
+                          : 'bg-white border-gray-300 opacity-70'
                           }`}
+
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm">
@@ -409,8 +498,8 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
         />
 
         <AnimalGuide
-          animal="turtle"
-          message="¡Lee con atención y marca como leído para hacer el quiz!"
+          animal="bear"
+          message="¡Lee con atención el articulo y marca como leído para hacer el quiz!"
         />
 
         <motion.div
@@ -425,7 +514,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
             <CardContent className="p-8">
               <div className="border-b-2 border-gray-200 pb-6 mb-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="text-6xl">{article.image}</div>
+                  <img src={article.image} alt={article.title} className="w-30 h-24 object-contain rounded-xl" />
                   <div className="flex-1">
                     <h2 className="text-2xl text-black mb-2">{article.title}</h2>
                     <div className="flex flex-wrap items-center gap-3">
@@ -447,7 +536,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
               </div>
 
               <div className="mb-6">
-                <AudioPlayer text="Reproduciendo artículo..." duration={5000} />
+                <AudioPlayer text={article.content} />
               </div>
 
               <div className="mb-6">
@@ -458,16 +547,17 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
 
               <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200 mb-6">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">light bulb</span>
+                  <span className="text-2xl">💡</span>
                   <h4 className="text-lg text-yellow-800">Dato Curioso:</h4>
                 </div>
                 <p className="text-yellow-700">{article.funFact}</p>
               </div>
 
               {!readArticles.has(currentArticle) && (
-                <div className="text-center">
+                <div className="text-center " >
                   <Button
                     onClick={markAsRead}
+
                     className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 text-lg"
                   >
                     Marcar como leído y hacer quiz
@@ -494,10 +584,10 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
               <div
                 key={index}
                 className={`w-3 h-3 rounded-full transition-colors ${index === currentArticle
-                    ? 'bg-blue-500'
-                    : readArticles.has(index)
-                      ? 'bg-green-400'
-                      : 'bg-gray-300'
+                  ? 'bg-blue-500'
+                  : readArticles.has(index)
+                    ? 'bg-green-400'
+                    : 'bg-gray-300'
                   }`}
               />
             ))}

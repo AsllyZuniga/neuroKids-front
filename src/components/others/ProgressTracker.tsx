@@ -256,13 +256,13 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                 Volver
               </Button>
             )}
-            <h1 className="text-3xl font-bold text-gray-800">Mi Progreso</h1>
+            <h1 className="text-3xl text-gray-800">Mi Progreso</h1>
           </div>
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
               <Star className="w-5 h-5 text-yellow-500" />
-              <span className="font-semibold">{progress.totalPoints} puntos</span>
+              <span>{progress.totalPoints} puntos</span>
             </div>
             
             <Badge variant="outline" className="bg-purple-100">
@@ -300,7 +300,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
             <div className="lg:col-span-2 space-y-6">
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <h3 className="text-lg mb-4 flex items-center gap-2">
                     <TrendingUp className="w-5 h-5" />
                     Progreso de Nivel
                   </h3>
@@ -328,7 +328,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
               <div className="grid md:grid-cols-2 gap-4">
                 <Card>
                   <CardContent className="p-6 text-center">
-                    <div className="text-3xl font-bold text-purple-600 mb-2">
+                    <div className="text-3xl text-purple-600 mb-2">
                       {progress.gamesCompleted}
                     </div>
                     <p className="text-gray-600">Juegos Completados</p>
@@ -337,7 +337,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
                 <Card>
                   <CardContent className="p-6 text-center">
-                    <div className="text-3xl font-bold text-green-600 mb-2">
+                    <div className="text-3xl  text-green-600 mb-2">
                       {progress.readingsCompleted}
                     </div>
                     <p className="text-gray-600">Lecturas Completadas</p>
@@ -346,7 +346,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
                 <Card>
                   <CardContent className="p-6 text-center">
-                    <div className="text-3xl font-bold text-orange-600 mb-2">
+                    <div className="text-3xl  text-orange-600 mb-2">
                       {progress.currentStreak}
                     </div>
                     <p className="text-gray-600">Racha Actual (días)</p>
@@ -355,7 +355,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
                 <Card>
                   <CardContent className="p-6 text-center">
-                    <div className="text-3xl font-bold text-blue-600 mb-2">
+                    <div className="text-3xl  text-blue-600 mb-2">
                       {progress.longestStreak}
                     </div>
                     <p className="text-gray-600">Racha Más Larga</p>
@@ -368,7 +368,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
             <div>
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <h3 className="text-lg  mb-4 flex items-center gap-2">
                     <Award className="w-5 h-5" />
                     Logros Recientes
                   </h3>
@@ -388,7 +388,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                           <div className="flex items-center gap-3">
                             <span className="text-2xl">{achievement.icon}</span>
                             <div className="flex-1">
-                              <p className="font-medium text-sm">{achievement.name}</p>
+                              <p className="text-sm">{achievement.name}</p>
                               <p className="text-xs opacity-70">{achievement.description}</p>
                             </div>
                             <Badge variant="outline" className="text-xs">
@@ -422,13 +422,13 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                 <Card className={`border-2 ${getRarityBorderColor(achievement.rarity)}`}>
                   <CardContent className="p-6 text-center">
                     <div className="text-4xl mb-3">{achievement.icon}</div>
-                    <h3 className="font-semibold mb-2">{achievement.name}</h3>
+                    <h3 className=" mb-2">{achievement.name}</h3>
                     <p className="text-sm text-gray-600 mb-3">{achievement.description}</p>
                     <div className="flex items-center justify-between">
                       <Badge className={getRarityColor(achievement.rarity)}>
                         {achievement.rarity}
                       </Badge>
-                      <span className="text-sm font-medium">+{achievement.points} pts</span>
+                      <span className="text-sm">+{achievement.points} pts</span>
                     </div>
                     <p className="text-xs text-gray-500 mt-2">
                       {new Date(achievement.unlockedAt).toLocaleDateString()}
@@ -441,7 +441,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
             {progress.achievements.length === 0 && (
               <div className="col-span-full text-center py-12">
                 <Trophy className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-500 mb-2">Sin logros aún</h3>
+                <h3 className="text-xl text-gray-500 mb-2">Sin logros aún</h3>
                 <p className="text-gray-400">¡Completa juegos y lecturas para ganar logros increíbles!</p>
               </div>
             )}
@@ -452,7 +452,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
           <div className="max-w-2xl mx-auto">
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
+                <h3 className="text-lg  mb-6 flex items-center gap-2">
                   <Target className="w-5 h-5" />
                   Objetivo Semanal
                 </h3>
@@ -485,16 +485,16 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
-                      <h4 className="font-semibold text-purple-700 mb-2">📈 Progreso Total</h4>
-                      <p className="text-2xl font-bold text-purple-600">
+                      <h4 className=" text-purple-700 mb-2">📈 Progreso Total</h4>
+                      <p className="text-2xl  text-purple-600">
                         {progress.gamesCompleted + progress.readingsCompleted}
                       </p>
                       <p className="text-sm text-purple-600">Actividades completadas</p>
                     </div>
 
                     <div className="p-4 bg-orange-50 rounded-lg border-2 border-orange-200">
-                      <h4 className="font-semibold text-orange-700 mb-2">🔥 Motivación</h4>
-                      <p className="text-2xl font-bold text-orange-600">
+                      <h4 className=" text-orange-700 mb-2">🔥 Motivación</h4>
+                      <p className="text-2xl  text-orange-600">
                         {progress.currentStreak}
                       </p>
                       <p className="text-sm text-orange-600">Días consecutivos</p>

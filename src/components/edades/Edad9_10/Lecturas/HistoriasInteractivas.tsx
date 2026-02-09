@@ -10,7 +10,75 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenHistoriasInteractivas } from '../IniciosJuegosLecturas/StartScreenHistoriasInteractivas/StartScreenHistoriasInteractivas';
+import { StartScreenHistoriasInteractivas } from '../IniciosJuegosLecturas/StartScreenHistoriasInteractivas';
+import { Button } from '../../../ui/button';
+import img1 from '../../../../assets/9_10/historias_interactivas/nivel1/1.png';
+import img2 from '../../../../assets/9_10/historias_interactivas/nivel1/2.png';
+import img3 from '../../../../assets/9_10/historias_interactivas/nivel1/3.png';
+import img4 from '../../../../assets/9_10/historias_interactivas/nivel1/4.png';
+import img5 from '../../../../assets/9_10/historias_interactivas/nivel1/5.png';
+import img6 from '../../../../assets/9_10/historias_interactivas/nivel1/6.png';
+import img7 from '../../../../assets/9_10/historias_interactivas/nivel1/7.png';
+import img8 from '../../../../assets/9_10/historias_interactivas/nivel1/8.png';
+import img9 from '../../../../assets/9_10/historias_interactivas/nivel1/9.png';
+import img10 from '../../../../assets/9_10/historias_interactivas/nivel1/10.png';
+import img11 from '../../../../assets/9_10/historias_interactivas/nivel1/11.png';
+import img12 from '../../../../assets/9_10/historias_interactivas/nivel1/12.png';
+import img13 from '../../../../assets/9_10/historias_interactivas/nivel1/13.png';
+import img14 from '../../../../assets/9_10/historias_interactivas/nivel1/14.png';
+import img15 from '../../../../assets/9_10/historias_interactivas/nivel1/15.png';
+import img16 from '../../../../assets/9_10/historias_interactivas/nivel1/16.png';
+import img17 from '../../../../assets/9_10/historias_interactivas/nivel1/17.png';
+import img18 from '../../../../assets/9_10/historias_interactivas/nivel1/18.png';
+import img19 from '../../../../assets/9_10/historias_interactivas/nivel1/19.png';
+import img20 from '../../../../assets/9_10/historias_interactivas/nivel1/20.png';
+import imgs1 from '../../../../assets/9_10/historias_interactivas/nivel2/1.png';
+import imgs2 from '../../../../assets/9_10/historias_interactivas/nivel2/2.png';
+import imgs3 from '../../../../assets/9_10/historias_interactivas/nivel2/3.png';
+import imgs4 from '../../../../assets/9_10/historias_interactivas/nivel2/4.png';
+import imgs5 from '../../../../assets/9_10/historias_interactivas/nivel2/5.png';
+import imgs6 from '../../../../assets/9_10/historias_interactivas/nivel2/6.png';
+import imgs7 from '../../../../assets/9_10/historias_interactivas/nivel2/7.png';
+import imgs8 from '../../../../assets/9_10/historias_interactivas/nivel2/8.png';
+import imgs9 from '../../../../assets/9_10/historias_interactivas/nivel2/9.png';
+import imgs10 from '../../../../assets/9_10/historias_interactivas/nivel2/10.png';
+import imgs11 from '../../../../assets/9_10/historias_interactivas/nivel2/11.png';
+import imgs12 from '../../../../assets/9_10/historias_interactivas/nivel2/12.png';
+import imgs13 from '../../../../assets/9_10/historias_interactivas/nivel2/13.png';
+import imgs14 from '../../../../assets/9_10/historias_interactivas/nivel2/14.png';
+import imgs15 from '../../../../assets/9_10/historias_interactivas/nivel2/15.png';
+import imgs16 from '../../../../assets/9_10/historias_interactivas/nivel2/16.png';
+import imgs17 from '../../../../assets/9_10/historias_interactivas/nivel2/17.png';
+import imgs18 from '../../../../assets/9_10/historias_interactivas/nivel2/18.png';
+import imgs19 from '../../../../assets/9_10/historias_interactivas/nivel2/19.png';
+import imgs20 from '../../../../assets/9_10/historias_interactivas/nivel2/20.png';
+import imag1 from '../../../../assets/9_10/historias_interactivas/nivel3/1.png';
+import imag2 from '../../../../assets/9_10/historias_interactivas/nivel3/2.png';
+import imag3 from '../../../../assets/9_10/historias_interactivas/nivel3/3.png';
+import imag4 from '../../../../assets/9_10/historias_interactivas/nivel3/4.png';
+import imag5 from '../../../../assets/9_10/historias_interactivas/nivel3/5.png';
+import imag6 from '../../../../assets/9_10/historias_interactivas/nivel3/6.png';
+import imag7 from '../../../../assets/9_10/historias_interactivas/nivel3/7.png';
+import imag8 from '../../../../assets/9_10/historias_interactivas/nivel3/8.png';
+import imag9 from '../../../../assets/9_10/historias_interactivas/nivel3/9.png';
+import imag10 from '../../../../assets/9_10/historias_interactivas/nivel3/10.png';
+import imag11 from '../../../../assets/9_10/historias_interactivas/nivel3/11.png';
+import imag12 from '../../../../assets/9_10/historias_interactivas/nivel3/12.png';
+import imag13 from '../../../../assets/9_10/historias_interactivas/nivel3/13.png';
+import imag14 from '../../../../assets/9_10/historias_interactivas/nivel3/14.png';
+import imag15 from '../../../../assets/9_10/historias_interactivas/nivel3/15.png';
+import imag16 from '../../../../assets/9_10/historias_interactivas/nivel3/16.png';
+import imag17 from '../../../../assets/9_10/historias_interactivas/nivel3/17.png';
+import imag18 from '../../../../assets/9_10/historias_interactivas/nivel3/18.png';
+import imag19 from '../../../../assets/9_10/historias_interactivas/nivel3/19.png';
+import imag20 from '../../../../assets/9_10/historias_interactivas/nivel3/20.png';
+
+
+
+
+
+
+
 
 interface HistoriasInteractivasProps {
   onBack: () => void;
@@ -48,7 +116,7 @@ const stories: InteractiveStory[] = [
       1: {
         id: 1,
         text: "Alex camina por un sendero cuando encuentra un bosque misterioso. Los árboles brillan con una luz dorada y se escuchan sonidos extraños. En la entrada del bosque hay un cartel que dice: 'Solo los valientes pueden entrar'.",
-        image: "🌲✨",
+        image: img1,
         choices: [
           { text: "Entrar al bosque con valentía", nextPart: 2, points: 15, consequence: "Alex demuestra ser valiente" },
           { text: "Investigar el cartel primero", nextPart: 3, points: 10, consequence: "Alex es cauteloso y sabio" },
@@ -58,7 +126,7 @@ const stories: InteractiveStory[] = [
       2: {
         id: 2,
         text: "Al entrar, Alex se encuentra con un unicornio herido. El unicornio le dice: 'Ayúdame, joven aventurero, y te recompensaré con un don especial.' Su cuerno está roto y necesita una hierba mágica que crece cerca del lago.",
-        image: "🦄💫",
+        image: img2,
         choices: [
           { text: "Buscar la hierba mágica inmediatamente", nextPart: 5, points: 20, consequence: "El unicornio se cura completamente" },
           { text: "Preguntar más sobre la hierba", nextPart: 6, points: 15, consequence: "Alex aprende sobre la magia" },
@@ -68,7 +136,7 @@ const stories: InteractiveStory[] = [
       3: {
         id: 3,
         text: "El cartel tiene palabras en un idioma antiguo. Alex logra entender que dice: 'Solo quien respete la naturaleza será bienvenido.' Al tocar el cartel, una luz suave lo envuelve y aparece un hada guardiana.",
-        image: "🧚‍♀️📜",
+        image: img3,
         choices: [
           { text: "Prometer respetar la naturaleza", nextPart: 8, points: 18, consequence: "El hada se convierte en guía" },
           { text: "Hacer preguntas sobre el bosque", nextPart: 9, points: 12, consequence: "Alex aprende los secretos del lugar" },
@@ -78,7 +146,7 @@ const stories: InteractiveStory[] = [
       4: {
         id: 4,
         text: "Alex regresa a casa, pero no puede dejar de pensar en el bosque. Esa noche sueña con criaturas mágicas que necesitan ayuda. Al despertar, decide que debe regresar.",
-        image: "💭🏠",
+        image: img4,
         choices: [
           { text: "Regresar al bosque al amanecer", nextPart: 1, points: 8, consequence: "Alex tiene una segunda oportunidad" },
           { text: "Prepararse mejor antes de volver", nextPart: 11, points: 12, consequence: "Alex se equipa para la aventura" },
@@ -88,7 +156,7 @@ const stories: InteractiveStory[] = [
       5: {
         id: 5,
         text: "Alex encuentra la hierba mágica junto al lago cristalino. Al tocarla, la hierba brilla con una luz azul. El unicornio se cura completamente y como recompensa, le otorga el don de entender a todos los animales del bosque.",
-        image: "🌿💙🦄",
+        image: img5,
         choices: [
           { text: "Agradecer y explorar el bosque", nextPart: 13, points: 25, consequence: "Alex vive muchas aventuras" },
           { text: "Preguntar sobre otros seres mágicos", nextPart: 14, points: 20, consequence: "Alex conoce toda la comunidad mágica" },
@@ -98,7 +166,7 @@ const stories: InteractiveStory[] = [
       6: {
         id: 6,
         text: "El unicornio explica que la hierba solo funciona si quien la busca tiene un corazón puro. Alex reflexiona sobre sus intenciones y se da cuenta de que realmente quiere ayudar.",
-        image: "❤️✨",
+        image: img6,
         choices: [
           { text: "Buscar la hierba con determinación", nextPart: 5, points: 18, consequence: "La pureza de corazón guía a Alex" },
           { text: "Meditar junto al unicornio", nextPart: 16, points: 15, consequence: "Alex desarrolla sabiduría interior" },
@@ -108,7 +176,7 @@ const stories: InteractiveStory[] = [
       7: {
         id: 7,
         text: "Alex sugiere vendar la herida del unicornio con hojas del bosque. El unicornio, agradecido por la creatividad, le revela un sendero secreto hacia una cueva mágica.",
-        image: "🍃🦄",
+        image: img7,
         choices: [
           { text: "Explorar la cueva mágica", nextPart: 13, points: 20, consequence: "Alex descubre maravillas ocultas" },
           { text: "Preguntar sobre la cueva", nextPart: 14, points: 15, consequence: "Alex aprende sobre sus peligros" },
@@ -118,7 +186,7 @@ const stories: InteractiveStory[] = [
       8: {
         id: 8,
         text: "El hada, complacida con la promesa de Alex, lo guía hacia un claro donde las criaturas del bosque se reúnen para compartir sus historias.",
-        image: "🧚‍♀️🌳",
+        image: img8,
         choices: [
           { text: "Unirse a las criaturas", nextPart: 13, points: 25, consequence: "Alex se gana su confianza" },
           { text: "Pedir un deseo al hada", nextPart: 14, points: 20, consequence: "Alex recibe un don mágico" },
@@ -128,7 +196,7 @@ const stories: InteractiveStory[] = [
       9: {
         id: 9,
         text: "El hada revela que el bosque está protegido por un antiguo hechizo que solo permite pasar a quienes demuestran bondad. Alex debe realizar una prueba para avanzar.",
-        image: "🧙‍♀️✨",
+        image: img9,
         choices: [
           { text: "Aceptar la prueba", nextPart: 13, points: 20, consequence: "Alex demuestra su bondad" },
           { text: "Preguntar sobre el hechizo", nextPart: 14, points: 15, consequence: "Alex aprende magia antigua" },
@@ -138,7 +206,7 @@ const stories: InteractiveStory[] = [
       10: {
         id: 10,
         text: "El hada otorga a Alex un amuleto de protección y le indica un camino hacia el corazón del bosque, donde reside un espíritu ancestral.",
-        image: "🧿🌲",
+        image: img10,
         choices: [
           { text: "Seguir el camino", nextPart: 13, points: 25, consequence: "Alex encuentra al espíritu" },
           { text: "Examinar el amuleto", nextPart: 14, points: 15, consequence: "Alex descubre su poder" },
@@ -148,7 +216,7 @@ const stories: InteractiveStory[] = [
       11: {
         id: 11,
         text: "Alex se prepara recolectando provisiones y estudiando mapas del bosque. Ahora más confiado, regresa al bosque con nuevos conocimientos.",
-        image: "🗺️🎒",
+        image: img11,
         choices: [
           { text: "Entrar al bosque preparado", nextPart: 2, points: 15, consequence: "Alex está listo para la aventura" },
           { text: "Buscar al hada guardiana", nextPart: 3, points: 12, consequence: "Alex busca guía mágica" },
@@ -158,7 +226,7 @@ const stories: InteractiveStory[] = [
       12: {
         id: 12,
         text: "Alex encuentra a un grupo de viajeros que también quieren explorar el bosque. Juntos, deciden formar un equipo para enfrentar los misterios.",
-        image: "👥🌲",
+        image: img12,
         choices: [
           { text: "Liderar al equipo hacia el bosque", nextPart: 2, points: 20, consequence: "Alex se convierte en líder" },
           { text: "Planificar con el equipo", nextPart: 11, points: 15, consequence: "Alex fortalece el grupo" },
@@ -168,7 +236,7 @@ const stories: InteractiveStory[] = [
       13: {
         id: 13,
         text: "Con su nuevo don, Alex puede hablar con las ardillas, los pájaros y todos los animales. Descubre que hay una celebración en el corazón del bosque donde todas las criaturas mágicas se reúnen una vez al año.",
-        image: "🎉🐿️🦅",
+        image: img13,
         choices: [
           { text: "Unirse a la celebración", nextPart: 18, points: 30, consequence: "¡Final Épico: Alex se convierte en leyenda!" },
           { text: "Ayudar a organizar la fiesta", nextPart: 19, points: 25, consequence: "¡Final Heroico: Alex es el organizador!" },
@@ -178,7 +246,7 @@ const stories: InteractiveStory[] = [
       14: {
         id: 14,
         text: "Alex aprende sobre las criaturas mágicas del bosque, incluyendo dragones y espíritus antiguos. Este conocimiento lo prepara para un nuevo desafío.",
-        image: "🐉✨",
+        image: img14,
         choices: [
           { text: "Buscar a los dragones", nextPart: 13, points: 25, consequence: "Alex enfrenta una aventura épica" },
           { text: "Contactar al espíritu ancestral", nextPart: 15, points: 20, consequence: "Alex recibe sabiduría" },
@@ -188,7 +256,7 @@ const stories: InteractiveStory[] = [
       15: {
         id: 15,
         text: "Alex jura proteger el bosque y se encuentra con el espíritu del bosque, quien le otorga el título de Guardián del Bosque.",
-        image: "🌳🛡️",
+        image: img15,
         choices: [
           { text: "Aceptar el rol de guardián", nextPart: 18, points: 30, consequence: "¡Final Épico: Alex es el guardián!" },
           { text: "Explorar más el bosque", nextPart: 13, points: 20, consequence: "Alex continúa su aventura" },
@@ -198,7 +266,7 @@ const stories: InteractiveStory[] = [
       16: {
         id: 16,
         text: "Meditando con el unicornio, Alex descubre una paz interior que le da claridad para sus próximas decisiones.",
-        image: "🧘‍♂️🦄",
+        image: img16,
         choices: [
           { text: "Buscar la hierba mágica", nextPart: 5, points: 20, consequence: "Alex actúa con claridad" },
           { text: "Explorar el bosque", nextPart: 13, points: 15, consequence: "Alex sigue su intuición" },
@@ -208,7 +276,7 @@ const stories: InteractiveStory[] = [
       17: {
         id: 17,
         text: "Al compartir una historia personal, el unicornio confía en Alex y le revela un secreto sobre el bosque que lo lleva a un nuevo destino.",
-        image: "📖🦄",
+        image: img17,
         choices: [
           { text: "Seguir el secreto", nextPart: 13, points: 20, consequence: "Alex descubre un tesoro oculto" },
           { text: "Preguntar más al unicornio", nextPart: 6, points: 15, consequence: "Alex profundiza su conexión" },
@@ -218,19 +286,19 @@ const stories: InteractiveStory[] = [
       18: {
         id: 18,
         text: "Alex participa en la gran celebración del bosque. Las criaturas mágicas lo nombran 'Amigo Eterno del Bosque Encantado' y le regalan un collar mágico que le permitirá volver siempre que quiera. ¡Ha vivido la aventura más increíble de su vida!",
-        image: "🏆🌟🎊",
+        image: img18,
         choices: []
       },
       19: {
         id: 19,
         text: "Alex organiza una celebración épica, ganándose el respeto de todas las criaturas. Se convierte en el héroe del bosque, recordado por generaciones.",
-        image: "🎉🌟",
+        image: img19,
         choices: []
       },
       20: {
         id: 20,
         text: "Alex conecta el mundo humano con el bosque mágico, creando un puente de amistad. Su legado une dos mundos para siempre.",
-        image: "🌍🤝",
+        image: img20,
         choices: []
       }
     }
@@ -243,193 +311,213 @@ const stories: InteractiveStory[] = [
     parts: {
       1: {
         id: 1,
-        text: "Emma llega a un antiguo castillo embrujado. Las torres se elevan en la niebla y se oyen susurros en el viento. En la puerta principal hay una inscripción: 'Solo los astutos sobreviven'.",
-        image: "🏰👻",
+        text: "Emma llega a un antiguo castillo del que todos hablan en el pueblo. Dicen que una maldición lo mantiene lleno de fantasmas y que solo alguien muy astuto podrá romperla. Las torres se elevan entre la niebla y el viento susurra secretos. En la puerta principal hay una inscripción: 'Solo los astutos sobreviven'.",
+        image: imgs1,
         choices: [
           { text: "Entrar por la puerta principal", nextPart: 2, points: 15, consequence: "Emma demuestra astucia" },
           { text: "Buscar una entrada secreta", nextPart: 3, points: 10, consequence: "Emma es cautelosa" },
           { text: "Esperar a la noche para observar", nextPart: 4, points: 5, consequence: "Emma pierde tiempo" }
         ]
       },
+
       2: {
         id: 2,
-        text: "Dentro del castillo, Emma encuentra un fantasma amistoso que necesita ayuda para resolver un acertijo antiguo y romper una maldición.",
-        image: "👻🧩",
+        text: "Dentro del castillo, Emma encuentra un fantasma amistoso que flota nervioso por el pasillo. Le explica que un hechicero lanzó una maldición sobre el castillo y que solo su antiguo cetro puede romperla. Antes de ayudarla, le pide que resuelva un acertijo para probar su ingenio.",
+        image: imgs2,
         choices: [
-          { text: "Resolver el acertijo inmediatamente", nextPart: 5, points: 20, consequence: "La maldición se rompe" },
+          { text: "Resolver el acertijo inmediatamente", nextPart: 5, points: 20, consequence: "La maldición comienza a debilitarse" },
           { text: "Preguntar sobre la historia del castillo", nextPart: 6, points: 15, consequence: "Emma aprende secretos ocultos" },
           { text: "Buscar pistas en las habitaciones", nextPart: 7, points: 10, consequence: "Emma encuentra artefactos" }
         ]
       },
+
       3: {
         id: 3,
-        text: "Emma descubre una entrada secreta bajo una estatua. Al entrar, encuentra un libro antiguo que parece contener pistas sobre la maldición del castillo.",
-        image: "📖🗝️",
+        text: "Emma descubre una entrada secreta bajo una estatua cubierta de polvo. Al deslizarse por ella, encuentra un libro antiguo que parece guardar pistas importantes sobre la maldición del castillo.",
+        image: imgs3,
         choices: [
           { text: "Leer el libro", nextPart: 8, points: 18, consequence: "Emma descubre la clave de la maldición" },
           { text: "Explorar el túnel", nextPart: 9, points: 12, consequence: "Emma encuentra una sala oculta" },
           { text: "Volver a la entrada principal", nextPart: 2, points: 10, consequence: "Emma toma el camino directo" }
         ]
       },
+
       4: {
         id: 4,
-        text: "Emma espera hasta la noche y ve luces extrañas en las ventanas del castillo. Decide que debe entrar para investigar, pero ahora está más alerta.",
-        image: "🌙🏰",
+        text: "Emma espera hasta la noche y ve luces extrañas encenderse en las ventanas del castillo. Con el corazón latiendo fuerte, decide entrar ahora que todo parece más misterioso.",
+        image: imgs4,
         choices: [
           { text: "Entrar sigilosamente", nextPart: 3, points: 12, consequence: "Emma actúa con precaución" },
           { text: "Llamar a la puerta", nextPart: 2, points: 8, consequence: "Emma enfrenta lo desconocido" },
           { text: "Buscar aliados", nextPart: 10, points: 10, consequence: "Emma forma un equipo" }
         ]
       },
+
       5: {
         id: 5,
-        text: "Emma resuelve el acertijo y libera al fantasma. Como recompensa, recibe un mapa a un tesoro escondido en el castillo.",
-        image: "🗺️💎",
+        text: "Emma resuelve el acertijo y libera parte de la magia del castillo. El fantasma sonríe agradecido y le entrega un mapa que señala lugares secretos donde podría estar escondido el cetro del hechicero.",
+        image: imgs5,
         choices: [
-          { text: "Buscar el tesoro", nextPart: 13, points: 25, consequence: "Emma encuentra riquezas" },
+          { text: "Buscar el tesoro", nextPart: 13, points: 25, consequence: "Emma sigue el mapa mágico" },
           { text: "Preguntar más al fantasma", nextPart: 6, points: 15, consequence: "Emma profundiza en la historia" },
           { text: "Explorar otras salas", nextPart: 7, points: 20, consequence: "Emma descubre más misterios" }
         ]
       },
+
       6: {
         id: 6,
-        text: "El fantasma cuenta que la maldición fue lanzada por un hechicero celoso. Para romperla completamente, Emma debe encontrar el cetro del hechicero.",
-        image: "🪄👻",
+        text: "El fantasma cuenta que la maldición fue creada por un hechicero celoso. Para romperla por completo, Emma debe encontrar su cetro, escondido en una sala protegida por magia antigua.",
+        image: imgs6,
         choices: [
-          { text: "Buscar el cetro", nextPart: 13, points: 20, consequence: "Emma enfrenta al hechicero" },
+          { text: "Buscar el cetro", nextPart: 13, points: 20, consequence: "Emma se acerca a su objetivo" },
           { text: "Investigar la biblioteca", nextPart: 8, points: 15, consequence: "Emma encuentra más pistas" },
           { text: "Hablar más con el fantasma", nextPart: 11, points: 10, consequence: "Emma fortalece su alianza" }
         ]
       },
+
       7: {
         id: 7,
-        text: "Emma encuentra un cofre antiguo con artefactos mágicos en una sala oculta. Uno de ellos brilla intensamente, sugiriendo un poder especial.",
-        image: "📦✨",
+        text: "Emma encuentra un cofre antiguo con artefactos mágicos que brillan suavemente. Uno de ellos late con una energía especial, como si quisiera ser usado.",
+        image: imgs7,
         choices: [
-          { text: "Usar el artefacto", nextPart: 13, points: 20, consequence: "Emma desata un poder mágico" },
+          { text: "Usar el artefacto", nextPart: 13, points: 20, consequence: "Emma libera un poder mágico" },
           { text: "Estudiar el cofre", nextPart: 8, points: 15, consequence: "Emma descubre su historia" },
           { text: "Llevar el artefacto al fantasma", nextPart: 6, points: 10, consequence: "Emma comparte su hallazgo" }
         ]
       },
+
       8: {
         id: 8,
-        text: "En la biblioteca, Emma encuentra un diario que detalla cómo romper la maldición. Debe realizar un ritual en la torre más alta del castillo.",
-        image: "📚🕯️",
+        text: "En la biblioteca, Emma encuentra un diario que explica cómo romper la maldición. Dice que debe realizar un ritual en la torre más alta del castillo usando el poder del cetro.",
+        image: imgs8,
         choices: [
-          { text: "Realizar el ritual", nextPart: 13, points: 25, consequence: "Emma rompe la maldición" },
+          { text: "Realizar el ritual", nextPart: 13, points: 25, consequence: "Emma debilita la maldición" },
           { text: "Buscar más información", nextPart: 6, points: 15, consequence: "Emma se prepara mejor" },
           { text: "Explorar la torre", nextPart: 9, points: 20, consequence: "Emma encuentra un atajo" }
         ]
       },
+
       9: {
         id: 9,
-        text: "En una sala oculta, Emma descubre un espejo mágico que muestra visiones del pasado del castillo, revelando secretos del hechicero.",
-        image: "🪞✨",
+        text: "En una sala secreta, Emma descubre un espejo mágico que muestra el pasado del castillo. En las visiones aparece el hechicero y el lugar donde escondió su cetro.",
+        image: imgs9,
         choices: [
-          { text: "Seguir las visiones", nextPart: 13, points: 20, consequence: "Emma descubre la verdad" },
+          { text: "Seguir las visiones", nextPart: 13, points: 20, consequence: "Emma sigue la pista correcta" },
           { text: "Romper el espejo", nextPart: 7, points: 15, consequence: "Emma libera energía mágica" },
           { text: "Consultar al fantasma", nextPart: 6, points: 10, consequence: "Emma busca guía" }
         ]
       },
+
       10: {
         id: 10,
-        text: "Emma encuentra a un grupo de exploradores dispuestos a ayudarla. Juntos, planean entrar al castillo como equipo.",
-        image: "👥🏰",
+        text: "Emma encuentra a un grupo de exploradores que también quieren liberar el castillo. Deciden avanzar juntos, compartiendo ideas y cuidándose entre todos.",
+        image: imgs10,
         choices: [
           { text: "Liderar al equipo", nextPart: 2, points: 20, consequence: "Emma se convierte en líder" },
           { text: "Explorar con el equipo", nextPart: 3, points: 15, consequence: "Emma comparte la aventura" },
           { text: "Planificar cuidadosamente", nextPart: 4, points: 10, consequence: "Emma se prepara mejor" }
         ]
       },
+
       11: {
         id: 11,
-        text: "El fantasma revela que el cetro está escondido en una sala protegida por trampas. Emma debe ser cuidadosa para llegar a él.",
-        image: "🪄🕸️",
+        text: "El fantasma revela que el cetro está escondido en una sala llena de trampas mágicas. Emma deberá usar su inteligencia para llegar hasta él.",
+        image: imgs11,
         choices: [
           { text: "Enfrentar las trampas", nextPart: 13, points: 20, consequence: "Emma demuestra valentía" },
           { text: "Buscar un camino alternativo", nextPart: 9, points: 15, consequence: "Emma evita el peligro" },
           { text: "Prepararse con el fantasma", nextPart: 6, points: 10, consequence: "Emma planea con cuidado" }
         ]
       },
+
       12: {
         id: 12,
-        text: "Emma encuentra un pergamino antiguo que detalla un ritual para contactar a los espíritus del castillo, lo que podría ayudarla.",
-        image: "📜🕯️",
+        text: "Emma encuentra un pergamino antiguo que explica cómo hablar con los espíritus del castillo para pedir ayuda.",
+        image: imgs12,
         choices: [
-          { text: "Realizar el ritual", nextPart: 13, points: 20, consequence: "Emma contacta a los espíritus" },
+          { text: "Realizar el ritual", nextPart: 13, points: 20, consequence: "Emma recibe ayuda espiritual" },
           { text: "Buscar al fantasma", nextPart: 6, points: 15, consequence: "Emma busca más guía" },
-          { text: "Explorar más", nextPart: 7, points: 10, consequence: "Emma encuentra nuevos secretos" }
+          { text: "Explorar más", nextPart: 7, points: 10, consequence: "Emma halla nuevos secretos" }
         ]
       },
+
       13: {
         id: 13,
-        text: "Emma encuentra el cetro y rompe la maldición. El castillo se ilumina y los fantasmas agradecidos la nombran protectora del castillo.",
-        image: "🪄🌟",
+        text: "Después de todo lo aprendido, Emma llega a una sala secreta. Allí encuentra el cetro del hechicero. Al tocarlo, la maldición se rompe, el castillo se llena de luz y los fantasmas recuperan la paz. Admirados por su valentía e inteligencia, la nombran protectora del castillo.",
+        image: imgs13,
         choices: [
           { text: "Aceptar el rol de protectora", nextPart: 18, points: 30, consequence: "¡Final Épico: Emma es heroína!" },
           { text: "Explorar más el castillo", nextPart: 19, points: 25, consequence: "¡Final Heroico: Emma descubre más!" },
           { text: "Compartir el cetro", nextPart: 20, points: 20, consequence: "¡Final Unificador: Emma une a todos!" }
         ]
       },
+
       14: {
         id: 14,
-        text: "Emma descubre un pasadizo secreto que lleva a una cámara con artefactos mágicos, cada uno con un poder único.",
-        image: "🗝️📦",
+        text: "Emma descubre un pasadizo secreto que conduce a una cámara llena de artefactos mágicos, cada uno con un poder especial.",
+        image: imgs14,
         choices: [
           { text: "Usar un artefacto", nextPart: 13, points: 20, consequence: "Emma desata magia poderosa" },
           { text: "Estudiar los artefactos", nextPart: 8, points: 15, consequence: "Emma aprende su historia" },
           { text: "Consultar al fantasma", nextPart: 6, points: 10, consequence: "Emma busca sabiduría" }
         ]
       },
+
       15: {
         id: 15,
-        text: "Emma encuentra una sala con un altar mágico que podría romper la maldición si realiza el ritual correcto.",
-        image: "🕍✨",
+        text: "Emma llega a una sala con un altar mágico. Allí comprende que el cetro puede romper la maldición si se usa con valor y sabiduría.",
+        image: imgs15,
         choices: [
           { text: "Realizar el ritual", nextPart: 13, points: 25, consequence: "Emma rompe la maldición" },
           { text: "Buscar más pistas", nextPart: 8, points: 15, consequence: "Emma se prepara mejor" },
           { text: "Consultar al fantasma", nextPart: 6, points: 10, consequence: "Emma busca guía" }
         ]
       },
+
       16: {
         id: 16,
-        text: "Emma medita en una sala silenciosa y siente una conexión con los espíritus del castillo, ganando claridad.",
-        image: "🧘‍♀️🏰",
+        text: "Emma medita en una sala silenciosa del castillo. Siente la presencia de los espíritus y gana claridad para continuar su misión.",
+        image: imgs16,
         choices: [
           { text: "Buscar el cetro", nextPart: 13, points: 20, consequence: "Emma actúa con claridad" },
           { text: "Explorar más", nextPart: 9, points: 15, consequence: "Emma sigue su intuición" },
           { text: "Hablar con el fantasma", nextPart: 6, points: 10, consequence: "Emma fortalece su vínculo" }
         ]
       },
+
       17: {
         id: 17,
-        text: "Emma comparte una historia personal con el fantasma, quien le revela un secreto sobre el cetro escondido.",
-        image: "📖👻",
+        text: "Emma comparte una historia personal con el fantasma. Él confía en ella y le revela una pista secreta sobre dónde se esconde el cetro.",
+        image: imgs17,
         choices: [
-          { text: "Buscar el cetro", nextPart: 13, points: 20, consequence: "Emma sigue el secreto" },
+          { text: "Buscar el cetro", nextPart: 13, points: 20, consequence: "Emma sigue la pista" },
           { text: "Preguntar más al fantasma", nextPart: 6, points: 15, consequence: "Emma profundiza la conexión" },
           { text: "Explorar sola", nextPart: 9, points: 10, consequence: "Emma toma su propio camino" }
         ]
       },
+
       18: {
         id: 18,
-        text: "Emma comparte el tesoro con el pueblo y el castillo se convierte en un lugar de paz. ¡Aventura completada!",
-        image: "🌟🏆",
+        text: "Emma comparte la paz del castillo con el pueblo. El castillo deja de ser embrujado y se convierte en un lugar seguro lleno de luz. ¡Aventura completada!",
+        image: imgs18,
         choices: []
       },
+
       19: {
         id: 19,
-        text: "Emma descubre más secretos del castillo y se convierte en su guardiana legendaria, recordada por siempre.",
-        image: "🏰🌟",
+        text: "Emma continúa explorando el castillo y se convierte en su guardiana legendaria, recordada por su inteligencia y valentía.",
+        image: imgs19,
         choices: []
       },
+
       20: {
         id: 20,
-        text: "Emma une a los habitantes del pueblo con los espíritus del castillo, creando un legado de armonía.",
-        image: "🤝🌍",
+        text: "Emma une a los habitantes del pueblo con los espíritus del castillo, creando un legado de amistad que durará para siempre.",
+        image: imgs20,
         choices: []
       }
     }
+
   },
   {
     id: 3,
@@ -439,8 +527,8 @@ const stories: InteractiveStory[] = [
     parts: {
       1: {
         id: 1,
-        text: "Sam explora un desierto antiguo donde se rumorea que hay una ciudad perdida. El sol quema y el viento susurra secretos. Encuentra un oasis con una estatua que dice: 'Solo los perseverantes hallarán el camino'.",
-        image: "🏜️🗿",
+        text: "Sam llega a un desierto grande y misterioso. En el pueblo dicen que allí existe una ciudad perdida. El sol quema y el viento suena fuerte. Sam encuentra un oasis con una estatua que dice: 'Solo los que no se rinden hallarán el camino'.",
+        image: imag1,
         choices: [
           { text: "Seguir el camino indicado por la estatua", nextPart: 2, points: 15, consequence: "Sam demuestra perseverancia" },
           { text: "Explorar el oasis primero", nextPart: 3, points: 10, consequence: "Sam encuentra recursos" },
@@ -449,8 +537,8 @@ const stories: InteractiveStory[] = [
       },
       2: {
         id: 2,
-        text: "Sam encuentra una entrada a la ciudad perdida, pero está custodiada por un guardián ancestral que plantea un enigma.",
-        image: "🕌🦁",
+        text: "Sam sigue el camino y llega a una gran puerta de piedra. Es la entrada de la ciudad perdida. Un guardián antiguo la cuida. El guardián le propone un enigma para poder pasar.",
+        image: imag2,
         choices: [
           { text: "Responder el enigma", nextPart: 5, points: 20, consequence: "El guardián permite el paso" },
           { text: "Buscar otra entrada", nextPart: 6, points: 15, consequence: "Sam evita el peligro" },
@@ -459,8 +547,8 @@ const stories: InteractiveStory[] = [
       },
       3: {
         id: 3,
-        text: "En el oasis, Sam descubre un pozo con inscripciones antiguas que parecen indicar un pasaje secreto hacia la ciudad perdida.",
-        image: "💧🗿",
+        text: "En el oasis, Sam ve un pozo con dibujos viejos. Los símbolos muestran un pasaje secreto que va bajo la arena hacia la ciudad perdida.",
+        image: imag3,
         choices: [
           { text: "Explorar el pasaje", nextPart: 8, points: 18, consequence: "Sam encuentra un atajo" },
           { text: "Estudiar las inscripciones", nextPart: 9, points: 12, consequence: "Sam descubre secretos antiguos" },
@@ -469,8 +557,8 @@ const stories: InteractiveStory[] = [
       },
       4: {
         id: 4,
-        text: "Sam descansa en el oasis y encuentra un mapa antiguo en una cueva cercana. El mapa señala la ubicación de la ciudad perdida.",
-        image: "🗺️🏜️",
+        text: "Sam descansa un poco en el oasis. Cerca hay una cueva pequeña. Dentro encuentra un mapa viejo que marca dónde está la ciudad perdida.",
+        image: imag4,
         choices: [
           { text: "Seguir el mapa", nextPart: 2, points: 12, consequence: "Sam sigue una ruta clara" },
           { text: "Buscar provisiones", nextPart: 10, points: 10, consequence: "Sam se prepara mejor" },
@@ -479,8 +567,8 @@ const stories: InteractiveStory[] = [
       },
       5: {
         id: 5,
-        text: "Sam resuelve el enigma y el guardián le otorga una llave dorada que abre la puerta principal de la ciudad perdida.",
-        image: "🗝️🕌",
+        text: "Sam responde bien el enigma. El guardián sonríe y le entrega una llave dorada. Esa llave abre la puerta principal de la ciudad perdida.",
+        image: imag5,
         choices: [
           { text: "Entrar a la ciudad", nextPart: 13, points: 25, consequence: "Sam descubre la ciudad perdida" },
           { text: "Preguntar al guardián", nextPart: 7, points: 15, consequence: "Sam aprende más secretos" },
@@ -489,8 +577,8 @@ const stories: InteractiveStory[] = [
       },
       6: {
         id: 6,
-        text: "Sam encuentra una entrada secundaria cubierta de arena. Al limpiarla, descubre un mecanismo que requiere una llave especial.",
-        image: "🚪🏜️",
+        text: "Sam descubre una entrada tapada por arena. Al limpiar, ve una cerradura especial. Parece necesitar una llave para abrir.",
+        image: imag6,
         choices: [
           { text: "Buscar la llave", nextPart: 13, points: 20, consequence: "Sam accede a la ciudad" },
           { text: "Forzar la entrada", nextPart: 8, points: 15, consequence: "Sam enfrenta un desafío" },
@@ -499,8 +587,8 @@ const stories: InteractiveStory[] = [
       },
       7: {
         id: 7,
-        text: "Sam estudia al guardián y descubre que es una estatua animada por magia antigua. Encuentra un panel con símbolos que podrían desactivarlo.",
-        image: "🦁🪄",
+        text: "Sam mira al guardián con atención. Descubre que es una estatua con magia. Cerca hay un panel con símbolos que pueden apagar su poder.",
+        image: imag7,
         choices: [
           { text: "Activar los símbolos", nextPart: 13, points: 20, consequence: "Sam desactiva al guardián" },
           { text: "Estudiar más los símbolos", nextPart: 9, points: 15, consequence: "Sam aprende magia antigua" },
@@ -509,8 +597,8 @@ const stories: InteractiveStory[] = [
       },
       8: {
         id: 8,
-        text: "Sam entra por un pasaje secreto y encuentra una sala llena de artefactos antiguos que cuentan la historia de la ciudad perdida.",
-        image: "🛡️📜",
+        text: "Sam entra por un túnel secreto. Dentro hay una sala con objetos antiguos. Los objetos cuentan cómo nació la ciudad perdida.",
+        image: imag8,
         choices: [
           { text: "Estudiar los artefactos", nextPart: 13, points: 25, consequence: "Sam se convierte en experto" },
           { text: "Buscar la sala principal", nextPart: 5, points: 20, consequence: "Sam llega al corazón de la ciudad" },
@@ -519,8 +607,8 @@ const stories: InteractiveStory[] = [
       },
       9: {
         id: 9,
-        text: "Sam descifra las inscripciones y descubre que la ciudad está protegida por un hechizo que requiere un ritual para desactivarlo.",
-        image: "📜🪄",
+        text: "Sam lee los símbolos del pozo. Aprende que la ciudad tiene un hechizo protector. Para entrar debe hacer un ritual especial.",
+        image: imag9,
         choices: [
           { text: "Realizar el ritual", nextPart: 13, points: 20, consequence: "Sam desactiva el hechizo" },
           { text: "Buscar más pistas", nextPart: 8, points: 15, consequence: "Sam se prepara mejor" },
@@ -529,8 +617,8 @@ const stories: InteractiveStory[] = [
       },
       10: {
         id: 10,
-        text: "Sam recolecta provisiones en el oasis y se encuentra con un grupo de exploradores que quieren unirse a su aventura.",
-        image: "👥💧",
+        text: "Sam busca agua y comida en el oasis. Allí conoce a otros exploradores. Ellos quieren llegar a la ciudad perdida y ayudar a Sam.",
+        image: imag10,
         choices: [
           { text: "Liderar al equipo", nextPart: 2, points: 20, consequence: "Sam se convierte en líder" },
           { text: "Explorar con el equipo", nextPart: 6, points: 15, consequence: "Sam comparte la aventura" },
@@ -539,8 +627,8 @@ const stories: InteractiveStory[] = [
       },
       11: {
         id: 11,
-        text: "En la cueva, Sam encuentra un altar antiguo con ofrendas que podrían ser clave para entrar a la ciudad perdida.",
-        image: "🕍🗿",
+        text: "En la cueva, Sam encuentra un altar con regalos antiguos. Las ofrendas parecen abrir caminos hacia la ciudad perdida.",
+        image: imag11,
         choices: [
           { text: "Usar las ofrendas", nextPart: 13, points: 20, consequence: "Sam desbloquea un pasaje" },
           { text: "Estudiar el altar", nextPart: 9, points: 15, consequence: "Sam descubre su significado" },
@@ -549,8 +637,8 @@ const stories: InteractiveStory[] = [
       },
       12: {
         id: 12,
-        text: "Sam encuentra un diario de un explorador anterior que describe un camino seguro hacia la ciudad perdida.",
-        image: "📖🏜️",
+        text: "Sam halla un diario de otro viajero. El libro explica un camino seguro para llegar a la ciudad perdida.",
+        image: imag12,
         choices: [
           { text: "Seguir el camino del diario", nextPart: 13, points: 20, consequence: "Sam llega a la ciudad" },
           { text: "Buscar al guardián", nextPart: 2, points: 15, consequence: "Sam busca la llave" },
@@ -559,74 +647,83 @@ const stories: InteractiveStory[] = [
       },
       13: {
         id: 13,
-        text: "Sam entra a la ciudad perdida y descubre artefactos que revelan una civilización antigua. Es nombrado explorador legendario.",
-        image: "🌍🔍",
+        text: "Después de muchas pruebas, Sam entra por fin a la ciudad perdida. Ve edificios antiguos y objetos brillantes por todos lados. Sam cumple su sueño y se convierte en un gran explorador.",
+        image: imag13,
         choices: [
           { text: "Compartir los descubrimientos", nextPart: 18, points: 30, consequence: "¡Final Épico: Sam es leyenda!" },
           { text: "Estudiar más artefactos", nextPart: 19, points: 25, consequence: "¡Final Heroico: Sam es experto!" },
           { text: "Proteger la ciudad", nextPart: 20, points: 20, consequence: "¡Final Unificador: Sam es guardián!" }
         ]
       },
+
       14: {
         id: 14,
-        text: "Sam encuentra un templo oculto con jeroglíficos que narran la historia de la ciudad perdida.",
-        image: "🕌📜",
+        text: "Antes de llegar al centro, Sam descubre un templo oculto dentro de la ciudad. En las paredes hay dibujos grandes que cuentan la historia de las personas que vivieron allí hace mucho tiempo.",
+        image: imag14,
         choices: [
-          { text: "Estudiar los jeroglíficos", nextPart: 13, points: 20, consequence: "Sam descubre la historia" },
-          { text: "Buscar tesoros", nextPart: 8, points: 15, consequence: "Sam encuentra riquezas" },
-          { text: "Consultar al guardián", nextPart: 2, points: 10, consequence: "Sam busca guía" }
+          { text: "Leer los dibujos con calma", nextPart: 15, points: 20, consequence: "Sam entiende la historia del lugar" },
+          { text: "Buscar objetos antiguos", nextPart: 17, points: 15, consequence: "Sam encuentra algo especial" },
+          { text: "Seguir hacia el centro", nextPart: 13, points: 10, consequence: "Sam continúa su camino" }
         ]
       },
+
       15: {
         id: 15,
-        text: "Sam realiza un ritual que desactiva las trampas de la ciudad, ganándose el respeto de los espíritus antiguos.",
-        image: "🪄🗿",
+        text: "Sam aprende un ritual sencillo en el templo. Al hacerlo, las trampas mágicas de la ciudad se apagan y el camino se vuelve seguro.",
+        image: imag15,
         choices: [
-          { text: "Entrar a la ciudad", nextPart: 13, points: 25, consequence: "Sam llega al corazón de la ciudad" },
-          { text: "Explorar más", nextPart: 8, points: 15, consequence: "Sam descubre más secretos" },
-          { text: "Honrar a los espíritus", nextPart: 20, points: 20, consequence: "Sam se convierte en guardián" }
+          { text: "Entrar al centro de la ciudad", nextPart: 13, points: 25, consequence: "Sam avanza sin peligro" },
+          { text: "Explorar otras salas", nextPart: 17, points: 15, consequence: "Sam descubre nuevos secretos" },
+          { text: "Descansar un momento", nextPart: 16, points: 10, consequence: "Sam recupera fuerzas" }
         ]
       },
+
       16: {
         id: 16,
-        text: "Sam medita en el oasis y siente una conexión con los espíritus del desierto, ganando claridad para su misión.",
-        image: "🧘‍♂️🏜️",
+        text: "Sam se sienta a respirar tranquilo. El silencio lo ayuda a pensar mejor y a sentirse seguro para seguir con la aventura.",
+        image: imag16,
         choices: [
-          { text: "Seguir al guardián", nextPart: 2, points: 20, consequence: "Sam actúa con claridad" },
-          { text: "Explorar el oasis", nextPart: 3, points: 15, consequence: "Sam encuentra recursos" },
-          { text: "Buscar artefactos", nextPart: 8, points: 10, consequence: "Sam descubre reliquias" }
+          { text: "Seguir al centro de la ciudad", nextPart: 13, points: 20, consequence: "Sam continúa con calma" },
+          { text: "Volver al templo", nextPart: 14, points: 15, consequence: "Sam repasa lo aprendido" },
+          { text: "Explorar ruinas cercanas", nextPart: 17, points: 10, consequence: "Sam encuentra pistas" }
         ]
       },
+
       17: {
         id: 17,
-        text: "Sam encuentra un amuleto antiguo que parece estar conectado con la ciudad perdida, guiándolo hacia su destino.",
-        image: "🧿🏜️",
+        text: "Sam encuentra un amuleto brillante entre la arena y las piedras. El amuleto vibra y señala el camino correcto hacia el corazón de la ciudad.",
+        image: imag17,
         choices: [
-          { text: "Seguir el amuleto", nextPart: 13, points: 20, consequence: "Sam llega a la ciudad" },
-          { text: "Estudiar el amuleto", nextPart: 9, points: 15, consequence: "Sam descubre su poder" },
-          { text: "Buscar al guardián", nextPart: 2, points: 10, consequence: "Sam busca guía" }
+          { text: "Seguir el brillo del amuleto", nextPart: 13, points: 20, consequence: "Sam llega a su destino" },
+          { text: "Examinar el amuleto", nextPart: 15, points: 15, consequence: "Sam entiende su poder" },
+          { text: "Mostrarlo en el templo", nextPart: 14, points: 10, consequence: "Sam recibe más pistas" }
         ]
       },
+
       18: {
         id: 18,
-        text: "Sam comparte sus descubrimientos con el mundo, inspirando a otros exploradores. ¡Aventura completada!",
-        image: "🏆🌟",
+        text: "Sam cuenta su aventura a todo el mundo. Otros se inspiran con su historia y quieren explorar también. ¡Aventura terminada!",
+        image: imag18,
         choices: []
       },
+
       19: {
         id: 19,
-        text: "Sam se convierte en un experto en la civilización perdida, publicando libros que fascinan al mundo.",
-        image: "📚🌍",
+        text: "Sam estudia la ciudad perdida durante muchos años. Escribe libros y enseña a otros todos sus secretos.",
+        image: imag19,
         choices: []
       },
+
       20: {
         id: 20,
-        text: "Sam protege la ciudad perdida, asegurando que sus secretos permanezcan seguros para las generaciones futuras.",
-        image: "🛡️🏜️",
+        text: "Sam cuida la ciudad perdida para que nadie la dañe. Así protege su historia para el futuro.",
+        image: imag20,
         choices: []
       }
     }
+
   }
+
 ];
 
 export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel }: HistoriasInteractivasProps) {
@@ -640,9 +737,11 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   const [consequences, setConsequences] = useState<string[]>([]);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
-
+  const [showFinalStory, setShowFinalStory] = useState(false);
   const story = stories[currentLevel - 1];
   const part = story.parts[currentPart];
+  const finalStoryText = storyPath.map((id) => story.parts[id]?.text).join(" ");
+
   const progress = (storyPath.length / 8) * 100;
 
   // Función para mejorar la pronunciación de números con signos
@@ -674,33 +773,33 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
     const choice = part.choices[choiceIndex];
     const newScore = score + choice.points;
     setScore(newScore);
-    
+
     setConsequences([...consequences, choice.consequence]);
-    
+
     if (choice.points >= 15) {
       setShowReward(true);
       setTimeout(() => setShowReward(false), 1500);
     }
-    
+
     if (choice.nextPart) {
-        if (story.parts[choice.nextPart]) {
-          if (story.parts[choice.nextPart].choices.length === 0) {
-            setCurrentPart(choice.nextPart);
-            setStoryPath([...storyPath, choice.nextPart]);
-            setTimeout(() => {
-              setReadingComplete(true);
-              setShowMotivational(true);
-            }, 3000);
-          } else {
-            setCurrentPart(choice.nextPart);
-            setStoryPath([...storyPath, choice.nextPart]);
-          }
-        } else {
+      if (story.parts[choice.nextPart]) {
+        if (story.parts[choice.nextPart].choices.length === 0) {
+          setCurrentPart(choice.nextPart);
+          setStoryPath([...storyPath, choice.nextPart]);
           setTimeout(() => {
             setReadingComplete(true);
-            setShowMotivational(true);
+            setShowFinalStory(true);
           }, 3000);
+        } else {
+          setCurrentPart(choice.nextPart);
+          setStoryPath([...storyPath, choice.nextPart]);
         }
+      } else {
+        setTimeout(() => {
+          setReadingComplete(true);
+          setShowMotivational(true);
+        }, 3000);
+      }
     }
   };
 
@@ -735,30 +834,42 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
           className="mb-6"
         />
 
-        <div className="text-center mb-6">
-          <h2 className="text-2xl text-black">{story.title}</h2>
-        </div>
+
 
         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6">
           <AnimalGuide
-            animal="turtle"
+            animal="fish"
             message="¡Tú decides cómo continúa la historia! Lee con cuidado y elige la opción que más te guste. Cada decisión llevará la historia por un camino diferente."
           />
         </motion.div>
 
-        <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="max-w-3xl mx-auto">
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl text-black">{story.title}</h2>
+        </div>
+        <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 lg:col-span-2">
             <CardContent className="p-8">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="flex flex-col gap-6">
                 <div className="text-center">
                   <div className="bg-gradient-to-br from-indigo-200 to-purple-200 rounded-2xl p-8 mb-4 min-h-[200px] flex items-center justify-center border-4 border-indigo-300">
-                    <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 2, repeat: Infinity }} className="text-8xl">
-                      {part.image}
+                    <motion.div
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="flex items-center justify-center"
+                    >
+                      <img
+                        src={part.image}
+                        alt="Escena de la historia"
+                        className="w-full h-full max-h-[260px] object-contain"
+                        draggable={false}
+                      />
+
                     </motion.div>
+
                   </div>
-                  <AudioPlayer 
-                    text={removeEmojis(part.text)} 
-                    duration={removeEmojis(part.text).length * 50}
+                  <AudioPlayer
+                    text={removeEmojis(part.text)}
+                    duration={removeEmojis(part.text).length * 100}
                     voice="child"
                   />
                 </div>
@@ -775,7 +886,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                         Tu aventura hasta ahora:
                       </h4>
                       <div className="flex flex-wrap gap-2">
-                        {storyPath.map(( index) => (
+                        {storyPath.map((index) => (
                           <div key={index} className="flex items-center">
                             <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs">
                               {index + 1}
@@ -794,7 +905,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
           </Card>
 
           {part.choices.length > 0 && (
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 max-w-7xl">
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 h-fit">
               <CardContent className="p-6 ">
                 <h3 className="text-lg mb-4 text-black flex items-center gap-2">
                   <Brain className="w-5 h-5 text-purple-500" />
@@ -843,6 +954,45 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
               setShowLevelComplete(true);
             }}
           />
+        )}
+        {showFinalStory && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 text-black"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <Card className="max-w-3xl w-full bg-white border-4 border-purple-300">
+              <CardContent className="p-8 space-y-6">
+                <h2 className="text-2xl text-center text-purple-700">
+                  📖 Tu Historia Completa
+                </h2>
+
+                <AudioPlayer
+                  text={removeEmojis(finalStoryText)}
+                  duration={removeEmojis(finalStoryText).length * 60}
+                  voice="child"
+                />
+
+                <div className="max-h-[300px] overflow-y-auto p-4 bg-purple-50 rounded-lg border-2 border-purple-200 text-lg leading-relaxed">
+                  {finalStoryText}
+                </div>
+
+                <div className="flex justify-center gap-4 pt-4">
+                  <Button
+                    onClick={() => {
+                      setShowFinalStory(false);
+                      setShowMotivational(true);
+                      setShowLevelComplete(true);
+
+                    }}
+                    className="px-6 py-3 text-lg bg-purple-500 text-white rounded-xl"
+                  >
+                    Continuar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
         )}
 
         {/* MODAL FINAL */}

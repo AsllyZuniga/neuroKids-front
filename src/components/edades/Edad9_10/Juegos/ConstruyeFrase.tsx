@@ -12,9 +12,15 @@ import { ProgressBar } from "../../../others/ProgressBar";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
-import { StartScreenConstruyeFrase } from "../IniciosJuegosLecturas/StartScreenConstruyeFrase/StartScreenConstruyeFrase";
+import { StartScreenConstruyeFrase } from "../IniciosJuegosLecturas/StartScreenConstruyeFrase";
 import { speakText, stopSpeech, isSpeechSupported } from '../../../../utils/textToSpeech';
 import { isUserAuthenticated } from '../../../../hooks/useLevelLock';
+import gato from '../../../../assets/9_10/construye_frase/1gatonegro.svg';
+import flores from '../../../../assets/9_10/construye_frase/2florescoloridas.svg';
+import abuela from '../../../../assets/9_10/construye_frase/3abuelaypastel.svg';
+import futbol from '../../../../assets/9_10/construye_frase/4ninosfutbol.svg';
+import explorador from '../../../../assets/9_10/construye_frase/5explorador.svg';
+import cientificos from '../../../../assets/9_10/construye_frase/6cientificos.svg';
 
 interface ConstruyeFraseProps {
   onBack: () => void;
@@ -35,6 +41,7 @@ interface Level {
   challenges: SentenceChallenge[];
 }
 
+
 const levels: Level[] = [
   {
     level: 1,
@@ -42,10 +49,10 @@ const levels: Level[] = [
       {
         id: 1,
         theme: "Animales",
-        correctSentence: "El gato negro duerme en el sofá cómodo",
-        words: ["El", "gato", "negro", "duerme", "en", "el", "sofá", "cómodo"],
+        correctSentence: "El gato negro duerme en el cojin cómodo",
+        words: ["El", "gato", "negro", "duerme", "en", "el", "cojin", "cómodo"],
         hint: "¿Dónde duerme el gato negro?",
-        image: "🐱",
+        image: gato,
       },
       {
         id: 2,
@@ -53,7 +60,7 @@ const levels: Level[] = [
         correctSentence: "Las flores coloridas crecen en el jardín hermoso",
         words: ["Las", "flores", "coloridas", "crecen", "en", "el", "jardín", "hermoso"],
         hint: "¿Dónde crecen las flores coloridas?",
-        image: "🌸",
+        image: flores,
       },
     ],
   },
@@ -66,7 +73,7 @@ const levels: Level[] = [
         correctSentence: "Mi abuela cocina deliciosos pasteles todos los domingos",
         words: ["Mi", "abuela", "cocina", "deliciosos", "pasteles", "todos", "los", "domingos"],
         hint: "¿Qué hace mi abuela los domingos?",
-        image: "👵",
+        image: abuela,
       },
       {
         id: 4,
@@ -74,7 +81,7 @@ const levels: Level[] = [
         correctSentence: "Los niños juegan fútbol con mucha energía y alegría",
         words: ["Los", "niños", "juegan", "fútbol", "con", "mucha", "energía", "y", "alegría"],
         hint: "¿Cómo juegan fútbol los niños?",
-        image: "⚽",
+        image: futbol,
       },
     ],
   },
@@ -84,10 +91,10 @@ const levels: Level[] = [
       {
         id: 5,
         theme: "Aventura",
-        correctSentence: "El valiente explorador descubrió tesoros antiguos en la cueva misteriosa",
-        words: ["El", "valiente", "explorador", "descubrió", "tesoros", "antiguos", "en", "la", "cueva", "misteriosa"],
-        hint: "¿Qué descubrió el explorador en la cueva?",
-        image: "🗺️",
+        correctSentence: "Los valientes exploradores descubrieron tesoros antiguos en la cueva misteriosa",
+        words: ["Los", "valientes", "exploradores", "descubrieron", "tesoros", "antiguos", "en", "la", "cueva", "misteriosa"],
+        hint: "¿Qué descubrieron los exploradores en la cueva?",
+        image: explorador,
       },
       {
         id: 6,
@@ -95,7 +102,7 @@ const levels: Level[] = [
         correctSentence: "Los científicos estudian planetas lejanos con telescopios muy potentes",
         words: ["Los", "científicos", "estudian", "planetas", "lejanos", "con", "telescopios", "muy", "potentes"],
         hint: "¿Cómo estudian los científicos los planetas lejanos?",
-        image: "🔬",
+        image: cientificos,
       },
     ],
   },
@@ -119,6 +126,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   const lastSpokenRef = useRef<string | null>(null);
   const hoverTimeoutRef = useRef<number | null>(null);
   const navigate = useNavigate();
+  const [draggedWord, setDraggedWord] = useState<{ word: string; index: number } | null>(null);
 
   const currentLevelData = levels.find(l => l.level === currentLevel);
   const challenges = currentLevelData?.challenges || [];
@@ -286,7 +294,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
           className="mb-6"
         >
           <AnimalGuide
-            animal="turtle"
+            animal="owl"
             message="¡Construye frases correctas ordenando las palabras! Lee con cuidado y piensa en el orden que tiene más sentido."
           />
         </motion.div>
@@ -296,10 +304,23 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-yellow-200 mb-4">
               <CardContent className="p-6">
                 <div className="text-center mb-4">
-                  <div className="text-6xl mb-3">{challenge.image}</div>
-                  <Badge variant="secondary" className="mb-2">
-                    {challenge.theme}
+                  <Badge variant="secondary" className="mb-2 text-black">
+                    Tema: {challenge.theme}
                   </Badge>
+                  <div className="mb-3 flex justify-center">
+                    {challenge.image?.startsWith("http") || challenge.image?.includes("/") ? (
+                      <img
+                        src={challenge.image}
+                        alt={challenge.theme}
+                        className="w-50 h-50 object-contain"
+                        draggable={false}
+                      />
+                    ) : (
+                      <span className="text-6xl">{challenge.image}</span>
+                    )}
+                  </div>
+
+
                   <h3 className="text-lg text-gray-800">Desafío {currentChallenge + 1}</h3>
                 </div>
 
@@ -354,7 +375,16 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
                   Tu frase construida:
                 </h3>
 
-                <div className="min-h-[80px] p-4 bg-orange-50 rounded-lg border-2 border-orange-200 border-dashed">
+                <div
+                  className="min-h-[80px] p-4 bg-orange-50 rounded-lg border-2 border-orange-200 border-dashed"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => {
+                    if (!draggedWord) return;
+                    addWordToSentence(draggedWord.word, draggedWord.index);
+                    setDraggedWord(null);
+                  }}
+                >
+
                   {userSentence.length === 0 ? (
                     <div className="text-gray-500 text-center py-4">
                       Arrastra las palabras aquí para construir tu frase
@@ -405,15 +435,18 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
                   {availableWords.map((word, index) => (
                     <motion.div
                       key={`available-${index}`}
+                      draggable
+                      onDragStart={() => setDraggedWord({ word, index })}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-amber-100 text-amber-800 px-4 py-3 rounded-lg cursor-pointer border-2 border-amber-200 hover:bg-amber-200 transition-colors dyslexia-friendly"
+                      className="bg-amber-100 text-amber-800 px-4 py-3 rounded-lg cursor-grab border-2 border-amber-200 hover:bg-amber-200 transition-colors dyslexia-friendly"
                       onClick={() => addWordToSentence(word, index)}
                       onMouseEnter={() => handleWordHover(word)}
                     >
                       {word}
                     </motion.div>
                   ))}
+
                 </div>
 
                 {availableWords.length === 0 && !showResult && (
@@ -424,18 +457,17 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
               </CardContent>
             </Card>
 
-          
+
             {showResult && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-6"
               >
-                <Card className={`border-2 ${
-                  userSentence.join(' ') === challenge.correctSentence
-                    ? 'bg-green-50 border-green-300'
-                    : 'bg-red-50 border-red-300'
-                }`}>
+                <Card className={`border-2 ${userSentence.join(' ') === challenge.correctSentence
+                  ? 'bg-green-50 border-green-300'
+                  : 'bg-red-50 border-red-300'
+                  }`}>
                   <CardContent className="p-4">
                     <div className="flex items-center gap-2 mb-2">
                       {userSentence.join(' ') === challenge.correctSentence ? (

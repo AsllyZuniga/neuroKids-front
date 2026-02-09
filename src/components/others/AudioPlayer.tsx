@@ -8,17 +8,20 @@ interface AudioPlayerProps {
   duration?: number;
   onPlay?: () => void;
   onEnd?: () => void;
+    onSpeakingChange?: (value: boolean) => void; 
   className?: string;
   disabled?: boolean;
   autoPlay?: boolean;
   voice?: 'child' | 'adult' | 'robot';
+  
 }
 
 export function AudioPlayer({ 
-  text = "Reproduciendo audio...", 
+  text = "", 
   duration, 
   onPlay, 
   onEnd, 
+  onSpeakingChange, 
   className = "",
   disabled = false,
   voice = 'child'
@@ -43,11 +46,13 @@ export function AudioPlayer({
       setIsPlaying(false);
       setProgress(0);
       stopSpeech(); // Detener la voz si está hablando
+      onSpeakingChange?.(false);  
     } else {
       setIsPlaying(true);
       setProgress(0);
       // Iniciar la lectura del texto con voz (siempre usa 'child' que es compatible)
       speakText(text, { voiceType: 'child' });
+      onSpeakingChange?.(true); 
     }
   };
 
@@ -71,6 +76,7 @@ export function AudioPlayer({
           setProgress(0);
           if (onEnd) {
             onEnd();
+             onSpeakingChange?.(false);
           }
         }
       }, 50);
@@ -134,11 +140,7 @@ export function AudioPlayer({
         </div>
       )}
       
-      {!isPlaying && text && (
-        <span className="text-sm text-gray-600 max-w-48 truncate italic">
-          "{text.split(' ').slice(0, 4).join(' ')}..."
-        </span>
-      )}
+      
     </div>
   );
 }

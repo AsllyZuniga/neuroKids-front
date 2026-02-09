@@ -13,7 +13,25 @@ import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { LevelLock } from '../../../others/LevelLock';
 import { useLevelLock } from '../../../../hooks/useLevelLock';
 import { speakText } from '../../../../utils/textToSpeech';
-import { StartScreenFrasesMagicas } from "../IniciosJuegosLecturas/StartScreenFrasesMagicas/StartScreenFrasesMagicas";
+import { StartScreenFrasesMagicas } from "../IniciosJuegosLecturas/StartScreenFrasesMagicas";
+import sol from "../../../../assets/7_8/frasesmagicas/sol1.svg"
+import cielo from "../../../../assets/7_8/frasesmagicas/nublado1.svg"
+import mesa from "../../../../assets/7_8/frasesmagicas/mesa.svg"
+import pan from "../../../../assets/7_8/frasesmagicas/mesaconpan.svg"
+import luz from "../../../../assets/7_8/frasesmagicas/luz.svg"
+import sinLuz from "../../../../assets/7_8/frasesmagicas/sinluz.svg"
+import flor from "../../../../assets/7_8/frasesmagicas/flor.svg"
+import sinFlor from "../../../../assets/7_8/frasesmagicas/sinflor.svg"
+import Luna from "../../../../assets/7_8/frasesmagicas/luna.svg"
+import sinLuna from "../../../../assets/7_8/frasesmagicas/sinluna.svg"
+import hada from "../../../../assets/7_8/frasesmagicas/hada.svg"
+import sinHada from "../../../../assets/7_8/frasesmagicas/sinhada.svg"
+import nieve from "../../../../assets/7_8/frasesmagicas/conNieve.svg"
+import sinNieve from "../../../../assets/7_8/frasesmagicas/sinNieve.svg"
+import arcoiris from "../../../../assets/7_8/frasesmagicas/arcoiris.svg"
+import sinArcoiris from "../../../../assets/7_8/frasesmagicas/sinArcoiris.svg"
+import mar from "../../../../assets/7_8/frasesmagicas/mar.svg"
+import sinAnimales from "../../../../assets/7_8/frasesmagicas/sinAnimales.svg"
 
 interface FrasesMagicasProps {
   onBack: () => void;
@@ -35,98 +53,99 @@ interface MagicSentence {
 const magicSentencesLevel1: MagicSentence[] = [
   {
     id: 1,
-    sentence: "Pan, que aparezca una mariposa brillante",
-    magicWord: "Pan",
-    beforeMagic: "No hay nada en el jardín.",
-    afterMagic: "¡Aparece una hermosa mariposa volando entre las flores!",
-    beforeImage: "🌿",
-    afterImage: "🦋",
-    sound: "¡Poof!"
+    sentence: "Sol",
+    magicWord: "Sol",
+    beforeMagic: "El cielo está gris.",
+    afterMagic: "¡El sol aparece y todo brilla!",
+    beforeImage: cielo,
+    afterImage: sol,
+    sound: "¡Tarán!"
   },
   {
     id: 2,
-    sentence: "Sol, que brille en el cielo azul",
-    magicWord: "Sol",
-    beforeMagic: "El cielo está nublado.",
-    afterMagic: "☀️ ¡El sol aparece e ilumina todo el lugar!",
-    beforeImage: "🌥️",
-    afterImage: "☀️",
-    sound: "¡Chisss!"
+    sentence: "Pan",
+    magicWord: "Pan",
+    beforeMagic: "La mesa está vacía.",
+    afterMagic: "¡Hay pan listo para comer!",
+    beforeImage: mesa,
+    afterImage: pan,
+    sound: "¡Pum!"
   },
   {
     id: 3,
-    sentence: "Luz, que ilumine la habitación oscura",
+    sentence: "Luz",
     magicWord: "Luz",
-    beforeMagic: "Todo está a oscuras.",
-    afterMagic: "💡 ¡Una luz brillante enciende la habitación!",
-    beforeImage: "🌑",
-    afterImage: "💡",
-    sound: "¡Boom!"
+    beforeMagic: "Todo está oscuro.",
+    afterMagic: "¡La casa se llena de luz!",
+    beforeImage: sinLuz,
+    afterImage: luz,
+    sound: "¡Click!"
   }
 ];
 
 const magicSentencesLevel2: MagicSentence[] = [
   {
     id: 1,
-    sentence: "Tic, que florezcan mil rosas",
-    magicWord: "Tic",
-    beforeMagic: "El jardín está seco y sin color",
-    afterMagic: "🌹🌷🌼 ¡El jardín se llena de flores de todos los colores!",
-    beforeImage: "🌿",
-    afterImage: "🌺🌹🌻",
-    sound: "¡Fiuuu Boom!"
+    sentence: "Flor",
+    magicWord: "Flor",
+    beforeMagic: "El jardín está vacío.",
+    afterMagic: "¡Una flor bonita creció!",
+    beforeImage: sinFlor,
+    afterImage: flor,
+    sound: "¡Plin!"
   },
   {
     id: 2,
-    sentence: "Pa, que el río empiece a cantar",
-    magicWord: "Pa",
-    beforeMagic: "El río está quieto y silencioso",
-    afterMagic: "¡El río canta alegremente mientras corre entre las piedras!",
-    beforeImage: "💧",
-    afterImage: "🌊🎶",
-    sound: "¡Splash splash!"
+    sentence: "Mar",
+    magicWord: "Mar",
+    beforeMagic: "El mar esta vacio.",
+    afterMagic: "¡Hay animales en el mar!",
+    beforeImage: sinAnimales,
+    afterImage: mar,
+    sound: "¡Splash!"
   },
   {
     id: 3,
-    sentence: "Pop, que caigan estrellas del cielo",
-    magicWord: "Pop",
-    beforeMagic: "El cielo nocturno está tranquilo",
-    afterMagic: "¡Miles de estrellas fugaces cruzan el firmamento!",
-    beforeImage: "🌙",
-    afterImage: "🌠🌟✨",
-    sound: "¡Fiuuuuuu!"
+    sentence: "Luna",
+    magicWord: "Luna",
+    beforeMagic: "La noche está oscura.",
+    afterMagic: "¡La luna brilla en el cielo!",
+    beforeImage: sinLuna,
+    afterImage: Luna,
+    sound: "¡Shhh!"
   }
 ];
 
 const magicSentencesLevel3: MagicSentence[] = [
   {
     id: 1,
-    sentence: "Lo, que aparezca un dragón y vuele sobre el castillo",
-    magicWord: "Lo",
-    beforeMagic: "El castillo está en calma y no hay nadie alrededor",
-    afterMagic: "¡Un dragón majestuoso aparece y sobrevuela el castillo soltando chispas!",
-    beforeImage: "🏰",
-    afterImage: "🐉🔥🏰",
-    sound: "¡Roooar!"
+    sentence: "Hada",
+    magicWord: "Hada",
+    beforeMagic: "El bosque está vacío.",
+    afterMagic: "¡Un hada vuela feliz en el bosque!",
+    beforeImage: sinHada,
+    afterImage: hada,
+    sound: "¡Fiuu!"
   },
   {
     id: 2,
-    sentence: "Sal, que la luna se convierta en sol y vuelva a brillar",
-    magicWord: "Sal",
-    beforeMagic: "La noche es profunda y oscura",
-    afterMagic: "¡La luna se transforma lentamente en un brillante sol!",
-    beforeImage: "🌙",
-    afterImage: "🌞",
-    sound: "¡Woooosh!"
+    sentence: "Nieve",
+    magicWord: "Nieve",
+    beforeMagic: "El cielo está vacío.",
+    afterMagic: "La nieve cae despacio.",
+    beforeImage: sinNieve,
+    afterImage: nieve,
+    sound: "¡Plim!"
+
   },
   {
     id: 3,
-    sentence: "Sí, que aparezca un arcoíris con lluvia de estrellas",
-    magicWord: "Sí",
-    beforeMagic: "El cielo está gris después de la tormenta",
-    afterMagic: "🌈✨ ¡Un arcoíris aparece mientras caen estrellas fugaces!",
-    beforeImage: "🌧️",
-    afterImage: "🌈💫🌟",
+    sentence: "Magia",
+    magicWord: "Magia",
+    beforeMagic: "El cielo está gris.",
+    afterMagic: "¡Un arcoíris aparece!",
+    beforeImage: sinArcoiris,
+    afterImage: arcoiris,
     sound: "¡Tachán!"
   }
 ];
@@ -191,14 +210,23 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   }, [currentSentence]);
 
 
-  const playSentenceAudio = () => {
+  const playMagicTextAudio = () => {
     if (isPlaying) return;
+
     setIsPlaying(true);
-    speakText(sentence.sentence, { voiceType: 'child' });
-    const words = sentence.sentence.split(/\s+/).filter(Boolean).length;
-    const duration = Math.max(words * 350, 1800);
+
+    const textToRead = showMagic
+      ? sentence.afterMagic
+      : sentence.beforeMagic;
+
+    speakText(textToRead, { voiceType: 'child' });
+
+    const words = textToRead.split(/\s+/).filter(Boolean).length;
+    const duration = Math.max(words * 350, 1500);
+
     setTimeout(() => setIsPlaying(false), duration);
   };
+
 
 
   const activateMagic = () => {
@@ -209,10 +237,9 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
     setScore(score + (level === 3 ? 40 : level === 2 ? 30 : 20));
     setShowReward(true);
 
-    // ¡CONFETI AL ACTIVAR MAGIA!
     setTimeout(() => {
       setShowReward(false);
-    }, 3000); // Duración del confeti
+    }, 3000);
   };
 
   const startListening = () => {
@@ -250,7 +277,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
         console.log(`📢 Detectado: "${transcript}" (confianza: ${(confidence * 100).toFixed(1)}%)`);
 
         if (transcript.includes(expectedWord)) {
-          setMessage(`✅ ¡Magia activada! (Confianza: ${(confidence * 100).toFixed(1)}%)`);
+          setMessage(`✅ ¡Magia activada!`);
           detected = true;
           activateMagic();
           recognition.stop();
@@ -260,7 +287,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
         for (let alt = 1; alt < results.length && alt <= 3; alt++) {
           const alternative = results[alt].transcript.trim().toLowerCase();
           if (alternative.includes(expectedWord)) {
-            setMessage(`✅ ¡Magia activada! (Alternativa detectada)`);
+            setMessage(`✅ ¡Magia activada!`);
             detected = true;
             activateMagic();
             recognition.stop();
@@ -270,13 +297,12 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
         const similarity = calculateSimilarity(transcript, expectedWord);
         if (similarity > 0.7) {
-          setMessage(`✅ ¡Magia activada! (Cerca: "${transcript}" ≈ "${expectedWord}")`);
+          setMessage(`✅ ¡Magia activada!`);
           detected = true;
           activateMagic();
           recognition.stop();
           return;
         }
-        setMessage(`❓ No detecté "${expectedWord}". Intenté: "${transcript}". Confianza: ${(confidence * 100).toFixed(1)}%. ¡Inténtalo de nuevo!`);
       }
     };
 
@@ -291,8 +317,11 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
     };
 
     recognition.onspeechend = () => {
-      if (!detected) setMessage("🛑 No se detectó voz. ¡Habla más fuerte la próxima vez!");
+      if (!detected) setMessage("🛑 No se detectó voz.");
       setIsListening(false);
+      setTimeout(() => {
+      }, 2000);
+
     };
 
     recognition.onend = () => setIsListening(false);
@@ -332,7 +361,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
       setCurrentSentence(currentSentence + 1);
       setShowMagic(false);
       setMagicActivated(false);
-      setMessage("Di la palabra mágica cuando actives el micrófono.");
+      setMessage("");
     } else {
       setReadingComplete(true);
       setShowReward(true);
@@ -365,7 +394,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
     setCurrentProgress(0);
     setShowMotivational(false);
     setShowLevelComplete(false);
-    setMessage("Di la palabra mágica cuando actives el micrófono.");
+    setMessage("");
   };
 
   const goToNextLevel = () => {
@@ -386,108 +415,104 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
   return (
     <LevelLock level={level} isLocked={isLevelLocked}>
-    <div
-      className="min-h-screen p-6 relative overflow-hidden"
-      style={{ //cambiar color de fondo 
-        background: 'linear-gradient(135deg, #c29ce7ff 0%, #be7ea2ff 100%)'
-      }}
-    >
-      <ConfettiExplosion show={showMagic} />
-      <ConfettiExplosion show={readingComplete} />
-      <RewardAnimation type="star" show={showReward} />
+      <div
+        className="min-h-screen p-6 relative overflow-hidden"
+        style={{ //cambiar color de fondo 
+          background: 'linear-gradient(135deg, rgb(210, 168, 253) 0%, rgb(253, 181, 222) 100%)'
+        }}
+      >
+        <ConfettiExplosion show={showMagic} />
+        <ConfettiExplosion show={readingComplete} />
+        <RewardAnimation type="star" show={showReward} />
 
-      {/* HEADER */}
-      <GameHeader
-        title="Frases Mágicas"
-        level={level}
-        score={score}
-        onBack={onBack}
-        onRestart={restartReading}
-      />
-
-      {/* BARRA DE PROGRESO */}
-      <ProgressBar
-        current={currentSentence + 1}
-        total={totalSentences}
-        progress={currentProgress}
-        className="mb-6"
-      />
-
-      {/* GUÍA DEL BÚHO */}
-      <div className="max-w-2xl mx-auto mb-6">
-        <AnimalGuide
-          animal="owl"
-          message={
-            level === 1
-              ? '¡Di la palabra mágica para activar la magia!'
-              : level === 2
-                ? 'Las frases son más poderosas... ¡pronuncia bien!'
-                : 'Solo los magos expertos pueden controlar estas palabras mágicas.'
-          }
+        {/* HEADER */}
+        <GameHeader
+          title="Frases Mágicas"
+          level={level}
+          score={score}
+          onBack={onBack}
+          onRestart={restartReading}
         />
-      </div>
 
-      {/* JUEGO */}
-      {!readingComplete && !showMotivational && !showLevelComplete && (
-        <motion.div
-          key={currentSentence}
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="max-w-7xl mx-auto"
-        >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-500 mb-6">
-            <CardContent className="p-6">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="text-center">
-                  <div className="bg-gradient-to-br from-purple-200 to-pink-200 rounded-2xl p-8 mb-6 border-4 border-purple-300 min-h-[220px] flex flex-col justify-center">
-                    {!showMagic ? (
-                      <motion.div
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
-                        <div className="text-7xl mb-3">{sentence.beforeImage}</div>
-                        <p className="text-purple-700 font-medium">{sentence.beforeMagic}</p>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        initial={{ scale: 0.5 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.8 }}
-                      >
-                        <div className="text-7xl mb-3">{sentence.afterImage}</div>
-                        <p className="text-purple-700 font-medium">{sentence.afterMagic}</p>
-                        <div className="text-yellow-600 text-xl mt-2 font-bold">{sentence.sound}</div>
-                      </motion.div>
-                    )}
+        {/* BARRA DE PROGRESO */}
+        <ProgressBar
+          current={currentSentence + 1}
+          total={totalSentences}
+          progress={currentProgress}
+          className="mb-6"
+        />
+
+        {/* GUÍA DEL BÚHO */}
+        <div>
+          <AnimalGuide
+            animal="frog"
+            message={
+              level === 1
+                ? '¡Di la palabra mágica para activar la magia!'
+                : level === 2
+                  ? 'Las frases son más poderosas ahora. ¡Tú puedes!'
+                  : 'Solo los magos expertos como tú pueden controlar estas palabras mágicas.'
+            }
+          />
+        </div>
+
+        {/* JUEGO */}
+        {!readingComplete && !showMotivational && !showLevelComplete && (
+          <motion.div
+            key={currentSentence}
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            className="max-w-7xl mx-auto"
+          >
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-500 mb-6">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                  <div className="text-center">
+                    <div className="bg-gradient-to-br from-purple-200 to-pink-200 rounded-2xl p-8 border-4 border-purple-300 min-h-[220px] flex items-center justify-center">
+                      {!showMagic ? (
+                        <motion.img
+                          key="before"
+                          src={sentence.beforeImage}
+                          alt="Antes de la magia"
+                          className="w-50 h-50 object-contain"
+                          animate={{ scale: [1, 1.05, 1] }}
+                          
+                        />
+                      ) : (
+                        <motion.img
+                          key="after"
+                          src={sentence.afterImage}
+                          alt="Después de la magia"
+                          className="w-50 h-50 object-contain"
+                         
+                          
+                        />
+                      )}
+                    </div>
+
+
+
                   </div>
+                  <div className="space-y-6">
 
-                  <div className="space-y-3">
-                    <ButtonWithAudio
-                      onClick={playSentenceAudio}
-                      disabled={isPlaying}
-                      playOnClick
-                      playOnHover
-                      audioText={isPlaying ? 'Reproduciendo' : 'Escuchar Frase'}
-                      className={`w-full text-lg py-6 ${isPlaying
-                        ? 'bg-green-500 text-white animate-pulse'
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                        }`}
-                    >
-                      <Volume2 className={`w-5 h-5 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
-                      {isPlaying ? 'Reproduciendo...' : 'Escuchar Frase'}
-                    </ButtonWithAudio>
+                    <div className="text-center bg-pink-100 p-5 rounded-xl border-2 border-purple-500">
+                      <h4 className="text-lg text-black mb-2">Palabra mágica</h4>
+                      <div className="text-5xl text-purple-700 ">
+                        {sentence.magicWord}
+                      </div>
+
+                    </div>
                     <ButtonWithAudio
                       onClick={startListening}
                       disabled={isListening || magicActivated}
                       playOnClick
-                      playOnHover={!magicActivated}
-                      audioText={magicActivated ? 'Magia activada' : isListening ? 'Escuchando' : 'Activar micrófono'}
+                      playOnHover={false}
                       className={`w-full text-lg py-6 ${magicActivated
                         ? 'bg-gray-400 cursor-not-allowed'
                         : isListening
                           ? 'bg-red-400 animate-pulse'
                           : 'bg-purple-500 hover:bg-purple-600'
-                        } text-white`}
+                        } text-black`}
                     >
                       {isListening ? (
                         <>Escuchando...</>
@@ -498,95 +523,95 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                       )}
                     </ButtonWithAudio>
 
-                    <p className="text-purple-700 text-center font-medium bg-purple-50 p-3 rounded-lg">
-                      {message}
-                    </p>
+                    <div className="bg-yellow-50 p-5 rounded-xl border-2 border-yellow-200">
+                      <h4 className="text-lg text-yellow-800 mb-2">Consejo 💡</h4>
+                      <p className="text-yellow-700">
+                        Activa el microfono y di con voz clara la palabra mágica resaltada. ¡Recuerda pronunciarla igual que aparece!
+                      </p>
+                    </div>
+
+                    <div className="text-center text-gray-800 bg-gradient-to-r from-blue-100 to-green-100 p-6 rounded-xl border-2 border-blue-500">
+                      <p className="text-xl">
+                        {!showMagic ? sentence.beforeMagic : sentence.afterMagic}
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      <ButtonWithAudio
+                        onClick={playMagicTextAudio}
+                        disabled={isPlaying}
+                        playOnClick
+                        playOnHover={false}
+                        className={`w-full text-lg py-6 ${isPlaying
+                          ? 'bg-green-500 text-black animate-pulse'
+                          : 'bg-blue-500 hover:bg-blue-600 text-black'
+                          }`}
+                      >
+                        <Volume2 className={`w-5 h-5 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
+                        {isPlaying ? 'Reproduciendo...' : 'Escuchar Frase'}
+                      </ButtonWithAudio>
+
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-6">
-                  <div className="text-2xl leading-relaxed text-gray-800 bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-xl border-2 border-purple-200">
-                    <span className="text-purple-600 text-4xl">"</span>
-                    {sentence.sentence.split(sentence.magicWord).map((part, i, arr) => (
-                      <span key={i}>
-                        {part}
-                        {i < arr.length - 1 && (
-                          <span className="text-purple-700 font-bold bg-yellow-200 px-3 py-1 rounded-lg border-2 border-yellow-300 text-3xl">
-                            {sentence.magicWord}
-                          </span>
-                        )}
-                      </span>
-                    ))}
-                    <span className="text-purple-600 text-4xl">"</span>
-                  </div>
+              </CardContent>
+            </Card>
 
-                  <div className="bg-yellow-50 p-5 rounded-xl border-2 border-yellow-200">
-                    <h4 className="text-lg font-semibold text-yellow-800 mb-2">Consejo del Búho:</h4>
-                    <p className="text-yellow-700">
-                      Di con voz clara la palabra mágica resaltada. ¡Recuerda pronunciarla igual que aparece!
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            {/* NAVEGACIÓN */}
+            <div className="flex justify-between items-center mt-6">
+              <ButtonWithAudio
+                onClick={goToPreviousSentence}
+                disabled={currentSentence === 0}
+                playOnHover
+                playOnClick
+                variant="outline"
+                className="bg-green-500"
+              >
+                <ChevronLeft className="w-5 h-5 mr-2" />
+                Anterior
+              </ButtonWithAudio>
 
-          {/* NAVEGACIÓN */}
-          <div className="flex justify-between items-center mt-6">
-            <ButtonWithAudio
-              onClick={goToPreviousSentence}
-              disabled={currentSentence === 0}
-              playOnHover
-              playOnClick
-              variant="outline"
-              className="bg-green-500"
-            >
-              <ChevronLeft className="w-5 h-5 mr-2" />
-              Anterior
-            </ButtonWithAudio>
+              <ButtonWithAudio
+                onClick={goToNextSentence}
+                disabled={!magicActivated}
+                playOnHover
+                playOnClick
+                className="bg-purple-500 hover:bg-purple-600 text-white"
+              >
+                Siguiente
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </ButtonWithAudio>
+            </div>
+          </motion.div>
+        )}
 
-            <ButtonWithAudio
-              onClick={goToNextSentence}
-              disabled={!magicActivated}
-              playOnHover
-              playOnClick
-              audioText="Siguiente"
-              className="bg-purple-500 hover:bg-purple-600 text-white"
-            >
-              Siguiente
-              <ChevronRight className="w-5 h-5 ml-2" />
-            </ButtonWithAudio>
-          </div>
-        </motion.div>
-      )}
+        {/* MENSAJE MOTIVACIONAL */}
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={totalSentences * 30}
+            customMessage="¡Eres un mago de las palabras!"
+            customSubtitle="Activaste toda la magia del nivel"
+            celebrationText="¡Lo lograste!"
+            onComplete={() => {
+              setShowMotivational(false);
+              setShowLevelComplete(true);
+            }}
+          />
+        )}
 
-      {/* MENSAJE MOTIVACIONAL */}
-      {showMotivational && (
-        <MotivationalMessage
-          score={score}
-          total={totalSentences * 30}
-          customMessage="¡Eres un mago de las palabras!"
-          customSubtitle="Activaste toda la magia del nivel"
-          celebrationText="¡Lo lograste!"
-          onComplete={() => {
-            setShowMotivational(false);
-            setShowLevelComplete(true);
-          }}
-        />
-      )}
-
-      {/* MODAL DE NIVEL COMPLETADO */}
-      {showLevelComplete && (
-        <LevelCompleteModal
-          score={score}
-          total={totalSentences * 30}
-          level={level}
-          isLastLevel={level >= 3}
-          onNextLevel={goToNextLevel}
-          onRestart={restartReading}
-          onExit={onBack}
-        />
-      )}
-    </div>
+        {/* MODAL DE NIVEL COMPLETADO */}
+        {showLevelComplete && (
+          <LevelCompleteModal
+            score={score}
+            total={totalSentences * 30}
+            level={level}
+            isLastLevel={level >= 3}
+            onNextLevel={goToNextLevel}
+            onRestart={restartReading}
+            onExit={onBack}
+          />
+        )}
+      </div>
     </LevelLock>
   );
 }

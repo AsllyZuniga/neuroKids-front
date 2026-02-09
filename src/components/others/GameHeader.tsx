@@ -34,7 +34,7 @@ export function GameHeader({
         </Button>
       </div>
       <div className="text-center">
-        <h1 className="text-2xl text-black mb-2 dyslexia-friendly font-bold">
+        <h1 className="text-4xl text-black mb-2 ">
           {title}
           {level !== undefined && <span className="ml-2"> - Nivel {level}</span>}
         </h1>
@@ -42,7 +42,7 @@ export function GameHeader({
           key={score}
           initial={{ scale: 1.2, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="flex items-center gap-2 text-black font-medium"
+          className="flex items-center gap-2 text-black "
         >
           <Star className="w-5 h-5 text-yellow-400 fill-current" />
           <span>Puntos: {score}</span>

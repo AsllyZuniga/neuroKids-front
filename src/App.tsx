@@ -38,7 +38,9 @@ function App() {
           <Route path="/docente/login" element={<TeacherLogin />} />
           <Route path="/estudiante/login" element={<StudentLogin />} />
           <Route path="/estudiante/registro" element={<StudentRegister />} />
-          <Route path="/bienvenida/estudiante" element={<StudentWelcome />} />
+          <Route path="/bienvenida/estudiante" element={<Dashboard />} />
+          <Route path="/perfil/estudiante" element={<StudentWelcome />} />
+          <Route path="/perfil/docente" element={<TeacherWelcome />} />
           <Route path="/bienvenida/docente" element={<TeacherWelcome />} />
           <Route path="/test-instituciones" element={<TestInstituciones />} />
 

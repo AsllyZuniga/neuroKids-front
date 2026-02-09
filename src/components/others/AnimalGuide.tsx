@@ -1,23 +1,38 @@
 import { Volume2, RotateCcw } from 'lucide-react';
 import { Button } from "../ui/button";
+import buho from '../../assets/Animalguia/buho.svg';
+import rana from '../../assets/Animalguia/rana.svg';
+import mono from '../../assets/Animalguia/mono.svg';
+import pez from '../../assets/Animalguia/pez.svg';
+import koala from '../../assets/Animalguia/koala.svg';
+import oso from '../../assets/Animalguia/oso.svg';
 
 interface AnimalGuideProps {
-  animal: 'owl' | 'turtle' | 'monkey';
+  animal: 'owl' | 'frog' | 'monkey' | 'fish' | 'koala' | 'bear';
   message: string;
   onRepeat?: () => void;
   className?: string;
 }
 
-const animalEmojis = {
-  owl: '🦉',
-  turtle: '🐢', 
-  monkey: '🐵'
-};
+
+
+const animalImages = {
+  owl: buho,
+  monkey: mono,
+  frog: rana,
+  fish: pez,
+  koala: koala,
+  bear : oso
+
+}
 
 const animalNames = {
   owl: 'Búho Lector',
-  turtle: 'Tortuga Sabia', 
-  monkey: 'Mono Curioso'
+  frog: 'Rana Sabia',
+  monkey: 'Mono Curioso',
+  fish: 'Pez Inteligente',
+  koala: 'Koala Pensador',
+  bear: 'Oso Aventurero'
 };
 
 export function AnimalGuide({ animal, message, onRepeat, className = '' }: AnimalGuideProps) {
@@ -34,21 +49,22 @@ export function AnimalGuide({ animal, message, onRepeat, className = '' }: Anima
   };
 
   return (
-    <div className={` w-900 flex items-center gap-4 p-4 bg-white/90 rounded-2xl shadow-lg border-2 border-orange-200 ${className}`}>
+    <div className={` max-w-4xl mx-auto mb-8 flex items-center gap-4 p-4 bg-white/90 rounded-2xl shadow-lg border-2 border-orange-200 ${className}`}>
       <div className="relative">
-        <div className="w-16 h-16 rounded-full bg-orange-100 border-2 border-orange-300 flex items-center justify-center text-3xl">
-          {animalEmojis[animal]}
-        </div>
-        <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs">
-          💡
+        <div className="w-20 h-20 rounded-full bg-orange-100 border-2 border-orange-300 flex items-center justify-center">
+          <img
+            src={animalImages[animal]}
+            alt={animalNames[animal]}
+            className="w-20 h-20 object-contain"
+          />
         </div>
       </div>
-      
+
       <div className="flex-1">
-        <h4 className="text-orange-600 mb-1 font-semibold">{animalNames[animal]}</h4>
+        <h4 className="text-orange-600 mb-1">{animalNames[animal]}</h4>
         <p className="text-gray-700">{message}</p>
       </div>
-      
+
       <div className="flex flex-col gap-2">
         <Button
           onClick={handleSpeak}

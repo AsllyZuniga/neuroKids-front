@@ -201,9 +201,9 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
       />
 
       {/* Animal Guide */}
-      <div className="max-w-2xl mx-auto mb-8">
+      <div>
         <AnimalGuide
-          animal="turtle"
+          animal="koala"
           message={`${isPhrase ? 'Completa la frase' : 'Arrastra la sílaba correcta'} para la ${isPhrase ? 'palabra que falta' : 'imagen'}. ¡Tú puedes!`}
         />
       </div>
@@ -297,7 +297,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                   >
                     {draggedItem ? (
                       <span
-                        className={`text-2xl font-bold ${isCorrectDrop === true ? 'text-green-600' : isCorrectDrop === false ? 'text-red-600' : 'text-gray-600'
+                        className={`text-2xl ${isCorrectDrop === true ? 'text-green-600' : isCorrectDrop === false ? 'text-red-600' : 'text-gray-600'
                           }`}
                       >
                         {draggedItem}
@@ -327,7 +327,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
                           onDragEnd={() => { }}
                           onMouseEnter={() => { if (canSpeakOnHover()) speakText(syllable, { voiceType: 'child' }); }}
                           onClick={() => speakText(syllable, { voiceType: 'child' })}
-                          className="cursor-grab active:cursor-grabbing p-4 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-lg text-center font-bold text-xl shadow-lg hover:shadow-xl transition-all"
+                          className="cursor-grab active:cursor-grabbing p-4 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-lg text-center text-xl shadow-lg hover:shadow-xl transition-all"
                         >
                           {syllable}
                         </div>

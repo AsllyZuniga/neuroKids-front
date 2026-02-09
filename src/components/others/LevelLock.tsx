@@ -70,7 +70,7 @@ export function LevelLock({ level, isLocked, children, onLoginRequired }: LevelL
               <Lock className="w-24 h-24 mx-auto text-purple-600" />
             </motion.div>
 
-            <h2 className="text-3xl font-bold mb-4 text-gray-800">
+            <h2 className="text-3xl mb-4 text-gray-800">
               ¡Nivel {level} Bloqueado!
             </h2>
 

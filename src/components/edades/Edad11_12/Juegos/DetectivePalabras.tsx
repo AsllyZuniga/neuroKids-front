@@ -10,7 +10,7 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenDetectivePalabras } from '../IniciosJuegosLecturas/StartScreenDetectivePalabras/StartScreenDetectivePalabras';
+import { StartScreenDetectivePalabras } from '../IniciosJuegosLecturas/StartScreenDetectivePalabras';
 
 interface DetectivePalabrasProps {
   onBack: () => void;
@@ -268,14 +268,14 @@ const MAX_LEVEL = 5;
 export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
   const [currentLevel, setCurrentLevel] = useState(level);
   const [currentChallenge, setCurrentChallenge] = useState(0);
-  const [foundWords, setFoundWords] = useState<Set<string>>(new Set());
+  const [foundWords, setFoundWords] = useState<Record<string, 'sustantivo' | 'verbo' | 'adjetivo'>>({});
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(0);
   const [challengeComplete, setChallengeComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
 
   const challenges = gameChallenges[currentLevel as keyof typeof gameChallenges] || gameChallenges[1];
   const current = challenges[currentChallenge];
@@ -291,32 +291,19 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
     setShowMotivational(false);
   }, [level]);
 
-  useEffect(() => {
-    if (gameStarted && timeLeft > 0 && !challengeComplete) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && gameStarted && !challengeComplete) {
-      handleTimeUp();
-    }
-  }, [timeLeft, gameStarted, challengeComplete]);
 
   useEffect(() => {
     if (gameStarted && current) {
-      setTimeLeft(current.timeLimit);
-      setFoundWords(new Set());
+      setFoundWords({});
+      setSelectedWords(new Set());
       setChallengeComplete(false);
     }
   }, [currentChallenge, gameStarted, current]);
 
   const startGame = () => {
     setGameStarted(true);
-    setTimeLeft(current.timeLimit);
   };
 
-  const handleTimeUp = () => {
-    setChallengeComplete(true);
-    setTimeout(nextChallenge, 3000);
-  };
 
   const splitTextIntoWords = (text: string) => {
     return text.split(/\s+/).map((word, index) => ({
@@ -331,33 +318,45 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
   const handleWordClick = (word: string) => {
     if (challengeComplete) return;
 
-    const targetWord = current.targetWords.find(tw => 
-      tw.word.toLowerCase() === word.toLowerCase()
+    const cleanWord = word.toLowerCase();
+
+    if (selectedWords.has(cleanWord)) return;
+
+    const newSelected = new Set(selectedWords);
+    newSelected.add(cleanWord);
+    setSelectedWords(newSelected);
+
+    const targetWord = current.targetWords.find(
+      tw => tw.word.toLowerCase() === cleanWord
     );
 
-    if (targetWord && !foundWords.has(word.toLowerCase())) {
-      const newFoundWords = new Set(foundWords);
-      newFoundWords.add(word.toLowerCase());
-      setFoundWords(newFoundWords);
-      const newScore = score + 10;
-      setScore(newScore);
+    let newScore = score;
+
+    if (targetWord) {
+      newScore += 10;
+
+      setFoundWords(prev => ({
+        ...prev,
+        [cleanWord]: targetWord.type
+      }));
+
       setShowReward(true);
+      setTimeout(() => setShowReward(false), 600);
+    }
 
-      setTimeout(() => setShowReward(false), 1000);
+    setScore(newScore);
 
-      if (newFoundWords.size === current.targetWords.length) {
-        setChallengeComplete(true);
-        const bonusPoints = Math.floor(timeLeft / 5) * 2;
-        setScore(newScore + 10 + bonusPoints);
-        
-        setTimeout(() => {
-          nextChallenge();
-        }, 2000);
-      }
-    } else {
-      setScore(Math.max(0, score - 2));
+    // cuando ya eligió N palabras
+    if (newSelected.size === current.targetWords.length) {
+      setChallengeComplete(true);
+
+      setTimeout(() => {
+        nextChallenge();
+      }, 2500); // 👈 tiempo para analizar
     }
   };
+
+
 
   const nextChallenge = () => {
     if (currentChallenge < challenges.length - 1) {
@@ -382,11 +381,11 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
       setCurrentLevel(nextLevel);
       setCurrentChallenge(0);
       setScore(0);
-      setFoundWords(new Set());
+      setFoundWords({});
       setShowLevelComplete(false);
       setShowMotivational(false);
       setShowLevelComplete(false);
-      setGameStarted(true); 
+      setGameStarted(true);
     } else {
       setShowLevelComplete(false);
       setShowLevelComplete(false);
@@ -421,7 +420,7 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
           score={score}
           onBack={onBack}
           onRestart={restartLevel}
-          
+
         />
 
         <ProgressBar
@@ -431,7 +430,7 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
         />
 
         <AnimalGuide
-          animal="monkey"
+          animal="koala"
           message="¡Sé un detective curioso! Encuentra las palabras del tipo que se pide."
         />
 
@@ -444,20 +443,19 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
                   <div className="flex items-center gap-2">
                     <Crosshair className="w-5 h-5 text-indigo-500" />
                     <span className="text-gray-600">
-                      {foundWords.size} / {current.targetWords.length}
+                      {selectedWords.size} / {current.targetWords.length}
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-2">
                   {current.targetWords.map((target, index) => (
                     <Badge
                       key={index}
-                      className={`${getWordTypeColor(target.type)} ${
-                        foundWords.has(target.word.toLowerCase()) ? 'opacity-50' : ''
-                      }`}
+                      className={`${getWordTypeColor(target.type)} ${foundWords[target.word.toLowerCase()] ? 'opacity-50' : ''
+                        }`}
                     >
-                      {foundWords.has(target.word.toLowerCase()) && (
+                      {foundWords[target.word.toLowerCase()] && (
                         <CheckCircle className="w-3 h-3 mr-1" />
                       )}
                       {target.type}
@@ -471,21 +469,29 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
               <CardContent className="p-8">
                 <div className="text-xl leading-relaxed">
                   {textWords.map(({ word, originalWord, index }) => {
-                    const isTarget = current.targetWords.some(tw => 
+                    const isTarget = current.targetWords.some(tw =>
                       tw.word.toLowerCase() === word.toLowerCase()
                     );
-                    const isFound = foundWords.has(word.toLowerCase());
-                    
+                    const clean = word.toLowerCase();
+                    const isSelected = selectedWords.has(clean);
+                    const foundType = foundWords[clean];
+
+
                     return (
                       <span key={index}>
                         <span
-                          className={`cursor-pointer transition-all duration-200 rounded px-1 text-black ${
-                            isFound
+                          className={`cursor-pointer transition-all duration-200 rounded px-1 text-black ${foundType === 'sustantivo'
+                            ? 'bg-blue-200 text-blue-800'
+                            : foundType === 'verbo'
                               ? 'bg-green-200 text-green-800'
-                              : isTarget
-                              ? 'hover:bg-yellow-100 hover:shadow-sm'
-                              : 'hover:bg-gray-100'
-                          }`}
+                              : foundType === 'adjetivo'
+                                ? 'bg-purple-200 text-purple-800'
+                                : isSelected
+                                  ? 'bg-red-200 text-red-800'
+                                  : 'hover:bg-gray-100'
+                            }`}
+
+
                           onClick={() => handleWordClick(word)}
                         >
                           {originalWord}

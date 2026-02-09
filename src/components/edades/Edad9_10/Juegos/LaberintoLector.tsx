@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type JSX } from 'react';
 import { motion } from "framer-motion";
 import { Navigation, Flag, Book } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
-import { AudioPlayer } from '../../../others/AudioPlayer';
 import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenLaberintoLector } from "../IniciosJuegosLecturas/StartScreenLaberintoLector/StartScreenLaberintoLector";
+import { StartScreenLaberintoLector } from "../IniciosJuegosLecturas/StartScreenLaberintoLector";
 
 interface LaberintoLectorProps {
   onBack: () => void;
@@ -92,22 +91,22 @@ const mazeConfigs = {
 };
 
 const questions = [
-  { text: "¿Cuál es la función principal de los adjetivos?", options: ["Expresar acciones", "Describir sustantivos", "Unir palabras", "Indicar tiempo"], correct: 1, explanation: "Los adjetivos describen o califican a los sustantivos.", points: 40 },
-  { text: "En la oración 'El perro corre rápido', ¿cuál es el verbo?", options: ["El", "perro", "corre", "rápido"], correct: 2, explanation: "El verbo 'corre' expresa la acción.", points: 30 },
-  { text: "¿Qué tipo de palabra es 'hermoso'?", options: ["Sustantivo", "Verbo", "Adjetivo", "Artículo"], correct: 2, explanation: "'Hermoso' es un adjetivo.", points: 40 },
+  { text: "Lee: 'El perro corre en el parque'. ¿Qué hace el perro?", options: ["Duerme", "Corre", "Come", "Salta"], correct: 1, explanation: "El texto dice que el perro corre.", points: 30 },
+  { text: "Lee: 'Ana tiene un globo rojo'. ¿De qué color es el globo?", options: ["Azul", "Verde", "Rojo", "Amarillo"], correct: 2, explanation: "El texto dice que el globo es rojo.", points: 30 },
+  { text: "Lee: 'Juan está en la escuela'. ¿Dónde está Juan?", options: ["En casa", "En la escuela", "En el parque", "En la playa"], correct: 1, explanation: "La frase dice que Juan está en la escuela.", points: 30 },
   { text: "¿Cuántas vocales tiene la palabra 'mariposa'?", options: ["3", "4", "5", "6"], correct: 1, explanation: "'mariposa' tiene 4 vocales: a-i-o-a.", points: 30 },
-  { text: "¿Cuál de estas palabras es un sustantivo?", options: ["Correr", "Azul", "Mesa", "Rápidamente"], correct: 2, explanation: "'Mesa' es un sustantivo.", points: 30 },
-  { text: "¿Qué figura retórica se usa en 'Sus ojos son dos estrellas'?", options: ["Comparación", "Metáfora", "Personificación", "Hipérbole"], correct: 1, explanation: "Es una metáfora.", points: 50 },
+  { text: "Si tienes frío, ¿qué es mejor hacer?", options: ["Ponerte una chaqueta", "Comer helado", "Dormir en el suelo", "Mojarte"], correct: 0, explanation: "Cuando hace frío, usamos ropa para calentarnos.", points: 30 },
+  { text: "El pez vive en el ____.", options: ["cielo", "agua", "árbol", "fuego"], correct: 1, explanation: "Los peces viven en el agua.", points: 30, },
   { text: "¿Cuál es el sinónimo de 'alegre'?", options: ["Triste", "Feliz", "Cansado", "Enojado"], correct: 1, explanation: "'Feliz' es sinónimo de 'alegre'.", points: 30 },
-  { text: "¿Qué tiempo verbal es 'corrimos'?", options: ["Presente", "Futuro", "Pretérito", "Condicional"], correct: 2, explanation: "'Corrimos' está en pretérito.", points: 40 },
+  { text: "Si ganas un juego, ¿cómo te sientes?", options: ["Triste", "Feliz", "Enojado", "Asustado"], correct: 1, explanation: "Cuando ganamos, nos sentimos felices.", points: 30 },
   { text: "¿Cuál es el antónimo de 'alto'?", options: ["Grande", "Bajo", "Ancho", "Largo"], correct: 1, explanation: "'Bajo' es el antónimo de 'alto'.", points: 30 },
-  { text: "¿Qué tipo de palabra es 'y' en la oración 'Juan y María'?", options: ["Sustantivo", "Conjunción", "Adjetivo", "Verbo"], correct: 1, explanation: "'Y' es una conjunción.", points: 40 },
+  { text: "¿Cuál NO es un animal?", options: ["Perro", "Gato", "Mesa", "Pájaro"], correct: 2, explanation: "La mesa no es un animal.", points: 30 },
   { text: "¿Cuántas sílabas tiene la palabra 'elefante'?", options: ["2", "3", "4", "5"], correct: 2, explanation: "'Elefante' tiene 4 sílabas.", points: 30 },
   { text: "¿Qué función cumple el punto en una oración?", options: ["Separar palabras", "Terminar oraciones", "Unir ideas", "Hacer pausas"], correct: 1, explanation: "El punto termina oraciones.", points: 30 },
-  { text: "¿Cuál de estas palabras está bien escrita?", options: ["Sivuela", "Escuela", "Escuella", "Ezcuela"], correct: 1, explanation: "La forma correcta es 'escuela'.", points: 40 },
-  { text: "¿Qué tipo de texto es una receta de cocina?", options: ["Narrativo", "Instructivo", "Descriptivo", "Argumentativo"], correct: 1, explanation: "Una receta es instructiva.", points: 40 },
-  { text: "¿Cuál es el aumentativo de 'casa'?", options: ["Casita", "Casón", "Casilla", "Caseta"], correct: 1, explanation: "'Casón' es el aumentativo.", points: 50 },
-  { text: "¿Qué significa la palabra 'transparente'?", options: ["Que se rompe fácil", "Que se ve a través", "Que es muy claro", "Que brilla mucho"], correct: 1, explanation: "'Transparente' permite ver a través.", points: 30 }
+  { text: "Lee: 'Pedro tiene tres lápices'. ¿Cuántos lápices tiene Pedro?", options: ["Uno", "Dos", "Tres", "Cuatro"], correct: 2, explanation: "Pedro tiene tres lápices.", points: 30, },
+  { text: "Antes de dormir, ¿qué haces?", options: ["Desayunar", "Ponerte pijama", "Ir a clases", "Jugar fútbol"], correct: 1, explanation: "Antes de dormir usamos pijama.", points: 30 },
+  { text: "El sol sirve para dar ____.", options: ["ruido", "calor", "miedo", "sombra"], correct: 1, explanation: "El sol nos da calor y luz.", points: 30 },
+  { text: "¿Qué cosa NO se puede comer?", options: ["Pan", "Manzana", "Piedra", "Arroz"], correct: 2, explanation: "La piedra no se puede comer.", points: 30 }
 ];
 
 const treasureTypes = [
@@ -136,18 +135,65 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
   const [showTreasureModal, setShowTreasureModal] = useState(false);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
+  const [questionsAnsweredCount, setQuestionsAnsweredCount] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const totalObjectives = totalTreasures + totalQuestions;
+  const completedObjectives = treasuresFound + questionsAnsweredCount;
+  const [showFinishWarning, setShowFinishWarning] = useState(false);
+  const [availableQuestions, setAvailableQuestions] = useState([...questions]);
+
+  const progressValue =
+    totalObjectives > 0
+      ? (completedObjectives / totalObjectives) * 100
+      : 0;
+
 
   useEffect(() => {
     initializeMaze();
   }, [currentLevel]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (showQuestion || gameComplete || showMotivational || showLevelComplete) return;
+
+      switch (e.key) {
+        case "ArrowUp":
+          e.preventDefault();
+          movePlayer("up");
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          movePlayer("down");
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          movePlayer("left");
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          movePlayer("right");
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [playerPosition, showQuestion, gameComplete, showMotivational, showLevelComplete]);
+
+
   const initializeMaze = () => {
     const config = mazeConfigs[currentLevel as keyof typeof mazeConfigs];
+    let pool = [...availableQuestions];
     const newMaze: MazeCell[][] = config.data.map((row) =>
       row.map((cell) => {
         const cellData: MazeCell = { type: cell as any, visited: false };
-        if (cell === 'question') {
-          cellData.question = questions[Math.floor(Math.random() * questions.length)];
+        if (cell === 'question' && pool.length > 0) {
+          const index = Math.floor(Math.random() * pool.length);
+          cellData.question = pool[index];
+          pool.splice(index, 1);
         } else if (cell === 'treasure') {
           const treasureType = treasureTypes[Math.floor(Math.random() * treasureTypes.length)];
           cellData.reward = treasureType.points;
@@ -158,13 +204,21 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
     );
 
     let treasureCount = 0;
-    newMaze.forEach(row => row.forEach(cell => { if (cell.type === 'treasure') treasureCount++; }));
+    let questionCount = 0;
+
+
+    newMaze.forEach(row => row.forEach(cell => { if (cell.type === 'treasure') treasureCount++; if (cell.type === 'question') questionCount++; }));
     setMaze(newMaze);
     setTotalTreasures(treasureCount);
     setPlayerPosition({ row: 1, col: 1 });
     setScore(0);
     setTreasuresFound(0);
     setGameComplete(false);
+    setTotalQuestions(questionCount);
+    setQuestionsAnsweredCount(0);
+    setAvailableQuestions(pool);
+
+
   };
 
   const canMoveTo = (newRow: number, newCol: number): boolean => {
@@ -205,8 +259,14 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
         setTimeout(() => { setShowTreasureModal(false); setShowReward(false); }, 3000);
         if (window.navigator.vibrate) window.navigator.vibrate([100, 50, 100, 50, 200]);
       } else if (cell.type === 'finish') {
-        setGameComplete(true);
-        if (window.navigator.vibrate) window.navigator.vibrate([200, 100, 200, 100, 200]);
+        if (completedObjectives >= totalObjectives) {
+          setGameComplete(true);
+          if (window.navigator.vibrate)
+            window.navigator.vibrate([200, 100, 200]);
+        } else {
+          setShowFinishWarning(true);
+          setTimeout(() => setShowFinishWarning(false), 2500);
+        }
       }
 
       const newMaze = [...maze];
@@ -232,6 +292,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
       setShowQuestion(false);
       setCurrentQuestion(null);
       setQuestionAnswered(false);
+      setQuestionsAnsweredCount(q => q + 1);
     }, 3000);
   };
 
@@ -247,6 +308,12 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
     setShowMotivational(false);
     setShowLevelComplete(false);
   };
+
+  useEffect(() => {
+    if (availableQuestions.length === 0) {
+      setAvailableQuestions([...questions]);
+    }
+  }, [availableQuestions]);
 
   useEffect(() => {
     if (gameComplete) {
@@ -273,15 +340,15 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
         />
 
         <ProgressBar
-          current={treasuresFound}
-          total={totalTreasures}
-          progress={(treasuresFound / totalTreasures) * 100}
+          current={completedObjectives}
+          total={totalObjectives}
+          progress={progressValue}
           className="mb-6"
         />
 
         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6">
           <AnimalGuide
-            animal="turtle"
+            animal="koala"
             message={
               currentLevel === 1
                 ? "¡Bienvenido al Laberinto del Aprendiz! Encuentra tesoros, responde preguntas y llega a la meta. Usa las flechas para moverte."
@@ -302,13 +369,13 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
                 </h3>
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   <div></div>
-                  <Button onClick={() => movePlayer('up')} variant="outline" className="h-12 bg-white/80 text-black" disabled={showQuestion}>↑</Button>
+                  <Button onClick={() => movePlayer('up')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80  text-black" disabled={showQuestion}>↑</Button>
                   <div></div>
-                  <Button onClick={() => movePlayer('left')} variant="outline" className="h-12 bg-white/80 text-black" disabled={showQuestion}>←</Button>
+                  <Button onClick={() => movePlayer('left')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80 text-black" disabled={showQuestion}>←</Button>
                   <div className="h-12 bg-gray-100 rounded border-2 border-gray-200 flex items-center justify-center text-2xl">🧭</div>
-                  <Button onClick={() => movePlayer('right')} variant="outline" className="h-12 bg-white/80 text-black" disabled={showQuestion}>→</Button>
+                  <Button onClick={() => movePlayer('right')} variant="outline" className="h-12 border-2 border-gray-200  bg-white/80 text-black" disabled={showQuestion}>→</Button>
                   <div></div>
-                  <Button onClick={() => movePlayer('down')} variant="outline" className="h-12 bg-white/80 text-black" disabled={showQuestion}>↓</Button>
+                  <Button onClick={() => movePlayer('down')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80 text-black" disabled={showQuestion}>↓</Button>
                   <div></div>
                 </div>
                 <div className="text-sm text-black space-y-2">
@@ -328,14 +395,25 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
                   <Flag className="w-5 h-5 text-emerald-500" />
                   <h3 className="text-lg text-black">Laberinto</h3>
                 </div>
-                <div className={`grid gap-1 mx-auto`} style={{ gridTemplateColumns: `repeat(${maze[0]?.length || 8}, minmax(0, 1fr))`, maxWidth: maze[0]?.length > 8 ? '600px' : '400px' }}>
+                <div className={`grid gap-1 mx-auto`} style={{ gridTemplateColumns: `repeat(${maze[0]?.length || 8}, minmax(0, 1fr))`, maxWidth: maze[0]?.length > 8 ? '800px' : '100%' }}>
                   {maze.map((row, rowIndex) =>
                     row.map((cell, colIndex) => {
                       const isPlayer = playerPosition.row === rowIndex && playerPosition.col === colIndex;
                       let cellClass = `${maze[0]?.length > 8 ? 'w-6 h-6' : 'w-8 h-8'} flex items-center justify-center text-xs transition-all duration-200 border rounded`;
-                      let content = "";
+                      let content: string | JSX.Element = "";
                       switch (cell.type) {
-                        case 'wall': cellClass += " bg-gray-800 border-gray-700"; break;
+                        case 'wall':
+                          cellClass += " bg-gray-800 border-gray-700 shadow-inner relative overflow-hidden";
+                          content = (
+                            <motion.div
+                              initial={{ y: -4 }}
+                              animate={{ y: [0, -2, 0] }}
+                              transition={{ duration: 1.5, repeat: Infinity }}
+                              className="w-full h-full bg-gray-900"
+                            />
+                          );
+                          break;
+
                         case 'path': case 'start': cellClass += cell.visited ? " bg-green-200 border-green-300" : " bg-green-100 border-green-200"; break;
                         case 'question': cellClass += cell.visited ? " bg-blue-200 border-blue-300" : " bg-blue-100 border-blue-200"; content = "❓"; break;
                         case 'treasure': cellClass += cell.visited ? " bg-yellow-200 border-yellow-300" : " bg-yellow-100 border-yellow-200"; content = cell.visited ? "✔️" : (cell.treasureInfo?.emoji || "💎"); break;
@@ -368,7 +446,6 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
                       <span className="text-sm">+{currentQuestion.points} pts</span>
                     </motion.div>
                   </div>
-                  <div className="mb-4"><AudioPlayer text="Reproduciendo pregunta..." duration={2000} className="mb-4" /></div>
                   <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 p-4 bg-white/80 rounded-lg border-2 border-blue-200">
                     <p className="text-black text-lg">{currentQuestion.text}</p>
                   </motion.div>
@@ -400,7 +477,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
         )}
 
         <RewardAnimation type="star" show={showReward} />
-        
+
         {/* MENSAJE MOTIVACIONAL */}
         {showMotivational && (
           <MotivationalMessage
@@ -427,6 +504,20 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
             onRestart={handleRepeatLevel}
             onExit={onBack}
           />
+        )}
+        {showFinishWarning && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center"
+          >
+            <div className="bg-white/90 backdrop-blur-md px-6 py-4 rounded-xl shadow-xl text-center text-lg font-bold text-purple-700">
+              🧭 ¡Aún no terminamos!
+              <br />
+              Recorre todo el camino y encuentra los tesoros y preguntas.
+            </div>
+          </motion.div>
         )}
 
         {showTreasureModal && currentTreasure && (

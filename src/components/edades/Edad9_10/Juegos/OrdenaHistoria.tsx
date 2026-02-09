@@ -10,7 +10,7 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
-import { StartScreenOrdenaHistoria } from "../IniciosJuegosLecturas/StartScreenOrdenaHistoria/StartScreenOrdenaHistoria";
+import { StartScreenOrdenaHistoria } from "../IniciosJuegosLecturas/StartScreenOrdenaHistoria";
 import { speakText, canSpeakOnHover } from '../../../../utils/textToSpeech';
 import { useProgress } from '../../../../hooks/useProgress';
 
@@ -42,12 +42,12 @@ const levels: Level[] = [
       {
         title: "El día en el parque",
         fragments: [
-          { id: 1, text: "María se despertó muy temprano en la mañana.", correctOrder: 1 },
-          { id: 2, text: "Desayunó cereal con leche y se vistió rápidamente.", correctOrder: 2 },
+          { id: 1, text: "María se despertó muy temprano.", correctOrder: 1 },
+          { id: 2, text: "Desayunó y se vistió rápidamente.", correctOrder: 2 },
           { id: 3, text: "Salió de casa con su pelota favorita.", correctOrder: 3 },
-          { id: 4, text: "En el parque encontró a sus amigos jugando.", correctOrder: 4 },
-          { id: 5, text: "Jugaron fútbol toda la tarde hasta que se hizo de noche.", correctOrder: 5 },
-          { id: 6, text: "Regresó a casa feliz y cansada del día.", correctOrder: 6 }
+          { id: 4, text: "En el parque encontró a sus amigos.", correctOrder: 4 },
+          { id: 5, text: "Jugaron fútbol hasta que se hizo de noche.", correctOrder: 5 },
+          { id: 6, text: "Regresó a casa muy feliz.", correctOrder: 6 }
         ]
       },
       {
@@ -55,34 +55,22 @@ const levels: Level[] = [
         fragments: [
           { id: 1, text: "Ana y su familia planearon un viaje al zoológico.", correctOrder: 1 },
           { id: 2, text: "Llegaron temprano y compraron entradas.", correctOrder: 2 },
-          { id: 3, text: "Vieron primero a los leones rugiendo fuerte.", correctOrder: 3 },
-          { id: 4, text: "Luego alimentaron a las jirafas con hojas.", correctOrder: 4 },
-          { id: 5, text: "Tomaron un descanso para comer helado.", correctOrder: 5 },
-          { id: 6, text: "Regresaron a casa con fotos y recuerdos felices.", correctOrder: 6 }
+          { id: 3, text: "Vieron primero a los leones.", correctOrder: 3 },
+          { id: 4, text: "Luego alimentaron a las jirafas.", correctOrder: 4 },
+          { id: 5, text: "Regresaron a casa con fotos y recuerdos felices.", correctOrder: 5 }
+          
         ]
       },
       {
         title: "El día de la bicicleta",
         fragments: [
           { id: 1, text: "Pedro decidió salir a andar en bicicleta.", correctOrder: 1 },
-          { id: 2, text: "Se puso su casco y revisó las llantas.", correctOrder: 2 },
-          { id: 3, text: "Pedaleó hasta el parque por un camino soleado.", correctOrder: 3 },
-          { id: 4, text: "Encontró a su amigo Luis practicando trucos.", correctOrder: 4 },
-          { id: 5, text: "Juntos corrieron carreras y rieron mucho.", correctOrder: 5 },
-          { id: 6, text: "Volvió a casa antes de que anocheciera.", correctOrder: 6 }
+          { id: 2, text: "Pedaleó hasta el parque.", correctOrder: 2 },
+          { id: 3, text: "Encontró a su amigo Luis practicando trucos.", correctOrder: 3 },
+          { id: 4, text: "Juntos corrieron carreras y rieron mucho.", correctOrder: 4 },
+          { id: 5, text: "Volvió a casa antes de que anocheciera.", correctOrder: 5 }
         ]
       },
-      {
-        title: "La búsqueda del tesoro",
-        fragments: [
-          { id: 1, text: "Sofía encontró un mapa del tesoro en el ático.", correctOrder: 1 },
-          { id: 2, text: "Leyó las pistas con su hermano menor.", correctOrder: 2 },
-          { id: 3, text: "Buscaron en el jardín cerca del roble grande.", correctOrder: 3 },
-          { id: 4, text: "Cavaron y hallaron una caja de madera.", correctOrder: 4 },
-          { id: 5, text: "Dentro encontraron monedas de chocolate.", correctOrder: 5 },
-          { id: 6, text: "Compartieron el tesoro con sus amigos.", correctOrder: 6 }
-        ]
-      }
     ]
   },
   {
@@ -92,22 +80,20 @@ const levels: Level[] = [
         title: "La aventura del gatito",
         fragments: [
           { id: 1, text: "Un pequeño gatito se perdió en el bosque.", correctOrder: 1 },
-          { id: 2, text: "Caminó durante horas buscando el camino a casa.", correctOrder: 2 },
-          { id: 3, text: "Se encontró con un búho sabio en un árbol.", correctOrder: 3 },
-          { id: 4, text: "El búho le enseñó el camino correcto.", correctOrder: 4 },
-          { id: 5, text: "El gatito siguió las indicaciones cuidadosamente.", correctOrder: 5 },
-          { id: 6, text: "Finalmente llegó a casa donde lo esperaba su familia.", correctOrder: 6 }
+          { id: 2, text: "Se encontró con un búho sabio en un árbol.", correctOrder: 2 },
+          { id: 3, text: "El búho le enseñó el camino correcto.", correctOrder: 3 },
+          { id: 4, text: "El gatito siguió las indicaciones cuidadosamente.", correctOrder: 4 },
+          { id: 5, text: "Finalmente llegó a casa donde lo esperaba su familia.", correctOrder: 5 }
         ]
       },
       {
         title: "El viaje al mar",
         fragments: [
           { id: 1, text: "La familia empacó sus maletas para las vacaciones.", correctOrder: 1 },
-          { id: 2, text: "Viajaron en auto durante varias horas.", correctOrder: 2 },
-          { id: 3, text: "Llegaron a la playa y se instalaron en el hotel.", correctOrder: 3 },
-          { id: 4, text: "Nadaron en el mar y construyeron castillos de arena.", correctOrder: 4 },
-          { id: 5, text: "Vieron un hermoso atardecer.", correctOrder: 5 },
-          { id: 6, text: "Regresaron a casa con lindos recuerdos.", correctOrder: 6 }
+          { id: 2, text: "Llegaron a la playa y se instalaron en el hotel.", correctOrder: 2 },
+          { id: 3, text: "Nadaron en el mar y construyeron castillos de arena.", correctOrder: 3 },
+          { id: 4, text: "Vieron un hermoso atardecer.", correctOrder: 4 },
+          { id: 5, text: "Regresaron a casa con lindos recuerdos.", correctOrder: 5 }
         ]
       },
       {
@@ -117,8 +103,7 @@ const levels: Level[] = [
           { id: 2, text: "Construyeron una cometa con papel de colores.", correctOrder: 2 },
           { id: 3, text: "Llegaron al campo donde había mucho viento.", correctOrder: 3 },
           { id: 4, text: "Hicieron volar su cometa más alto que las demás.", correctOrder: 4 },
-          { id: 5, text: "Ganaron un premio por la cometa más creativa.", correctOrder: 5 },
-          { id: 6, text: "Celebraron con un picnic bajo el sol.", correctOrder: 6 }
+          { id: 5, text: "Ganaron un premio por la cometa más creativa.", correctOrder: 5 }
         ]
       },
       {
@@ -128,21 +113,9 @@ const levels: Level[] = [
           { id: 2, text: "Buscaron los ingredientes en la despensa.", correctOrder: 2 },
           { id: 3, text: "Mezclaron harina, azúcar y huevos en un tazón.", correctOrder: 3 },
           { id: 4, text: "Formaron las galletas y las pusieron en el horno.", correctOrder: 4 },
-          { id: 5, text: "El aroma llenó la casa mientras se horneaban.", correctOrder: 5 },
-          { id: 6, text: "Todos disfrutaron las galletas calientes.", correctOrder: 6 }
+          { id: 5, text: "Todos disfrutaron las galletas calientes.", correctOrder: 5 }
         ]
       },
-      {
-        title: "El día de la limpieza",
-        fragments: [
-          { id: 1, text: "La familia decidió limpiar el garaje un sábado.", correctOrder: 1 },
-          { id: 2, text: "Sacaron cajas viejas y barrieron el polvo.", correctOrder: 2 },
-          { id: 3, text: "Encontraron un viejo álbum de fotos.", correctOrder: 3 },
-          { id: 4, text: "Se detuvieron para mirar las fotos y reír.", correctOrder: 4 },
-          { id: 5, text: "Organizaron todo y dejaron el garaje impecable.", correctOrder: 5 },
-          { id: 6, text: "Celebraron con limonada en el patio.", correctOrder: 6 }
-        ]
-      }
     ]
   },
   {
@@ -179,17 +152,6 @@ const levels: Level[] = [
           { id: 4, text: "Descubrieron una cueva escondida detrás de unas rocas.", correctOrder: 4 },
           { id: 5, text: "Exploraron la cueva con linternas y cuidado.", correctOrder: 5 },
           { id: 6, text: "Regresaron al campamento contando historias.", correctOrder: 6 }
-        ]
-      },
-      {
-        title: "El misterio del libro perdido",
-        fragments: [
-          { id: 1, text: "Emma notó que su libro favorito había desaparecido.", correctOrder: 1 },
-          { id: 2, text: "Buscó en su cuarto debajo de la cama.", correctOrder: 2 },
-          { id: 3, text: "Preguntó a su hermano si lo había visto.", correctOrder: 3 },
-          { id: 4, text: "Encontró una pista en la sala: una nota rara.", correctOrder: 4 },
-          { id: 5, text: "La nota la llevó al armario donde estaba el libro.", correctOrder: 5 },
-          { id: 6, text: "Celebró leyendo el libro con su hermano.", correctOrder: 6 }
         ]
       },
       {
@@ -237,33 +199,52 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
     initializeStory();
   }, [initializeStory]);
 
-  const handleDragStart = (fragment: StoryFragment) => {
-    setDraggedFragment(fragment);
-  };
+const handleDragStart = (fragment: StoryFragment) => {
+  setDraggedFragment(fragment);
+};
+
+
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
 
-  const handleDrop = (e: React.DragEvent, position: number) => {
-    e.preventDefault();
-    if (!draggedFragment) return;
+const handleDrop = (e: React.DragEvent, position?: number) => {
+  e.preventDefault();
+  if (!draggedFragment) return;
 
-    const newUserOrder = [...userOrder];
-    const existingIndex = newUserOrder.findIndex(f => f.id === draggedFragment.id);
-    if (existingIndex !== -1) {
-      newUserOrder.splice(existingIndex, 1);
+  setUserOrder(prev => {
+    const newOrder = [...prev];
+    const fromIndex = newOrder.findIndex(f => f.id === draggedFragment.id);
+
+    // 👉 VIENE DESDE FRAGMENTS → SIEMPRE AL FINAL
+    if (fromIndex === -1) {
+      newOrder.push(draggedFragment);
+    } 
+    // 👉 VIENE DESDE USERORDER → REORDENAR
+    else {
+      newOrder.splice(fromIndex, 1);
+      const insertIndex = position === undefined ? newOrder.length : position;
+      newOrder.splice(insertIndex, 0, draggedFragment);
     }
-    newUserOrder.splice(position, 0, draggedFragment);
-    setUserOrder(newUserOrder);
-    setFragments(fragments.filter(f => f.id !== draggedFragment.id));
-    setDraggedFragment(null);
-  };
 
-  const handleFragmentClick = (fragment: StoryFragment) => {
-    setUserOrder([...userOrder, fragment]);
-    setFragments(fragments.filter(f => f.id !== fragment.id));
-  };
+    return newOrder;
+  });
+
+  setFragments(prev => prev.filter(f => f.id !== draggedFragment.id));
+  setDraggedFragment(null);
+};
+
+
+
+
+const handleFragmentClick = (fragment: StoryFragment) => {
+  if (userOrder.some(f => f.id === fragment.id)) return;
+
+  setUserOrder(prev => [...prev, fragment]);
+  setFragments(prev => prev.filter(f => f.id !== fragment.id));
+};
+
 
   const handleRemoveFromOrder = (fragmentId: number) => {
     const fragmentToRemove = userOrder.find(f => f.id === fragmentId);
@@ -392,7 +373,7 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
 
         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6">
           <AnimalGuide
-            animal="turtle"
+            animal="monkey"
             message="Lee cada frase con paciencia y ordénalas para formar una historia completa. ¡Puedes arrastrar las frases o hacer clic en ellas!"
           />
         </motion.div>
@@ -412,6 +393,7 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
                   animate={{ opacity: 1, y: 0 }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                 
                 >
                   <Card
                     className="cursor-move bg-white/80 hover:bg-white border-2 border-blue-200 hover:border-blue-400 transition-all"
@@ -431,6 +413,7 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
                     }}
                     onDragStart={() => handleDragStart(fragment)}
                     onClick={() => handleFragmentClick(fragment)}
+                    
                   >
                     <CardContent className="p-4">
                       <p className="text-black leading-relaxed">{fragment.text}</p>
@@ -451,6 +434,7 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
             </div>
             <div className="space-y-3 min-h-[400px]">
               {userOrder.map((fragment, index) => (
+                
                 <motion.div
                   key={fragment.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -460,6 +444,8 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
                   onDrop={(e) => handleDrop(e, index)}
                 >
                   <Card
+                    draggable
+                    onDragStart={() => handleDragStart(fragment)}
                     className="bg-green-50 border-2 border-green-300"
                     tabIndex={0}
                     aria-label={fragment.text}
@@ -481,7 +467,7 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
                 </motion.div>
               ))}
               {userOrder.length === 0 && (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 0)}>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500" onDragOver={handleDragOver} onDrop={handleDrop}>
                   Arrastra las frases aquí para ordenar la historia
                 </div>
               )}

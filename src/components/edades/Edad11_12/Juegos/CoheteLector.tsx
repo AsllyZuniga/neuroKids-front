@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { Target, Clock } from 'lucide-react';
+import { Target } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
 import { Badge } from '../../../ui/badge';
@@ -11,7 +11,7 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenCoheteLector } from '../IniciosJuegosLecturas/StartScreenCoheteLector/StartScreenCoheteLector';
+import { StartScreenCoheteLector } from '../IniciosJuegosLecturas/StartScreenCoheteLector';
 
 
 interface CoheteLectorProps {
@@ -29,147 +29,141 @@ interface Challenge {
   correct: number;
   explanation: string;
   points: number;
-  timeLimit: number;
+
 }
 
 const allChallenges: Challenge[] = [
   {
     id: 1,
     type: 'comprehension',
-    text: "El cambio climático es uno de los mayores desafíos de nuestro tiempo. Los científicos han observado que la temperatura promedio de la Tierra ha aumentado significativamente en las últimas décadas, principalmente debido a las actividades humanas como la quema de combustibles fósiles.",
-    question: "Según el texto, ¿cuál es la principal causa del cambio climático?",
+    text: "Lucas encontró un perro perdido en el parque. El perro estaba cansado y tenía hambre. Lucas lo llevó a su casa y le dio agua y comida.",
+    question: "¿Qué hizo Lucas con el perro?",
     options: [
-      "Los cambios naturales del planeta",
-      "Las actividades humanas como la quema de combustibles fósiles",
-      "Los volcanes y terremotos",
-      "La radiación solar"
+      "Lo dejó solo en el parque",
+      "Lo llevó a su casa y lo ayudó",
+      "Lo vendió",
+      "Se fue a jugar"
     ],
     correct: 1,
-    explanation: "El texto claramente indica que el aumento de temperatura es 'principalmente debido a las actividades humanas como la quema de combustibles fósiles'.",
+    explanation: "Lucas llevó al perro a su casa y le dio agua y comida.",
     points: 100,
-    timeLimit: 30
   },
   {
     id: 2,
     type: 'vocabulary',
-    question: "¿Qué significa la palabra 'perspicaz'?",
+    question: "¿Qué significa la palabra 'cansado'?",
     options: [
-      "Que ve con dificultad",
-      "Que tiene gran capacidad para entender",
-      "Que es muy alto",
-      "Que habla mucho"
+      "Con mucha energía",
+      "Con sueño o sin fuerzas",
+      "Muy rápido",
+      "Muy feliz"
     ],
     correct: 1,
-    explanation: "'Perspicaz' significa que tiene gran agudeza mental, que comprende y entiende las cosas con facilidad.",
-    points: 80,
-    timeLimit: 20
+    explanation: "'Cansado' es cuando una persona o animal tiene sueño o pocas fuerzas.",
+    points: 80
   },
   {
     id: 3,
-    type: 'grammar',
-    question: "En la oración 'Los estudiantes estudian diligentemente', ¿qué función cumple la palabra 'diligentemente'?",
+    type: 'comprehension',
+    text: "María preparó su mochila. Guardó sus cuadernos y su merienda porque iba a la escuela.",
+    question: "¿Por qué María preparó la mochila?",
     options: [
-      "Sustantivo",
-      "Adjetivo",
-      "Adverbio",
-      "Verbo"
+      "Para ir a dormir",
+      "Para ir a la escuela",
+      "Para jugar videojuegos",
+      "Para ir al parque"
     ],
-    correct: 2,
-    explanation: "'Diligentemente' es un adverbio que modifica al verbo 'estudian', indicando la manera en que realizan la acción.",
-    points: 90,
-    timeLimit: 25
+    correct: 1,
+    explanation: "María preparó la mochila porque iba a la escuela.",
+    points: 100
   },
   {
     id: 4,
-    type: 'comprehension',
-    text: "La biodiversidad se refiere a la variedad de vida en la Tierra, incluyendo la diversidad de especies, ecosistemas y genes. Es fundamental para el equilibrio de los ecosistemas y proporciona servicios esenciales como la polinización, la purificación del agua y la regulación del clima.",
-    question: "¿Por qué es importante la biodiversidad según el texto?",
+    type: 'vocabulary',
+    question: "¿Cuál es un sinónimo de 'feliz'?",
     options: [
-      "Solo para tener más animales",
-      "Para el equilibrio de ecosistemas y servicios esenciales",
-      "Para hacer parques más bonitos",
-      "No es importante"
+      "triste",
+      "contento",
+      "enojado",
+      "asustado"
     ],
     correct: 1,
-    explanation: "El texto explica que la biodiversidad es fundamental para el equilibrio de los ecosistemas y proporciona servicios esenciales.",
-    points: 100,
-    timeLimit: 35
+    explanation: "'Contento' significa feliz.",
+    points: 80
   },
   {
     id: 5,
-    type: 'vocabulary',
-    question: "¿Cuál es el sinónimo más apropiado para 'elocuente'?",
+    type: 'comprehension',
+    text: "Carlos practicó fútbol toda la semana. El sábado jugó un partido y metió un gol.",
+    question: "¿Qué pasó el sábado?",
     options: [
-      "Silencioso",
-      "Expresivo y convincente al hablar",
-      "Muy rápido",
-      "Confuso"
+      "Carlos durmió",
+      "Carlos metió un gol",
+      "Carlos faltó",
+      "Pedro perdió su balón"
     ],
     correct: 1,
-    explanation: "'Elocuente' se refiere a alguien que habla de manera expresiva, clara y convincente.",
-    points: 85,
-    timeLimit: 20
+    explanation: "El sábado Carlos jugó y metió un gol.",
+    points: 100
   },
   {
     id: 6,
-    type: 'grammar',
-    question: "Identifica el sujeto en la oración: 'Durante la tormenta, los árboles del parque se movían violentamente'",
+    type: 'vocabulary',
+    question: "¿Qué significa 'rápido'?",
     options: [
-      "Durante la tormenta",
-      "los árboles del parque",
-      "se movían",
-      "violentamente"
+      "Muy lento",
+      "Que va deprisa",
+      "Que no se mueve",
+      "Que duerme"
     ],
     correct: 1,
-    explanation: "El sujeto es 'los árboles del parque', ya que es quien realiza la acción de moverse.",
-    points: 95,
-    timeLimit: 30
+    explanation: "'Rápido' es algo que va deprisa.",
+    points: 80
   },
   {
     id: 7,
     type: 'comprehension',
-    text: "La energía renovable, como la solar y la eólica, se está utilizando cada vez más para reducir la dependencia de los combustibles fósiles. Estas fuentes de energía son sostenibles porque no se agotan y generan menos contaminación.",
-    question: "¿Qué ventaja principal de las energías renovables menciona el texto?",
+    text: "Laura regó las plantas todos los días. Gracias a eso, crecieron verdes y bonitas.",
+    question: "¿Por qué crecieron las plantas?",
     options: [
-      "Son más baratas que los combustibles fósiles",
-      "No se agotan y generan menos contaminación",
-      "Producen más energía que las fuentes tradicionales",
-      "No necesitan mantenimiento"
+      "Porque nadie las tocó",
+      "Porque Laura las regó",
+      "Porque llovió mucho",
+      "Porque eran mágicas"
     ],
     correct: 1,
-    explanation: "El texto destaca que las energías renovables son sostenibles porque no se agotan y generan menos contaminación.",
-    points: 100,
-    timeLimit: 30
+    explanation: "Las plantas crecieron porque Laura las regó todos los días.",
+    points: 100
   },
   {
     id: 8,
-    type: 'vocabulary',
-    question: "¿Qué significa la palabra 'efímero'?",
+    type: "comprehension",
+    text: "Luis llevó una sombrilla porque el cielo estaba oscuro y empezó a llover.",
+    question: "¿Por qué Luis llevó sombrilla?",
     options: [
-      "Que dura poco tiempo",
-      "Que es muy fuerte",
-      "Que ocurre con frecuencia",
-      "Que es invisible"
+      "Porque hacía calor",
+      "Porque iba a correr",
+      "Porque empezó a llover",
+      "Porque era de noche"
     ],
-    correct: 0,
-    explanation: "'Efímero' se refiere a algo que tiene una duración breve o pasajera.",
-    points: 80,
-    timeLimit: 20
+    correct: 2,
+    explanation: "Luis llevó sombrilla porque comenzó a llover.",
+    points: 100
   },
   {
     id: 9,
-    type: 'grammar',
-    question: "En la oración 'María y Juan corrieron al parque rápidamente', ¿cuál es el complemento circunstancial?",
+    type: "comprehension",
+    text: "Pedro olvidó su cuaderno en casa. En clase no pudo hacer la actividad.",
+    question: "¿Qué le pasó a Pedro?",
     options: [
-      "María y Juan",
-      "corrieron",
-      "al parque rápidamente",
-      "rápidamente"
+      "Perdió el lápiz",
+      "Olvidó su cuaderno",
+      "Llegó tarde",
+      "No quiso trabajar"
     ],
-    correct: 2,
-    explanation: "El complemento circunstancial indica las circunstancias de la acción (lugar y manera), en este caso 'al parque rápidamente'.",
-    points: 90,
-    timeLimit: 25
+    correct: 1,
+    explanation: "Pedro no pudo trabajar porque olvidó su cuaderno.",
+    points: 100
   },
   {
     id: 10,
@@ -185,37 +179,37 @@ const allChallenges: Challenge[] = [
     correct: 1,
     explanation: "El texto menciona específicamente el calentamiento global, la contaminación y la pesca excesiva como amenazas.",
     points: 100,
-    timeLimit: 35
+
   },
   {
     id: 11,
-    type: 'vocabulary',
-    question: "¿Cuál es el antónimo más adecuado para 'meticuloso'?",
+    type: "comprehension",
+    text: "Sofía tenía hambre. Abrió la nevera y tomó una fruta.",
+    question: "¿Qué hizo Sofía?",
     options: [
-      "Cuidadoso",
-      "Descuidadoso",
-      "Rápido",
-      "Eficiente"
+      "Salió a jugar",
+      "Tomó una fruta",
+      "Se fue a dormir",
+      "Leyó un libro"
     ],
     correct: 1,
-    explanation: "'Meticuloso' significa cuidadoso o detallista, por lo que su antónimo es 'descuidadoso'.",
-    points: 85,
-    timeLimit: 20
+    explanation: "Sofía tomó una fruta porque tenía hambre.",
+    points: 100
   },
   {
     id: 12,
-    type: 'grammar',
-    question: "En la oración 'El libro que leí ayer era fascinante', ¿qué tipo de oración es 'que leí ayer'?",
+    type: "comprehension",
+    text: "Carla se puso la chaqueta porque hacía mucho frío afuera.",
+    question: "¿Por qué Carla se puso la chaqueta?",
     options: [
-      "Oración principal",
-      "Oración subordinada adjetiva",
-      "Oración subordinada sustantiva",
-      "Oración coordinada"
+      "Porque tenía sueño",
+      "Porque hacía frío",
+      "Porque iba a correr",
+      "Porque estaba mojada"
     ],
     correct: 1,
-    explanation: "'Que leí ayer' es una oración subordinada adjetiva porque describe al sustantivo 'libro'.",
-    points: 95,
-    timeLimit: 30
+    explanation: "Carla se puso la chaqueta porque hacía frío.",
+    points: 100
   }
 ];
 
@@ -234,7 +228,6 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   const [rocketHeight, setRocketHeight] = useState(0);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [levelComplete, setLevelComplete] = useState(false);
@@ -261,35 +254,25 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
 
   }, [level]);
 
-  // Timer
-  useEffect(() => {
-    if (gameStarted && timeLeft > 0 && !showResult) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && gameStarted && !showResult) {
-      handleTimeUp();
-    }
-  }, [timeLeft, gameStarted, showResult]);
+
+
 
   useEffect(() => {
-    if (gameStarted && challenge) {
-      setTimeLeft(challenge.timeLimit);
-      setSelectedAnswer(null);
-      setShowResult(false);
-    }
-  }, [currentChallenge, gameStarted, challenge]);
+    if (!gameStarted) return;
+
+    setSelectedAnswer(null);
+    setShowResult(false);
+  }, [currentChallenge]);
+
 
   const startGame = () => {
     setGameStarted(true);
-    setTimeLeft(challenge.timeLimit);
   };
 
-  const handleTimeUp = () => {
-    setSelectedAnswer(-1);
-    setStreak(0);
-    setShowResult(true);
-    setTimeout(nextChallenge, 3000);
-  };
+
+
+
+
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null || showResult) return;
@@ -299,9 +282,9 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
 
     if (answerIndex === challenge.correct) {
       let points = challenge.points;
-      const timeBonus = Math.floor(timeLeft / 2) * 5;
+
       const streakBonus = streak * 10;
-      const totalPoints = points + timeBonus + streakBonus;
+      const totalPoints = points + streakBonus;
 
       setScore(score + totalPoints);
       setStreak(streak + 1);
@@ -334,7 +317,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
     setLevelComplete(false);
     setShowMotivational(false);
     setShowLevelComplete(false);
-    setGameStarted(false);
+    setGameStarted(true);
   };
 
   const loadNextLevel = () => {
@@ -350,7 +333,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
       setLevelComplete(false);
       setShowMotivational(false);
       setShowLevelComplete(false);
-      setGameStarted(false); 
+      setGameStarted(true);
     } else {
 
       setLevelComplete(false);
@@ -361,9 +344,10 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'comprehension': return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'vocabulary': return 'bg-green-100 text-green-700 border-green-300';
-      case 'grammar': return 'bg-purple-100 text-purple-700 border-purple-300';
+      case 'comprehension': return 'bg-sky-100 text-sky-800 border-sky-300';
+      case 'vocabulary': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
+      case 'grammar': return 'bg-violet-100 text-violet-800 border-violet-300';
+
       default: return 'bg-gray-100 text-gray-700 border-gray-300';
     }
   };
@@ -384,7 +368,9 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-200 via-purple-400 text-white"> 
+    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-200 via-sky-200 to-blue-100 text-slate-800">
+
+
       <div className="max-w-7xl mx-auto">
         <GameHeader
           title={`Cohete Lector`}
@@ -401,19 +387,19 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
         />
 
         <AnimalGuide
-          animal="turtle"
+          animal="owl"
           message="¡Responde rápido para elevar el cohete!"
         />
 
-        <div className="grid lg:grid-cols-4 gap-8 mt-6">
-          <div className="lg:col-span-1">
-            <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20">
-              <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-center">Progreso del Cohete</h3>
-                <div className="relative h-64 bg-gradient-to-t from-blue-900 to-black rounded-lg border border-white/20 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+          <div className="lg:col-span-5">
+            <Card className="bg-purple-300 border border-slate-200 shadow-sm">
+              <CardContent className="p-8">
+                <h3 className="text-lg mb-6 text-center">Progreso del Cohete</h3>
+                <div className="relative h-96 bg-gradient-to-t from-blue-800 to-black rounded-lg border border-white/20 overflow-hidden">
                   <motion.div
                     animate={{ bottom: `${rocketHeight}%` }}
-                    className="absolute left-1/2 transform -translate-x-1/2 text-2xl"
+                    className="absolute left-1/2 transform -translate-x-1/2 text-5xl"
                     style={{ bottom: `${rocketHeight}%` }}
                   >
                     🚀
@@ -429,38 +415,36 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
             </Card>
           </div>
 
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-7">
             <motion.div
               key={currentChallenge}
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
             >
-              <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20">
+              <Card className="bg-blue-100 backdrop-blur-sm border-2 border-blue-400">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-3 mb-6">
                     <Badge className={`${getTypeColor(challenge.type)} border`}>
                       {getTypeLabel(challenge.type)}
                     </Badge>
                     <div className="flex items-center gap-1">
-                      <Target className="w-4 h-4 text-yellow-400" />
+                      <Target className="w-4 h-4 text-amber-500" />
+
                       <span>{challenge.points} puntos</span>
-                    </div>
-                    <div className="flex items-center gap-1 ml-auto">
-                      <Clock className="w-4 h-4 text-red-400" />
-                      <span className={timeLeft <= 10 ? 'text-red-400' : ''}>{timeLeft}s</span>
                     </div>
                   </div>
 
                   {challenge.text && (
-                    <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
+                    <div className="mb-6 p-5 bg-slate-50 rounded-lg border border-slate-200">
                       <div className="mb-3">
-                        <AudioPlayer text="Reproduciendo texto..." duration={3000} />
+                        <AudioPlayer text={challenge.text || ""} />
                       </div>
-                      <p className="text-gray-200 leading-relaxed">{challenge.text}</p>
+                      <p className="text-slate-700 leading-relaxed tracking-wide">{challenge.text}</p>
                     </div>
                   )}
 
-                  <h3 className="text-xl mb-6">{challenge.question}</h3>
+                  <h3 className="text-xl mb-6 text-slate-800">{challenge.question}</h3>
+
 
                   <div className="grid gap-4">
                     {challenge.options.map((option, index) => (
@@ -473,17 +457,17 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
                           onClick={() => handleAnswerSelect(index)}
                           disabled={selectedAnswer !== null}
                           variant="outline"
-                          className={`w-full justify-start text-left p-6 h-auto transition-all ${
-                            selectedAnswer === null
-                              ? 'bg-white/10 hover:bg-white/20 border-white/30'
-                              : selectedAnswer === index
+                          className={`w-full justify-start text-left p-6 h-auto transition-all ${selectedAnswer === null
+                            ? 'bg-white hover:bg-sky-50 border-slate-300'
+                            : selectedAnswer === index
                               ? index === challenge.correct
-                                ? 'bg-green-500/30 border-green-400'
-                                : 'bg-red-500/30 border-red-400'
-                              : index === challenge.correct && showResult
-                              ? 'bg-green-500/30 border-green-400'
-                              : 'bg-white/5 border-white/20'
-                          }`}
+                                ? 'bg-green-200 border-green-400 text-green-800'
+                                : 'bg-red-200 border-red-400 text-red-800'
+                              : showResult && selectedAnswer !== null && index === challenge.correct
+                                ? 'bg-green-200 border-green-400 text-green-800'
+                                : 'bg-slate-100 border-slate-200'
+
+                            }`}
                         >
                           <span>{option}</span>
                         </Button>
@@ -495,10 +479,12 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-4 bg-blue-500/20 rounded-lg border border-blue-400/30"
+                      className="mt-6 p-5 bg-blue-100 rounded-lg border border-blue-300"
+
                     >
-                      <h4 className="text-lg mb-2 text-blue-200">Explicación:</h4>
-                      <p className="text-blue-100">{challenge.explanation}</p>
+                      <h4 className="text-lg mb-2 text-blue-800">Explicación:</h4>
+                      <p className="text-blue-700">{challenge.explanation}</p>
+
                     </motion.div>
                   )}
                 </CardContent>

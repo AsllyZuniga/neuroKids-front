@@ -9,10 +9,24 @@ import { GameHeader } from "../../../others/GameHeader";
 import { ProgressBar } from "../../../others/ProgressBar";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenCuentoPictogramas } from "../IniciosJuegosLecturas/StartScreenCuentoPictogramas/StartScreenCuentoPictogramas";
+import { StartScreenCuentoPictogramas } from "../IniciosJuegosLecturas/StartScreenCuentoPictogramas";
 import { LevelLock } from '../../../others/LevelLock';
 import { useLevelLock } from '../../../../hooks/useLevelLock';
 import { speakText } from '../../../../utils/textToSpeech';
+import image1 from "../../../../assets/7_8/cuentospictogramas/nivel1/1.png";
+import image2 from "../../../../assets/7_8/cuentospictogramas/nivel1/2.png";
+import image3 from "../../../../assets/7_8/cuentospictogramas/nivel1/3.png";  
+import image4 from "../../../../assets/7_8/cuentospictogramas/nivel1/4.png";
+import image5 from "../../../../assets/7_8/cuentospictogramas/nivel1/5.png";
+import image6 from "../../../../assets/7_8/cuentospictogramas/nivel1/6.png";
+import img1 from "../../../../assets/7_8/cuentospictogramas/nivel2/1.png";
+import img2 from "../../../../assets/7_8/cuentospictogramas/nivel2/2.png";
+import img3 from "../../../../assets/7_8/cuentospictogramas/nivel2/3.png";
+import img4 from "../../../../assets/7_8/cuentospictogramas/nivel2/4.png";
+import imag1 from "../../../../assets/7_8/cuentospictogramas/nivel3/1.png";
+import imag2 from "../../../../assets/7_8/cuentospictogramas/nivel3/2.png";
+import imag3 from "../../../../assets/7_8/cuentospictogramas/nivel3/3.png";
+import img5 from "../../../../assets/7_8/cuentospictogramas/nivel3/4.png";
 
 interface CuentoPictogramas {
   onBack: () => void;
@@ -37,7 +51,7 @@ const storyPagesLevel1: StoryPage[] = [
       { word: "gato", emoji: "🐱" },
       { word: "casa", emoji: "🏠" }
     ],
-    image: "🏡",
+    image: image1,
     audio: "/audio/page1.mp3"
   },
   {
@@ -47,7 +61,7 @@ const storyPagesLevel1: StoryPage[] = [
       { word: "gato", emoji: "🐱" },
       { word: "sol", emoji: "☀️" }
     ],
-    image: "🌞",
+    image: image2,
     audio: "/audio/page2.mp3"
   },
   {
@@ -57,7 +71,7 @@ const storyPagesLevel1: StoryPage[] = [
       { word: "flor", emoji: "🌸" },
       { word: "árbol", emoji: "🌳" }
     ],
-    image: "🌺",
+    image: image3,
     audio: "/audio/page3.mp3"
   },
   {
@@ -67,7 +81,7 @@ const storyPagesLevel1: StoryPage[] = [
       { word: "gato", emoji: "🐱" },
       { word: "agua", emoji: "💧" }
     ],
-    image: "🏞️",
+    image: image4,
     audio: "/audio/page4.mp3"
   },
   {
@@ -78,7 +92,7 @@ const storyPagesLevel1: StoryPage[] = [
       { word: "luna", emoji: "🌙" },
       { word: "estrellas", emoji: "⭐" }
     ],
-    image: "🌃",
+    image: image5,
     audio: "/audio/page5.mp3"
   },
   {
@@ -88,7 +102,7 @@ const storyPagesLevel1: StoryPage[] = [
       { word: "gato", emoji: "🐱" },
       { word: "casa", emoji: "🏠" }
     ],
-    image: "❤️",
+    image: image6,
     audio: "/audio/page6.mp3"
   }
 ];
@@ -102,7 +116,7 @@ const storyPagesLevel2: StoryPage[] = [
       { word: "parque", emoji: "🌳" },
       { word: "pelota", emoji: "⚽" }
     ],
-    image: "🏞️",
+    image: img1,
     audio: "/audio/lv2_page1.mp3"
   },
   {
@@ -113,7 +127,7 @@ const storyPagesLevel2: StoryPage[] = [
       { word: "niño", emoji: "🧒" },
       { word: "perro", emoji: "🐶" }
     ],
-    image: "🐾",
+    image: img2,
     audio: "/audio/lv2_page2.mp3"
   },
   {
@@ -124,7 +138,7 @@ const storyPagesLevel2: StoryPage[] = [
       { word: "pelota", emoji: "⚽" },
       { word: "niño", emoji: "🧒" }
     ],
-    image: "⚽",
+    image: img3,
     audio: "/audio/lv2_page3.mp3"
   },
   {
@@ -133,7 +147,7 @@ const storyPagesLevel2: StoryPage[] = [
     pictograms: [
       { word: "noche", emoji: "🌙" }
     ],
-    image: "🌃",
+    image: img4,
     audio: "/audio/lv2_page4.mp3"
   }
 ];
@@ -148,7 +162,7 @@ const storyPagesLevel3: StoryPage[] = [
       { word: "ruido", emoji: "🔊" },
       { word: "árbol", emoji: "🌳" }
     ],
-    image: "🌲",
+    image: imag1,
     audio: "/audio/lv3_page1.mp3"
   },
   {
@@ -158,7 +172,7 @@ const storyPagesLevel3: StoryPage[] = [
       { word: "valentía", emoji: "💪" },
       { word: "búho", emoji: "🦉" }
     ],
-    image: "🦉",
+    image: imag2,
     audio: "/audio/lv3_page2.mp3"
   },
   {
@@ -169,7 +183,7 @@ const storyPagesLevel3: StoryPage[] = [
       { word: "búho", emoji: "🦉" },
       { word: "casa", emoji: "🏠" }
     ],
-    image: "🏡",
+    image: imag3,
     audio: "/audio/lv3_page3.mp3"
   },
   {
@@ -180,7 +194,7 @@ const storyPagesLevel3: StoryPage[] = [
       { word: "cielo", emoji: "☁️" },
       { word: "luna", emoji: "🌙" }
     ],
-    image: "🌕",
+    image: img5,
     audio: "/audio/lv3_page4.mp3"
   }
 ];
@@ -387,9 +401,9 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
       />
 
       {/* ANIMAL GUIDE */}
-      <div className="max-w-2xl mx-auto mb-6">
+      <div>
         <AnimalGuide
-          animal="owl"
+          animal="fish"
           message="¡Lee la historia y haz clic en los pictogramas para descubrir su significado! Cada emoji te da puntos."
         />
       </div>
@@ -407,7 +421,12 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 {/* IMAGEN + AUDIO */}
                 <div className="text-center">
-                  <div className="text-9xl mb-4">{currentStoryPage.image}</div>
+                  <img
+  src={currentStoryPage.image}
+  alt="Ilustración del cuento"
+  className="mx-auto mb-4 max-h-80 object-contain rounded-xl"
+/>
+
                   <ButtonWithAudio
                     onClick={playPageAudio}
                     playOnClick
@@ -425,7 +444,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
 
                 {/* TEXTO CON PICTOGRAMAS */}
                 <div className="text-center md:text-left">
-                  <div className="text-xl leading-relaxed text-gray-800 font-[OpenDyslexic]">
+                  <div className="text-xl leading-relaxed text-gray-800 ">
                     {renderTextWithPictograms(currentStoryPage.text, currentStoryPage.pictograms)}
                   </div>
 
@@ -435,7 +454,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
                       {currentStoryPage.pictograms.map(({ word, emoji }) => (
                         <div
                           key={word}
-                          className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium transition-all
+                          className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm  transition-all
                           ${clickedPictograms.has(word)
                               ? 'bg-green-100 text-green-700 border-2 border-green-300'
                               : 'bg-gray-100 text-gray-600 border-2 border-gray-300'
@@ -496,7 +515,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-100 border-2 border-yellow-300 p-4 rounded-xl shadow-lg text-center text-yellow-800 font-medium"
+              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-100 border-2 border-yellow-300 p-4 rounded-xl shadow-lg text-center text-yellow-800"
             >
               ¡Haz clic en al menos {requiredClicks} pictogramas para continuar!
             </motion.div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { Star, Brain, Lightbulb, CheckCircle, XCircle } from 'lucide-react';
+import { Star, Brain, Lightbulb } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
 import { Badge } from '../../../ui/badge';
@@ -11,7 +11,7 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenPreguntasInferenciales } from '../IniciosJuegosLecturas/StartScreenPreguntasInferenciales/StartScreenPreguntasInferenciales';
+import { StartScreenPreguntasInferenciales } from '../IniciosJuegosLecturas/StartScreenPreguntasInferenciales';
 
 interface PreguntasInferencialesProps {
   onBack: () => void;
@@ -27,7 +27,6 @@ interface InferenceChallenge {
   explanation: string;
   hint: string;
   difficulty: number;
-  timeLimit: number;
 }
 
 interface Level {
@@ -54,7 +53,7 @@ const allLevels: Level[] = [
         explanation: "Las pistas son que cerró la puerta suavemente, suspiró profundamente, y tiene lágrimas en los ojos, lo que sugiere tristeza. La correa sin usar implica que Toby ya no está.",
         hint: "Observa las acciones sutiles: cerrar suavemente, suspirar, y qué significa la correa sin usar.",
         difficulty: 2,
-        timeLimit: 45
+
       },
       {
         id: 2,
@@ -70,7 +69,7 @@ const allLevels: Level[] = [
         explanation: "Las lágrimas y el contexto de tristeza (suspirar, correa sin usar) sugieren que María está escribiendo algo emocional, probablemente una despedida a Toby, quien ya no está.",
         hint: "Piensa en por qué alguien escribiría con lágrimas, considerando el contexto del texto.",
         difficulty: 2,
-        timeLimit: 40
+
       },
       {
         id: 3,
@@ -86,7 +85,7 @@ const allLevels: Level[] = [
         explanation: "Dado su estado emocional (tristeza, lágrimas), es probable que María continúe procesando su pérdida, posiblemente guardando el cuaderno y siguiendo con su tristeza.",
         hint: "Considera el estado emocional de María y qué acción encaja con ese sentimiento.",
         difficulty: 3,
-        timeLimit: 50
+
       },
       {
         id: 4,
@@ -102,7 +101,7 @@ const allLevels: Level[] = [
         explanation: "El texto se centra en las acciones y emociones de María, que reflejan tristeza por la pérdida de Toby, lo que apunta al tema del duelo por una mascota.",
         hint: "Piensa en la emoción principal que transmite el texto y cómo se relaciona con las acciones de María.",
         difficulty: 3,
-        timeLimit: 50
+
       }
     ]
   },
@@ -124,7 +123,7 @@ const allLevels: Level[] = [
         explanation: "El texto menciona que Ana respira profundamente y siente una mezcla de ansiedad y determinación, lo que indica nerviosismo combinado con resolución.",
         hint: "Fíjate en las palabras que describen cómo actúa Ana y lo que siente al llegar al auditorio.",
         difficulty: 2,
-        timeLimit: 40
+
       },
       {
         id: 6,
@@ -140,7 +139,7 @@ const allLevels: Level[] = [
         explanation: "El texto muestra que Ana se preparó bien, pero también que hay otros participantes confiados, sugiriendo que varios están preparados, lo que hará la competencia reñida.",
         hint: "Considera que el texto menciona diferentes niveles de preparación y confianza entre los concursantes.",
         difficulty: 2,
-        timeLimit: 40
+
       },
       {
         id: 7,
@@ -156,7 +155,7 @@ const allLevels: Level[] = [
         explanation: "Ana estudió durante semanas y revisa su proyecto con determinación, lo que muestra que es dedicada y perseverante.",
         hint: "Piensa en cómo Ana se prepara y actúa antes de la competencia.",
         difficulty: 2,
-        timeLimit: 45
+
       },
       {
         id: 8,
@@ -172,7 +171,7 @@ const allLevels: Level[] = [
         explanation: "El texto indica que Ana está ansiosa pero determinada, y sentarse en una esquina revisando su proyecto sugiere que busca concentrarse antes de la competencia.",
         hint: "Considera el estado emocional de Ana y qué la motiva a actuar así.",
         difficulty: 3,
-        timeLimit: 50
+
       }
     ]
   },
@@ -194,7 +193,7 @@ const allLevels: Level[] = [
         explanation: "El texto describe múltiples ejemplos de personas ayudándose mutuamente, culminando en una respuesta colectiva a la crisis, destacando la solidaridad comunitaria.",
         hint: "Observa el patrón de comportamiento que se repite en toda la historia.",
         difficulty: 3,
-        timeLimit: 55
+
       },
       {
         id: 10,
@@ -210,7 +209,7 @@ const allLevels: Level[] = [
         explanation: "La señora Martínez enseña a leer a quien lo necesite, lo que indica que es generosa y está comprometida con el bienestar de la comunidad.",
         hint: "Piensa en qué revela el acto de enseñar a leer a cualquiera que lo necesite.",
         difficulty: 2,
-        timeLimit: 40
+
       },
       {
         id: 11,
@@ -226,7 +225,7 @@ const allLevels: Level[] = [
         explanation: "El texto muestra que el pueblo ya tenía una cultura de ayuda mutua (donaciones, reparaciones, enseñanza), lo que llevó a una respuesta colectiva ante la crisis.",
         hint: "Fíjate en cómo el pueblo actuaba antes de las lluvias.",
         difficulty: 3,
-        timeLimit: 50
+
       },
       {
         id: 12,
@@ -242,7 +241,7 @@ const allLevels: Level[] = [
         explanation: "Dado el historial de solidaridad del pueblo, es probable que se unan nuevamente para enfrentar otra crisis, como lo hicieron con las inundaciones.",
         hint: "Considera cómo el pueblo ha respondido a desafíos previos según el texto.",
         difficulty: 3,
-        timeLimit: 50
+
       }
     ]
   }
@@ -263,12 +262,14 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const currentLevelData = allLevels[currentLevel - 1] || allLevels[0];
   const challenges = currentLevelData.challenges;
   const challenge = challenges[currentChallenge];
 
-  const progress = challenges.length > 0 ? (currentChallenge / challenges.length) * 100 : 0;
+  const progress = ((currentChallenge + 1) / challenges.length) * 100;
+
 
   // Reset al cambiar nivel
   useEffect(() => {
@@ -281,28 +282,30 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
 
   }, [initialLevel]);
 
-  
   useEffect(() => {
-    if (gameStarted && timeLeft > 0 && !showResult && selectedAnswer === null) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    if (gameStarted && timeLeft > 0 && !showResult && selectedAnswer === null && !isSpeaking) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 100);
       return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && gameStarted && !showResult && selectedAnswer === null) {
+    }
+    else if (timeLeft === 0 && gameStarted && !showResult && selectedAnswer === null && !isSpeaking) {
       handleTimeUp();
     }
-  }, [timeLeft, gameStarted, showResult, selectedAnswer]);
+  }, [timeLeft, gameStarted, showResult, selectedAnswer, isSpeaking]);
+
 
   useEffect(() => {
     if (gameStarted && challenge) {
-      setTimeLeft(challenge.timeLimit);
+      setTimeLeft(45); // ✅ tiempo base
       setSelectedAnswer(null);
       setShowResult(false);
       setShowHint(false);
     }
   }, [currentChallenge, currentLevel, gameStarted, challenge]);
 
+
   const startGame = () => {
     setGameStarted(true);
-    setTimeLeft(challenge.timeLimit);
+
   };
 
   const handleTimeUp = () => {
@@ -310,13 +313,6 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
       setSelectedAnswer(-1);
       setStreak(0);
       setShowResult(true);
-      setTimeout(() => {
-        if (currentChallenge < challenges.length - 1) {
-          setCurrentChallenge(currentChallenge + 1);
-        } else {
-          setShowMotivational(true);
-        }
-      }, 4000);
     }
   };
 
@@ -327,14 +323,18 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
     setShowResult(true);
 
     if (answerIndex === challenge.correct) {
-      let points = challenge.difficulty * 15;
-      const timeBonus = Math.floor(timeLeft / 5) * 2;
-      const streakBonus = streak * 5;
+      let basePoints = challenge.difficulty * 10; // antes 15
+      const timeBonus = Math.floor(timeLeft / 10) * 2;
+      const streakBonus = Math.min(streak * 3, 15);
       const hintPenalty = showHint ? -5 : 0;
-      const totalPoints = Math.max(points + timeBonus + streakBonus + hintPenalty, 5);
 
-      setScore(score + totalPoints);
-      setStreak(streak + 1);
+      const totalPoints = Math.max(
+        basePoints + timeBonus + streakBonus + hintPenalty,
+        5
+      );
+
+      setScore(prev => prev + totalPoints);
+      setStreak(prev => prev + 1);
       setShowReward(true);
     } else {
       setStreak(0);
@@ -342,9 +342,9 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
 
     setTimeout(() => {
       setShowReward(false);
-      nextChallenge();
-    }, 4000);
+    }, 3000);
   };
+
 
   const nextChallenge = () => {
     if (currentChallenge < challenges.length - 1) {
@@ -360,7 +360,11 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
     setStreak(0);
     setShowMotivational(false);
     setShowLevelComplete(false);
-    setGameStarted(false);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setShowHint(false);
+    setTimeLeft(45);
+    setGameStarted(true);
   };
 
   const loadNextLevel = () => {
@@ -458,93 +462,100 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
               ))}
             </div>
           </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
+              <CardContent className="p-8">
+                <div className="mb-4">
+                  <AudioPlayer text={currentLevelData.text} onSpeakingChange={setIsSpeaking} />
+                </div>
+                <div className="text-lg leading-relaxed text-black bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border-2 border-indigo-200">
+                  {currentLevelData.text}
+                </div>
 
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
-            <CardContent className="p-8">
-              <div className="mb-4">
-                <AudioPlayer text="Reproduciendo texto..." duration={4000} />
-              </div>
-              <div className="text-lg leading-relaxed text-black bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border-2 border-indigo-200">
-                {currentLevelData.text}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 mb-6">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl text-black">{challenge.question}</h3>
                 <Button
                   onClick={toggleHint}
                   variant="outline"
-                  className="bg-yellow-100 border-yellow-300 text-yellow-700 hover:bg-yellow-200"
+                  className="bg-yellow-100 border-yellow-300 text-yellow-700 hover:bg-yellow-200 mt-4"
                 >
                   <Lightbulb className="w-4 h-4 mr-2" />
                   Pista
                 </Button>
-              </div>
 
-              {showHint && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-4 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200"
-                >
-                  <p className="text-yellow-800">{challenge.hint}</p>
-                </motion.div>
-              )}
-
-              <div className="grid gap-3">
-                {challenge.options.map((option, index) => (
+                {showHint && (
                   <motion.div
-                    key={index}
-                    whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
-                    whileTap={{ scale: 0.98 }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-4 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200 mt-4"
                   >
-                    <Button
-                      onClick={() => handleAnswerSelect(index)}
-                      disabled={selectedAnswer !== null}
-                      variant="outline"
-                      className={`w-full justify-start text-left p-6 h-auto transition-all ${
-                        selectedAnswer === null
+                    <p className="text-yellow-800">{challenge.hint}</p>
+                  </motion.div>
+                )}
+
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 mb-8 w-[800px]">
+
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl text-black">{challenge.question}</h3>
+
+                </div>
+
+
+
+                <div className="grid gap-3">
+                  {challenge.options.map((option, index) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button
+                        onClick={() => handleAnswerSelect(index)}
+                        disabled={selectedAnswer !== null}
+                        variant="outline"
+                        className={`w-full justify-start text-left p-6 h-auto transition-all ${selectedAnswer === null
                           ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-purple-300'
                           : selectedAnswer === index
-                          ? index === challenge.correct
-                            ? 'bg-green-100 border-green-400 text-green-800'
-                            : 'bg-red-100 border-red-400 text-red-800'
-                          : index === challenge.correct && showResult
-                          ? 'bg-green-100 border-green-400 text-green-800'
-                          : 'bg-gray-100 border-gray-300 text-gray-500'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm">
-                          {String.fromCharCode(65 + index)}
+                            ? 'bg-indigo-200 border-indigo-400 text-indigo-800'
+                            : 'bg-gray-100 border-gray-300 text-gray-500'
+                          }`}
+                      >
+                        <div className="flex items-start gap-3 text-left w-full">
+
+                          <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm">
+                            {String.fromCharCode(65 + index)}
+                          </div>
+                          <span className="text-lg text-black flex-1">{option}</span>
+
                         </div>
-                        <span className="text-lg text-black flex-1">{option}</span>
-                        {showResult && (
-                          <span>
-                            {index === challenge.correct ? (
-                              <CheckCircle className="w-5 h-5 text-green-600" />
-                            ) : selectedAnswer === index ? (
-                              <XCircle className="w-5 h-5 text-red-600" />
-                            ) : null}
-                          </span>
-                        )}
-                      </div>
-                    </Button>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                      </Button>
+                    </motion.div>
+                  ))}
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <Button
+                    onClick={nextChallenge}
+                    className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-xl"
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           {showResult && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <Card className="bg-blue-50 border-2 border-blue-200">
+
+
+
+
+              <Card className="bg-blue-50 border-2 border-blue-200 mt-4">
                 <CardContent className="p-6">
                   <h4 className="text-lg mb-3 text-blue-800 flex items-center gap-2">
                     <Brain className="w-5 h-5" />

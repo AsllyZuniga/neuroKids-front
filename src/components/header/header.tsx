@@ -48,12 +48,12 @@ export default function Header() {
     setIsAuthenticated(false);
     setUser(null);
     setUserType("");
-    navigate("/tipo-usuario");
+    navigate("/bienvenida/estudiante");
   };
 
   const getUserDisplayName = () => {
     if (!user) return "";
-    
+
     if (userType === "estudiante") {
       return `${user.nombre} ${user.apellido || ""}`.trim();
     } else {
@@ -65,7 +65,8 @@ export default function Header() {
     <header className="header">
       <div className="header__container">
         <div className="header__logo">
-          <img src="/src/assets/logo.png" alt="NeuroKids" className="header__logo-img" />
+          <img src="/src/assets/logo.png" alt="NeuroKids" className="header__logo-img" onClick={() => navigate("/bienvenida/estudiante")} />
+
         </div>
 
         <div className="header__auth">
@@ -74,6 +75,30 @@ export default function Header() {
               <span className="header__welcome">
                 {HEADER_TEXT.welcome}, {getUserDisplayName()}
               </span>
+
+              <Button
+                label="Inicio"
+                variant="primary"
+                size="medium"
+                onClick={() => navigate("/bienvenida/estudiante")}
+                className="header__profile-btn"
+              />
+              <Button
+                label="Perfil"
+                variant="primary"
+                size="medium"
+                onClick={() => {
+                  if (userType === "docente" || userType === "admin") {
+                    navigate("/perfil/docente");
+                  } else {
+                    navigate("/perfil/estudiante");
+                  }
+                }}
+                className="header__profile-btn"
+              />
+
+
+
               <Button
                 label={HEADER_TEXT.logout}
                 variant="secondary"

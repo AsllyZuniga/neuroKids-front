@@ -32,14 +32,14 @@ export function Avatar({ name, level, xp, maxXp, badges, className = '' }: Avata
           </div>
           
    
-          <div className="absolute -top-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+          <div className="absolute -top-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm ">
             {level}
           </div>
         </div>
         
 
         <div className="flex-1">
-          <h3 className="text-lg text-gray-800 mb-1 font-semibold">{name}</h3>
+          <h3 className="text-lg text-gray-800 mb-1">{name}</h3>
           
 
           <div className="mb-2">

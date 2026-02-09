@@ -10,7 +10,7 @@ import { ProgressBar } from "../../../others/ProgressBar";
 import { RewardAnimation } from "../../../others/RewardAnimation";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { ConfettiExplosion } from "../../../others/ConfettiExplosion"; 
+import { ConfettiExplosion } from "../../../others/ConfettiExplosion";
 import { LevelLock } from "../../../others/LevelLock";
 import { StartScreenBingo } from "../IniciosJuegosLecturas/StartScreenBingo";
 import { speakText, canSpeakOnHover } from "../../../../utils/textToSpeech";
@@ -183,180 +183,179 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
     }
     setShowLevelComplete(false);
   };
- if (!gameStarted) {
+  if (!gameStarted) {
     return <StartScreenBingo onStart={() => setGameStarted(true)} onBack={onBack} />;
   }
 
   // Envolver el juego con LevelLock
   return (
     <LevelLock level={level} isLocked={isLevelLocked}>
-    <div
-      className="min-h-screen p-4 sm:p-6 relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
-      }}
-    >
-      <ConfettiExplosion show={showBingo} />
-      <RewardAnimation type="star" show={showReward} />
-      {showBingo && (
-        <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1.5, rotate: 0 }}
-          exit={{ scale: 0, rotate: 180 }}
-          className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
-        >
-          <div className="text-8xl font-bold text-yellow-400 drop-shadow-2xl animate-pulse">
-            ¡BINGO!
-          </div>
-        </motion.div>
-      )}
-
-      {/* HEADER */}
-      <GameHeader
-        title="Bingo de Palabras"
-        level={level}
-        score={calledIndex}
-        onBack={onBack}
-        onRestart={restartLevel}
-      />
-
-      {/* PROGRESS BAR */}
-      <ProgressBar
-        current={calledIndex + 1}
-        total={calledList.length}
-        className="mb-6"
-      />
-
-      {/* ANIMAL GUIDE */}
-      <div className="max-w-2xl mx-auto mb-6">
-        <AnimalGuide
-          animal="owl"
-          message="¡Escucha la palabra y búscala en tu cartón! ¡Marca si la tienes!"
-        />
-      </div>
-
-      {/* JUEGO */}
-      {!bingoAchieved && !showMotivational && !showLevelComplete && (
-        <div className="grid md:grid-cols-3 gap-5 max-w-7xl mx-auto">
+      <div
+        className="min-h-screen p-4 sm:p-6 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
+        }}
+      >
+        <ConfettiExplosion show={showBingo} />
+        <RewardAnimation type="star" show={showReward} />
+        {showBingo && (
           <motion.div
-            key={currentWord}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="flex flex-col items-center bg-white/90 p-5 rounded-2xl shadow-lg"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1.5, rotate: 0 }}
+            exit={{ scale: 0, rotate: 180 }}
+            className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
           >
-            <h2 className="text-lg font-medium text-gray-700 mb-3">Palabra actual</h2>
-            <div className="text-4xl font-bold text-indigo-700 mb-4">{currentWord}</div>
-
-            {!isWordOnCard && (
-              <div className="text-yellow-700 text-sm text-center bg-yellow-50 rounded-md p-2 mb-3">
-              </div>
-            )}
-
-            <ButtonWithAudio
-              onClick={goToNextWord}
-              disabled={isWordOnCard}
-              audioText="Siguiente palabra"
-              className={`w-full ${isWordOnCard
-                ? "bg-blue-600 cursor-not-allowed text-black"
-                : "bg-green-500 hover:bg-green-400 text-black"
-                }`}
-            >
-              Siguiente palabra
-            </ButtonWithAudio>
-
-            <ButtonWithAudio
-              onClick={speakCurrentWord}
-              variant="outline"
-              size="sm"
-              audioText="Repetir palabra"
-              className="mt-3 w-full bg-purple-500 text-black"
-            >
-              <Volume2 className="w-4 h-4 mr-2 text-black" />
-              Repetir
-            </ButtonWithAudio>
+            <div className="text-8xl text-yellow-400 drop-shadow-2xl animate-pulse">
+              ¡BINGO!
+            </div>
           </motion.div>
+        )}
 
-          <div className="md:col-span-2 bg-white/90 p-4 rounded-2xl shadow-lg">
-            <div
-              className="grid gap-3"
-              style={{
-                gridTemplateColumns: `repeat(${data.gridSize}, minmax(100px, 1fr))`,
-                gridTemplateRows: `repeat(${data.rows || data.gridSize}, minmax(100px, 1fr))`,
-              }}
+        {/* HEADER */}
+        <GameHeader
+          title="Bingo de Palabras"
+          level={level}
+          score={calledIndex}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
+
+        {/* PROGRESS BAR */}
+        <ProgressBar
+          current={calledIndex}
+          total={calledList.length}
+          className="mb-6"
+        />
+
+        {/* ANIMAL GUIDE */}
+        <div >
+          <AnimalGuide
+            animal="owl"
+            message="¡Escucha la palabra y búscala en tu cartón! ¡Marca si la tienes!"
+          />
+        </div>
+
+        {/* JUEGO */}
+        {!bingoAchieved && !showMotivational && !showLevelComplete && (
+          <div className="grid md:grid-cols-3 gap-5 max-w-7xl mx-auto">
+            <motion.div
+              key={currentWord}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="flex flex-col items-center bg-white/90 p-5 rounded-2xl shadow-lg"
             >
-              {grid.map((cell, i) => (
-                <motion.div
-                  key={i}
-                  whileTap={{ scale: 0.9 }}
-                  whileHover={{ scale: 1.05 }}
-                  initial={{ scale: 1 }}
-                  animate={cell.matched ? {
-                    scale: [1, 1.3, 1],
-                    rotate: [0, 10, -10, 0],
-                    transition: { duration: 0.6 }
-                  } : {}}
-                  onMouseEnter={() => {
-                    // Reproducir el audio de la palabra al hacer hover
-                    if (!cell.matched && canSpeakOnHover()) {
-                      speakText(cell.word, { voiceType: 'child' });
-                    }
-                  }}
-                >
-                  <Card
-                    onClick={() => handleCellClick(cell.word)}
-                    className={`cursor-pointer text-center p-3 border-2 rounded-xl transition-all h-full flex flex-col justify-center
-                      ${cell.matched
-                        ? "border-green-500 bg-green-100 shadow-2xl scale-110"
-                        : "border-blue-200 hover:bg-blue-50"
-                      }`}
+              <h2 className="text-lg  text-gray-700 mb-3">Palabra actual</h2>
+              <div className="text-4xl  text-indigo-700 mb-4">{currentWord}</div>
+
+              {!isWordOnCard && (
+                <div className="text-yellow-700 text-sm text-center bg-yellow-50 rounded-md p-2 mb-3">
+                </div>
+              )}
+
+      /*    <ButtonWithAudio
+                onClick={goToNextWord}
+                disabled={isWordOnCard}
+                className={`w-full ${isWordOnCard
+                  ? "bg-blue-600 cursor-not-allowed text-black"
+                  : "bg-green-500 hover:bg-green-400 text-black"
+                  }`}
+              >
+                Siguiente palabra
+              </ButtonWithAudio>
+
+              <ButtonWithAudio
+                onClick={speakCurrentWord}
+                variant="outline"
+                size="sm"
+
+                className="mt-3 w-full bg-purple-500 text-black"
+              >
+                <Volume2 className="w-4 h-4 mr-2 text-black" />
+                Repetir
+              </ButtonWithAudio>
+            </motion.div>
+
+            <div className="md:col-span-2 bg-white/90 p-4 rounded-2xl shadow-lg">
+              <div
+                className="grid gap-3"
+                style={{
+                  gridTemplateColumns: `repeat(${data.gridSize}, minmax(100px, 1fr))`,
+                  gridTemplateRows: `repeat(${data.rows || data.gridSize}, minmax(100px, 1fr))`,
+                }}
+              >
+                {grid.map((cell, i) => (
+                  <motion.div
+                    key={i}
+                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.05 }}
+                    initial={{ scale: 1 }}
+                    animate={cell.matched ? {
+                      scale: [1, 1.3, 1],
+                      rotate: [0, 10, -10, 0],
+                      transition: { duration: 0.6 }
+                    } : {}}
+                    onMouseEnter={() => {
+                      // Reproducir el audio de la palabra al hacer hover
+                      if (!cell.matched && canSpeakOnHover()) {
+                        speakText(cell.word, { voiceType: 'child' });
+                      }
+                    }}
                   >
-                    <motion.div
-                      animate={cell.matched ? {
-                        scale: [1, 1.5, 1],
-                        rotate: [0, 360],
-                      } : {}}
-                      transition={{ duration: 0.8 }}
-                      className="text-5xl mb-1"
+                    <Card
+                      onClick={() => handleCellClick(cell.word)}
+                      className={`cursor-pointer text-center p-3 border-2 rounded-xl transition-all h-full flex flex-col justify-center
+                      ${cell.matched
+                          ? "border-green-500 bg-green-100 shadow-2xl scale-110"
+                          : "border-blue-200 hover:bg-blue-50"
+                        }`}
                     >
-                      {cell.emoji}
-                    </motion.div>
-                    <div className="text-lg font-semibold text-gray-800">{cell.word}</div>
-                  </Card>
-                </motion.div>
-              ))}
+                      <motion.div
+                        animate={cell.matched ? {
+                          scale: [1, 1.5, 1],
+                          rotate: [0, 360],
+                        } : {}}
+                        transition={{ duration: 0.8 }}
+                        className="text-5xl mb-1"
+                      >
+                        {cell.emoji}
+                      </motion.div>
+                      <div className="text-lg  text-gray-800">{cell.word}</div>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* MENSAJE MOTIVACIONAL */}
-      {showMotivational && (
-        <MotivationalMessage
-          score={calledIndex + 1}
-          total={calledList.length}
-          customMessage="¡Hiciste BINGO! ¡Increíble!"
-          customSubtitle="Encontraste todas las palabras del cartón"
-          celebrationText="Felicitaciones"
-          onComplete={() => {
-            setShowMotivational(false);
-            setShowLevelComplete(true);
-          }}
-        />
-      )}
+        {/* MENSAJE MOTIVACIONAL */}
+        {showMotivational && (
+          <MotivationalMessage
+            score={calledIndex + 1}
+            total={calledList.length}
+            customMessage="¡Hiciste BINGO! ¡Increíble!"
+            customSubtitle="Encontraste todas las palabras del cartón"
+            celebrationText="Felicitaciones"
+            onComplete={() => {
+              setShowMotivational(false);
+              setShowLevelComplete(true);
+            }}
+          />
+        )}
 
-      {/* MODAL FINAL */}
-      {showLevelComplete && (
-        <LevelCompleteModal
-          score={calledIndex + 1}
-          total={calledList.length}
-          level={level}
-          isLastLevel={level >= 3}
-          onNextLevel={handleNextLevel}
-          onRestart={restartLevel}
-          onExit={onBack}
-        />
-      )}
-    </div>
+        {/* MODAL FINAL */}
+        {showLevelComplete && (
+          <LevelCompleteModal
+            score={calledIndex + 1}
+            total={calledList.length}
+            level={level}
+            isLastLevel={level >= 3}
+            onNextLevel={handleNextLevel}
+            onRestart={restartLevel}
+            onExit={onBack}
+          />
+        )}
+      </div>
     </LevelLock>
   );
 }

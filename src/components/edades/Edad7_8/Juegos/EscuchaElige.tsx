@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
-// import { Button } from "../../../ui/button"; // Reemplazado por ButtonWithAudio
 import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
 import { Card, CardContent } from "../../../ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
@@ -18,7 +17,6 @@ import { useLevelLock } from "../../../../hooks/useLevelLock";
 import gatoAudio from "../../../../assets/sounds/gato_escuchaElige.mp3";
 import perroAudio from "../../../../assets/sounds/perro_escuchaElige.mp3";
 import vacaAudio from "../../../../assets/sounds/vaca_escuchaElige.mp3";
-import aguaAudio from "../../../../assets/sounds/agua_escuchaElige.mp3";
 import loboAudio from "../../../../assets/sounds/lobo_escuchaElige.mp3";
 import cerdoAudio from "../../../../assets/sounds/cerdo_escuchaElige.mp3";
 import galloAudio from "../../../../assets/sounds/gallo_escuchaElige.mp3";
@@ -26,7 +24,6 @@ import campanaAudio from "../../../../assets/sounds/campana_escuchaElige.mp3";
 import telefonoAudio from "../../../../assets/sounds/telefono_escuchaElige.mp3";
 import relojAudio from "../../../../assets/sounds/reloj_escuchaElige.mp3";
 import ambulanciaAudio from "../../../../assets/sounds/ambulancia_escuchaElige.mp3";
-import platoAudio from "../../../../assets/sounds/plato_escuchaElige.mp3";
 import silencioAudio from "../../../../assets/sounds/silencio_escuchaElige.mp3";
 import abejaAudio from "../../../../assets/sounds/abeja_escuchaElige.mp3";
 import trenAudio from "../../../../assets/sounds/tren_escuchaElige.mp3";
@@ -69,14 +66,7 @@ const levelQuestions: Record<number, Question[]> = {
       soundLabel: "Reproducir sonido"
     },
     {
-      id: 4, //corregir
-      audio: aguaAudio,
-      options: ["🚿 Ducha", "🚪 Puerta", "🧼 Jabón", "🚽 Inodoro"],
-      correct: 0,
-      soundLabel: "Reproducir sonido"
-    },
-    {
-      id: 5,
+      id: 4,
       audio: loboAudio,
       options: ["🐺 Lobo", "🦁 León", "🐻 Oso", "🦊 Zorro"],
       correct: 0,
@@ -113,13 +103,7 @@ const levelQuestions: Record<number, Question[]> = {
       correct: 3,
       soundLabel: "Reproducir sonido"
     },
-    {
-      id: 5,
-      audio: relojAudio,
-      options: ["⏰ Reloj", "🎞️ Camára", "📻 Radio", "🔔 Campanilla"],
-      correct: 0,
-      soundLabel: "Reproducir sonido"
-    },
+
   ],
 
   3: [
@@ -131,9 +115,9 @@ const levelQuestions: Record<number, Question[]> = {
       soundLabel: "Reproducir sonido"
     },
     {
-      id: 2, // corregir
-      audio: platoAudio,
-      options: ["🍽 Plato", "🥄 Cuchara", "🥛 Vaso", "🍴 Tenedor"],
+      id: 2, 
+      audio: relojAudio,
+      options: ["⏰ Reloj", "🎞️ Camára", "📻 Radio", "🔔 Campanilla"],
       correct: 0,
       soundLabel: "Reproducir sonido"
     },
@@ -325,9 +309,9 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
       />
 
       {/* ANIMAL GUIDE */}
-      <div className="max-w-2xl mx-auto mb-8">
+      <div>
         <AnimalGuide
-          animal="owl"
+          animal="monkey"
           message="¡Escucha atentamente el sonido y elige la respuesta correcta!"
         />
       </div>
@@ -366,7 +350,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
                 whileTap={{ scale: 0.98 }}
               >
                 <Card
-                  className={`cursor-pointer transition-all border-2 p-4 text-lg font-medium
+                  className={`cursor-pointer transition-all border-2 p-4 text-lg
                   ${selectedAnswer === null
                       ? 'bg-white hover:bg-orange-50 border-gray-200 hover:border-orange-300 text-black'
                       : selectedAnswer === index

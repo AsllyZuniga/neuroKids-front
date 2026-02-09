@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import {  ChevronLeft, ChevronRight, Calendar, Award, MapPin, Book, CheckCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar, Award, MapPin, Book, CheckCircle } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
 import { Badge } from '../../../ui/badge';
@@ -11,7 +11,19 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenBiografiasSencillas } from '../IniciosJuegosLecturas/StartScreenBiografiasSencillas/StartScreenBiografiasSencillas';
+import { StartScreenBiografiasSencillas } from '../IniciosJuegosLecturas/StartScreenBiografiasSencillas';
+import marie from '../../../../assets/11_12/biografias_sencillas/marieCurie.svg';
+import leonardo from '../../../../assets/11_12/biografias_sencillas/leonardoDaVinci.svg';
+import mandela from '../../../../assets/11_12/biografias_sencillas/nelsonMandela.svg';
+import frida from '../../../../assets/11_12/biografias_sencillas/fridaKahlo.svg';
+import einstein from '../../../../assets/11_12/biografias_sencillas/albertEinstein.svg';
+import malala from '../../../../assets/11_12/biografias_sencillas/malalaYousafzai.svg';
+import steveJobs from '../../../../assets/11_12/biografias_sencillas/steveJobs.svg';
+import janeGoodall from '../../../../assets/11_12/biografias_sencillas/janeGoodall.svg';
+import martin from '../../../../assets/11_12/biografias_sencillas/martinLutherKingJr.svg';
+import amelia from '../../../../assets/11_12/biografias_sencillas/ameliaEarhart.svg';
+import poe from '../../../../assets/11_12/biografias_sencillas/edgarAllanPoe.svg';
+import darwin from '../../../../assets/11_12/biografias_sencillas/charlesDarwin.svg';
 
 interface BiografiasSencillasProps {
   onBack: () => void;
@@ -25,7 +37,8 @@ interface Biography {
   birthYear: number;
   country: string;
   category: string;
-  emoji: string;
+  image: string;
+
   mainAchievement: string;
   story: string;
   timeline: {
@@ -50,7 +63,7 @@ const biographiesLevel1: Biography[] = [
     birthYear: 1867,
     country: "Polonia",
     category: "Ciencia",
-    emoji: "⚗️",
+    image: marie,
     mainAchievement: "Descubrió dos elementos químicos y fue pionera en el estudio de la radioactividad",
     story: "Marie Curie nació en Polonia cuando las mujeres no podían ir a la universidad en su país. Pero ella tenía un gran sueño: estudiar ciencia. Trabajó muy duro y ahorró dinero para ir a estudiar a París, Francia. Allí conoció a Pierre Curie y se casaron. Juntos descubrieron elementos nuevos como el polonio y el radio. Marie fue la primera mujer en ganar un Premio Nobel, ¡y después ganó otro! Su trabajo ayudó a desarrollar tratamientos médicos que salvaron muchas vidas. Aunque enfrentó muchas dificultades por ser mujer en un mundo de hombres científicos, nunca se rindió.",
     timeline: [
@@ -86,7 +99,7 @@ const biographiesLevel1: Biography[] = [
     birthYear: 1452,
     country: "Italia",
     category: "Arte e Inventos",
-    emoji: "🎨",
+    image: leonardo,
     mainAchievement: "Fue artista, inventor, científico y diseñó máquinas adelantadas a su tiempo",
     story: "Leonardo da Vinci fue una de las personas más creativas de la historia. No solo pintó obras famosas como 'La Mona Lisa', sino que también diseñó inventos increíbles como helicópteros, tanques y paracaídas, ¡400 años antes de que se construyeran! Leonardo era muy curioso: estudiaba el cuerpo humano, los animales, las plantas y hasta el clima. Escribía sus notas al revés, como en un espejo. Aunque vivió hace más de 500 años, muchos de sus inventos parecen de ciencia ficción. Leonardo nos enseña que la creatividad no tiene límites cuando combinamos arte, ciencia y mucha imaginación.",
     timeline: [
@@ -121,7 +134,7 @@ const biographiesLevel1: Biography[] = [
     birthYear: 1918,
     country: "Sudáfrica",
     category: "Derechos Humanos",
-    emoji: "✊",
+    image: mandela,
     mainAchievement: "Luchó contra la discriminación racial y se convirtió en presidente de Sudáfrica",
     story: "Nelson Mandela nació en Sudáfrica cuando las leyes no permitían que las personas de piel negra tuvieran los mismos derechos que las de piel blanca. Esto se llamaba apartheid. Nelson estudió para ser abogado y decidió luchar pacíficamente por la igualdad. Por sus ideas, fue enviado a prisión durante 27 años. Pero nunca perdió la esperanza ni el amor por su país. Cuando salió de prisión, en lugar de buscar venganza, trabajó para que todas las personas pudieran vivir en paz. Se convirtió en el primer presidente negro de Sudáfrica y ganó el Premio Nobel de la Paz. Su vida nos enseña sobre el perdón, la perseverancia y la justicia.",
     timeline: [
@@ -156,7 +169,7 @@ const biographiesLevel1: Biography[] = [
     birthYear: 1907,
     country: "México",
     category: "Arte",
-    emoji: "🌺",
+    image: frida,
     mainAchievement: "Creó arte único expresando sus emociones y la cultura mexicana",
     story: "Frida Kahlo fue una artista mexicana muy especial. Cuando era joven, tuvo un accidente muy grave que la obligó a estar en cama durante mucho tiempo. Para no aburrirse, comenzó a pintar. Sus pinturas eran diferentes a las de otros artistas porque mostraba sus sentimientos, sus dolores y sus alegrías. También pintaba la hermosa cultura de México con colores brillantes. Frida no se avergonzaba de ser diferente; al contrario, celebraba lo que la hacía única. Sus autorretratos muestran una mujer fuerte que convirtió su dolor en arte hermoso. Aunque su vida fue difícil, sus pinturas están llenas de vida y color.",
     timeline: [
@@ -194,7 +207,7 @@ const biographiesLevel2: Biography[] = [
     birthYear: 1879,
     country: "Alemania",
     category: "Ciencia",
-    emoji: "🧠",
+    image: einstein,
     mainAchievement: "Desarrolló la teoría de la relatividad que cambió nuestra comprensión del universo",
     story: "Albert Einstein nació en Alemania y desde niño era muy curioso sobre cómo funcionaba el mundo. No le gustaba mucho la escuela tradicional, pero amaba aprender por su cuenta. Desarrolló ideas revolucionarias sobre el espacio, el tiempo y la energía. Su famosa ecuación E=mc² explica cómo la materia se convierte en energía. Einstein ganó el Premio Nobel y se convirtió en uno de los científicos más famosos del mundo. Tuvo que huir de su país por la guerra, pero siempre promovió la paz y el conocimiento.",
     timeline: [
@@ -229,7 +242,7 @@ const biographiesLevel2: Biography[] = [
     birthYear: 1997,
     country: "Pakistán",
     category: "Derechos Humanos",
-    emoji: "📚",
+    image: malala,
     mainAchievement: "Luchó por el derecho de las niñas a la educación y ganó el Premio Nobel de la Paz",
     story: "Malala nació en Pakistán, donde algunos grupos no querían que las niñas fueran a la escuela. Desde pequeña, escribió un blog sobre su vida y la importancia de estudiar. A los 15 años, fue atacada por defender la educación, pero sobrevivió y continuó su lucha. Se convirtió en la persona más joven en ganar el Premio Nobel. Hoy, viaja por el mundo promoviendo la educación para todos los niños.",
     timeline: [
@@ -264,7 +277,7 @@ const biographiesLevel2: Biography[] = [
     birthYear: 1955,
     country: "Estados Unidos",
     category: "Tecnología",
-    emoji: "💻",
+    image: steveJobs,
     mainAchievement: "Fundó Apple y revolucionó la computación personal, los teléfonos y la músicaデジタル",
     story: "Steve Jobs fue adoptado y creció en California. Abandonó la universidad pero fundó Apple en un garaje con su amigo. Crearon la primera computadora personal accesible. Aunque fue despedido de su propia compañía, regresó y creó productos innovadores como el iPhone y el iPad. Steve enfatizaba el diseño simple y hermoso en la tecnología.",
     timeline: [
@@ -299,7 +312,7 @@ const biographiesLevel2: Biography[] = [
     birthYear: 1934,
     country: "Reino Unido",
     category: "Ciencia",
-    emoji: "🦍",
+    image: janeGoodall,
     mainAchievement: "Estudió a los chimpancés y promovió la conservación de la vida silvestre",
     story: "Jane Goodall soñaba con África desde niña. A los 26 años, viajó a Tanzania para estudiar chimpancés en la naturaleza. Descubrió que usan herramientas y tienen emociones similares a los humanos. Fundó institutos para proteger animales y educar sobre el medio ambiente. Aún hoy, viaja promoviendo la conservación.",
     timeline: [
@@ -330,7 +343,7 @@ const biographiesLevel2: Biography[] = [
 ];
 
 const biographiesLevel3: Biography[] = [
- 
+
   {
     id: 9,
     name: "Martin Luther King Jr.",
@@ -338,7 +351,7 @@ const biographiesLevel3: Biography[] = [
     birthYear: 1929,
     country: "Estados Unidos",
     category: "Derechos Humanos",
-    emoji: "🕊️",
+    image: martin,
     mainAchievement: "Lideró el movimiento por los derechos civiles usando la no violencia",
     story: "Martin Luther King nació en una época de segregación racial en EE.UU. Como pastor, lideró protestas pacíficas contra la discriminación. Su famoso discurso 'Tengo un sueño' inspiró a millones. Ganó el Premio Nobel de la Paz y ayudó a pasar leyes por la igualdad. Trágicamente, fue asesinado, pero su legado vive.",
     timeline: [
@@ -373,7 +386,7 @@ const biographiesLevel3: Biography[] = [
     birthYear: 1897,
     country: "Estados Unidos",
     category: "Aventura",
-    emoji: "✈️",
+    image: amelia,
     mainAchievement: "Fue la primera mujer en volar sola sobre el Atlántico",
     story: "Amelia Earhart amaba la aventura. Aprendió a volar y rompió récords en aviación. Cruzó el Atlántico sola, inspirando a mujeres a entrar en campos dominados por hombres. Desapareció en un vuelo alrededor del mundo, pero su espíritu valiente perdura.",
     timeline: [
@@ -403,72 +416,72 @@ const biographiesLevel3: Biography[] = [
   },
   {
     id: 11,
-    name: "Stephen Hawking",
-    title: "El Científico del Universo",
-    birthYear: 1942,
-    country: "Reino Unido",
-    category: "Ciencia",
-    emoji: "🌌",
-    mainAchievement: "Explicó los agujeros negros y el Big Bang pese a su enfermedad",
-    story: "Stephen Hawking fue diagnosticado con una enfermedad que lo dejó en silla de ruedas, pero su mente brilló. Escribió libros sobre el universo accesibles para todos. Su trabajo sobre agujeros negros cambió la física. Comunicaba con una computadora y inspiró a muchos con su determinación.",
+    name: "Edgar Allan Poe",
+    title: "El Maestro del Misterio",
+    birthYear: 1809,
+    country: "Estados Unidos",
+    category: "Literatura",
+    image: poe,
+    mainAchievement: "Fue pionero del cuento de terror y del relato detectivesco moderno",
+    story: "Edgar Allan Poe fue un escritor estadounidense famoso por sus historias misteriosas y un poco escalofriantes. Desde joven amaba la lectura y la poesía. Aunque su vida fue difícil y a veces triste, usó su imaginación para crear cuentos inolvidables como 'El cuervo' y 'El corazón delator'. También creó uno de los primeros detectives de la literatura. Sus relatos enseñan a leer con atención, a imaginar y a explorar emociones profundas de una manera creativa. Hoy en día, Poe sigue siendo uno de los autores más influyentes del mundo.",
     timeline: [
-      { age: 21, event: "Diagnosticado con ELA" },
-      { age: 32, event: "Propuso la radiación de Hawking" },
-      { age: 46, event: "Publicó 'Una breve historia del tiempo'" },
-      { age: 59, event: "Ganó premios científicos" },
-      { age: 70, event: "Continuó trabajando en cosmología" }
+      { age: 5, event: "Comenzó a interesarse por la lectura" },
+      { age: 18, event: "Entró a la universidad" },
+      { age: 24, event: "Publicó sus primeros poemas" },
+      { age: 35, event: "Escribió 'El cuervo'" },
+      { age: 40, event: "Se volvió famoso por sus cuentos de misterio" }
     ],
-    inspiration: "Hawking nos enseña que las limitaciones físicas no detienen una mente curiosa.",
+    inspiration: "Poe nos enseña que la imaginación puede transformar las dificultades en arte y grandes historias.",
     quiz: {
-      question: "¿Qué libro famoso escribió Stephen Hawking?",
+      question: "¿Por qué es famoso Edgar Allan Poe?",
       options: [
-        "El origen de las especies",
-        "Una breve historia del tiempo",
-        "1984",
-        "El principito"
+        "Por descubrir planetas",
+        "Por escribir historias de misterio y terror",
+        "Por ser presidente",
+        "Por inventar máquinas"
       ],
       correct: 1,
-      explanation: "'Una breve historia del tiempo' explica el universo de manera simple."
+      explanation: "Edgar Allan Poe es famoso por sus cuentos de misterio y por ser pionero del relato detectivesco."
     },
     funFacts: [
-      "Apareció en Los Simpsons y Star Trek",
-      "Su voz era generada por computadora",
-      "Vivió mucho más de lo predicho por su enfermedad"
+      "Escribió el famoso poema 'El cuervo'",
+      "Creó uno de los primeros detectives de la literatura",
+      "Sus historias siguen leyéndose en todo el mundo"
     ]
   },
   {
     id: 12,
-    name: "Rosa Parks",
-    title: "La Madre del Movimiento por los Derechos Civiles",
-    birthYear: 1913,
-    country: "Estados Unidos",
-    category: "Derechos Humanos",
-    emoji: "🚌",
-    mainAchievement: "Se negó a ceder su asiento en un bus, iniciando el boicot de Montgomery",
-    story: "Rosa Parks creció en una era de segregación. Como costurera, un día se negó a dar su asiento a un hombre blanco en un bus, lo que la arrestaron. Esto encendió el movimiento por derechos civiles. Trabajó con Martin Luther King y luchó por la igualdad toda su vida.",
+    name: "Charles Darwin",
+    title: "El Explorador de la Evolución",
+    birthYear: 1809,
+    country: "Reino Unido",
+    category: "Ciencia",
+    image: darwin,
+    mainAchievement: "Propuso la teoría de la evolución por selección natural",
+    story: "Charles Darwin fue un científico inglés muy curioso. Desde joven le encantaba observar plantas y animales. Viajó por el mundo en un barco llamado HMS Beagle, donde estudió especies de muchos lugares. Notó que los seres vivos cambiaban para adaptarse a su entorno. Gracias a eso, creó la teoría de la evolución por selección natural, que explica cómo los animales y las personas han cambiado con el tiempo. Su libro 'El origen de las especies' transformó la ciencia y nuestra forma de entender la vida.",
     timeline: [
-      { age: 19, event: "Se unió a la NAACP" },
-      { age: 42, event: "Se negó a ceder su asiento en el bus" },
-      { age: 43, event: "Inició el boicot a los autobuses" },
-      { age: 50, event: "Trabajó en el Congreso" },
-      { age: 81, event: "Recibió la Medalla Presidencial de la Libertad" }
+      { age: 16, event: "Comenzó a interesarse por la naturaleza" },
+      { age: 22, event: "Viajó en el HMS Beagle" },
+      { age: 27, event: "Estudió animales en las Islas Galápagos" },
+      { age: 50, event: "Publicó 'El origen de las especies'" },
+      { age: 73, event: "Fue reconocido como uno de los grandes científicos" }
     ],
-    inspiration: "Rosa nos enseña que un acto de coraje puede iniciar grandes cambios sociales.",
+    inspiration: "Darwin nos enseña que observar, preguntar y explorar puede ayudarnos a comprender el mundo.",
     quiz: {
-      question: "¿Qué acción famosa hizo Rosa Parks?",
+      question: "¿Por qué es famoso Charles Darwin?",
       options: [
-        "Volar un avión",
-        "Negarse a ceder su asiento en un bus",
-        "Escribir un libro",
-        "Ganar una carrera"
+        "Por escribir poemas",
+        "Por crear la teoría de la evolución",
+        "Por ser presidente",
+        "Por inventar máquinas"
       ],
       correct: 1,
-      explanation: "Su negativa inició el boicot y el movimiento por derechos civiles."
+      explanation: "Charles Darwin es famoso por explicar cómo los seres vivos cambian con el tiempo mediante la evolución."
     },
     funFacts: [
-      "Era costurera de profesión",
-      "Hay estatuas y museos en su honor",
-      "Vivió hasta los 92 años"
+      "Viajó cinco años en un barco alrededor del mundo",
+      "Amaba coleccionar insectos",
+      "Su teoría cambió para siempre la biología"
     ]
   }
 ];
@@ -487,10 +500,10 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
   const [showMotivational, setShowMotivational] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [readBiographies, setReadBiographies] = useState<Set<number>>(new Set());
-
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const biographies = allBiographies[currentLevel - 1];
   const biography = biographies[currentBio];
-  const progress = (currentBio  / biographies.length) * 100;
+  const progress = (currentBio / biographies.length) * 100;
 
 
   useEffect(() => {
@@ -623,17 +636,16 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                         onClick={() => handleQuizAnswer(index)}
                         disabled={selectedAnswer !== null}
                         variant="outline"
-                        className={`w-full justify-start text-left p-6 h-auto transition-all ${
-                          selectedAnswer === null
-                            ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-indigo-300'
-                            : selectedAnswer === index
+                        className={`w-full justify-start text-left p-6 h-auto transition-all ${selectedAnswer === null
+                          ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-indigo-300'
+                          : selectedAnswer === index
                             ? index === biography.quiz.correct
                               ? 'bg-green-100 border-green-400 text-green-800'
                               : 'bg-red-100 border-red-400 text-red-800'
                             : index === biography.quiz.correct && selectedAnswer !== null
-                            ? 'bg-green-100 border-green-400 text-green-800'
-                            : 'bg-gray-100 border-gray-300 text-gray-500'
-                        }`}
+                              ? 'bg-green-100 border-green-400 text-green-800'
+                              : 'bg-gray-100 border-gray-300 text-gray-500'
+                          }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm">
@@ -713,11 +725,11 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
         />
 
         <AnimalGuide
-          animal="monkey"
+          animal="fish"
           message="¡Conoce personas extraordinarias que cambiaron el mundo! Sus historias nos inspiran a ser mejores."
         />
 
-        <div className="grid lg:grid-cols-3 gap-8 mt-6">
+        <div className="grid lg:grid-cols-3 gap-6 mt-6">
           {/* Main Biography */}
           <div className="lg:col-span-2">
             <motion.div
@@ -726,10 +738,11 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-300 mb-6">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-6 mb-6">
-                    <div className="text-8xl">{biography.emoji}</div>
+                    <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-indigo-300 shadow-lg">
+                      <img src={biography.image} className="w-full h-full object-cover" /></div>
                     <div className="flex-1">
                       <h2 className="text-3xl text-black mb-2">{biography.name}</h2>
                       <p className="text-xl text-black mb-3">{biography.title}</p>
@@ -738,11 +751,11 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                           {biography.category}
                         </Badge>
                         <div className="flex items-center gap-1 text-black">
-                          <Calendar className="w-4 h-4" />
+                          <Calendar className="w-4 h-4 text-purple-500" />
                           <span>{biography.birthYear}</span>
                         </div>
                         <div className="flex items-center gap-1 text-black">
-                          <MapPin className="w-4 h-4" />
+                          <MapPin className="w-4 h-4 text-red-500" />
                           <span>{biography.country}</span>
                         </div>
                       </div>
@@ -758,19 +771,19 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                   </div>
 
                   <div className="mb-6">
-                    <AudioPlayer text={`Reproduciendo biografía de ${biography.name}...`} duration={5000} />
+                    <AudioPlayer text={biography.story} onSpeakingChange={setIsSpeaking} />
                   </div>
 
                   <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-200 mb-6">
                     <p className="text-lg leading-relaxed text-black">{biography.story}</p>
                   </div>
 
-                  <div className="bg-green-50 p-4 rounded-lg border-2 border-green-200">
+                  <div className="bg-purple-100 p-4 rounded-lg border-2 border-purple-300">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-2xl">Lightbulb</span>
-                      <h4 className="text-lg text-green-800">Inspiración:</h4>
+                      <span className="text-2xl">💫</span>
+                      <h4 className="text-lg text-purple-800">Inspiración:</h4>
                     </div>
-                    <p className="text-green-700 italic">"{biography.inspiration}"</p>
+                    <p className="text-purple-700">"{biography.inspiration}"</p>
                   </div>
                 </CardContent>
               </Card>
@@ -789,18 +802,18 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
             </motion.div>
           </div>
 
-    
+
           <div className="lg:col-span-1">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 mb-6">
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-300 mb-6">
               <CardContent className="p-6">
                 <h3 className="text-lg mb-4 text-black flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-purple-500" />
+                  <Calendar className="w-5 h-5 text-green-500" />
                   Cronología de Vida
                 </h3>
                 <div className="space-y-4">
                   {biography.timeline.map((event, index) => (
                     <div key={index} className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm">
+                      <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
                         {event.age}
                       </div>
                       <p className="text-black text-sm">{event.event}</p>
@@ -810,10 +823,10 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
               </CardContent>
             </Card>
 
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200">
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-300">
               <CardContent className="p-6">
                 <h3 className="text-lg mb-4 text-black flex items-center gap-2">
-                  <span className="text-orange-500">Thinking Face</span>
+                  <span className="text-orange-500">🤔</span>
                   Datos Curiosos
                 </h3>
                 <div className="space-y-3">
@@ -828,7 +841,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
           </div>
         </div>
 
-   
+
         <div className="flex justify-between items-center mt-8">
           <Button
             onClick={previousBiography}
@@ -844,13 +857,12 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
             {biographies.map((_, index) => (
               <div
                 key={index}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentBio
-                    ? 'bg-indigo-500'
-                    : readBiographies.has(index)
+                className={`w-3 h-3 rounded-full transition-colors ${index === currentBio
+                  ? 'bg-indigo-500'
+                  : readBiographies.has(index)
                     ? 'bg-green-400'
                     : 'bg-gray-300'
-                }`}
+                  }`}
               />
             ))}
           </div>
