@@ -128,7 +128,7 @@ export default function TeacherWelcome() {
               </div>
               <h3 className="teacher-welcome__card-title">Mis Estudiantes</h3>
               <p className="teacher-welcome__card-description">
-                Gestiona y supervisa el progreso de tus estudiantes
+                Gestiona y revisa el listado de tus estudiantes
               </p>
               <Button
                 label="Ver Estudiantes"

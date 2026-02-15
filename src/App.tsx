@@ -9,6 +9,7 @@ const StudentRegister = lazy(() => import("./pages/studentRegister/studentRegist
 const StudentWelcome = lazy(() => import("./pages/studentWelcome/studentWelcome"));
 const TeacherWelcome = lazy(() => import("./pages/teacherWelcome/teacherWelcome"));
 const TestInstituciones = lazy(() => import("./pages/testInstituciones/testInstituciones"));
+const Estudiantes = lazy(() => import("./pages/estudiantes/estudiantes"));
 
 import { BingoPalabras } from "./components/edades/Edad7_8/Juegos/BingoPalabras";
 import { EscuchaElige } from "./components/edades/Edad7_8/Juegos/EscuchaElige";
@@ -43,6 +44,7 @@ function App() {
           <Route path="/perfil/docente" element={<TeacherWelcome />} />
           <Route path="/bienvenida/docente" element={<TeacherWelcome />} />
           <Route path="/test-instituciones" element={<TestInstituciones />} />
+          <Route path="/estudiantes" element={<Estudiantes />} />
 
           <Route path="/" element={<Dashboard />} />
 
