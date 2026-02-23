@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../shared/components/Button/Button";
 import Card from "../../shared/components/Card/Card";
 import "./teacherLogin.scss";
-
 import { API_CONFIG, buildApiUrl } from "../../config/api";
+
+// CAMBIO IMPORTANTE: Importamos la imagen aquí arriba
+import iconDocente from "../../assets/img/regla.svg"; 
 
 interface LoginResponse {
   success: boolean;
@@ -88,7 +90,8 @@ export default function TeacherLogin() {
         <Card className="teacher-login__card">
           <div className="teacher-login__header">
             <div className="teacher-login__icon">
-              <img src="/src/assets/img/cuaderno.svg" alt="Docente" />
+              {/* CAMBIO AQUÍ: Usamos la variable importada en lugar del texto fijo */}
+              <img src={iconDocente} alt="Docente" />
             </div>
             <h1 className="teacher-login__title">Acceso Docente</h1>
             <p className="teacher-login__subtitle">

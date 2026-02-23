@@ -44,7 +44,8 @@ export default function UserType() {
           <div className="user-type__option">
             <div className="user-type__card user-type__card--teacher">
               <div className="user-type__card-icon">
-                <img src="/src/assets/img/cuaderno.svg" alt="Docente" />
+                {/* CAMBIO AQUÍ: Usamos regla.svg que sí existe en tu carpeta */}
+                <img src="/src/assets/img/regla.svg" alt="Docente" />
               </div>
               <h3 className="user-type__card-title">Soy Docente</h3>
               <p className="user-type__card-description">
