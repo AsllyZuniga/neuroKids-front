@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./header.scss";
 import { HEADER_TEXT } from "./header.constants";
 import Button from "../../shared/components/Button/Button";
+import { useLocation } from "react-router-dom";
 
 interface User {
   id: number;
@@ -16,6 +17,8 @@ export default function Header() {
   const [user, setUser] = useState<User | null>(null);
   const [userType, setUserType] = useState<string>("");
   const navigate = useNavigate();
+   const location = useLocation();
+    const isStudentProfile = location.pathname === "/perfil/estudiante";
 
   useEffect(() => {
     checkAuthStatus();
@@ -25,6 +28,7 @@ export default function Header() {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
     const userTypeData = localStorage.getItem("userType");
+   
 
     if (token && userData) {
       setIsAuthenticated(true);
@@ -73,7 +77,7 @@ export default function Header() {
           {isAuthenticated && user ? (
             <div className="header__user-info">
               <span className="header__welcome">
-                {HEADER_TEXT.welcome}, {getUserDisplayName()}
+                {HEADER_TEXT.welcome}  {getUserDisplayName()}
               </span>
 
               <Button
@@ -99,13 +103,15 @@ export default function Header() {
 
 
 
-              <Button
-                label={HEADER_TEXT.logout}
-                variant="secondary"
-                size="medium"
-                onClick={handleLogout}
-                className="header__logout-btn"
-              />
+             {!isStudentProfile && (
+  <Button
+    label={HEADER_TEXT.logout}
+    variant="secondary"
+    size="medium"
+    onClick={handleLogout}
+    className="header__logout-btn"
+  />
+)}
             </div>
           ) : (
             <Button

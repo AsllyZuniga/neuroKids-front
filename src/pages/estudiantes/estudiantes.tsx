@@ -4,7 +4,7 @@ import Header from "../../components/header/header";
 import Card from "../../shared/components/Card/Card";
 import { API_CONFIG, buildApiUrl } from "../../config/api";
 import "./estudiantes.scss";
-import { div } from "framer-motion/m";
+
 
 interface Usuario {
     id: number;
@@ -249,12 +249,23 @@ export default function Estudiantes() {
         setEditingError(null);
     };
 
+const handleBack = () => {
+    navigate("/perfil/docente"); 
+};
+
     return (
         <div className="estudiantes-page">
             <Header />
             <div className="estudiantes-container">
+                <button 
+        className="estudiantes-back-btn"
+        onClick={handleBack}
+    >
+        ← Volver
+    </button>
                 <Card className="estudiantes-card">
                     <div className="estudiantes-header">
+                        
                         <h2 className="estudiantes-title">Listado de Estudiantes</h2>
 
                         <div className="estudiantes-toolbar">

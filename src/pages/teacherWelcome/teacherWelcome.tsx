@@ -4,6 +4,7 @@ import Header from "../../components/header/header";
 import Button from "../../shared/components/Button/Button";
 import Card from "../../shared/components/Card/Card";
 import "./teacherWelcome.scss";
+import { API_CONFIG, buildApiUrl } from "../../config/api";
 
 interface Teacher {
   id: number;
@@ -14,15 +15,68 @@ interface Teacher {
 }
 
 export default function TeacherWelcome() {
+
+  const avatars = [
+    "/avatars/mujer.svg",
+    "/avatars/hombre.svg"
+  ];
+  const [totalStudents, setTotalStudents] = useState<number>(0);
+
+  const [avatarIndex, setAvatarIndex] = useState(0);
   const [teacher, setTeacher] = useState<Teacher | null>(null);
   const [currentTime, setCurrentTime] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setAvatarIndex((prev) => (prev === 0 ? 1 : 0));
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const resp = await fetch(buildApiUrl("/usuarios"), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!resp.ok) {
+          const text = await resp.text();
+          throw new Error(text || "Error al obtener usuarios");
+        }
+
+        const data = await resp.json();
+        const usuarios = data?.data?.usuarios || [];
+
+        const onlyStudents = usuarios.filter(
+          (u: any) => u.rol_id === 3
+        );
+
+        setTotalStudents(onlyStudents.length);
+
+      } catch (error) {
+        console.error("Error obteniendo estudiantes:", error);
+      }
+    };
+
+    fetchStudents();
+  }, []);
+
+  useEffect(() => {
     // Obtener datos del docente desde localStorage
     const userData = localStorage.getItem("user");
     const userType = localStorage.getItem("userType");
-    
+
     if (!userData || userType !== "docente") {
       // Si no hay datos de docente, redirigir al login
       navigate("/tipo-usuario");
@@ -40,15 +94,15 @@ export default function TeacherWelcome() {
     // Actualizar la hora
     updateTime();
     const timeInterval = setInterval(updateTime, 1000);
-    
+
     return () => clearInterval(timeInterval);
   }, [navigate]);
 
   const updateTime = () => {
     const now = new Date();
-    const timeString = now.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    const timeString = now.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
     });
     setCurrentTime(timeString);
   };
@@ -70,10 +124,6 @@ export default function TeacherWelcome() {
     navigate("/reportes");
   };
 
-  const handleCreateAssignment = () => {
-    // TODO: Implementar página de creación de asignaciones
-    navigate("/asignaciones");
-  };
 
   const handleManageReadings = () => {
     // TODO: Implementar página de gestión de lecturas
@@ -87,18 +137,23 @@ export default function TeacherWelcome() {
   return (
     <div className="teacher-welcome">
       <Header />
-      
+
       <div className="teacher-welcome__container">
         <div className="teacher-welcome__hero">
           <div className="teacher-welcome__hero-content">
             <div className="teacher-welcome__avatar">
-              <img src="/src/assets/img/cuaderno.svg" alt="Avatar Docente" />
+              <img
+                src={avatars[avatarIndex]}
+                alt="Avatar Docente"
+                className="teacher-welcome__avatar-img"
+              />
             </div>
-            
+
             <h1 className="teacher-welcome__title">
-              {getGreeting()}, Profesor {teacher.nombre}! 👨‍🏫
+              {getGreeting()} <br />
+              Profesor/a {teacher.nombre}
             </h1>
-            
+
             <p className="teacher-welcome__subtitle">
               Panel de control docente - {currentTime}
             </p>
@@ -120,11 +175,11 @@ export default function TeacherWelcome() {
 
         <div className="teacher-welcome__actions">
           <h2 className="teacher-welcome__actions-title">Herramientas de Gestión</h2>
-          
+
           <div className="teacher-welcome__cards">
             <Card className="teacher-welcome__card teacher-welcome__card--primary">
               <div className="teacher-welcome__card-icon">
-                <img src="/src/assets/img/cohete.svg" alt="Estudiantes" />
+                <img src="/avatars/estudiantes.svg" alt="Estudiantes" />
               </div>
               <h3 className="teacher-welcome__card-title">Mis Estudiantes</h3>
               <p className="teacher-welcome__card-description">
@@ -141,7 +196,7 @@ export default function TeacherWelcome() {
 
             <Card className="teacher-welcome__card teacher-welcome__card--secondary">
               <div className="teacher-welcome__card-icon">
-                <img src="/src/assets/img/paletaColores.svg" alt="Reportes" />
+                <img src="/avatars/reportes.svg" alt="Reportes" />
               </div>
               <h3 className="teacher-welcome__card-title">Reportes</h3>
               <p className="teacher-welcome__card-description">
@@ -156,26 +211,11 @@ export default function TeacherWelcome() {
               />
             </Card>
 
-            <Card className="teacher-welcome__card teacher-welcome__card--tertiary">
-              <div className="teacher-welcome__card-icon">
-                <img src="/src/assets/img/regla.svg" alt="Asignaciones" />
-              </div>
-              <h3 className="teacher-welcome__card-title">Asignaciones</h3>
-              <p className="teacher-welcome__card-description">
-                Crea y gestiona tareas de lectura para tus estudiantes
-              </p>
-              <Button
-                label="Crear Asignación"
-                variant="primary"
-                size="large"
-                onClick={handleCreateAssignment}
-                className="teacher-welcome__card-button"
-              />
-            </Card>
+
 
             <Card className="teacher-welcome__card teacher-welcome__card--quaternary">
               <div className="teacher-welcome__card-icon">
-                <img src="/src/assets/img/cuaderno.svg" alt="Lecturas" />
+                <img src="/avatars/lecturas.svg" alt="Lecturas" />
               </div>
               <h3 className="teacher-welcome__card-title">Lecturas</h3>
               <p className="teacher-welcome__card-description">
@@ -197,7 +237,9 @@ export default function TeacherWelcome() {
             <h3 className="teacher-welcome__stats-title">Resumen Rápido</h3>
             <div className="teacher-welcome__stats-grid">
               <div className="teacher-welcome__stat-item">
-                <div className="teacher-welcome__stat-number">--</div>
+                <div className="teacher-welcome__stat-number">
+                  {totalStudents}
+                </div>
                 <div className="teacher-welcome__stat-label">Estudiantes Activos</div>
               </div>
               <div className="teacher-welcome__stat-item">
@@ -206,16 +248,9 @@ export default function TeacherWelcome() {
               </div>
               <div className="teacher-welcome__stat-item">
                 <div className="teacher-welcome__stat-number">--</div>
-                <div className="teacher-welcome__stat-label">Asignaciones Pendientes</div>
-              </div>
-              <div className="teacher-welcome__stat-item">
-                <div className="teacher-welcome__stat-number">--</div>
                 <div className="teacher-welcome__stat-label">Promedio General</div>
               </div>
             </div>
-            <p className="teacher-welcome__stats-note">
-              * Los datos se cargarán automáticamente cuando estén disponibles
-            </p>
           </div>
         </div>
       </div>

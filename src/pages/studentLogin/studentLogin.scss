@@ -92,6 +92,7 @@
         50% { transform: translateY(-4px); }
     }
 
+<<<<<<< Updated upstream
     &__title {
         font-size: 1.4rem; /* Letra más pequeña */
         margin-bottom: 0.2rem;
@@ -102,6 +103,15 @@
         animation: titleFloat 3s ease-in-out infinite;
         letter-spacing: 0.5px;
     }
+=======
+         img {
+             width: 70px;
+             height: 70px;
+             object-fit: contain;
+             
+         }
+     }
+>>>>>>> Stashed changes
 
     @keyframes titleFloat {
         0%, 100% { transform: translateY(0); }

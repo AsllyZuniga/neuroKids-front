@@ -385,7 +385,7 @@ export default function StudentRegister() {
                 className="student-register__step"
               >
                 <div className="student-register__icon">
-                  <img src="/src/assets/img/cohete.svg" alt="Bienvenida" />
+                  <img src="/avatars/estudiante.svg" alt="Bienvenida" />
                 </div>
                 <h2 className="student-register__step-title">¡Bienvenido a NeuroKids!</h2>
                 <p className="student-register__step-description">

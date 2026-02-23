@@ -104,7 +104,7 @@ body {
 
 
         .estudiantes-search::placeholder {
-            color: #252525;
+            color: #000000;
         }
 
 
@@ -113,7 +113,7 @@ body {
             border: 1px solid #ffffff;
             background: rgb(159, 166, 190);
             border-radius: 6px;
-            color: black;
+            color: rgb(255, 255, 255);
         }
 
         .estudiantes-pagesize {
@@ -362,6 +362,20 @@ body {
                 cursor: not-allowed;
             }
         }
+    }
+
+    .estudiantes-back-btn {
+        padding: 8px 14px;
+        background: #3567c4;
+        border: none;
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 2rem;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
 
 }

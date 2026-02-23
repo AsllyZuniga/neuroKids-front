@@ -196,7 +196,7 @@ export default function StudentLogin() {
         <Card className="student-login__card">
           <div className="student-login__header">
             <div className="student-login__icon">
-              <img src="/src/assets/img/cohete.svg" alt="Estudiante" />
+              <img src="/avatars/estudiante.svg" alt="Estudiante" />
             </div>
             <h1 className="student-login__title">¡Hola Estudiante!</h1>
             <p className="student-login__subtitle">

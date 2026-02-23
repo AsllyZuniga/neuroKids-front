@@ -43,18 +43,18 @@
   &__user-info {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1.5rem;
   }
 
   &__welcome {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: #fff;
     font-weight: 500;
-    font-family: "OpenDyslexic", sans-serif;
+    font-family: "OpenDyslexic";
   }
 
   &__login-btn {
-    font-family: "OpenDyslexic", sans-serif;
+    font-family: "OpenDyslexic";
     font-size: 15px;
     font-weight: bold;
     border-radius: 8px;
@@ -75,7 +75,7 @@
   }
 
   &__logout-btn {
-    font-family: "OpenDyslexic", sans-serif;
+    font-family: "OpenDyslexic";
     font-size: 13px;
     font-weight: bold;
     border-radius: 6px;
