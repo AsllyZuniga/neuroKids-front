@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+database_neurokids.sql
+database_neurokids_neon_fixed.sql
