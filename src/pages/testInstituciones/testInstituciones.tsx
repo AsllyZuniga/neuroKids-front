@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { API_CONFIG, buildApiUrl } from "../../config/api";
+import { API_CONFIG, buildApiUrl } from "@/config/api";
 
 interface Institucion {
   id: number;

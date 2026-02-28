@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from "framer-motion";
 import { ArrowLeft, Play } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { Button } from "@/components/ui/button";
 import fondo from '../../../../assets/11_12/detective_palabras/fondo.svg';
 
 interface StartScreenDetectivePalabrasProps {

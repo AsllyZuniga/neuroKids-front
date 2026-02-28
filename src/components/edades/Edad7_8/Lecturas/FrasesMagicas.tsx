@@ -1,37 +1,37 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import { Card, CardContent } from "../../../ui/card";
-import { AnimalGuide } from '../../../others/AnimalGuide';
-import { RewardAnimation } from "../../../others/RewardAnimation";
-import { GameHeader } from "../../../others/GameHeader";
-import { ProgressBar } from "../../../others/ProgressBar";
-import { MotivationalMessage } from '../../../others/MotivationalMessage';
-import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
-import { LevelLock } from '../../../others/LevelLock';
-import { useLevelLock } from '../../../../hooks/useLevelLock';
-import { speakText } from '../../../../utils/textToSpeech';
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { Card, CardContent } from "@/components/ui/card";
+import { AnimalGuide } from '@/components/others/AnimalGuide';
+import { RewardAnimation } from "@/components/others/RewardAnimation";
+import { GameHeader } from "@/components/others/GameHeader";
+import { ProgressBar } from "@/components/others/ProgressBar";
+import { MotivationalMessage } from '@/components/others/MotivationalMessage';
+import { LevelCompleteModal } from '@/components/others/LevelCompleteModal';
+import { ConfettiExplosion } from '@/components/others/ConfettiExplosion';
+import { LevelLock } from '@/components/others/LevelLock';
+import { useLevelLock } from '@/hooks/useLevelLock';
+import { speakText } from '@/utils/textToSpeech';
 import { StartScreenFrasesMagicas } from "../IniciosJuegosLecturas/StartScreenFrasesMagicas";
-import sol from "../../../../assets/7_8/frasesmagicas/sol1.svg"
-import cielo from "../../../../assets/7_8/frasesmagicas/nublado1.svg"
-import mesa from "../../../../assets/7_8/frasesmagicas/mesa.svg"
-import pan from "../../../../assets/7_8/frasesmagicas/mesaconpan.svg"
-import luz from "../../../../assets/7_8/frasesmagicas/luz.svg"
-import sinLuz from "../../../../assets/7_8/frasesmagicas/sinluz.svg"
-import flor from "../../../../assets/7_8/frasesmagicas/flor.svg"
-import sinFlor from "../../../../assets/7_8/frasesmagicas/sinflor.svg"
-import Luna from "../../../../assets/7_8/frasesmagicas/luna.svg"
-import sinLuna from "../../../../assets/7_8/frasesmagicas/sinluna.svg"
-import hada from "../../../../assets/7_8/frasesmagicas/hada.svg"
-import sinHada from "../../../../assets/7_8/frasesmagicas/sinhada.svg"
-import nieve from "../../../../assets/7_8/frasesmagicas/conNieve.svg"
-import sinNieve from "../../../../assets/7_8/frasesmagicas/sinNieve.svg"
-import arcoiris from "../../../../assets/7_8/frasesmagicas/arcoiris.svg"
-import sinArcoiris from "../../../../assets/7_8/frasesmagicas/sinArcoiris.svg"
-import mar from "../../../../assets/7_8/frasesmagicas/mar.svg"
-import sinAnimales from "../../../../assets/7_8/frasesmagicas/sinAnimales.svg"
+import sol from "@/assets/7_8/frasesmagicas/sol1.svg"
+import cielo from "@/assets/7_8/frasesmagicas/nublado1.svg"
+import mesa from "@/assets/7_8/frasesmagicas/mesa.svg"
+import pan from "@/assets/7_8/frasesmagicas/mesaconpan.svg"
+import luz from "@/assets/7_8/frasesmagicas/Luz.svg"
+import sinLuz from "@/assets/7_8/frasesmagicas/sinLuz.svg"
+import flor from "@/assets/7_8/frasesmagicas/flor.svg"
+import sinFlor from "@/assets/7_8/frasesmagicas/sinFlor.svg"
+import Luna from "@/assets/7_8/frasesmagicas/luna.svg"
+import sinLuna from "@/assets/7_8/frasesmagicas/sinLuna.svg"
+import hada from "@/assets/7_8/frasesmagicas/hada.svg"
+import sinHada from "@/assets/7_8/frasesmagicas/sinHada.svg"
+import nieve from "@/assets/7_8/frasesmagicas/conNieve.svg"
+import sinNieve from "@/assets/7_8/frasesmagicas/sinNieve.svg"
+import arcoiris from "@/assets/7_8/frasesmagicas/arcoiris.svg"
+import sinArcoiris from "@/assets/7_8/frasesmagicas/sinArcoiris.svg"
+import mar from "@/assets/7_8/frasesmagicas/mar.svg"
+import sinAnimales from "@/assets/7_8/frasesmagicas/sinAnimales.svg"
 
 interface FrasesMagicasProps {
   onBack: () => void;

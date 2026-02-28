@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Book, Play, Gem, ArrowLeft } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { Button } from "@/components/ui/button";
 import fondo from '../../../../assets/9_10/laberinto_lector/fondo.svg';
 
 interface StartScreenLaberintoLectorProps {

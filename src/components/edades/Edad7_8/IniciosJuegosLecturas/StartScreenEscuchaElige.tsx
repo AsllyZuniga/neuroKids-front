@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Play, Sparkles, ArrowLeft } from "lucide-react";
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import escuchaLeft from "../../../../assets/Iniciosimages/escuchaelige.svg";
-import fondo from "../../../../assets/7_8/escuchaelige/fondo.svg"
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import escuchaLeft from "@/assets/Iniciosimages/escuchaelige.svg";
+import fondo from "@/assets/7_8/escuchaelige/fondo.svg"
 
 interface StartScreenEscuchaEligeProps {
   onStart: () => void;

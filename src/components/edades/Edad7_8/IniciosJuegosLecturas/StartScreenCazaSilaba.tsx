@@ -1,9 +1,9 @@
 import { ArrowLeft, Play } from "lucide-react";
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
 import { motion } from "framer-motion";
 
-import fondo from "../../../../assets/7_8/cazasilaba/fondo.svg"
-import silabasRight from "../../../../assets/Iniciosimages/Silabas.svg";
+import fondo from "@/assets/7_8/cazasilaba/fondo.svg"
+import silabasRight from "@/assets/Iniciosimages/Silabas.svg";
 
 interface StartScreenCazaSilabaProps {
   onStart: () => void;

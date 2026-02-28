@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Play, ArrowLeft } from "lucide-react";
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import { FloatingItem } from "../../../ui/FloatingItem";
-import fondo from "../../../../assets/7_8/primerapalabra/fondo.svg"
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { FloatingItem } from "@/components/ui/FloatingItem";
+import fondo from "@/assets/7_8/primerapalabra/fondo.svg"
 
 interface StartScreenPrimeraPalabraProps {
   onStart: () => void;

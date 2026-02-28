@@ -1,8 +1,8 @@
-import { FloatingItem } from "../../../ui/FloatingItem";
-import { AnimatedText } from "../../../ui/AnimatedText";
-import { Button } from "../../../ui/button";
+import { FloatingItem } from "@/components/ui/FloatingItem";
+import { AnimatedText } from "@/components/ui/AnimatedText";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play } from "lucide-react";
-import fondo from "../../../../assets//11_12/noticias_niños/fondo.svg";
+import fondo from "@/assets//11_12/noticias_niños/fondo.svg";
 
 interface StartScreenNoticiasSencillasProps {
   onStart: () => void;

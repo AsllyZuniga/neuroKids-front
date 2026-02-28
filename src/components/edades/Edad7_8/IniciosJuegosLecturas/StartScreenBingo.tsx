@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Play, ArrowLeft } from "lucide-react";
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import fondo from "../../../../assets/7_8/bingopalabras/fondo.svg"
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import fondo from "@/assets/7_8/bingopalabras/fondo.svg"
 
 interface StartScreenProps {
   onStart: () => void;

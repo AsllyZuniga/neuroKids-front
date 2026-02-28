@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "../ui/card";
 import { Trophy } from "lucide-react";
 import { ConfettiExplosion } from "./ConfettiExplosion";
-import successMp3 from "../../assets/sounds/correcto.mp3"; 
+import successMp3 from "@/assets/sounds/correcto.mp3"; 
 
 interface MotivationalMessageProps {
   score: number;

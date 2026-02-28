@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Brain, ArrowLeft, Play } from "lucide-react";
-import { Button } from "../../../ui/button";
+import { Button } from "@/components/ui/button";
 
-import fondo from "../../../../assets/11_12/preguntas_inferenciales/fondo.svg";
+import fondo from "@/assets/11_12/preguntas_inferenciales/fondo.svg";
 
 interface StartScreenPreguntasInferencialesProps {
   onStart: () => void;

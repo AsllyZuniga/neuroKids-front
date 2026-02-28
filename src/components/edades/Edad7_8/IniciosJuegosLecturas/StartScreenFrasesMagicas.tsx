@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Play, ArrowLeft } from "lucide-react";
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import { AnimatedText } from "../../../ui/AnimatedText";
-import { FloatingItem } from "../../../ui/FloatingItem";
-import fondo from "../../../../assets/7_8/frasesmagicas/fondo.svg";
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { AnimatedText } from "@/components/ui/AnimatedText";
+import { FloatingItem } from "@/components/ui/FloatingItem";
+import fondo from "@/assets/7_8/frasesmagicas/fondo.svg";
 
 interface StartScreenFrasesMagicasProps {
   onStart: () => void;

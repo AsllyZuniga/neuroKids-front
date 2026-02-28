@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { Button } from "../../../ui/button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play } from "lucide-react";
-import fondo from "../../../../assets/11_12/cuentos_interactivos/fondo.svg";
+import fondo from "@/assets/11_12/cuentos_interactivos/fondo.svg";
 
 interface StartScreenCuentoInteractivoProps {
   onStart: () => void;

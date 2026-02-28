@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Play, ArrowLeft } from "lucide-react";
-import { Button } from "../../../ui/button";
-import { AnimatedText } from "../../../ui/AnimatedText";
+import { Button } from "@/components/ui/button";
+import { AnimatedText } from "@/components/ui/AnimatedText";
 import fondo from '../../../../assets/11_12/biografias_sencillas/fondo.svg';
 
 interface StartScreenBiografiasSencillasProps {

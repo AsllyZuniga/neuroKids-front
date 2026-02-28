@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Play } from "lucide-react";
-import { Button } from "../../../ui/button";
-import { FloatingItem } from "../../../ui/FloatingItem";
-import fondo from "../../../../assets/9_10/ordena_historia/fondo.svg";
+import { Button } from "@/components/ui/button";
+import { FloatingItem } from "@/components/ui/FloatingItem";
+import fondo from "@/assets/9_10/ordena_historia/fondo.svg";
 
 interface StartScreenOrdenaHistoriaProps {
   onStart: () => void;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./header.scss";
 import { HEADER_TEXT } from "./header.constants";
-import Button from "../../shared/components/Button/Button";
+import Button from "@/shared/components/Button/Button";
 import { useLocation } from "react-router-dom";
 
 interface User {

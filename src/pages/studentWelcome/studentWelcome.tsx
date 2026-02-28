@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, TrendingUp, LogOut, Book, Gamepad2, Lock } from "lucide-react";
-import Header from "../../components/header/header";
-import { progressService } from "../../services/progressService";
+import Header from "@/components/header/header";
+import { progressService } from "@/services/progressService";
 import "./studentWelcome.scss";
 
 interface Student {

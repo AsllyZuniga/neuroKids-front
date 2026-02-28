@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../../shared/components/Button/Button";
-import Card from "../../shared/components/Card/Card";
+import Button from "@/shared/components/Button/Button";
+import Card from "@/shared/components/Card/Card";
 import "./studentLogin.scss";
 
-import { API_CONFIG, buildApiUrl } from "../../config/api";
+import { API_CONFIG, buildApiUrl } from "@/config/api";
 
 interface Institucion {
   id: number;

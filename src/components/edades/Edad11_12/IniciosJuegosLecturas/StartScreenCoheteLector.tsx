@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Rocket, Star, Sparkles, ArrowLeft, Play } from "lucide-react";
-import { Button } from "../../../ui/button";
-import { FloatingItem } from "../../../ui/FloatingItem";
-import fondo from "../../../../assets/11_12/cohete_lector/fondo.svg";
+import { Button } from "@/components/ui/button";
+import { FloatingItem } from "@/components/ui/FloatingItem";
+import fondo from "@/assets/11_12/cohete_lector/fondo.svg";
 
 interface StartScreenCoheteLectorProps {
   onStart: () => void;

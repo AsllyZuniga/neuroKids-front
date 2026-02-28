@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Home } from "lucide-react";
-import Header from "../../components/header/header";
-import { ImageCard } from "../../components/others/ImageCard";
+import Header from "@/components/header/header";
+import { ImageCard } from "@/components/others/ImageCard";
 import "./prueba.scss";
 
 export default function Prueba({

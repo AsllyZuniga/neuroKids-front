@@ -1,8 +1,8 @@
 //..ok
-import Header from "../../components/header/header";
-import SceneImages from "../../components/sceneImages/sceneImages";
+import Header from "@/components/header/header";
+import SceneImages from "@/components/sceneImages/sceneImages";
 import "./dashboard.scss";
-import AgeCircle from "../../components/ageCircle/AgeCircle";
+import AgeCircle from "@/components/ageCircle/AgeCircle";
 
 const Dashboard = () => {
   return (

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/header/header";
-import Button from "../../shared/components/Button/Button";
-import Card from "../../shared/components/Card/Card";
+import Header from "@/components/header/header";
+import Button from "@/shared/components/Button/Button";
+import Card from "@/shared/components/Card/Card";
 import "./teacherWelcome.scss";
-import { API_CONFIG, buildApiUrl } from "../../config/api";
+import { API_CONFIG, buildApiUrl } from "@/config/api";
 
 interface Teacher {
   id: number;

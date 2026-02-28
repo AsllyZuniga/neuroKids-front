@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../../shared/components/Button/Button";
-import Card from "../../shared/components/Card/Card";
+import Button from "@/shared/components/Button/Button";
+import Card from "@/shared/components/Card/Card";
 import "./teacherLogin.scss";
-import { API_CONFIG, buildApiUrl } from "../../config/api";
+import { API_CONFIG, buildApiUrl } from "@/config/api";
 
 // CAMBIO IMPORTANTE: Importamos la imagen aquí arriba
-import iconDocente from "../../assets/img/regla.svg"; 
+import iconDocente from "@/assets/img/regla.svg"; 
 
 interface LoginResponse {
   success: boolean;

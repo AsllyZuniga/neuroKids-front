@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Sparkles, BookOpen, Play, ArrowLeft } from "lucide-react";
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import { FloatingItem } from "../../../ui/FloatingItem";
-import { AnimatedText } from "../../../ui/AnimatedText";
-import fondo from "../../../../assets/7_8/cuentospictogramas/fondo.svg"
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { FloatingItem } from "@/components/ui/FloatingItem";
+import { AnimatedText } from "@/components/ui/AnimatedText";
+import fondo from "@/assets/7_8/cuentospictogramas/fondo.svg"
 
 
 interface StartScreenCuentoPictogramasProps {

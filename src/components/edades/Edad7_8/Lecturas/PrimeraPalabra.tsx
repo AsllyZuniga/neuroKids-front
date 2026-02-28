@@ -1,34 +1,34 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import { Card, CardContent } from "../../../ui/card";
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { Card, CardContent } from "@/components/ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
-import { RewardAnimation } from "../../../others/RewardAnimation";
-import { GameHeader } from "../../../others/GameHeader";
-import { ProgressBar } from "../../../others/ProgressBar";
+import { RewardAnimation } from "@/components/others/RewardAnimation";
+import { GameHeader } from "@/components/others/GameHeader";
+import { ProgressBar } from "@/components/others/ProgressBar";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenPrimeraPalabra } from "../IniciosJuegosLecturas/StartScreenPrimeraPalabra";
-import { LevelLock } from "../../../others/LevelLock";
-import { useLevelLock } from "../../../../hooks/useLevelLock";
-import { speakText } from "../../../../utils/textToSpeech";
-import sol from "../../../../assets/7_8/primerapalabra/sol.svg"
-import mar from "../../../../assets/7_8/primerapalabra/mar.svg"
-import vela from "../../../../assets/7_8/primerapalabra/vela.svg"
-import flor from "../../../../assets/7_8/primerapalabra/flor.svg"
-import niña from "../../../../assets/7_8/primerapalabra/LaNiñaCanta.svg"
-import perro from "../../../../assets/7_8/primerapalabra/ElPerroDuerme.svg"
-import gato from "../../../../assets/7_8/primerapalabra/ElGatoCorre.svg"
-import niño from "../../../../assets/7_8/primerapalabra/ElNiñoLee.svg"
-import vaca from "../../../../assets/7_8/primerapalabra/LaVacaCome.svg"
-import arbol from "../../../../assets/7_8/primerapalabra/ElArbolCrece.svg"
-import tren from "../../../../assets/7_8/primerapalabra/ElTrenAvanza.svg"
-import pirata from "../../../../assets/7_8/primerapalabra/pirata3.svg"
-import granjero from "../../../../assets/7_8/primerapalabra/granjero.svg"
-import astronauta from "../../../../assets/7_8/primerapalabra/astronauta.svg"
-import maestra from "../../../../assets/7_8/primerapalabra/maestra.svg"
+import { LevelLock } from "@/components/others/LevelLock";
+import { useLevelLock } from "@/hooks/useLevelLock";
+import { speakText } from "@/utils/textToSpeech";
+import sol from "@/assets/7_8/primerapalabra/sol.svg"
+import mar from "@/assets/7_8/primerapalabra/mar.svg"
+import vela from "@/assets/7_8/primerapalabra/vela.svg"
+import flor from "@/assets/7_8/primerapalabra/flor.svg"
+import niña from "@/assets/7_8/primerapalabra/LaNiñaCanta.svg"
+import perro from "@/assets/7_8/primerapalabra/ElPerroDuerme.svg"
+import gato from "@/assets/7_8/primerapalabra/ElGatoCorre.svg"
+import niño from "@/assets/7_8/primerapalabra/ElNiñoLee.svg"
+import vaca from "@/assets/7_8/primerapalabra/LaVacaCome.svg"
+import arbol from "@/assets/7_8/primerapalabra/ElArbolCrece.svg"
+import tren from "@/assets/7_8/primerapalabra/ElTrenAvanza.svg"
+import pirata from "@/assets/7_8/primerapalabra/pirata3.svg"
+import granjero from "@/assets/7_8/primerapalabra/granjero.svg"
+import astronauta from "@/assets/7_8/primerapalabra/astronauta.svg"
+import maestra from "@/assets/7_8/primerapalabra/maestra.svg"
 
 
 interface PrimeraPalabraProps {

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/header/header";
-import Card from "../../shared/components/Card/Card";
-import { API_CONFIG, buildApiUrl } from "../../config/api";
+import Header from "@/components/header/header";
+import Card from "@/shared/components/Card/Card";
+import { API_CONFIG, buildApiUrl } from "@/config/api";
 import "./estudiantes.scss";
 
 

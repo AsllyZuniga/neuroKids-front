@@ -1,11 +1,11 @@
 //ok
 import "./sceneImages.scss" // Test import scenes
-import arcoiris from "../../assets/img/arcoiris.svg";
-import bloques1 from "../../assets/img/bloque1.svg";
-import bloques2 from "../../assets/img/bloque2.svg";
-import cohete from "../../assets/img/cohete.svg";
-import neurokids from "../../assets/img/neuroKids.svg";
-import nube from "../../assets/img/nube.svg";
+import arcoiris from "@/assets/img/arcoiris.svg";
+import bloques1 from "@/assets/img/bloque1.svg";
+import bloques2 from "@/assets/img/bloque2.svg";
+import cohete from "@/assets/img/cohete.svg";
+import neurokids from "@/assets/img/neuroKids.svg";
+import nube from "@/assets/img/nube.svg";
 
 export default function SceneImages() {
   return (

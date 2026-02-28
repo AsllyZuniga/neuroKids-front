@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
-//import { Button } from "../../../ui/button";
-import { ButtonWithAudio } from "../../../ui/ButtonWithAudio";
-import { Card } from "../../../ui/card";
+//import { Button } from "@/components/ui/button";
+import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { Card } from "@/components/ui/card";
 import { AnimalGuide } from '../../../others/AnimalGuide';
-import { GameHeader } from "../../../others/GameHeader";
-import { ProgressBar } from "../../../others/ProgressBar";
-import { RewardAnimation } from "../../../others/RewardAnimation";
+import { GameHeader } from "@/components/others/GameHeader";
+import { ProgressBar } from "@/components/others/ProgressBar";
+import { RewardAnimation } from "@/components/others/RewardAnimation";
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { ConfettiExplosion } from "../../../others/ConfettiExplosion";
-import { LevelLock } from "../../../others/LevelLock";
+import { ConfettiExplosion } from "@/components/others/ConfettiExplosion";
+import { LevelLock } from "@/components/others/LevelLock";
 import { StartScreenBingo } from "../IniciosJuegosLecturas/StartScreenBingo";
-import { speakText, canSpeakOnHover } from "../../../../utils/textToSpeech";
-import { useLevelLock } from "../../../../hooks/useLevelLock";
+import { speakText, canSpeakOnHover } from "@/utils/textToSpeech";
+import { useLevelLock } from "@/hooks/useLevelLock";
 
 interface WordItem {
   word: string;

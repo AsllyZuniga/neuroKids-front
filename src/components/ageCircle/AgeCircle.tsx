@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import "./AgeCircle.scss";
 
-import Btn1 from "../../assets/img/btn_7-8.webp";
-import Btn2 from "../../assets/img/btn-9-10.webp"; 
-import Btn3 from "../../assets/img/btn-11-12.webp"; 
+import Btn1 from "@/assets/img/btn_7-8.webp";
+import Btn2 from "@/assets/img/btn-9-10.webp"; 
+import Btn3 from "@/assets/img/btn-11-12.webp"; 
 
 export default function AgeCircle() {
   const navigate = useNavigate();

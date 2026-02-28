@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ConfettiExplosion } from "../../components/others/ConfettiExplosion";
-import successMp3 from "../../assets/sounds/correcto.mp3";
-import Button from "../../shared/components/Button/Button";
-import Card from "../../shared/components/Card/Card";
+import { ConfettiExplosion } from "@/components/others/ConfettiExplosion";
+import successMp3 from "@/assets/sounds/correcto.mp3";
+import Button from "@/shared/components/Button/Button";
+import Card from "@/shared/components/Card/Card";
 import "./studentRegister.scss";
-import { API_CONFIG, buildApiUrl } from "../../config/api";
+import { API_CONFIG, buildApiUrl } from "@/config/api";
 
 interface Institucion {
   id: number;
