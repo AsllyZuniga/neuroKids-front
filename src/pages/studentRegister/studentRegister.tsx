@@ -9,7 +9,7 @@ import "./studentRegister.scss";
 import { API_CONFIG, buildApiUrl } from "@/config/api";
 
 interface Institucion {
-  id: number;
+  id: string;
   nombre: string;
 }
 
@@ -37,9 +37,7 @@ interface RegisterResponse {
 
 interface InstitucionesResponse {
   success: boolean;
-  data?: {
-    instituciones: Institucion[];
-  };
+  data?: Institucion[];
 }
 
 type RegistrationStep =
@@ -116,7 +114,7 @@ export default function StudentRegister() {
       const data: InstitucionesResponse = await response.json();
 
       if (data.success && data.data) {
-        setInstituciones(data.data.instituciones);
+        setInstituciones(data.data);
       } else {
         setError("Error al cargar las escuelas disponibles");
       }
@@ -246,7 +244,7 @@ export default function StudentRegister() {
       const requestData: Record<string, string | number | boolean> = {
         nombre: formData.nombre.trim(),
         apellido: formData.apellido.trim(),
-        institucion_id: parseInt(formData.institucion_id)
+        institucion_id: formData.institucion_id
       };
 
       // Incluir edad solo si existe (estudiante solo puede omitirla)
@@ -701,7 +699,7 @@ export default function StudentRegister() {
                     </div>
                     <div className="student-register__summary-item">
                       <strong>Escuela:</strong>{' '}
-                      {instituciones.find(i => i.id === parseInt(formData.institucion_id))?.nombre || 'No seleccionada'}
+                      {instituciones.find(i => i.id === formData.institucion_id)?.nombre || 'No seleccionada'}
                     </div>
                   </div>
                   {withParent && (

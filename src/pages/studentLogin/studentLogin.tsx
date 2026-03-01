@@ -7,7 +7,7 @@ import "./studentLogin.scss";
 import { API_CONFIG, buildApiUrl } from "@/config/api";
 
 interface Institucion {
-  id: number;
+  id: string;
   nombre: string;
 }
 
@@ -34,9 +34,7 @@ interface LoginResponse {
 interface InstitucionesResponse {
   success: boolean;
   message?: string;
-  data?: {
-    instituciones: Institucion[];
-  };
+  data?: Institucion[];
 }
 
 export default function StudentLogin() {
@@ -71,8 +69,8 @@ export default function StudentLogin() {
       console.log("Datos recibidos:", data);
       
       if (data.success && data.data) {
-        setInstituciones(data.data.instituciones);
-        console.log("Instituciones cargadas:", data.data.instituciones.length);
+        setInstituciones(data.data);
+        console.log("Instituciones cargadas:", data.data.length);
       } else {
         console.error("Error en la respuesta:", data.message ?? "Respuesta no exitosa");
         setError(data.message ?? "Error al cargar las escuelas disponibles");
@@ -129,11 +127,11 @@ export default function StudentLogin() {
       const requestData = {
         nombre: formData.nombre.trim(),
         apellido: formData.apellido.trim(),
-        institucion_id: parseInt(formData.institucion_id)
+        institucion_id: formData.institucion_id
       };
       
-      // Verificar que institucion_id sea un número válido
-      if (isNaN(requestData.institucion_id)) {
+      // Verificar que institucion_id esté seleccionado
+      if (!requestData.institucion_id) {
         setError("Por favor selecciona una escuela válida");
         setLoading(false);
         return;

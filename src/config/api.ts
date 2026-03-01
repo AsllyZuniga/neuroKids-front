@@ -1,14 +1,14 @@
 export const API_CONFIG = {
-    BASE_URL: "http://localhost:8000/api",
+    BASE_URL: "http://localhost:3000",
     ENDPOINTS: {
         // Endpoints para docentes/administradores
         ADMIN_LOGIN: "/admin/login",
 
         // Endpoints para estudiantes
-        STUDENT_LOGIN: "/estudiantes/iniciar-sesion",
+        STUDENT_LOGIN: "/auth/estudiantes/iniciar-sesion",
         // Coincide con ruta backend: POST /api/estudiantes/registro
-        STUDENT_REGISTER: "/estudiantes/registro",
-        STUDENT_INSTITUCIONES: "/estudiantes/instituciones",
+        STUDENT_REGISTER: "/auth/estudiantes/registro",
+        STUDENT_INSTITUCIONES: "/auth/instituciones",
 
         // Endpoints comunes
         LOGOUT: "/logout",
