@@ -11,7 +11,7 @@ export const API_CONFIG = {
         STUDENT_INSTITUCIONES: "/auth/instituciones",
 
         // Endpoints comunes
-        LOGOUT: "/logout",
+        LOGOUT: "auth/logout",
         ME: "/me",
         REFRESH: "/refresh"
     }
