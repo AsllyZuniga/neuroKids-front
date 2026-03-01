@@ -19,6 +19,7 @@ interface LoginResponse {
       id: number;
       nombre: string;
       apellido: string;
+      edad: number;
       codigo_estudiante: string;
       institucion_id: number;
       institucion: string;
