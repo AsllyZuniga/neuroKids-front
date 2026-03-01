@@ -27,12 +27,14 @@
       font-weight: 700;
       color: #1e293b;
       margin: 0.5rem 0 0.25rem;
+      min-height: 1.5rem; // Evita que colapse
     }
 
     &-subtitle {
       font-size: 0.875rem;
       color: #64748b;
       margin: 0;
+      min-height: 1rem; // Evita que colapse
     }
 
     &-nav {
@@ -344,5 +346,286 @@
     &__map-container {
       height: 400px;
     }
+  }
+}
+
+// Estilos del Modal de Insignia
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.insignia-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.8) 0%, 
+    rgba(30, 41, 59, 0.9) 50%, 
+    rgba(0, 0, 0, 0.8) 100%);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: modalBackgroundGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes modalBackgroundGlow {
+  0% { border-shadow: 0 0 20px rgba(79, 172, 254, 0.3); }
+  100% { box-shadow: 0 0 40px rgba(79, 172, 254, 0.6); }
+}
+
+.insignia-modal-content {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 30px;
+  padding: 3rem 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+      transparent 30%, 
+      rgba(255, 215, 0, 0.1) 50%, 
+      transparent 70%);
+    pointer-events: none;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.insignia-celebration {
+  position: relative;
+  z-index: 1;
+
+  h2 {
+    background: linear-gradient(135deg, #f59e0b, #d97706, #92400e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+  }
+
+  h3 {
+    color: #1f2937;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 1.5rem 0 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  p {
+    color: #6b7280;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+}
+
+.insignia-display {
+  margin: 2rem 0;
+  position: relative;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% { 
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.insignia-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 5px solid #ffd700;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(240, 249, 255, 0.8) 100%);
+  padding: 10px;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 3;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  
+  // Asegurar visibilidad
+  opacity: 1 !important;
+  visibility: visible !important;
+  
+  // Evitar que las animaciones interfieran
+  animation: none !important;
+  transform: none !important;
+}
+
+.insignia-glow {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: conic-gradient(from 0deg, 
+      #ffd700, #ffed4a, #f59e0b, #d97706, #ffd700);
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotate 3s linear infinite;
+    opacity: 0.7;
+  }
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.puntos {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #10b981, #059669, #047857);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 
+    0 4px 12px rgba(16, 185, 129, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '✨';
+    position: absolute;
+    left: 8px;
+    animation: sparkle 1.5s ease-in-out infinite;
+  }
+
+  &::after {
+    content: '✨';
+    position: absolute;
+    right: 8px;
+    animation: sparkle 1.5s ease-in-out infinite reverse;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 0.5;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+.btn-continuar {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed, #a855f7);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 8px 16px rgba(79, 70, 229, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.3), 
+      transparent);
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 24px rgba(79, 70, 229, 0.5),
+      0 6px 12px rgba(0, 0, 0, 0.2);
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 
+      0 4px 8px rgba(79, 70, 229, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.1);
   }
 }

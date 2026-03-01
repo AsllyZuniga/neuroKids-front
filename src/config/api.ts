@@ -10,6 +10,11 @@ export const API_CONFIG = {
         STUDENT_REGISTER: "/auth/estudiantes/registro",
         STUDENT_INSTITUCIONES: "/auth/instituciones",
 
+        // Endpoints para insignias y notificaciones
+        STUDENT_INSIGNIAS: "/insignias-estudiante/estudiante",
+        STUDENT_NOTIFICATIONS: "/notificaciones-estudiante/pendientes",
+        MARK_NOTIFICATION_READ: "/notificaciones-estudiante/completar-bienvenida",
+
         // Endpoints comunes
         LOGOUT: "auth/logout",
         ME: "/me",
