@@ -13,6 +13,8 @@ import { LevelLock } from "@/components/others/LevelLock";
 import { StartScreenEscuchaElige } from "../IniciosJuegosLecturas/StartScreenEscuchaElige";
 import { speakText, canSpeakOnHover } from "@/utils/textToSpeech";
 import { useLevelLock } from "@/hooks/useLevelLock";
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 
 import gatoAudio from "@/assets/sounds/gato_escuchaElige.mp3";
 import perroAudio from "@/assets/sounds/perro_escuchaElige.mp3";
@@ -161,6 +163,32 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   const [currentProgress, setCurrentProgress] = useState(0);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(2); // Escucha y Elige
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '7-8',
+        level: localLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
+    console.log('🔄 EscuchaElige - Ejecutando useEffect, nivel:', localLevel);
+    guardarInicioNivel();
+  }, [localLevel, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
 
   const currentQ = questions[currentQuestion];
   const totalQuestions = questions.length;

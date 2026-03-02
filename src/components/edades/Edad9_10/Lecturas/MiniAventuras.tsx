@@ -10,6 +10,8 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { StartScreenMiniAventuras } from '../IniciosJuegosLecturas/StartScreenMiniAventuras';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import img1 from '../../../../assets/9_10/mini_aventuras/nivel1/1.png';
 import img2 from '../../../../assets/9_10/mini_aventuras/nivel1/2.png';
 import img3 from '../../../../assets/9_10/mini_aventuras/nivel1/3.png';
@@ -286,11 +288,38 @@ export function MiniAventuras({ onBack }: MiniAventurasProps) {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(8); // Mini Aventuras
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '9-10',
+        level: 1,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura
+    console.log('🔄 MiniAventuras - Ejecutando useEffect');
+    guardarInicioNivel();
+  }, [activityConfig, saveProgress]); // Se ejecuta al montar y cuando cambian las dependencias
+
   const adventure = adventures[currentAdventure];
   const page = adventure.pages[currentPage];
   const totalPages = adventure.pages.length;
   const progress = (currentPage / totalPages) * 100;
- const [isSpeaking, setIsSpeaking] = useState(false);
 
 
 

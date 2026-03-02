@@ -13,6 +13,8 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenCuentoInteractivo } from '../IniciosJuegosLecturas/StartScreenCuentoInteractivo';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 
 interface CuentoInteractivoProps {
   onBack: () => void;
@@ -368,6 +370,32 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
   const [isPlayingFinal, setIsPlayingFinal] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [visitedSections, setVisitedSections] = useState<StorySection[]>([]);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(4); // Cuento Interactivo
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '11-12',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+
   const MIN_FINAL_TIME = 10000;
   const [finalStartTime, setFinalStartTime] = useState<number | null>(null);
 

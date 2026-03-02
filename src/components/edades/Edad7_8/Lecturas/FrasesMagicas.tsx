@@ -13,6 +13,8 @@ import { ConfettiExplosion } from '@/components/others/ConfettiExplosion';
 import { LevelLock } from '@/components/others/LevelLock';
 import { useLevelLock } from '@/hooks/useLevelLock';
 import { speakText } from '@/utils/textToSpeech';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import { StartScreenFrasesMagicas } from "../IniciosJuegosLecturas/StartScreenFrasesMagicas";
 import sol from "@/assets/7_8/frasesmagicas/sol1.svg"
 import cielo from "@/assets/7_8/frasesmagicas/nublado1.svg"
@@ -166,6 +168,32 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   const [currentProgress, setCurrentProgress] = useState(0);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(5); // Frases Mágicas
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '7-8',
+        level: level,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    console.log('🔄 FrasesMagicas - Ejecutando useEffect, nivel:', level);
+    guardarInicioNivel();
+  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
 
   const magicSentences = (() => {
     switch (level) {

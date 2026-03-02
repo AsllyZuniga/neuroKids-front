@@ -11,6 +11,8 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenDetectivePalabras } from '../IniciosJuegosLecturas/StartScreenDetectivePalabras';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 
 interface DetectivePalabrasProps {
   onBack: () => void;
@@ -276,6 +278,31 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(3); // Detective Palabras
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '11-12',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
 
   const challenges = gameChallenges[currentLevel as keyof typeof gameChallenges] || gameChallenges[1];
   const current = challenges[currentChallenge];

@@ -15,6 +15,8 @@ import { LevelLock } from "@/components/others/LevelLock";
 import { StartScreenBingo } from "../IniciosJuegosLecturas/StartScreenBingo";
 import { speakText, canSpeakOnHover } from "@/utils/textToSpeech";
 import { useLevelLock } from "@/hooks/useLevelLock";
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 
 interface WordItem {
   word: string;
@@ -96,6 +98,32 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [showBingo, setShowBingo] = useState(false);
+
+  // 💾 Simple: Solo guardar al iniciar nivel como dashboard
+  const { saveProgress } = useProgress();
+  const activityConfig = getActivityByDbId(10); // ID 10 = Bingo de Palabras
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '7-8',
+        level: level,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
+    console.log('🔄 BingoPalabras - Ejecutando useEffect, nivel:', level);
+    guardarInicioNivel();
+  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
 
   const currentWord = calledList[calledIndex] || "";
   const isWordOnCard = grid.some((c) => c.word === currentWord);

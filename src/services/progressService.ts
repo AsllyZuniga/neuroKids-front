@@ -48,15 +48,27 @@ class ProgressService {
   async saveActivityProgress(activityProgress: Omit<ActivityProgress, 'completedAt' | 'attempts'>): Promise<void> {
     const estudianteId = this.getStudentId();
 
+    console.log('🔍 DEBUG saveActivityProgress:', {
+      estudianteId,
+      activityProgress,
+      userData: localStorage.getItem('user') ? 'exists' : 'missing',
+      token: this.getToken() ? 'exists' : 'missing',
+      timestamp: new Date().toISOString(),
+      uniqueAccess: `${estudianteId}_${activityProgress.activityId}_${Date.now()}`
+    });
+
     if (!estudianteId) {
-      console.error('No se encontró información del estudiante');
+      console.error('❌ No se encontró información del estudiante en localStorage');
+      console.log('📝 userData en localStorage:', localStorage.getItem('user'));
       return;
     }
 
     try {
+      console.log('🔄 NUEVO ACCESO - Intentando registrar ingreso a actividad');
       console.log('🎯 Guardando progreso en DB:', {
         estudiante_id: estudianteId,
         actividad_id: activityProgress.activityId,
+        timestamp_unico: Date.now(),
         puntuacion: activityProgress.score,
         puntuacion_maxima: activityProgress.maxScore,
         completado: activityProgress.completed,
@@ -64,39 +76,62 @@ class ProgressService {
       });
 
       // Guardamos directamente en el backend usando el endpoint real
+      // Agregamos timestamp único para forzar registro cada vez
+      const requestBody = {
+        estudiante_id: estudianteId,
+        actividad_id: activityProgress.activityId,
+        puntuacion: activityProgress.score,
+        puntuacion_maxima: activityProgress.maxScore,
+        completado: activityProgress.completed,
+        completado_at: activityProgress.completed ? new Date().toISOString() : null,
+        intentos: 1,
+        tiempo_total: activityProgress.timeSpent || 0,
+        ultima_interaccion: new Date().toISOString(),
+        // Agregamos timestamp único para garantizar registros únicos
+        timestamp_acceso: Date.now(),
+        session_id: `${estudianteId}_${activityProgress.activityId}_${Date.now()}`
+      };
+
+      console.log('🚀 Haciendo request a:', buildApiUrl(API_CONFIG.ENDPOINTS.PROGRESS_SAVE));
+      console.log('📦 Request body:', requestBody);
+
       const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.PROGRESS_SAVE), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          estudiante_id: estudianteId,
-          actividad_id: activityProgress.activityId,
-          puntuacion: activityProgress.score,
-          puntuacion_maxima: activityProgress.maxScore,
-          completado: activityProgress.completed,
-          completado_at: activityProgress.completed ? new Date().toISOString() : null,
-          intentos: 1,
-          tiempo_total: activityProgress.timeSpent || 0,
-          ultima_interaccion: new Date().toISOString()
-        })
+        body: JSON.stringify(requestBody)
       });
+
+      console.log('📡 Response status:', response.status);
+      console.log('📡 Response ok:', response.ok);
 
       if (response.ok) {
         const result = await response.json();
-        console.log('✅ Progreso guardado exitosamente:', result);
+        console.log('✅ ÉXITO - Progreso guardado correctamente:', {
+          estudiante_id: estudianteId,
+          actividad_id: activityProgress.activityId,
+          timestamp: new Date().toISOString(),
+          result: result
+        });
 
         // También guardamos en localStorage como caché
         this.saveToLocalStorage(estudianteId, activityProgress);
       } else {
-        const errorData = await response.json();
-        console.error('❌ Error del servidor:', errorData);
+        const errorData = await response.text(); // Cambio a text() para capturar errores HTML
+        console.error('❌ Error del servidor:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: errorData
+        });
 
         // Guardar en localStorage como fallback
+        console.log('💾 Guardando en localStorage como fallback');
         this.saveToLocalStorage(estudianteId, activityProgress);
       }
     } catch (error) {
-      console.error('❌ Error guardando progreso:', error);
+      console.error('❌ Error guardando progreso (catch block):', error);
+      console.log('💾 Guardando en localStorage debido a error de red');
 
       // Guardar en localStorage como fallback
       this.saveToLocalStorage(estudianteId, activityProgress);
@@ -213,7 +248,7 @@ class ProgressService {
   /**
    * Verifica si una actividad está completada
    */
-  async isActivityCompleted(activityId: string): Promise<boolean> {
+  async isActivityCompleted(activityId: number): Promise<boolean> {
     const activityProgress = await this.getActivityProgress(activityId);
     return activityProgress?.completed || false;
   }

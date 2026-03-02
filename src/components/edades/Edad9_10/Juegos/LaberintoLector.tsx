@@ -10,6 +10,8 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenLaberintoLector } from "../IniciosJuegosLecturas/StartScreenLaberintoLector";
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 
 interface LaberintoLectorProps {
   onBack: () => void;
@@ -137,6 +139,32 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [questionsAnsweredCount, setQuestionsAnsweredCount] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(12); // Laberinto Lector
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '9-10',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+
   const totalObjectives = totalTreasures + totalQuestions;
   const completedObjectives = treasuresFound + questionsAnsweredCount;
   const [showFinishWarning, setShowFinishWarning] = useState(false);

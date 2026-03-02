@@ -12,6 +12,8 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenHistoriasInteractivas } from '../IniciosJuegosLecturas/StartScreenHistoriasInteractivas';
 import { Button } from '../../../ui/button';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import img1 from '../../../../assets/9_10/historias_interactivas/nivel1/1.png';
 import img2 from '../../../../assets/9_10/historias_interactivas/nivel1/2.png';
 import img3 from '../../../../assets/9_10/historias_interactivas/nivel1/3.png';
@@ -738,6 +740,32 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [showFinalStory, setShowFinalStory] = useState(false);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(15); // Historias Interactivas
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '9-10',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+
   const story = stories[currentLevel - 1];
   const part = story.parts[currentPart];
   const finalStoryText = storyPath.map((id) => story.parts[id]?.text).join(" ");

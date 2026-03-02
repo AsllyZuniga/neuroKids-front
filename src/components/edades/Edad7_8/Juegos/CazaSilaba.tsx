@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
@@ -13,6 +13,8 @@ import { LevelLock } from "@/components/others/LevelLock";
 import { StartScreenCazaSilaba } from "../IniciosJuegosLecturas/StartScreenCazaSilaba";
 import { speakText, canSpeakOnHover } from "@/utils/textToSpeech";
 import { useLevelLock } from "@/hooks/useLevelLock";
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import solImg from '../../../../assets/7_8/images/sol.png';
 import gatoImg from '../../../../assets/7_8/images/gato.png';
 import florImg from '../../../../assets/7_8/images/flor.png';
@@ -82,6 +84,35 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [currentProgress, setCurrentProgress] = useState(0);
   const isLevelLocked = useLevelLock(currentLevel);
+
+  // 💾 Simple: Solo guardar al iniciar nivel como dashboard
+  const { saveProgress } = useProgress();
+  const activityConfig = getActivityByDbId(11); // ID 11 = Caza la Sílaba
+
+  // 💾 Guardar progreso CADA vez que se entra a la actividad
+  useEffect(() => {
+    if (activityConfig) {
+      const guardarInicioNivel = async () => {
+        try {
+          await saveProgress({
+            activityId: activityConfig.dbId,
+            activityName: activityConfig.name,
+            activityType: activityConfig.type,
+            ageGroup: '7-8',
+            level: currentLevel,
+            score: 0,
+            maxScore: 100,
+            completed: false,
+            timeSpent: 0
+          });
+          console.log(`🎯 Caza Sílaba Nivel ${currentLevel} iniciado`);
+        } catch (error) {
+          console.error('Error guardando progreso:', error);
+        }
+      };
+      guardarInicioNivel();
+    }
+  }, [currentLevel, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
 
   const QUESTIONS_PER_LEVEL = 5;
   const data = gameData[currentLevel as keyof typeof gameData] || gameData[1];

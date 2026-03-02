@@ -15,6 +15,8 @@ import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenConstruyeFrase } from "../IniciosJuegosLecturas/StartScreenConstruyeFrase";
 import { speakText, stopSpeech, isSpeechSupported } from '../../../../utils/textToSpeech';
 import { isUserAuthenticated } from '../../../../hooks/useLevelLock';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import gato from '../../../../assets/9_10/construye_frase/1gatonegro.svg';
 import flores from '../../../../assets/9_10/construye_frase/2florescoloridas.svg';
 import abuela from '../../../../assets/9_10/construye_frase/3abuelaypastel.svg';
@@ -127,6 +129,31 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   const hoverTimeoutRef = useRef<number | null>(null);
   const navigate = useNavigate();
   const [draggedWord, setDraggedWord] = useState<{ word: string; index: number } | null>(null);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(13); // Construye Frase
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '9-10',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
 
   const currentLevelData = levels.find(l => l.level === currentLevel);
   const challenges = currentLevelData?.challenges || [];

@@ -11,8 +11,8 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenPreguntasInferenciales } from '../IniciosJuegosLecturas/StartScreenPreguntasInferenciales';
-
+import { StartScreenPreguntasInferenciales } from '../IniciosJuegosLecturas/StartScreenPreguntasInferenciales';import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 interface PreguntasInferencialesProps {
   onBack: () => void;
   level?: number;
@@ -263,6 +263,31 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const [showReward, setShowReward] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(18); // Preguntas Inferenciales
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '11-12',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
 
   const currentLevelData = allLevels[currentLevel - 1] || allLevels[0];
   const challenges = currentLevelData.challenges;

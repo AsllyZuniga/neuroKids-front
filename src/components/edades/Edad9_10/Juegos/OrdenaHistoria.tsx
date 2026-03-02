@@ -13,6 +13,7 @@ import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenOrdenaHistoria } from "../IniciosJuegosLecturas/StartScreenOrdenaHistoria";
 import { speakText, canSpeakOnHover } from '../../../../utils/textToSpeech';
 import { useProgress } from '../../../../hooks/useProgress';
+import { getActivityByDbId } from "@/config/activities";
 
 interface OrdenaHistoriaProps {
   onBack: () => void;
@@ -185,6 +186,29 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [attempts, setAttempts] = useState(0);
+
+  const activityConfig = getActivityByDbId(9); // Ordena Historia
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '9-10',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
 
   const initializeStory = useCallback(() => {
     const currentStory = levels[currentLevel - 1].stories[currentStoryIndex];

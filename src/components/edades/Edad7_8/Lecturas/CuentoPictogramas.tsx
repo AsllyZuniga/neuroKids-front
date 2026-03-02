@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
@@ -13,6 +13,8 @@ import { StartScreenCuentoPictogramas } from "../IniciosJuegosLecturas/StartScre
 import { LevelLock } from '../../../others/LevelLock';
 import { useLevelLock } from '../../../../hooks/useLevelLock';
 import { speakText } from '../../../../utils/textToSpeech';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import image1 from "@/assets/7_8/cuentospictogramas/nivel1/1.png";
 import image2 from "@/assets/7_8/cuentospictogramas/nivel1/2.png";
 import image3 from "@/assets/7_8/cuentospictogramas/nivel1/3.png";  
@@ -213,6 +215,35 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
   const [currentProgress, setCurrentProgress] = useState(0); // Estado para progreso incremental
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
+
+  // 💾 Simple: Solo guardar al iniciar nivel como dashboard
+  const { saveProgress } = useProgress();
+  const activityConfig = getActivityByDbId(1); // ID 1 = Cuento con Pictogramas
+
+  // 💾 Guardar progreso CADA vez que se entra a la actividad
+  useEffect(() => {
+    if (activityConfig) {
+      const guardarInicioNivel = async () => {
+        try {
+          await saveProgress({
+            activityId: activityConfig.dbId,
+            activityName: activityConfig.name,
+            activityType: activityConfig.type,
+            ageGroup: '7-8',
+            level: level,
+            score: 0,
+            maxScore: 100,
+            completed: false,
+            timeSpent: 0
+          });
+          console.log(`📚 Cuento Nivel ${level} iniciado`);
+        } catch (error) {
+          console.error('Error guardando progreso:', error);
+        }
+      };
+      guardarInicioNivel();
+    }
+  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
 
   let storyPages: StoryPage[] = [];
   switch (level) {

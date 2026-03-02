@@ -79,6 +79,31 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
   const [likesMap, setLikesMap] = useState<Record<number, number>>({});
   const [likedMap, setLikedMap] = useState<Record<number, boolean>>({});
 
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(14); // Noticias Sencillas
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '11-12',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+
   const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
 
 

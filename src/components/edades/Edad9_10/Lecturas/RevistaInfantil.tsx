@@ -11,8 +11,8 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenRevistaInfantil } from "../IniciosJuegosLecturas/StartScreenRevistaInfantil";
-import delfin from '../../../../assets/9_10/revista_infantil/delfin1.svg';
+import { StartScreenRevistaInfantil } from "../IniciosJuegosLecturas/StartScreenRevistaInfantil";import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";import delfin from '../../../../assets/9_10/revista_infantil/delfin1.svg';
 import planta from '../../../../assets/9_10/revista_infantil/planta2.svg';
 import volcan from '../../../../assets/9_10/revista_infantil/volcan3.svg';
 import robots from '../../../../assets/9_10/revista_infantil/robots4.svg';
@@ -264,6 +264,31 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
   const [readArticles, setReadArticles] = useState<Set<number>>(new Set());
   const [showMotivational, setShowMotivational] = useState(false);
   const [levelComplete, setLevelComplete] = useState(false);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(7); // Revista Infantil
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '9-10',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
 
   const currentArticles = articlesByLevel[currentLevel - 1];
   const article = currentArticles[currentArticle];

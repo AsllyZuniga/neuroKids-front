@@ -14,6 +14,8 @@ import { StartScreenPrimeraPalabra } from "../IniciosJuegosLecturas/StartScreenP
 import { LevelLock } from "@/components/others/LevelLock";
 import { useLevelLock } from "@/hooks/useLevelLock";
 import { speakText } from "@/utils/textToSpeech";
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import sol from "@/assets/7_8/primerapalabra/sol.svg"
 import mar from "@/assets/7_8/primerapalabra/mar.svg"
 import vela from "@/assets/7_8/primerapalabra/vela.svg"
@@ -164,6 +166,33 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const [showQuestions, setShowQuestions] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const locked = useLevelLock(currentLevel);
+  
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(6); // Primera Palabra
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '7-8',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    console.log('🔄 PrimeraPalabra - Ejecutando useEffect, nivel:', currentLevel);
+    guardarInicioNivel();
+  }, [currentLevel, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+
   const recognitionRef = useRef<any>(null);
   const data = readingData[currentLevel] ?? readingData[1];
   const currentItem = data[currentIndex];

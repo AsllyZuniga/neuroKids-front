@@ -12,6 +12,8 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenBiografiasSencillas } from '../IniciosJuegosLecturas/StartScreenBiografiasSencillas';
+import { useProgress } from "@/hooks/useProgress";
+import { getActivityByDbId } from "@/config/activities";
 import marie from '../../../../assets/11_12/biografias_sencillas/marieCurie.svg';
 import leonardo from '../../../../assets/11_12/biografias_sencillas/leonardoDaVinci.svg';
 import mandela from '../../../../assets/11_12/biografias_sencillas/nelsonMandela.svg';
@@ -501,6 +503,32 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
   const [showReward, setShowReward] = useState(false);
   const [readBiographies, setReadBiographies] = useState<Set<number>>(new Set());
   const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const { saveProgress } = useProgress();
+
+  const activityConfig = getActivityByDbId(16); // Biografías Sencillas
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress({
+        activityId: activityConfig.dbId,
+        activityName: activityConfig.name,
+        activityType: activityConfig.type,
+        ageGroup: '11-12',
+        level: currentLevel,
+        score: 0,
+        maxScore: 100,
+        completed: false,
+        timeSpent: 0
+      });
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    guardarInicioNivel();
+  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+
   const biographies = allBiographies[currentLevel - 1];
   const biography = biographies[currentBio];
   const progress = (currentBio / biographies.length) * 100;
