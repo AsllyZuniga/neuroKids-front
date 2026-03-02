@@ -15,6 +15,13 @@ export const API_CONFIG = {
         STUDENT_NOTIFICATIONS: "/notificaciones-estudiante/pendientes",
         MARK_NOTIFICATION_READ: "/notificaciones-estudiante/completar-bienvenida",
 
+        // Endpoints para progreso de actividades
+        PROGRESS_SAVE: "/progreso-actividades",
+        PROGRESS_STUDENT: "/progreso-actividades/estudiante",
+        PROGRESS_ACTIVITY: "/progreso-actividades/actividad",
+        PROGRESS_SUMMARY: "/progreso-actividades/resumen",
+        PROGRESS_PENDING: "/progreso-actividades/pendientes",
+
         // Endpoints comunes
         LOGOUT: "auth/logout",
         ME: "/me",

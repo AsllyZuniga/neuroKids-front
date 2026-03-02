@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Home, TrendingUp, LogOut, Book, Gamepad2 } from "lucide-react";
 import Header from "@/components/header/header";
 import { insigniaService, type NotificacionInsignia } from "@/services/insigniaService";
+import { useProgress } from "@/hooks/useProgress";
+import { getActivitiesByAgeGroup, type ActivityConfig } from "@/config/activities";
 import "./studentWelcome.scss";
 
 interface Student {
@@ -15,16 +17,11 @@ interface Student {
   institucion: string;
 }
 
-interface Activity {
-  id: string;
-  type: 'lectura' | 'juego';
-  title: string;
-  icon: string;
+// Usar ActivityConfig de la configuración centralizada
+type Activity = ActivityConfig & {
   completed: boolean;
-  component: string;
-  ageGroup: '7-8' | '9-10' | '11-12';
   position: { x: number; y: number };
-}
+};
 
 export default function StudentWelcome() {
   const [student, setStudent] = useState<Student | null>(null);
@@ -34,6 +31,7 @@ export default function StudentWelcome() {
   const [insigniaToShow, setInsigniaToShow] = useState<NotificacionInsignia | null>(null);
   const [confetti, setConfetti] = useState(false);
   const navigate = useNavigate();
+  const { saveProgress } = useProgress();
 
 useEffect(() => {
   const userData = JSON.parse(localStorage.getItem("user") || "null");
@@ -229,69 +227,66 @@ window.addEventListener("focus", handleFocus);
   return () => window.removeEventListener("focus", handleFocus);
 }, []);
 
-  // Definir actividades por grupo de edad
-  const activities: Record<'7-8' | '9-10' | '11-12', Activity[]> = {
-    '7-8': [
-      { id: 'primera-palabra', type: 'lectura', title: 'Mi Primera Palabra', icon: '📖', completed: false, component: 'PrimeraPalabra', ageGroup: '7-8', position: { x: 30, y: 10 } },
-      { id: 'bingo-palabras', type: 'juego', title: 'Bingo de Palabras', icon: '🎮', completed: false, component: 'BingoPalabras', ageGroup: '7-8', position: { x: 50, y: 25 } },
-      { id: 'cuento-pictogramas', type: 'lectura', title: 'Cuento con Pictogramas', icon: '📚', completed: false, component: 'CuentoPictogramas', ageGroup: '7-8', position: { x: 35, y: 40 } },
-      { id: 'caza-silaba', type: 'juego', title: 'Caza la Sílaba', icon: '🎯', completed: false, component: 'CazaSilaba', ageGroup: '7-8', position: { x: 60, y: 55 } },
-      { id: 'frases-magicas', type: 'lectura', title: 'Frases Mágicas', icon: '✨', completed: false, component: 'FrasesMagicas', ageGroup: '7-8', position: { x: 40, y: 70 } },
-      { id: 'escucha-elige', type: 'juego', title: 'Escucha y Elige', icon: '🎧', completed: false, component: 'EscuchaElige', ageGroup: '7-8', position: { x: 55, y: 85 } },
-    ],
-    '9-10': [
-      { id: 'mini-aventuras', type: 'lectura', title: 'Mini Aventuras', icon: '🗺️', completed: false, component: 'MiniAventuras', ageGroup: '9-10', position: { x: 25, y: 10 } },
-      { id: 'laberinto-lector', type: 'juego', title: 'Laberinto Lector', icon: '🌀', completed: false, component: 'LaberintoLector', ageGroup: '9-10', position: { x: 55, y: 25 } },
-      { id: 'historias-interactivas', type: 'lectura', title: 'Historias Interactivas', icon: '🎭', completed: false, component: 'HistoriasInteractivas', ageGroup: '9-10', position: { x: 30, y: 40 } },
-      { id: 'ordena-historia', type: 'juego', title: 'Ordena la Historia', icon: '🧩', completed: false, component: 'OrdenaHistoria', ageGroup: '9-10', position: { x: 65, y: 55 } },
-      { id: 'revista-infantil', type: 'lectura', title: 'Revista Infantil', icon: '📰', completed: false, component: 'RevistaInfantil', ageGroup: '9-10', position: { x: 35, y: 70 } },
-      { id: 'construye-frase', type: 'juego', title: 'Construye la Frase', icon: '🔨', completed: false, component: 'ConstruyeFrase', ageGroup: '9-10', position: { x: 50, y: 85 } },
+  // Obtener actividades por grupo de edad desde la configuración
+  const getActivitiesForAgeGroup = (ageGroup: '7-8' | '9-10' | '11-12'): Activity[] => {
+    const baseActivities = getActivitiesByAgeGroup(ageGroup);
+    
+    // Posiciones predefinidas para la visualización en mapa
+    const positions: Record<string, { x: number; y: number }> = {
+      // Edad 7-8
+      'primera-palabra': { x: 30, y: 10 },
+      'bingo-palabras': { x: 50, y: 25 },
+      'cuento-pictogramas': { x: 35, y: 40 },
+      'caza-silaba': { x: 60, y: 55 },
+      'frases-magicas': { x: 40, y: 70 },
+      'escucha-elige': { x: 55, y: 85 },
+      // Edad 9-10
+      'mini-aventuras': { x: 25, y: 10 },
+      'laberinto-lector': { x: 55, y: 25 },
+      'historias-interactivas': { x: 30, y: 40 },
+      'ordena-historia': { x: 65, y: 55 },
+      'revista-infantil': { x: 35, y: 70 },
+      'construye-frase': { x: 50, y: 85 },
+      // Edad 11-12
+      'biografias-sencillas': { x: 30, y: 10 },
+      'cohete-lector': { x: 60, y: 25 },
+      'cuento-interactivo': { x: 35, y: 40 },
+      'detective-palabras': { x: 55, y: 55 },
+      'noticias-sencillas': { x: 40, y: 70 },
+      'preguntas-inferenciales': { x: 50, y: 85 },
+    };
 
-    ],
-    '11-12': [
-      { id: 'biografias-sencillas', type: 'lectura', title: 'Biografías Sencillas', icon: '👤', completed: false, component: 'BiografiasSencillas', ageGroup: '11-12', position: { x: 30, y: 10 } },
-      { id: 'cohete-lector', type: 'juego', title: 'Cohete Lector', icon: '🚀', completed: false, component: 'CoheteLector', ageGroup: '11-12', position: { x: 60, y: 25 } },
-      { id: 'cuento-interactivo', type: 'lectura', title: 'Cuento Interactivo', icon: '📕', completed: false, component: 'CuentoInteractivo', ageGroup: '11-12', position: { x: 35, y: 40 } },
-      { id: 'detective-palabras', type: 'juego', title: 'Detective de Palabras', icon: '🔍', completed: false, component: 'DetectivePalabras', ageGroup: '11-12', position: { x: 55, y: 55 } },
-      { id: 'noticias-sencillas', type: 'lectura', title: 'Noticias Sencillas', icon: '📰', completed: false, component: 'NoticiasSencillas', ageGroup: '11-12', position: { x: 40, y: 70 } },
-      { id: 'preguntas-inferenciales', type: 'juego', title: 'Preguntas Inferenciales', icon: '💡', completed: false, component: 'PreguntasInferenciales', ageGroup: '11-12', position: { x: 50, y: 85 } },
-    ]
+    return baseActivities.map(activity => ({
+      ...activity,
+      completed: completedActivities.has(activity.id),
+      position: positions[activity.id] || { x: 50, y: 50 } // Posición por defecto
+    }));
   };
 
-  const handleActivityClick = (activity: Activity) => {
-
-      // Mapeo de actividades a rutas existentes
-      const routeMap: Record<string, string> = {
-        // Edad 7-8
-        'primera-palabra': '/nivel1/lectura3',
-        'bingo-palabras': '/nivel1/juego1',
-        'cuento-pictogramas': '/nivel1/lectura1',
-        'caza-silaba': '/nivel1/juego2',
-        'frases-magicas': '/nivel1/lectura2',
-        'escucha-elige': '/nivel1/juego3',
-        // Edad 9-10
-        'mini-aventuras': '/nivel2/lectura2',
-        'laberinto-lector': '/nivel2/juego2',
-        'historias-interactivas': '/nivel2/lectura1',
-        'ordena-historia': '/nivel2/juego3',
-        'revista-infantil': '/nivel2/lectura3',
-        'construye-frase': '/nivel2/juego1',
-        // Edad 11-12
-        'biografias-sencillas': '/nivel3/lectura1',
-        'cohete-lector': '/nivel3/juego1',
-        'cuento-interactivo': '/nivel3/lectura2',
-        'detective-palabras': '/nivel3/juego2',
-        'noticias-sencillas': '/nivel3/lectura3',
-        'preguntas-inferenciales': '/nivel3/juego3',
-      };
-
-      const route = routeMap[activity.id];
-      if (route) {
-        navigate(route);
-      } else {
-        console.error(`No route found for activity: ${activity.id}`);
+  const handleActivityClick = async (activity: Activity) => {
+    try {
+      // Guardar actividad iniciada usando el formato correcto del hook
+      if (student?.id) {
+        await saveProgress({
+          activityId: activity.dbId,
+          activityName: activity.title,
+          activityType: activity.type,
+          ageGroup: activity.ageGroup,
+          level: activity.level,
+          score: 0, // Score inicial
+          maxScore: activity.maxScore,
+          completed: false, // Solo iniciando la actividad
+          timeSpent: 0
+        });
+        
+        console.log(`Iniciando actividad: ${activity.title} (DB ID: ${activity.dbId})`);
       }
+    } catch (error) {
+      console.error('Error al iniciar actividad:', error);
+    }
     
+    // Usar la ruta definida en la configuración
+    navigate(activity.route);
   };
 
   const handleLogout = () => {
@@ -303,10 +298,7 @@ window.addEventListener("focus", handleFocus);
   if (!student) {
     return <div className="loading">Cargando...</div>;
   }
-const currentActivities = activities[selectedAgeGroup].map((activity) => ({
-  ...activity,
-  completed: completedActivities.has(activity.id),
-}));
+const currentActivities = getActivitiesForAgeGroup(selectedAgeGroup);
 
 
 

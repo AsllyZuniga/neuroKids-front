@@ -3,7 +3,7 @@ import { progressService } from '../services/progressService';
 import type { ActivityProgress } from '../services/progressService';
 
 interface SaveProgressParams {
-  activityId: string;
+  activityId: number; // Cambio a number
   activityName: string;
   activityType: 'lectura' | 'juego';
   ageGroup: '7-8' | '9-10' | '11-12';
@@ -43,7 +43,7 @@ export function useProgress() {
   /**
    * Obtiene el progreso de una actividad específica
    */
-  const getActivityProgress = useCallback(async (activityId: string): Promise<ActivityProgress | null> => {
+  const getActivityProgress = useCallback(async (activityId: number): Promise<ActivityProgress | null> => {
     try {
       return await progressService.getActivityProgress(activityId);
     } catch (error) {
@@ -55,9 +55,10 @@ export function useProgress() {
   /**
    * Verifica si una actividad está completada
    */
-  const isActivityCompleted = useCallback(async (activityId: string): Promise<boolean> => {
+  const isActivityCompleted = useCallback(async (activityId: number): Promise<boolean> => {
     try {
-      return await progressService.isActivityCompleted(activityId);
+      const progress = await progressService.getActivityProgress(activityId);
+      return progress?.completed || false;
     } catch (error) {
       console.error('Error verificando actividad completada:', error);
       return false;

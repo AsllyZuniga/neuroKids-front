@@ -1,7 +1,7 @@
-import { API_CONFIG } from '../config/api';
+import { API_CONFIG, buildApiUrl } from '../config/api';
 
 export interface ActivityProgress {
-  activityId: string;
+  activityId: number; // Cambio a number para coincidir con DB
   activityName: string;
   activityType: 'lectura' | 'juego';
   ageGroup: '7-8' | '9-10' | '11-12';
@@ -47,37 +47,59 @@ class ProgressService {
    */
   async saveActivityProgress(activityProgress: Omit<ActivityProgress, 'completedAt' | 'attempts'>): Promise<void> {
     const estudianteId = this.getStudentId();
-    const token = this.getToken();
 
-    if (!estudianteId || !token) {
+    if (!estudianteId) {
       console.error('No se encontró información del estudiante');
       return;
     }
 
     try {
-      // Primero guardamos en localStorage como respaldo
-      this.saveToLocalStorage(estudianteId, activityProgress);
+      console.log('🎯 Guardando progreso en DB:', {
+        estudiante_id: estudianteId,
+        actividad_id: activityProgress.activityId,
+        puntuacion: activityProgress.score,
+        puntuacion_maxima: activityProgress.maxScore,
+        completado: activityProgress.completed,
+        tiempo_total: activityProgress.timeSpent || 0
+      });
 
-      // Intentamos guardar en el backend
-      const response = await fetch(`${API_CONFIG.BASE_URL}/progreso`, {
+      // Guardamos directamente en el backend usando el endpoint real
+      const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.PROGRESS_SAVE), {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          estudianteId,
-          ...activityProgress,
-          completedAt: activityProgress.completed ? new Date().toISOString() : undefined
+          estudiante_id: estudianteId,
+          actividad_id: activityProgress.activityId,
+          puntuacion: activityProgress.score,
+          puntuacion_maxima: activityProgress.maxScore,
+          completado: activityProgress.completed,
+          completado_at: activityProgress.completed ? new Date().toISOString() : null,
+          intentos: 1,
+          tiempo_total: activityProgress.timeSpent || 0,
+          ultima_interaccion: new Date().toISOString()
         })
       });
 
-      if (!response.ok) {
-        console.warn('No se pudo guardar en el servidor, usando localStorage');
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ Progreso guardado exitosamente:', result);
+
+        // También guardamos en localStorage como caché
+        this.saveToLocalStorage(estudianteId, activityProgress);
+      } else {
+        const errorData = await response.json();
+        console.error('❌ Error del servidor:', errorData);
+
+        // Guardar en localStorage como fallback
+        this.saveToLocalStorage(estudianteId, activityProgress);
       }
     } catch (error) {
-      console.error('Error guardando progreso:', error);
-      // El progreso ya está en localStorage como respaldo
+      console.error('❌ Error guardando progreso:', error);
+
+      // Guardar en localStorage como fallback
+      this.saveToLocalStorage(estudianteId, activityProgress);
     }
   }
 
@@ -86,7 +108,6 @@ class ProgressService {
    */
   async getStudentProgress(): Promise<StudentProgress | null> {
     const estudianteId = this.getStudentId();
-    const token = this.getToken();
 
     if (!estudianteId) {
       return null;
@@ -94,31 +115,95 @@ class ProgressService {
 
     try {
       // Intentamos obtener del backend
-      if (token) {
-        const response = await fetch(`${API_CONFIG.BASE_URL}/progreso/${estudianteId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+      const response = await fetch(buildApiUrl(`${API_CONFIG.ENDPOINTS.PROGRESS_STUDENT}/${estudianteId}`));
 
-        if (response.ok) {
-          const data = await response.json();
-          return data.data;
+      if (response.ok) {
+        const data = await response.json();
+        console.log('📊 Progreso obtenido del servidor:', data);
+
+        if (data.success && data.data) {
+          // Transformar los datos del backend al formato esperado
+          const backendData = data.data;
+          return {
+            estudianteId,
+            totalPoints: backendData.estadisticas?.puntuacion_total || 0,
+            gamesCompleted: backendData.progreso?.filter((p: any) =>
+              p.actividad?.tipo_actividad_id === 2 && p.completado
+            ).length || 0,
+            readingsCompleted: backendData.progreso?.filter((p: any) =>
+              p.actividad?.tipo_actividad_id === 1 && p.completado
+            ).length || 0,
+            activities: backendData.progreso?.map((p: any) => ({
+              activityId: p.actividad_id,
+              activityName: p.actividad?.nombre || 'Actividad',
+              activityType: p.actividad?.tipo_actividad_id === 1 ? 'lectura' : 'juego',
+              ageGroup: this.getAgeGroupFromId(p.actividad?.grupo_edad_id),
+              level: p.actividad?.nivel || 1,
+              score: p.puntuacion || 0,
+              maxScore: p.puntuacion_maxima || 100,
+              completed: p.completado || false,
+              completedAt: p.completado_at,
+              attempts: p.intentos || 0,
+              timeSpent: p.tiempo_total || 0
+            })) || [],
+            lastActivity: backendData.estadisticas?.ultima_actividad
+          };
         }
       }
 
-      // Si falla, usamos localStorage
+      // Si falla, usamos localStorage como fallback
+      console.log('⚠️ Usando localStorage como fallback');
       return this.getFromLocalStorage(estudianteId);
     } catch (error) {
-      console.error('Error obteniendo progreso:', error);
+      console.error('❌ Error obteniendo progreso:', error);
       return this.getFromLocalStorage(estudianteId);
+    }
+  }
+
+  private getAgeGroupFromId(grupoEdadId: number): '7-8' | '9-10' | '11-12' {
+    switch (grupoEdadId) {
+      case 1: return '7-8';
+      case 2: return '9-10';
+      case 3: return '11-12';
+      default: return '7-8';
     }
   }
 
   /**
    * Obtiene el progreso de una actividad específica
    */
-  async getActivityProgress(activityId: string): Promise<ActivityProgress | null> {
+  async getActivityProgress(activityId: number): Promise<ActivityProgress | null> {
+    const estudianteId = this.getStudentId();
+    if (!estudianteId) return null;
+
+    try {
+      // Primero intentamos del backend
+      const response = await fetch(buildApiUrl(`${API_CONFIG.ENDPOINTS.PROGRESS_ACTIVITY}/${activityId}/estudiante/${estudianteId}`));
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          const p = data.data;
+          return {
+            activityId: p.actividad_id,
+            activityName: p.actividad?.nombre || 'Actividad',
+            activityType: p.actividad?.tipo_actividad_id === 1 ? 'lectura' : 'juego',
+            ageGroup: this.getAgeGroupFromId(p.actividad?.grupo_edad_id),
+            level: p.actividad?.nivel || 1,
+            score: p.puntuacion || 0,
+            maxScore: p.puntuacion_maxima || 100,
+            completed: p.completado || false,
+            completedAt: p.completado_at,
+            attempts: p.intentos || 0,
+            timeSpent: p.tiempo_total || 0
+          };
+        }
+      }
+    } catch (error) {
+      console.error('Error obteniendo progreso de actividad:', error);
+    }
+
+    // Fallback a localStorage
     const progress = await this.getStudentProgress();
     if (!progress) return null;
 
