@@ -2,8 +2,10 @@ export const API_CONFIG = {
     BASE_URL: "http://localhost:3000",
     ENDPOINTS: {
         // Endpoints para docentes/administradores
-        ADMIN_LOGIN: "/auth/docentes/iniciar-sesion",
-        ADMIN_REGISTER: "/auth/docentes/registro",
+        DOCENTE_LOGIN: "/auth/docentes/iniciar-sesion",
+        DOCENTE_REGISTER: "/auth/docentes/registro",
+        ADMIN_LOGIN: "/auth/administradores/iniciar-sesion",
+        ADMIN_REGISTER: "/auth/administradores/registro",
 
         // Endpoints para estudiantes
         STUDENT_LOGIN: "/auth/estudiantes/iniciar-sesion",
