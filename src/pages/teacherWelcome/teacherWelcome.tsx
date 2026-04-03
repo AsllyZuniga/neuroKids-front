@@ -4,7 +4,7 @@ import Header from "@/components/header/header";
 import Button from "@/shared/components/Button/Button";
 import Card from "@/shared/components/Card/Card";
 import "./teacherWelcome.scss";
-import { API_CONFIG, buildApiUrl } from "@/config/api";
+import { buildApiUrl } from "@/config/api";
 
 interface Teacher {
   id: number;
@@ -21,6 +21,10 @@ export default function TeacherWelcome() {
     "/avatars/hombre.svg"
   ];
   const [totalStudents, setTotalStudents] = useState<number>(0);
+  const [totalReadingsCompleted, setTotalReadingsCompleted] = useState<number>(0);
+  const [totalGamesCompleted, setTotalGamesCompleted] = useState<number>(0);
+  const [generalAverage, setGeneralAverage] = useState<number>(0);
+  const [statsLoading, setStatsLoading] = useState<boolean>(true);
 
   const [avatarIndex, setAvatarIndex] = useState(0);
   const [teacher, setTeacher] = useState<Teacher | null>(null);
@@ -38,38 +42,56 @@ export default function TeacherWelcome() {
 
 
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchQuickStats = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const resp = await fetch(buildApiUrl("/usuarios"), {
+        if (!token || localStorage.getItem("userType") !== "docente") return;
+        setStatsLoading(true);
+        const resp = await fetch(buildApiUrl("/reportes/estudiantes"), {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
 
-        if (!resp.ok) {
-          const text = await resp.text();
-          throw new Error(text || "Error al obtener usuarios");
-        }
+        if (!resp.ok) return;
 
         const data = await resp.json();
-        const usuarios = data?.data?.usuarios || [];
+        const estudiantes = Array.isArray(data?.data?.estudiantes) ? data.data.estudiantes : [];
+        setTotalStudents(estudiantes.length);
 
-        const onlyStudents = usuarios.filter(
-          (u: any) => u.rol_id === 3
+        const totalLecturas = estudiantes.reduce(
+          (acc: number, row: any) => acc + Number(row?.resumen?.lecturas_completadas ?? 0),
+          0
         );
+        setTotalReadingsCompleted(totalLecturas);
 
-        setTotalStudents(onlyStudents.length);
+        const totalJuegos = estudiantes.reduce(
+          (acc: number, row: any) => acc + Number(row?.resumen?.juegos_completados ?? 0),
+          0
+        );
+        setTotalGamesCompleted(totalJuegos);
 
+        const avg =
+          estudiantes.length > 0
+            ? Math.round(
+                estudiantes.reduce(
+                  (acc: number, row: any) => acc + Number(row?.resumen?.puntos_totales ?? 0),
+                  0
+                ) / estudiantes.length
+              )
+            : 0;
+        setGeneralAverage(avg);
       } catch (error) {
-        console.error("Error obteniendo estudiantes:", error);
+        console.error("Error obteniendo resumen rápido:", error);
+      } finally {
+        setStatsLoading(false);
       }
     };
 
-    fetchStudents();
+    fetchQuickStats();
+    const refreshId = setInterval(fetchQuickStats, 30000);
+    return () => clearInterval(refreshId);
   }, []);
 
   useEffect(() => {
@@ -77,8 +99,7 @@ export default function TeacherWelcome() {
     const userData = localStorage.getItem("user");
     const userType = localStorage.getItem("userType");
 
-    if (!userData || userType !== "docente") {
-      // Si no hay datos de docente, redirigir al login
+    if (!userData || userType !== "docente" || userData === "undefined" || userData === "null") {
       navigate("/tipo-usuario");
       return;
     }
@@ -125,10 +146,10 @@ export default function TeacherWelcome() {
   };
 
 
-  const handleManageReadings = () => {
-    // TODO: Implementar página de gestión de lecturas
-    navigate("/lecturas");
-  };
+  // const handleManageReadings = () => {
+  //   // TODO: Implementar página de gestión de lecturas
+  //   navigate("/lecturas");
+  // };
 
   if (!teacher) {
     return <div className="loading">Cargando...</div>;
@@ -213,7 +234,7 @@ export default function TeacherWelcome() {
 
 
 
-            <Card className="teacher-welcome__card teacher-welcome__card--quaternary">
+            {/* <Card className="teacher-welcome__card teacher-welcome__card--quaternary">
               <div className="teacher-welcome__card-icon">
                 <img src="/avatars/lecturas.svg" alt="Lecturas" />
               </div>
@@ -228,7 +249,7 @@ export default function TeacherWelcome() {
                 onClick={handleManageReadings}
                 className="teacher-welcome__card-button"
               />
-            </Card>
+            </Card> */}
           </div>
         </div>
 
@@ -238,17 +259,27 @@ export default function TeacherWelcome() {
             <div className="teacher-welcome__stats-grid">
               <div className="teacher-welcome__stat-item">
                 <div className="teacher-welcome__stat-number">
-                  {totalStudents}
+                  {statsLoading ? "..." : totalStudents}
                 </div>
                 <div className="teacher-welcome__stat-label">Estudiantes Activos</div>
               </div>
               <div className="teacher-welcome__stat-item">
-                <div className="teacher-welcome__stat-number">--</div>
+                <div className="teacher-welcome__stat-number">
+                  {statsLoading ? "..." : totalReadingsCompleted}
+                </div>
                 <div className="teacher-welcome__stat-label">Lecturas Completadas</div>
               </div>
               <div className="teacher-welcome__stat-item">
-                <div className="teacher-welcome__stat-number">--</div>
-                <div className="teacher-welcome__stat-label">Promedio General</div>
+                <div className="teacher-welcome__stat-number">
+                  {statsLoading ? "..." : totalGamesCompleted}
+                </div>
+                <div className="teacher-welcome__stat-label">Juegos Completados</div>
+              </div>
+              <div className="teacher-welcome__stat-item">
+                <div className="teacher-welcome__stat-number">
+                  {statsLoading ? "..." : generalAverage}
+                </div>
+                <div className="teacher-welcome__stat-label">Promedio General de Puntos</div>
               </div>
             </div>
           </div>

@@ -15,22 +15,22 @@ const letters = title.split("");
 
 export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLectorProps) {
   return (
-<div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+    <div
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
 
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
       </Button>
 
 
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {[...Array(50)].map((_, i) => (
           <motion.div
             key={`star-${i}`}
@@ -60,7 +60,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
       </div>
 
 
-      <div className="absolute top-10 left-10">
+      <div className="absolute left-6 top-16 hidden sm:left-10 sm:top-10 sm:block">
         <FloatingItem delay={0} duration={4} floatY={-30} floatX={10}>
           <Rocket size={60} color="#FFB3D9" style={{ filter: 'drop-shadow(0 4px 10px rgba(255, 179, 217, 0.5))' }} />
         </FloatingItem>
@@ -80,7 +80,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
 
 
     
-  <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-4 max-w-4xl mx-auto">
+      <div className="relative z-10 mx-auto flex max-w-4xl min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 text-center sm:pt-24">
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -93,7 +93,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
                       {letters.map((letter, index) => (
                         <motion.span
                           key={index}
-                          className="inline-block text-7xl md:text-7xl lg:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400"
+                          className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
                           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                           initial={{ opacity: 0, y: -40, rotate: -10 }}
                           animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -126,7 +126,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
           <Button
             onClick={onStart}
             size="lg"
-            className="px-12 py-8 text-2xl rounded-full shadow-2xl transform transition-all hover:scale-110 dyslexia-friendly"
+            className="text-xl px-8 py-6 rounded-full shadow-lg transform transition-all hover:scale-110 dyslexia-friendly"
             style={{
               background: 'linear-gradient(135deg, #FFB3D9 0%, #B8A3FF 100%)',
               border: 'none',

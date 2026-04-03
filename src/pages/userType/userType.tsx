@@ -21,6 +21,10 @@ const [avatarIndex, setAvatarIndex] = useState(0);
     navigate("/docente/login");
   };
 
+  const handleAdminLogin = () => {
+    navigate("/admin/login");
+  };
+
   useEffect(() => {
   const interval = setInterval(() => {
     setAvatarIndex((prev) => (prev === 0 ? 1 : 0));
@@ -34,14 +38,14 @@ const [avatarIndex, setAvatarIndex] = useState(0);
       <div className="user-type__container">
         <div className="user-type__header">
           <h1 className="user-type__title">¡Bienvenido a NeuroKids!</h1>
-          <p className="user-type__subtitle">¿Eres estudiante o docente?</p>
+          <p className="user-type__subtitle">¿Eres estudiante, docente o administrador?</p>
         </div>
 
         <div className="user-type__options">
           <div className="user-type__option">
             <div className="user-type__card user-type__card--student">
               <div className="user-type__card-icon">
-                <img src="avatars/estudiantes.svg" alt="Estudiante" />
+                <img src="/avatars/estudiantes.svg" alt="Estudiante" />
               </div>
               <h3 className="user-type__card-title">Soy Estudiante</h3>
               <p className="user-type__card-description">
@@ -75,6 +79,25 @@ const [avatarIndex, setAvatarIndex] = useState(0);
                 variant="secondary"
                 size="large"
                 onClick={handleTeacherLogin}
+                className="user-type__button"
+              />
+            </div>
+          </div>
+
+          <div className="user-type__option">
+            <div className="user-type__card user-type__card--admin">
+              <div className="user-type__card-icon">
+                <img src="/avatars/admin.svg" alt="Administrador" />
+              </div>
+              <h3 className="user-type__card-title">Soy Administrador</h3>
+              <p className="user-type__card-description">
+                Accede al panel para gestionar la plataforma
+              </p>
+              <Button
+                label="Continuar como Administrador"
+                variant="secondary"
+                size="large"
+                onClick={handleAdminLogin}
                 className="user-type__button"
               />
             </div>

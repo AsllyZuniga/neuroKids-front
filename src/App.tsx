@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 const Dashboard = lazy(() => import("./pages/dashboard/dashboard"));
 const Prueba = lazy(() => import("./pages/prueba/prueba"));
@@ -8,6 +8,11 @@ const StudentLogin = lazy(() => import("./pages/studentLogin/studentLogin"));
 const StudentRegister = lazy(() => import("./pages/studentRegister/studentRegister"));
 const StudentWelcome = lazy(() => import("./pages/studentWelcome/studentWelcome"));
 const TeacherWelcome = lazy(() => import("./pages/teacherWelcome/teacherWelcome"));
+const AdminLogin = lazy(() => import("./pages/adminLogin/adminLogin"));
+const AdminWelcome = lazy(() => import("./pages/adminWelcome/adminWelcome"));
+const Docentes = lazy(() => import("./pages/docentes/docentes"));
+const Instituciones = lazy(() => import("./pages/instituciones/instituciones"));
+const Reportes = lazy(() => import("./pages/reportes/reportes"));
 const TestInstituciones = lazy(() => import("./pages/testInstituciones/testInstituciones"));
 const Estudiantes = lazy(() => import("./pages/estudiantes/estudiantes"));
 
@@ -31,12 +36,44 @@ import { CuentoInteractivo } from "./components/edades/Edad11_12/Lecturas/Cuento
 import { NoticiasSencillas } from "./components/edades/Edad11_12/Lecturas/NoticiasSencillas";
 
 function App() {
+  const goToLevel1Dashboard = () => {
+    window.location.assign("/nivel1");
+  };
+  const goToLevel2Dashboard = () => {
+    window.location.assign("/nivel2");
+  };
+  const goToLevel3Dashboard = () => {
+    window.location.assign("/nivel3");
+  };
+
   return (
     <Router>
-      <Suspense fallback={<div>Cargando...</div>}>
+      <Suspense
+        fallback={
+          <div
+            style={{
+              minHeight: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: '"OpenDyslexic"',
+              color: "#64748b",
+              background: "linear-gradient(to bottom right, #eff6ff, #faf5ff)",
+            }}
+          >
+            Cargando…
+          </div>
+        }
+      >
         <Routes>
           <Route path="/tipo-usuario" element={<UserType />} />
           <Route path="/docente/login" element={<TeacherLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/perfil/admin" element={<AdminWelcome />} />
+          <Route path="/docentes" element={<Docentes />} />
+          <Route path="/instituciones" element={<Instituciones />} />
+          <Route path="/reportes" element={<Reportes />} />
+          <Route path="/lecturas" element={<Navigate to="/perfil/admin" replace />} />
           <Route path="/estudiante/login" element={<StudentLogin />} />
           <Route path="/estudiante/registro" element={<StudentRegister />} />
           <Route path="/bienvenida/estudiante" element={<Dashboard />} />
@@ -61,28 +98,28 @@ function App() {
             element={<Prueba nivel={3} imagen="/niveles/nivel3.png" lecturas={3} games={3} />}
           />
 
-          <Route path="/nivel1/juego1" element={<BingoPalabras onBack={() => window.history.back()} />} />
-          <Route path="/nivel1/juego2" element={<CazaSilaba onBack={() => window.history.back()}level={1}onFinishLevel={() => {/* Implement your finish logic here */}}/>}/>
-          <Route path="/nivel1/juego3" element={<EscuchaElige onBack={() => window.history.back()} level={1} />} />
-          <Route path="/nivel1/lectura1" element={<CuentoPictogramas onBack={() => window.history.back()} />} />
-          <Route path="/nivel1/lectura2" element={<FrasesMagicas onBack={() => window.history.back()} level={1} />} />
-          <Route path="/nivel1/lectura3" element={<PrimeraPalabra onBack={() => window.history.back()} />} />
+          <Route path="/nivel1/juego1" element={<BingoPalabras onBack={goToLevel1Dashboard} />} />
+          <Route path="/nivel1/juego2" element={<CazaSilaba onBack={goToLevel1Dashboard} level={1} onFinishLevel={() => {/* Implement your finish logic here */}}/>}/>
+          <Route path="/nivel1/juego3" element={<EscuchaElige onBack={goToLevel1Dashboard} level={1} />} />
+          <Route path="/nivel1/lectura1" element={<CuentoPictogramas onBack={goToLevel1Dashboard} />} />
+          <Route path="/nivel1/lectura2" element={<FrasesMagicas onBack={goToLevel1Dashboard} level={1} />} />
+          <Route path="/nivel1/lectura3" element={<PrimeraPalabra onBack={goToLevel1Dashboard} />} />
 
 
-          <Route path="/nivel2/juego1" element={<ConstruyeFrase onBack={() => window.history.back()} level={1}/>} />
-          <Route path="/nivel2/juego2" element={<LaberintoLector onBack={() => window.history.back()} level={1}/>}/>
-          <Route path="/nivel2/juego3" element={<OrdenaHistoria onBack={() => window.history.back()}  />} />
-          <Route path="/nivel2/lectura1" element={<HistoriasInteractivas onBack={() => window.history.back()} level={1} onNextLevel={() => {}}/>}/>
-          <Route path="/nivel2/lectura2" element={<MiniAventuras onBack={() => window.history.back()} level={1} />} />
-          <Route path="/nivel2/lectura3" element={<RevistaInfantil onBack={() => window.history.back()} level={1} onNextLevel={() => {}}/>} />
+          <Route path="/nivel2/juego1" element={<ConstruyeFrase onBack={goToLevel2Dashboard} level={1}/>} />
+          <Route path="/nivel2/juego2" element={<LaberintoLector onBack={goToLevel2Dashboard} level={1}/>}/>
+          <Route path="/nivel2/juego3" element={<OrdenaHistoria onBack={goToLevel2Dashboard}  />} />
+          <Route path="/nivel2/lectura1" element={<HistoriasInteractivas onBack={goToLevel2Dashboard} level={1} onNextLevel={() => {}}/>}/>
+          <Route path="/nivel2/lectura2" element={<MiniAventuras onBack={goToLevel2Dashboard} level={1} />} />
+          <Route path="/nivel2/lectura3" element={<RevistaInfantil onBack={goToLevel2Dashboard} level={1} onNextLevel={() => {}}/>} />
 
 
-          <Route path="/nivel3/juego1" element={<CoheteLector onBack={() => window.history.back()} level={1}/>} />
-          <Route path="/nivel3/juego2" element={<DetectivePalabras onBack={() => window.history.back()} level={1}/>}/>
-          <Route path="/nivel3/juego3" element={<PreguntasInferenciales onBack={() => window.history.back()} />} />
-          <Route path="/nivel3/lectura1" element={<BiografiasSencillas onBack={() => window.history.back()} />} />
-          <Route path="/nivel3/lectura2" element={<CuentoInteractivo onBack={() => window.history.back()} level={1} />} />
-          <Route path="/nivel3/lectura3" element={<NoticiasSencillas onBack={() => window.history.back()} level={1}/>} />
+          <Route path="/nivel3/juego1" element={<CoheteLector onBack={goToLevel3Dashboard} level={1}/>} />
+          <Route path="/nivel3/juego2" element={<DetectivePalabras onBack={goToLevel3Dashboard} level={1}/>}/>
+          <Route path="/nivel3/juego3" element={<PreguntasInferenciales onBack={goToLevel3Dashboard} />} />
+          <Route path="/nivel3/lectura1" element={<BiografiasSencillas onBack={goToLevel3Dashboard} />} />
+          <Route path="/nivel3/lectura2" element={<CuentoInteractivo onBack={goToLevel3Dashboard} level={1} />} />
+          <Route path="/nivel3/lectura3" element={<NoticiasSencillas onBack={goToLevel3Dashboard} level={1}/>} />
 
         </Routes>
       </Suspense>

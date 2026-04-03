@@ -15,7 +15,14 @@ import { LevelLock } from "@/components/others/LevelLock";
 import { useLevelLock } from "@/hooks/useLevelLock";
 import { speakText } from "@/utils/textToSpeech";
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import sol from "@/assets/7_8/primerapalabra/sol.svg"
 import mar from "@/assets/7_8/primerapalabra/mar.svg"
 import vela from "@/assets/7_8/primerapalabra/vela.svg"
@@ -168,30 +175,8 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const locked = useLevelLock(currentLevel);
   
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(6); // Primera Palabra
-
-  const guardarInicioNivel = () => {
-    if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '7-8',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
-    }
-  };
-
-  useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
-    console.log('🔄 PrimeraPalabra - Ejecutando useEffect, nivel:', currentLevel);
-    guardarInicioNivel();
-  }, [currentLevel, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+  const activityConfig = getActivityByDbId(3); // Mi Primera Palabra (lectura)
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const recognitionRef = useRef<any>(null);
   const data = readingData[currentLevel] ?? readingData[1];
@@ -200,6 +185,18 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const baseProgress = (currentIndex / totalItems) * 100;
   const maxItemProgress = 100 / totalItems;
   const questionIncrement = currentItem?.questions ? maxItemProgress / currentItem.questions.length : maxItemProgress;
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), currentLevel));
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    console.log('🔄 PrimeraPalabra - Ejecutando useEffect, nivel:', currentLevel);
+    guardarInicioNivel();
+  }, [currentLevel, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
 
   const updateProgress = () => {
     let newProgress = baseProgress;
@@ -290,7 +287,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     const current = currentItem.questions[currentQuestion];
 
     if (index === current.correct) {
-      setScore(prev => prev + 20);
+      setScore(prev => prev + 5);
     }
 
     setTimeout(() => {
@@ -323,6 +320,19 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   };
 
   const handleNextLevel = () => {
+    if (activityConfig) {
+      const correctCount = completedItems.filter(Boolean).length;
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: totalItems * 5,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount || totalItems
+        })
+      );
+    }
     const nextLevel = currentLevel < MAX_LEVEL ? currentLevel + 1 : 1;
     resetLevel(nextLevel);
   };
@@ -372,7 +382,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
       setPronunciationCorrect(ok);
 
       if (ok) {
-        setScore(s => s + 1);
+        setScore(s => s + 5);
         setShowReward(true);
         setTimeout(() => setShowReward(false), 1500);
         markCompleted(currentIndex);
@@ -665,7 +675,8 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
 
   return (
     <LevelLock level={currentLevel} isLocked={locked} onLoginRequired={onBack}>
-      <div className="min-h-screen p-6" style={{ background: 'linear-gradient(135deg,#B3E5FC 100%)' }}>
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg,#B3E5FC 100%)">
+      <div className="min-h-screen p-6">
         {/* RECOMPENSAS */}
         <RewardAnimation type="star" show={showReward} />
         <ConfettiExplosion show={showLevelComplete} />
@@ -688,7 +699,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
         />
 
         {/* GUÍA */}
-        <div>
+        <div className="mb-6">
           <AnimalGuide
             animal="bear"
             message={
@@ -766,6 +777,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
           />
         )}
       </div>
+      </AccessibilitySettingsWrapper>
     </LevelLock>
   );
 }

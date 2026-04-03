@@ -21,7 +21,7 @@ export default function AgeCircle() {
 
   return (
     <div className="age-buttons">
-      {buttons.map((btn, i) => (
+      {buttons.map((btn) => (
         <div
           key={btn.age} // Usar age como key único en lugar del índice
           className="age-button"

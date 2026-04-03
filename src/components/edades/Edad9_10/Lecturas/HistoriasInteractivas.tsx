@@ -13,7 +13,14 @@ import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenHistoriasInteractivas } from '../IniciosJuegosLecturas/StartScreenHistoriasInteractivas';
 import { Button } from '../../../ui/button';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import img1 from '../../../../assets/9_10/historias_interactivas/nivel1/1.png';
 import img2 from '../../../../assets/9_10/historias_interactivas/nivel1/2.png';
 import img3 from '../../../../assets/9_10/historias_interactivas/nivel1/3.png';
@@ -734,7 +741,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   const [currentPart, setCurrentPart] = useState(1);
   const [score, setScore] = useState(0);
   const [storyPath, setStoryPath] = useState<number[]>([1]);
-  const [readingComplete, setReadingComplete] = useState(false);
+  const [, setReadingComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [consequences, setConsequences] = useState<string[]>([]);
   const [showMotivational, setShowMotivational] = useState(false);
@@ -742,22 +749,12 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   const [showFinalStory, setShowFinalStory] = useState(false);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(15); // Historias Interactivas
+  const activityConfig = getActivityByDbId(4); // Historias Interactivas
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '9-10',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
@@ -765,6 +762,22 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
     // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     guardarInicioNivel();
   }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+
+  useEffect(() => {
+    if (showLevelComplete && activityConfig) {
+      const correctCount = Math.max(1, Math.round(score / 5));
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: stories.length,
+          score,
+          maxScore: 200,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
+  }, [showLevelComplete, activityConfig, score, currentLevel, saveProgress, getElapsedSeconds]);
 
   const story = stories[currentLevel - 1];
   const part = story.parts[currentPart];
@@ -799,15 +812,13 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
 
   const makeChoice = (choiceIndex: number) => {
     const choice = part.choices[choiceIndex];
-    const newScore = score + choice.points;
+    const newScore = score + 5;
     setScore(newScore);
 
     setConsequences([...consequences, choice.consequence]);
 
-    if (choice.points >= 15) {
-      setShowReward(true);
-      setTimeout(() => setShowReward(false), 1500);
-    }
+    setShowReward(true);
+    setTimeout(() => setShowReward(false), 1500);
 
     if (choice.nextPart) {
       if (story.parts[choice.nextPart]) {
@@ -837,8 +848,8 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-      <div className="max-w-7xl mx-auto">
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title="Historias Interactivas"
           level={currentLevel}
@@ -862,8 +873,6 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
           className="mb-6"
         />
 
-
-
         <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6">
           <AnimalGuide
             animal="fish"
@@ -871,10 +880,11 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
           />
         </motion.div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6">
           <h2 className="text-2xl text-black">{story.title}</h2>
         </div>
-        <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 lg:col-span-2">
             <CardContent className="p-8">
               <div className="flex flex-col gap-6">
@@ -1010,8 +1020,6 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                     onClick={() => {
                       setShowFinalStory(false);
                       setShowMotivational(true);
-                      setShowLevelComplete(true);
-
                     }}
                     className="px-6 py-3 text-lg bg-purple-500 text-white rounded-xl"
                   >
@@ -1053,5 +1061,6 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

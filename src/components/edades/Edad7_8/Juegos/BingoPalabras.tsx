@@ -16,7 +16,14 @@ import { StartScreenBingo } from "../IniciosJuegosLecturas/StartScreenBingo";
 import { speakText, canSpeakOnHover } from "@/utils/textToSpeech";
 import { useLevelLock } from "@/hooks/useLevelLock";
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface WordItem {
   word: string;
@@ -99,23 +106,13 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [showBingo, setShowBingo] = useState(false);
 
-  // 💾 Simple: Solo guardar al iniciar nivel como dashboard
   const { saveProgress } = useProgress();
   const activityConfig = getActivityByDbId(10); // ID 10 = Bingo de Palabras
+  const { getElapsedSeconds } = useActivityTimer([level]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '7-8',
-        level: level,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), level));
     }
   };
 
@@ -185,11 +182,6 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
         setShowReward(false);
         setShowMotivational(true);
       }, 3000);
-
-      setTimeout(() => {
-        setShowMotivational(false);
-        setShowLevelComplete(true);
-      }, 6000);
     }
   };
 
@@ -203,7 +195,19 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
     setShowBingo(false);
   };
 
-  const handleNextLevel = () => {
+  const handleNextLevel = async () => {
+    if (activityConfig) {
+      const correctCount = data.calledWords.length;
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level,
+          score: correctCount * 5,
+          maxScore: activityConfig.maxScore,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
     if (level < 3) {
       setLevel(level + 1);
     } else {
@@ -218,12 +222,8 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
   // Envolver el juego con LevelLock
   return (
     <LevelLock level={level} isLocked={isLevelLocked}>
-      <div
-        className="min-h-screen p-4 sm:p-6 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
-        }}
-      >
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)">
+      <div className="min-h-screen p-6 relative overflow-hidden">
         <ConfettiExplosion show={showBingo} />
         <RewardAnimation type="star" show={showReward} />
         {showBingo && (
@@ -243,7 +243,7 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
         <GameHeader
           title="Bingo de Palabras"
           level={level}
-          score={calledIndex}
+          score={calledIndex * 5}
           onBack={onBack}
           onRestart={restartLevel}
         />
@@ -256,7 +256,7 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
         />
 
         {/* ANIMAL GUIDE */}
-        <div >
+        <div className="mb-6">
           <AnimalGuide
             animal="owl"
             message="¡Escucha la palabra y búscala en tu cartón! ¡Marca si la tienes!"
@@ -280,7 +280,7 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
                 </div>
               )}
 
-      /*    <ButtonWithAudio
+          <ButtonWithAudio
                 onClick={goToNextWord}
                 disabled={isWordOnCard}
                 className={`w-full ${isWordOnCard
@@ -359,8 +359,8 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
         {/* MENSAJE MOTIVACIONAL */}
         {showMotivational && (
           <MotivationalMessage
-            score={calledIndex + 1}
-            total={calledList.length}
+            score={(calledIndex + 1) * 5}
+            total={calledList.length * 5}
             customMessage="¡Hiciste BINGO! ¡Increíble!"
             customSubtitle="Encontraste todas las palabras del cartón"
             celebrationText="Felicitaciones"
@@ -374,8 +374,8 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
         {/* MODAL FINAL */}
         {showLevelComplete && (
           <LevelCompleteModal
-            score={calledIndex + 1}
-            total={calledList.length}
+            score={(calledIndex + 1) * 5}
+            total={calledList.length * 5}
             level={level}
             isLastLevel={level >= 3}
             onNextLevel={handleNextLevel}
@@ -384,6 +384,7 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
           />
         )}
       </div>
+      </AccessibilitySettingsWrapper>
     </LevelLock>
   );
 }

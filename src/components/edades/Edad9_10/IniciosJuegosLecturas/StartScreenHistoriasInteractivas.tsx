@@ -36,16 +36,16 @@ const floatingItems = [
 export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScreenHistoriasInteractivasProps) {
   return (
     
-<div
-  className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat flex items-center justify-center bg-white"
-  style={{ backgroundImage: `url(${fondo})` }}
->
+    <div
+      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-white bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${fondo})` }}
+    >
 
 
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -71,7 +71,7 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative z-10 text-center px-4 max-w-4xl mx-auto "
+        className="relative z-10 mx-auto max-w-4xl px-4 pb-10 pt-20 text-center sm:pt-24"
       >
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -91,14 +91,14 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
         </motion.div>
 
         <div className="mb-8 text-center">
-          <div className="flex flex-col items-center gap-2 -translate-y-24">
+          <div className="flex flex-col items-center gap-2">
 
             {/* LINEA 1 */}
             <div className="flex justify-center gap-2">
               {letters1.map((letter, index) => (
                 <motion.span
                   key={index}
-                  className="inline-block text-5xl md:text-7xl lg:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400"
+                  className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
                   style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                   initial={{ opacity: 0, y: -40, rotate: -10 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -124,7 +124,7 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
               {letters2.map((letter, index) => (
                 <motion.span
                   key={index}
-                  className="inline-block text-5xl md:text-7xl lg:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400"
+                  className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
                   style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                   initial={{ opacity: 0, y: -40, rotate: -10 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -158,7 +158,8 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
         >
           <Button
             onClick={onStart}
-            className=" -translate-y-24 bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white px-8 py-6 text-xl rounded-full shadow-lg hover:shadow-xl transition-all duration-300 "
+            size="lg"
+            className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl dyslexia-friendly max-w-[calc(100vw-2rem)]"
           >
             <motion.div
               className="flex items-center gap-3"

@@ -1,5 +1,6 @@
 .student-register {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -567,6 +568,29 @@
 
         &__buttons {
             flex-direction: column;
+        }
+    }
+
+    @media (max-width: 480px) {
+        padding: max(0.75rem, env(safe-area-inset-top, 0px)) max(0.75rem, env(safe-area-inset-right, 0px))
+            max(0.75rem, env(safe-area-inset-bottom, 0px)) max(0.75rem, env(safe-area-inset-left, 0px));
+
+        &::before {
+            width: 180px;
+            height: 180px;
+        }
+
+        &::after {
+            width: 120px;
+            height: 120px;
+        }
+
+        &__card {
+            padding: 1.5rem 1rem;
+        }
+
+        &__step-title {
+            font-size: 1.35rem;
         }
     }
 }

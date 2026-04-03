@@ -11,8 +11,16 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenPreguntasInferenciales } from '../IniciosJuegosLecturas/StartScreenPreguntasInferenciales';import { useProgress } from "@/hooks/useProgress";
+import { StartScreenPreguntasInferenciales } from '../IniciosJuegosLecturas/StartScreenPreguntasInferenciales';
+import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 interface PreguntasInferencialesProps {
   onBack: () => void;
   level?: number;
@@ -257,7 +265,6 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const [showResult, setShowResult] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
@@ -265,22 +272,12 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const { saveProgress } = useProgress();
-
   const activityConfig = getActivityByDbId(18); // Preguntas Inferenciales
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '11-12',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
@@ -301,7 +298,6 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
     setCurrentLevel(initialLevel);
     setCurrentChallenge(0);
     setScore(0);
-    setStreak(0);
     setShowMotivational(false);
     setShowLevelComplete(false);
 
@@ -336,7 +332,6 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const handleTimeUp = () => {
     if (selectedAnswer === null && !showResult) {
       setSelectedAnswer(-1);
-      setStreak(0);
       setShowResult(true);
     }
   };
@@ -348,21 +343,9 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
     setShowResult(true);
 
     if (answerIndex === challenge.correct) {
-      let basePoints = challenge.difficulty * 10; // antes 15
-      const timeBonus = Math.floor(timeLeft / 10) * 2;
-      const streakBonus = Math.min(streak * 3, 15);
-      const hintPenalty = showHint ? -5 : 0;
-
-      const totalPoints = Math.max(
-        basePoints + timeBonus + streakBonus + hintPenalty,
-        5
-      );
-
-      setScore(prev => prev + totalPoints);
-      setStreak(prev => prev + 1);
+      setScore(prev => prev + 5);
       setShowReward(true);
     } else {
-      setStreak(0);
     }
 
     setTimeout(() => {
@@ -382,7 +365,6 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const restartLevel = () => {
     setCurrentChallenge(0);
     setScore(0);
-    setStreak(0);
     setShowMotivational(false);
     setShowLevelComplete(false);
     setSelectedAnswer(null);
@@ -392,12 +374,24 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
     setGameStarted(true);
   };
 
-  const loadNextLevel = () => {
+  const loadNextLevel = async () => {
+    const totalScore = challenges.reduce((sum, c) => sum + c.difficulty * 15, 0);
+    if (activityConfig) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: totalScore,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: challenges.length
+        })
+      );
+    }
     if (currentLevel < MAX_LEVEL) {
       setCurrentLevel(currentLevel + 1);
       setCurrentChallenge(0);
       setScore(0);
-      setStreak(0);
       setShowMotivational(false);
       setShowLevelComplete(false);
       setGameStarted(true);
@@ -448,9 +442,8 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-      <div className="max-w-6xl mx-auto">
-
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title={`Preguntas Inferenciales`}
           level={currentLevel}
@@ -463,13 +456,17 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
           current={currentChallenge + 1}
           total={challenges.length}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="monkey"
-          message="¡Lee entre líneas! Busca pistas ocultas para entender lo que no se dice directamente."
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="monkey"
+            message="¡Lee entre líneas! Busca pistas ocultas para entender lo que no se dice directamente."
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <motion.div
           key={currentChallenge}
           initial={{ x: 50, opacity: 0 }}
@@ -519,7 +516,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
               </CardContent>
             </Card>
 
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 mb-8 w-[800px]">
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 mb-8 w-full max-w-full">
 
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-6">
@@ -629,5 +626,6 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

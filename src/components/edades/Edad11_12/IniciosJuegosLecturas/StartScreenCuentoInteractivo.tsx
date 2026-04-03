@@ -15,14 +15,14 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
 
   return (
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat flex items-center justify-center"
+      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
   
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -33,7 +33,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="relative z-10 flex flex-col items-center justify-center gap-16 px-8 max-w-6xl"
+        className="relative z-10 mx-auto flex max-w-6xl flex-col items-center justify-center gap-8 px-4 pb-10 pt-20 sm:gap-12 sm:px-6 sm:pt-24 md:gap-16"
       >
 
     
@@ -44,7 +44,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
                 {word.split("").map((letter, index) => (
                   <motion.span
                     key={index}
-                    className="inline-block text-4xl sm:text-5xl md:text-6xl text-purple-600"
+                    className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-6xl"
                     initial={{ opacity: 0, y: -100, rotate: -180 }}
                     animate={{
                       opacity: 1,
@@ -94,7 +94,8 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
           >
             <Button
               onClick={onStart}
-              className="-translate-y-20 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white px-8 py-8 rounded-full shadow-xl dyslexia-friendly text-xl"
+              size="lg"
+              className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly max-w-[calc(100vw-2rem)]"
               style={{
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
               }}
@@ -110,8 +111,8 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
                 }}
                 className="flex items-center gap-3"
               >
-                ¡<Play className="w-8 h-8 mr-3 fill-white" />
-          ¡Comenzar a Jugar!
+                <Play className="w-8 h-8 mr-3 fill-white" />
+                ¡Comenzar a Jugar!
               </motion.span>
             </Button>
           </motion.div>
@@ -129,7 +130,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-purple-200/20 to-transparent rounded-full blur-3xl pointer-events-none"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[min(90vw,600px)] w-[min(90vw,600px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-radial from-purple-200/20 to-transparent blur-3xl"
       />
 
       <motion.div
@@ -142,7 +143,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-1/3 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-radial from-pink-200/20 to-transparent rounded-full blur-3xl pointer-events-none"
+        className="pointer-events-none absolute left-1/3 top-1/3 h-[min(85vw,500px)] w-[min(85vw,500px)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-radial from-pink-200/20 to-transparent blur-3xl"
       />
     </div>
   );

@@ -12,6 +12,22 @@ export interface Insignia {
     estado: boolean;
 }
 
+/** Respuesta de GET .../estudiante/:id/catalogo — nombres desde tabla `insignias` */
+export interface InsigniaCatalogoItem {
+    id: number;
+    nombre: string;
+    descripcion: string;
+    icono: string | null;
+    color_hex: string | null;
+    categoria: string | null;
+    rareza: string | null;
+    puntos_otorgados: number | null;
+    desbloqueada: boolean;
+    obtenido_at: string | null;
+    progreso_actual: number | null;
+    progreso_requerido: number | null;
+}
+
 export interface NotificacionInsignia {
     id: string;
     estudiante_id: string;
@@ -48,6 +64,27 @@ export const insigniaService = {
         }
     },
 
+    /** Marca una notificación concreta como leída (cualquier insignia). */
+    async marcarNotificacionLeida(estudianteId: string, notificacionId: string | number): Promise<boolean> {
+        try {
+            const url = buildApiUrl(
+                `${API_CONFIG.ENDPOINTS.MARK_ONE_NOTIFICATION_READ}/${estudianteId}/${notificacionId}`
+            );
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.success;
+        } catch (error) {
+            console.error('❌ Error en marcarNotificacionLeida:', error);
+            return false;
+        }
+    },
+
     // Marcar notificación de bienvenida como leída
     async marcarBienvenidaLeida(estudianteId: string): Promise<boolean> {
         try {
@@ -72,6 +109,22 @@ export const insigniaService = {
         } catch (error) {
             console.error('❌ Error en marcarBienvenidaLeida:', error);
             return false;
+        }
+    },
+
+    /** Catálogo completo de insignias (BD) con estado bloqueada / desbloqueada */
+    async getCatalogoInsigniasEstudiante(estudianteId: string): Promise<InsigniaCatalogoItem[]> {
+        try {
+            const url = buildApiUrl(`${API_CONFIG.ENDPOINTS.STUDENT_INSIGNIAS}/${estudianteId}/catalogo`);
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.success ? data.data : [];
+        } catch (error) {
+            console.error('❌ Error en getCatalogoInsigniasEstudiante:', error);
+            return [];
         }
     },
 

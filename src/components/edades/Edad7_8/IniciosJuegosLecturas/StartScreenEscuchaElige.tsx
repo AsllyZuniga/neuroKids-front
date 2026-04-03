@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Play, Sparkles, ArrowLeft } from "lucide-react";
+import { Play, ArrowLeft } from "lucide-react";
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
 import escuchaLeft from "@/assets/Iniciosimages/escuchaelige.svg";
 import fondo from "@/assets/7_8/escuchaelige/fondo.svg"
@@ -47,7 +47,7 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
 
   return (
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       <ButtonWithAudio
@@ -55,7 +55,7 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
         playOnClick
         playOnHover
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -114,7 +114,7 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
         }}
       />
 
-      <div className="max-w-4xl mx-auto text-center z-10">
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] min-h-screen max-w-4xl flex-col px-4 pb-10 pt-20 text-center sm:pt-24">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -145,7 +145,7 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
           animate="visible"
           variants={containerVariants}
         >
-          <div className="flex flex-wrap justify-center gap-2 px-4 translate-y-32">
+          <div className="flex flex-wrap justify-center gap-1 px-2 sm:gap-2 sm:px-4">
             {letters.map((letter, index) => (
               <motion.span
                 key={index}
@@ -222,7 +222,7 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 2.2 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-4 translate-y-32"
+                className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3"
               >
                 {[
                   { emoji: '🎵', text: 'Aprende sonidos' },
@@ -235,7 +235,7 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 2.4 + index * 0.1 }}
                     whileHover={{ y: -5 }}
-                    className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg"
+                    className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-lg sm:p-6"
                   >
 
                     <div className="text-4xl mb-2">{feature.emoji}</div>
@@ -246,13 +246,13 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
 
                 ))}
               </motion.div>
-              <div className="mt-12 flex justify-center translate-y-32">
+              <div className="mt-8 flex justify-center sm:mt-12">
                 <ButtonWithAudio
                   onClick={onStart}
                   playOnHover
                   playOnClick
                   size="lg"
-                  className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white rounded-full px-12 py-8 text-2xl shadow-xl dyslexia-friendly"
+                  className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly"
                 >
                   <Play className="w-8 h-8 mr-3 fill-white" />
                   ¡Comenzar a Jugar!

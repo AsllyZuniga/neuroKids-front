@@ -8,9 +8,9 @@ viewBox="0 0 45000 60000"
  <defs>
   <font id="FontID0" horiz-adv-x="722" font-variant="normal" style="fill-rule:nonzero" font-style="normal" font-weight="700">
 	<font-face 
-		font-family="Arial">
+		font-family="OpenDyslexic">
 		<font-face-src>
-			<font-face-name name="Arial Bold"/>
+			<font-face-name name="OpenDyslexic Bold"/>
 		</font-face-src>
 	</font-face>
    <missing-glyph><path d="M0 0z"/></missing-glyph>
@@ -28,7 +28,7 @@ viewBox="0 0 45000 60000"
   </font>
   <style type="text/css">
    <![CDATA[
-    @font-face { font-family:"Arial";font-variant:normal;font-style:normal;font-weight:bold;src:url("#FontID0") format(svg)}
+    @font-face { font-family:"OpenDyslexic";font-variant:normal;font-style:normal;font-weight:bold;src:url("#FontID0") format(svg)}
     .fil7 {fill:#2A2439}
     .fil13 {fill:#008E72;fill-rule:nonzero}
     .fil16 {fill:#00AF93;fill-rule:nonzero}
@@ -51,7 +51,7 @@ viewBox="0 0 45000 60000"
     .fil14 {fill:#672A38;fill-rule:nonzero;fill-opacity:0.200000}
     .fil15 {fill:#D62A38;fill-rule:nonzero;fill-opacity:0.200000}
     .fil6 {fill:white;fill-rule:nonzero}
-    .fnt0 {font-weight:bold;font-size:2309.71px;font-family:'Arial'}
+    .fnt0 {font-weight:bold;font-size:2309.71px;font-family:'OpenDyslexic'}
    ]]>
   </style>
  </defs>

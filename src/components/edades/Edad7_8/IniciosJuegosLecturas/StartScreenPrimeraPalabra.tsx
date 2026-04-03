@@ -23,14 +23,14 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
   ];
 
   return (
-<div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+    <div
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       <ButtonWithAudio
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
         playOnHover
         playOnClick
       >
@@ -39,7 +39,7 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
       </ButtonWithAudio>
 
       {/* 🌟 Floating words */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none">
         {letters.map((item, index) => (
           <FloatingItem
             key={item.letter}
@@ -47,7 +47,7 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
             y={`${item.y}%`}
             color={item.color}
             delay={index * 0.15}
-            size="text-4xl md:text-3xl"
+            size="text-2xl sm:text-3xl md:text-4xl"
             floatY={140}
             floatX={50}
             rotate
@@ -60,19 +60,18 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
       </div>
 
       <motion.div
-        className="fixed inset-0 flex items-center justify-center pointer-events-none z-10"
+        className="pointer-events-none fixed inset-0 z-10 flex items-center justify-center px-4 py-24 sm:py-28"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
       >
-
-        <div className="text-center">
+        <div className="max-w-[min(100%,24rem)] text-center sm:max-w-none">
           <motion.div
-            className="flex items-center justify-center gap-4 sm:gap-6 mb-4"
+            className="mb-4 flex items-center justify-center gap-4 sm:mb-6 sm:gap-6"
             animate={{ scale: [1, 1.03, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           >
-            <h1 className="text-5xl sm:text-7xl text-red-500 drop-shadow-lg -translate-y-32">
+            <h1 className="text-3xl leading-tight text-red-500 drop-shadow-lg sm:text-5xl md:text-7xl">
               Mi Primera Palabra
             </h1>
           </motion.div>
@@ -86,7 +85,7 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
             <ButtonWithAudio
               onClick={onStart}
               size="lg"
-              className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-400 hover:to-purple-500 text-white rounded-full px-12 py-8 text-3xl shadow-2xl border-4 border-white transform hover:scale-105 transition-transform -translate-y-24"
+              className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-400 hover:to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg border-2 border-white/90 transform transition-transform hover:scale-105 dyslexia-friendly max-w-full"
               playOnHover
               playOnClick
             >

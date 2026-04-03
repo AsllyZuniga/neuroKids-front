@@ -14,7 +14,14 @@ import { StartScreenEscuchaElige } from "../IniciosJuegosLecturas/StartScreenEsc
 import { speakText, canSpeakOnHover } from "@/utils/textToSpeech";
 import { useLevelLock } from "@/hooks/useLevelLock";
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 import gatoAudio from "@/assets/sounds/gato_escuchaElige.mp3";
 import perroAudio from "@/assets/sounds/perro_escuchaElige.mp3";
@@ -165,22 +172,12 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   const [showLevelComplete, setShowLevelComplete] = useState(false);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(2); // Escucha y Elige
+  const activityConfig = getActivityByDbId(12); // Escucha y Elige (juego)
+  const { getElapsedSeconds } = useActivityTimer([localLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '7-8',
-        level: localLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), localLevel));
     }
   };
 
@@ -260,7 +257,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
 
     const isCorrect = index === currentQ.correct;
     if (isCorrect) {
-      setScore(score + 20);
+      setScore(score + 5);
       setCorrectAnswers(correctAnswers + 1);
       setShowReward(true);
       const newProgress = baseProgress + (correctAnswers + 1) * incrementPerCorrect;
@@ -281,18 +278,25 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
           setShowReward(false);
           setShowMotivational(true);
         }, 1500);
-
-        setTimeout(() => {
-          setShowMotivational(false);
-          setShowLevelComplete(true);
-        }, 4500);
       }
     }, 2000);
   };
 
   // (restartGame ya definido con useCallback arriba)
 
-  const handleNextLevel = () => {
+  const handleNextLevel = async () => {
+    if (activityConfig && gameComplete) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: localLevel,
+          score,
+          maxScore: totalQuestions * 5,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers,
+          incorrectAnswers: totalQuestions - correctAnswers
+        })
+      );
+    }
     restartGame();
     if (localLevel < 3) {
       setLocalLevel(localLevel + 1);
@@ -311,11 +315,9 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
 
   return (
     <LevelLock level={localLevel} isLocked={isLevelLocked}>
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #f79facff 0%, #87CEEB 100%)">
     <div
       className="min-h-screen p-6"
-      style={{
-        background: 'linear-gradient(135deg, #f79facff 0%, #87CEEB 100%)'
-      }}
     >
       <RewardAnimation type="star" show={showReward} />
 
@@ -337,7 +339,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
       />
 
       {/* ANIMAL GUIDE */}
-      <div>
+      <div className="mb-6">
         <AnimalGuide
           animal="monkey"
           message="¡Escucha atentamente el sonido y elige la respuesta correcta!"
@@ -431,6 +433,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
         />
       )}
     </div>
+    </AccessibilitySettingsWrapper>
     </LevelLock>
   );
 }

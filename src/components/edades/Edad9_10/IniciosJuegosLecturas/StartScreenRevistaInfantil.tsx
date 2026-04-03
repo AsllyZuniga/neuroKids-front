@@ -26,14 +26,14 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
   return (
 
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
 
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -57,7 +57,7 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
       ))}
 
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 ">
+      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
 
         <motion.div
           className="mb-12 text-center"
@@ -65,11 +65,11 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3 mb-6 -translate-y-16">
+          <div className="mb-6 flex flex-wrap items-center justify-center gap-2 md:gap-3">
             {letters.map((letter, index) => (
               <motion.span
                 key={index}
-                className="inline-block text-5xl md:text-7xl lg:text-8xl"
+                className="inline-block text-4xl sm:text-5xl md:text-7xl lg:text-8xl"
                 style={{
                   color: index % 2 === 0 ? '#FF6B9D' : '#C084FC',
                   textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
@@ -111,7 +111,7 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
           <Button
             onClick={onStart}
             size="lg"
-            className="-translate-y-16 text-xl px-10 py-6 bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white rounded-full shadow-lg"
+            className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly max-w-[calc(100vw-2rem)]"
           >
             <motion.span
               animate={{

@@ -29,14 +29,14 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
 
   return (
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       {/* Botón volver */}
       <ButtonWithAudio
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -79,8 +79,7 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
 
 
 
-      {/* Contenido central */}
-      <div className="z-20 flex flex-col items-center justify-center gap-12 px-6 w-full text-center translate-y-32">
+      <div className="relative z-20 flex min-h-[100dvh] min-h-screen w-full flex-col items-center justify-center gap-6 px-4 pb-10 pt-20 text-center sm:gap-10 sm:px-6 sm:pt-24">
 
         {/* Línea 1 */}
         <div className="flex flex-wrap justify-center gap-2">
@@ -96,7 +95,7 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
               whileHover={{ scale: 1.25 }}
               className="inline-block"
               style={{
-                fontSize: "clamp(2.5rem, 8vw, 6rem)",
+                fontSize: "clamp(1.75rem, 7vw, 6rem)",
 
                 color:
                   index % 5 === 0
@@ -131,7 +130,7 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
               }}
               whileHover={{ scale: 1.25 }}
               style={{
-                fontSize: "clamp(4rem, 7vw, 6rem)",
+                fontSize: "clamp(1.75rem, 7vw, 6rem)",
                 color:
                   index % 5 === 0
                     ? "#FF6B9D"
@@ -149,27 +148,22 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
             </motion.span>
           ))}
         </div>
-      </div>
-
-
-
-      {/* Botón Jugar */}
-      <motion.div
-        className="z-20 mt-6 flex justify-center w-full"
-        variants={buttonVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <ButtonWithAudio
-          onClick={onStart}
-          className="px-50 py-25 text-4xl rounded-3xl bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-2xl hover:shadow-3xl flex gap-4 translate-y-32"
+        <motion.div
+          className="flex w-full justify-center"
+          variants={buttonVariants}
+          initial="hidden"
+          animate="visible"
         >
-          <Play className="w-8 h-8 mr-3 fill-white" />
-          ¡Comenzar a Jugar!
-        </ButtonWithAudio>
-      </motion.div>
-
-
+          <ButtonWithAudio
+            onClick={onStart}
+            size="lg"
+            className="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly max-w-[calc(100vw-2rem)]"
+          >
+            <Play className="w-8 h-8 mr-3 shrink-0 fill-white" />
+            ¡Comenzar a Jugar!
+          </ButtonWithAudio>
+        </motion.div>
+      </div>
     </div>
   );
 }

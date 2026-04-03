@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 import { progressService } from '../services/progressService';
 import type { ActivityProgress } from '../services/progressService';
 
-interface SaveProgressParams {
-  activityId: number; // Cambio a number
+export interface SaveProgressParams {
+  activityId: number;
   activityName: string;
   activityType: 'lectura' | 'juego';
   ageGroup: '7-8' | '9-10' | '11-12';
@@ -11,7 +11,14 @@ interface SaveProgressParams {
   score: number;
   maxScore: number;
   completed: boolean;
+  /** Juegos: true al terminar el nivel actual (1–3). */
+  nivelCompletado?: boolean;
+  /** Solo registro de entrada a un nivel (no cuenta puntos ni completa nivel). */
+  soloRegistro?: boolean;
   timeSpent?: number;
+  correctAnswers?: number;
+  incorrectAnswers?: number;
+  audioUses?: number;
 }
 
 export function useProgress() {
@@ -29,7 +36,12 @@ export function useProgress() {
         score: params.score,
         maxScore: params.maxScore,
         completed: params.completed,
-        timeSpent: params.timeSpent
+        nivelCompletado: params.nivelCompletado,
+        soloRegistro: params.soloRegistro,
+        timeSpent: params.timeSpent,
+        correctAnswers: params.correctAnswers,
+        incorrectAnswers: params.incorrectAnswers,
+        audioUses: params.audioUses
       });
 
       console.log(`✅ Progreso guardado: ${params.activityName} - Nivel ${params.level}`);

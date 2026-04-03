@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Trophy, Target, Calendar, TrendingUp, Award, ArrowLeft } from 'lucide-react';
+import { Star, Trophy, Target, TrendingUp, Award, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Progress } from '../ui/progress';
 import { Badge } from '../ui/badge';
@@ -80,142 +80,6 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
     }
   }, [progress, userAge]);
 
-  // Función para actualizar progreso (se llamará desde otros componentes)
-  const updateProgress = (type: 'game' | 'reading', points: number) => {
-    setProgress(prev => {
-      const newProgress = { ...prev };
-      
-
-      newProgress.totalPoints += points;
-      newProgress.experiencePoints += points;
-      
-  
-      if (type === 'game') {
-        newProgress.gamesCompleted += 1;
-      } else {
-        newProgress.readingsCompleted += 1;
-      }
-      
-     
-      newProgress.weeklyProgress += 1;
-      
-
-      const today = new Date().toISOString().split('T')[0];
-      const lastDate = new Date(newProgress.lastActivityDate);
-      const todayDate = new Date(today);
-      const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
-      
-      if (daysDiff === 1) {
-        newProgress.currentStreak += 1;
-      } else if (daysDiff === 0) {
-      // Mismo día, no cambiar racha
-      } else {
-        newProgress.currentStreak = 1;// Reiniciar racha
-      }
-      
-      if (newProgress.currentStreak > newProgress.longestStreak) {
-        newProgress.longestStreak = newProgress.currentStreak;
-      }
-      
-      newProgress.lastActivityDate = today;
-      
-         while (newProgress.experiencePoints >= newProgress.nextLevelXP) {
-        newProgress.experiencePoints -= newProgress.nextLevelXP;
-        newProgress.level += 1;
-        newProgress.nextLevelXP = Math.floor(newProgress.nextLevelXP * 1.5); // Incremento exponencial
-        
-       
-        const levelAchievement: Achievement = {
-          id: `level-${newProgress.level}`,
-          name: `Nivel ${newProgress.level}`,
-          description: `¡Has alcanzado el nivel ${newProgress.level}!`,
-          icon: '⭐',
-          unlockedAt: new Date().toISOString(),
-          points: newProgress.level * 50,
-          rarity: newProgress.level <= 3 ? 'common' : newProgress.level <= 7 ? 'rare' : newProgress.level <= 15 ? 'epic' : 'legendary'
-        };
-        
-        newProgress.achievements.push(levelAchievement);
-      }
-      
-
-      checkAchievements(newProgress);
-      
-      return newProgress;
-    });
-  };
-
-  const checkAchievements = (currentProgress: UserProgress) => {
-    const newAchievements: Achievement[] = [];
-    
-
-    if (currentProgress.gamesCompleted === 1 && !currentProgress.achievements.find(a => a.id === 'first-game')) {
-      newAchievements.push({
-        id: 'first-game',
-        name: 'Primer Juego',
-        description: 'Completaste tu primer juego',
-        icon: '🎮',
-        unlockedAt: new Date().toISOString(),
-        points: 25,
-        rarity: 'common'
-      });
-    }
-    
-    if (currentProgress.readingsCompleted === 1 && !currentProgress.achievements.find(a => a.id === 'first-reading')) {
-      newAchievements.push({
-        id: 'first-reading',
-        name: 'Primera Lectura',
-        description: 'Completaste tu primera lectura',
-        icon: '📖',
-        unlockedAt: new Date().toISOString(),
-        points: 25,
-        rarity: 'common'
-      });
-    }
-    
-    if (currentProgress.currentStreak >= 7 && !currentProgress.achievements.find(a => a.id === 'week-streak')) {
-      newAchievements.push({
-        id: 'week-streak',
-        name: 'Racha Semanal',
-        description: 'Mantuviste una racha de 7 días',
-        icon: '🔥',
-        unlockedAt: new Date().toISOString(),
-        points: 100,
-        rarity: 'rare'
-      });
-    }
-    
-   
-    if (currentProgress.gamesCompleted >= 10 && !currentProgress.achievements.find(a => a.id === 'game-master')) {
-      newAchievements.push({
-        id: 'game-master',
-        name: 'Maestro de Juegos',
-        description: 'Completaste 10 juegos',
-        icon: '🏆',
-        unlockedAt: new Date().toISOString(),
-        points: 150,
-        rarity: 'epic'
-      });
-    }
-    
-    if (currentProgress.readingsCompleted >= 10 && !currentProgress.achievements.find(a => a.id === 'reading-champion')) {
-      newAchievements.push({
-        id: 'reading-champion',
-        name: 'Campeón de Lectura',
-        description: 'Completaste 10 lecturas',
-        icon: '📚',
-        unlockedAt: new Date().toISOString(),
-        points: 150,
-        rarity: 'epic'
-      });
-    }
-    
-
-    if (newAchievements.length > 0) {
-      currentProgress.achievements.push(...newAchievements);
-    }
-  };
-
   const getRarityColor = (rarity: Achievement['rarity']) => {
     switch (rarity) {
       case 'common': return 'bg-gray-100 text-gray-700 border-gray-300';
@@ -233,13 +97,6 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
       case 'legendary': return 'border-yellow-300';
     }
   };
-
-  const getProgressColor = () => {
-    if (userAge === '7-8') return 'bg-purple-500';
-    if (userAge === '9-10') return 'bg-green-500';
-    return 'bg-blue-500';
-  };
-
 
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-blue-50 via-purple-50 to-green-50">

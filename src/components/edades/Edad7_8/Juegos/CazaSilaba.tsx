@@ -14,7 +14,14 @@ import { StartScreenCazaSilaba } from "../IniciosJuegosLecturas/StartScreenCazaS
 import { speakText, canSpeakOnHover } from "@/utils/textToSpeech";
 import { useLevelLock } from "@/hooks/useLevelLock";
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import solImg from '../../../../assets/7_8/images/sol.png';
 import gatoImg from '../../../../assets/7_8/images/gato.png';
 import florImg from '../../../../assets/7_8/images/flor.png';
@@ -85,26 +92,16 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
   const [currentProgress, setCurrentProgress] = useState(0);
   const isLevelLocked = useLevelLock(currentLevel);
 
-  // 💾 Simple: Solo guardar al iniciar nivel como dashboard
   const { saveProgress } = useProgress();
   const activityConfig = getActivityByDbId(11); // ID 11 = Caza la Sílaba
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   // 💾 Guardar progreso CADA vez que se entra a la actividad
   useEffect(() => {
     if (activityConfig) {
       const guardarInicioNivel = async () => {
         try {
-          await saveProgress({
-            activityId: activityConfig.dbId,
-            activityName: activityConfig.name,
-            activityType: activityConfig.type,
-            ageGroup: '7-8',
-            level: currentLevel,
-            score: 0,
-            maxScore: 100,
-            completed: false,
-            timeSpent: 0
-          });
+          await saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), currentLevel));
           console.log(`🎯 Caza Sílaba Nivel ${currentLevel} iniciado`);
         } catch (error) {
           console.error('Error guardando progreso:', error);
@@ -138,7 +135,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
   const handleDrop = () => {
     const isCorrect = draggedItem === currentItem.correct;
     setIsCorrectDrop(isCorrect);
-    const newScore = isCorrect ? score + 1 : score;
+    const newScore = isCorrect ? score + 5 : score;
     setScore(newScore);
     const newCompleted = [...completed];
     newCompleted[currentIndex] = isCorrect;
@@ -156,14 +153,6 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
 
       if (currentIndex + 1 >= QUESTIONS_PER_LEVEL) {
         setShowMotivational(true);
-        setTimeout(() => {
-          setShowMotivational(false);
-          setShowLevelComplete(true);
-          const finalScore = score + (isCorrect ? 1 : 0);
-          const passed = finalScore >= 4;
-
-          onFinishLevel(currentLevel, passed);
-        }, 3000);
       } else {
         setCurrentIndex(currentIndex + 1);
         setCurrentProgress(((currentIndex + 1) / QUESTIONS_PER_LEVEL) * 100);
@@ -182,7 +171,19 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
     setCurrentProgress(0);
   };
 
-  const handleNextLevel = () => {
+  const handleNextLevel = async () => {
+    if (activityConfig) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          score,
+          maxScore: activityConfig.maxScore,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: Math.floor(score / 5),
+          incorrectAnswers: QUESTIONS_PER_LEVEL - Math.floor(score / 5)
+        })
+      );
+    }
     if (currentLevel < 3) {
       setCurrentLevel(currentLevel + 1);
       setCurrentIndex(0);
@@ -207,11 +208,9 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
 
   return (
     <LevelLock level={currentLevel} isLocked={isLevelLocked}>
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)">
     <div
       className="min-h-screen p-6"
-      style={{
-        background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
-      }}
     >
       <RewardAnimation type="star" show={showReward} />
 
@@ -228,11 +227,12 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
       <ProgressBar
         current={currentIndex + 1}
         total={QUESTIONS_PER_LEVEL}
-        progress={currentProgress}  
+        progress={currentProgress}
+        className="mb-6"
       />
 
       {/* Animal Guide */}
-      <div>
+      <div className="mb-6">
         <AnimalGuide
           animal="koala"
           message={`${isPhrase ? 'Completa la frase' : 'Arrastra la sílaba correcta'} para la ${isPhrase ? 'palabra que falta' : 'imagen'}. ¡Tú puedes!`}
@@ -374,11 +374,12 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
       {/* Mensaje Motivacional */}
       {showMotivational && (
         <MotivationalMessage
-         
-          score={score + (isCorrectDrop ? 1 : 0)}
-          total={QUESTIONS_PER_LEVEL}
+          score={score}
+          total={QUESTIONS_PER_LEVEL * 5}
+          customSubtitle={`${Math.floor(score / 5)} de ${QUESTIONS_PER_LEVEL} respuestas correctas`}
           celebrationText="¡Lo lograste!"
           onComplete={() => {
+            onFinishLevel(currentLevel, score >= 20);
             setShowMotivational(false);
             setShowLevelComplete(true);
           }}
@@ -388,8 +389,8 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
       {/* Modal Final de Nivel */}
       {showLevelComplete && (
         <LevelCompleteModal
-          score={score + (isCorrectDrop ? 1 : 0)}
-          total={QUESTIONS_PER_LEVEL}
+          score={score}
+          total={QUESTIONS_PER_LEVEL * 5}
           level={currentLevel}
           isLastLevel={currentLevel >= 3}
           onNextLevel={handleNextLevel}
@@ -398,6 +399,7 @@ export function CazaSilaba({ onBack, level, onFinishLevel }: CazaSilabaProps) {
         />
       )}
     </div>
+    </AccessibilitySettingsWrapper>
     </LevelLock>
   );
 }

@@ -27,13 +27,13 @@ export function StartScreenNoticiasSencillas({ onStart, onBack }: StartScreenNot
 
   return (
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -86,7 +86,7 @@ export function StartScreenNoticiasSencillas({ onStart, onBack }: StartScreenNot
         <div className="relative">
           <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-pink-300/60 to-purple-300/60 rounded-full" />
 
-          <h1 className="relative tracking-wide text-4xl sm:text-5xl md:text-6xl lg:text-6xl text-purple-900 drop-shadow-xl">
+          <h1 className="relative text-3xl tracking-wide text-purple-900 drop-shadow-xl sm:text-5xl md:text-6xl">
             <AnimatedText text="Noticias para Niños" />
           </h1>
         </div>
@@ -94,7 +94,7 @@ export function StartScreenNoticiasSencillas({ onStart, onBack }: StartScreenNot
         <Button
           onClick={handleStartGame}
           size="lg"
-          className="mt-12 bg-gradient-to-r from-pink-300 to-purple-300 px-12 py-6 text-purple-900 shadow-lg transition-all hover:scale-110 hover:from-pink-400 hover:to-purple-400 hover:shadow-xl"
+          className="mt-12 bg-gradient-to-r from-pink-300 to-purple-300 text-purple-900 text-xl px-8 py-6 rounded-full shadow-lg transition-all hover:scale-110 hover:from-pink-400 hover:to-purple-400 hover:shadow-xl dyslexia-friendly"
         >
           <Play className="w-8 h-8 mr-3 fill-white" />
           ¡Comenzar a Jugar!

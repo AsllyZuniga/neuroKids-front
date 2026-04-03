@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
@@ -22,6 +23,42 @@ export function LevelCompleteModal({
   onExit
 }: LevelCompleteModalProps) {
  const passed = true;
+ const [isSubmitting, setIsSubmitting] = useState(false);
+
+ const runOnce = async (action: () => void | Promise<void>) => {
+   if (isSubmitting) return;
+   setIsSubmitting(true);
+   try {
+     await Promise.resolve(action());
+   } catch {
+     // Si falla algo inesperado, re-habilitamos botones para reintentar.
+     setIsSubmitting(false);
+   }
+ };
+
+ const handlePrimaryAction = () => {
+   runOnce(() => {
+     if (isLastLevel) {
+       if (onNextLevel) onNextLevel();
+       return onExit();
+     }
+     if (onNextLevel) {
+       return onNextLevel();
+     }
+     return onExit();
+   });
+ };
+
+ const handleExit = () => {
+   runOnce(() => {
+     // En el último nivel, primero persistimos y luego salimos sí o sí.
+     if (isLastLevel && onNextLevel) {
+       onNextLevel();
+       return onExit();
+     }
+     return onExit();
+   });
+ };
 
 
   return (
@@ -49,29 +86,32 @@ export function LevelCompleteModal({
           </p>
           <div className="flex items-center justify-center gap-2 mb-6">
             <Trophy className="w-5 h-5 text-yellow-500" />
-            <span className="text-yellow-600">+{score * 10} XP ganados</span>
+            <span className="text-yellow-600">+{score} XP ganados</span>
           </div>
 
           <div className="flex flex-col gap-3">
-            {passed && !isLastLevel && (
+            {passed && (
               <Button 
-                onClick={onNextLevel} 
+                onClick={handlePrimaryAction} 
+                disabled={isSubmitting}
                 className="bg-green-500 hover:bg-green-600 w-full text-lg text.black"
               >
                 <ArrowRight className="w-5 h-5 mr-2" />
-                Siguiente Nivel ({level + 1})
+                {isLastLevel ? "Finalizar" : `Siguiente Nivel (${level + 1})`}
               </Button>
             )}
             
             <div className="flex gap-2">
               <Button 
                 onClick={onRestart} 
+                disabled={isSubmitting}
                 className="bg-purple-500 hover:bg-purple-600 flex-01 text-black"
               >
                 {passed ? 'Repetir Nivel' : 'Intentar de nuevo'}
               </Button>
               <Button 
-                onClick={onExit} 
+                onClick={handleExit} 
+                disabled={isSubmitting}
                 variant="outline" 
                 className=" bg-blue-400 flex-1 text-black"
               >

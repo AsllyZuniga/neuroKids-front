@@ -12,7 +12,14 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenDetectivePalabras } from '../IniciosJuegosLecturas/StartScreenDetectivePalabras';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface DetectivePalabrasProps {
   onBack: () => void;
@@ -280,22 +287,12 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
   const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(3); // Detective Palabras
+  const activityConfig = getActivityByDbId(17); // Detective de Palabras
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '11-12',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
@@ -402,7 +399,19 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
     setGameStarted(false);
   };
 
-  const loadNextLevel = () => {
+  const loadNextLevel = async () => {
+    if (activityConfig) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: maxPoints,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: challenges.length
+        })
+      );
+    }
     if (currentLevel < MAX_LEVEL) {
       const nextLevel = currentLevel + 1;
       setCurrentLevel(nextLevel);
@@ -438,9 +447,8 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
 
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-      <div className="max-w-7xl mx-auto">
-
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title={`Detective de Palabras`}
           level={currentLevel}
@@ -454,13 +462,17 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
           current={currentChallenge + 1}
           total={challenges.length}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="koala"
-          message="¡Sé un detective curioso! Encuentra las palabras del tipo que se pide."
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="koala"
+            message="¡Sé un detective curioso! Encuentra las palabras del tipo que se pide."
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 mt-6">
           <div>
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
@@ -496,9 +508,6 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
               <CardContent className="p-8">
                 <div className="text-xl leading-relaxed">
                   {textWords.map(({ word, originalWord, index }) => {
-                    const isTarget = current.targetWords.some(tw =>
-                      tw.word.toLowerCase() === word.toLowerCase()
-                    );
                     const clean = word.toLowerCase();
                     const isSelected = selectedWords.has(clean);
                     const foundType = foundWords[clean];
@@ -592,5 +601,6 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

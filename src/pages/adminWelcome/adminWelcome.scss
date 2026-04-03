@@ -1,0 +1,366 @@
+.admin-welcome {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  /* Mismo fondo que el panel del docente (teacher-welcome) */
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &__container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  &__hero {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  &__hero-content {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
+  }
+
+  &__avatar {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, #7c3aed, #5b21b6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+  }
+
+  &__avatar-img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+  }
+
+  &__title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    font-family: "OpenDyslexic";
+  }
+
+  &__subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+    font-family: "OpenDyslexic";
+  }
+
+  &__info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  &__info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__info-label {
+    font-size: 0.9rem;
+    color: #888;
+    font-weight: 500;
+  }
+
+  &__info-value {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 20px;
+    border: 2px solid #e9ecef;
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  &__actions {
+    margin-bottom: 3rem;
+  }
+
+  &__actions-title {
+    text-align: center;
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    font-family: "OpenDyslexic";
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    justify-content: center;
+    align-items: stretch;
+    gap: 1.5rem;
+
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  &__card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 3rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+
+    &:hover {
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    &--primary {
+      border-top: 4px solid #4CAF50;
+    }
+
+    &--secondary {
+      border-top: 4px solid #FF9800;
+    }
+
+    &--quaternary {
+      border-top: 4px solid #F44336;
+    }
+  }
+
+  &__card-icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #9ca5aa 100%);
+
+    img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+    }
+  }
+
+  &__card-title {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-family: "OpenDyslexic";
+  }
+
+  &__card-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+    flex-grow: 1;
+  }
+
+  &__card-button {
+    width: 100%;
+    margin-top: auto;
+    font-family: "OpenDyslexic";
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  &__stats {
+    margin-bottom: 2rem;
+  }
+
+  &__stats-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+  }
+
+  &__stats-title {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-family: "OpenDyslexic";
+  }
+
+  &__stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__stat-item {
+    text-align: center;
+  }
+
+  &__stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.5rem;
+    font-family: "OpenDyslexic";
+  }
+
+  &__stat-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+  }
+
+  &-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.2rem;
+    color: white;
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  }
+
+  @media (max-width: 768px) {
+    &__container {
+      padding: 1rem;
+    }
+
+    &__hero-content {
+      padding: 2rem 1.5rem;
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+
+    &__subtitle {
+      font-size: 1rem;
+    }
+
+    &__info {
+      gap: 1rem;
+    }
+
+    &__actions-title {
+      font-size: 1.5rem;
+    }
+
+    &__cards {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    &__card {
+      padding: 1.5rem 1rem;
+    }
+
+    &__card-title {
+      font-size: 1.1rem;
+    }
+
+    &__card-description {
+      font-size: 0.8rem;
+    }
+
+    &__stats-card {
+      padding: 1.5rem;
+    }
+
+    &__stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    &__stat-number {
+      font-size: 1.5rem;
+    }
+
+    &__stat-label {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__container {
+      padding: 0.75rem;
+      padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+      padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+    }
+
+    &__hero-content {
+      padding: 1.25rem 1rem;
+      border-radius: 16px;
+    }
+
+    &__title {
+      font-size: 1.5rem;
+      line-height: 1.25;
+    }
+
+    &__subtitle {
+      font-size: 0.9rem;
+    }
+
+    &__avatar {
+      width: 88px;
+      height: 88px;
+      margin-bottom: 1.25rem;
+    }
+
+    &__avatar-img {
+      width: 72px;
+      height: 72px;
+    }
+
+    &__actions-title {
+      font-size: 1.25rem;
+    }
+
+    &__card-icon {
+      width: 88px;
+      height: 88px;
+
+      img {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+    &__stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

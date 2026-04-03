@@ -13,6 +13,7 @@ interface Usuario {
     correo?: string;
     rol_id: number;
     institucion_id?: number;
+    institucion?: { nombre?: string } | null;
     estado?: boolean;
     edad?: number | null;
 }
@@ -39,10 +40,12 @@ export default function Estudiantes() {
     const [deleteLoading, setDeleteLoading] = useState(false);
     const token = localStorage.getItem("token") || "";
 
+    const userType = localStorage.getItem("userType");
+    const isAdmin = userType === "admin";
+
     useEffect(() => {
-        const userType = localStorage.getItem("userType");
         const token = localStorage.getItem("token");
-        if (userType !== "docente" || !token) {
+        if ((userType !== "docente" && userType !== "admin") || !token) {
             navigate("/tipo-usuario");
             return;
         }
@@ -51,12 +54,15 @@ export default function Estudiantes() {
             setLoading(true);
             setError(null);
             try {
-                // Obtener instituciones (endpoint público para estudiantes)
+                // Obtener instituciones (endpoint público)
                 try {
                     const instResp = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.STUDENT_INSTITUCIONES));
                     if (instResp.ok) {
                         const instData = await instResp.json();
-                        const list: Array<{ id: number; nombre: string }> = instData?.data?.instituciones || [];
+                        const list: Array<{ id: number; nombre: string }> =
+                            instData?.data?.instituciones ||
+                            instData?.data ||
+                            [];
                         const map: Record<number, string> = {};
                         list.forEach(i => (map[i.id] = i.nombre));
                         setInstitucionesMap(map);
@@ -66,7 +72,12 @@ export default function Estudiantes() {
                     console.warn("No se pudieron cargar instituciones:", e);
                 }
 
-                const resp = await fetch(buildApiUrl("/usuarios"), {
+                // Listar estudiantes desde el backend (tabla estudiantes)
+                const endpoint =
+                    isAdmin && institucionFilter
+                        ? `/estudiantes?institucion_id=${encodeURIComponent(institucionFilter)}`
+                        : "/estudiantes";
+                const resp = await fetch(buildApiUrl(endpoint), {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
@@ -79,10 +90,11 @@ export default function Estudiantes() {
                 }
 
                 const data = await resp.json();
-                const usuarios: Usuario[] = data?.data?.usuarios || [];
-                // Filtrar solo estudiantes (rol_id === 3)
-                const onlyStudents = usuarios.filter(u => u.rol_id === 3);
-                setEstudiantes(onlyStudents);
+                const lista: Usuario[] =
+                    data?.data?.estudiantes ||
+                    data?.data ||
+                    [];
+                setEstudiantes(lista);
             } catch (err: any) {
                 console.error(err);
                 setError(err?.message || "Error al cargar estudiantes");
@@ -92,7 +104,7 @@ export default function Estudiantes() {
         };
 
         fetchUsuarios();
-    }, [navigate]);
+    }, [navigate, institucionFilter]);
 
     const filtered = useMemo(() => {
         return estudiantes.filter((s) => {
@@ -250,7 +262,7 @@ export default function Estudiantes() {
     };
 
 const handleBack = () => {
-    navigate("/perfil/docente"); 
+    navigate(userType === "admin" ? "/perfil/admin" : "/perfil/docente");
 };
 
     return (
@@ -274,13 +286,6 @@ const handleBack = () => {
                             </div>
 
                             <div className="estudiantes-controls">
-                                <input
-                                    placeholder="Buscar por nombre"
-                                    value={searchTerm}
-                                    onChange={handleSearch}
-                                    className="estudiantes-search"
-                                />
-
                                 <button
                                     className="estudiantes-refresh"
                                     onClick={() => setShowFilters(!showFilters)}
@@ -299,8 +304,12 @@ const handleBack = () => {
 
                     {showFilters && (
                         <div className="estudiantes-filters-panel">
-
-
+                            <input
+                                placeholder="Buscar por nombre"
+                                value={searchTerm}
+                                onChange={handleSearch}
+                                className="estudiantes-search"
+                            />
                             <input
                                 placeholder="Filtrar por edad"
                                 value={edadFilter}
@@ -310,22 +319,23 @@ const handleBack = () => {
                                 }}
                                 className="estudiantes-search"
                             />
-
-                            <select
-                                value={institucionFilter}
-                                onChange={(e) => {
-                                    setInstitucionFilter(e.target.value);
-                                    setPage(1);
-                                }}
-                                className="estudiantes-pagesize"
-                            >
-                                <option value="">Todas las instituciones</option>
-                                {Object.entries(institucionesMap).map(([id, nombre]) => (
-                                    <option key={id} value={id}>
-                                        {nombre}
-                                    </option>
-                                ))}
-                            </select>
+                            {isAdmin && (
+                                <select
+                                    value={institucionFilter}
+                                    onChange={(e) => {
+                                        setInstitucionFilter(e.target.value);
+                                        setPage(1);
+                                    }}
+                                    className="estudiantes-pagesize"
+                                >
+                                    <option value="">Todas las instituciones</option>
+                                    {Object.entries(institucionesMap).map(([id, nombre]) => (
+                                        <option key={id} value={id}>
+                                            {nombre}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                         </div>
                     )}
 
@@ -354,7 +364,10 @@ const handleBack = () => {
                                                     <td>{s.id}</td>
                                                     <td>{s.nombre} {s.apellido ?? ""}</td>
                                                     <td>{s.edad ?? "-"}</td>
-                                                    <td>{s.institucion_id ? (institucionesMap[s.institucion_id] ?? s.institucion_id) : "-"}</td>
+                                                    <td>
+                                                        {s.institucion?.nombre
+                                                            ?? (s.institucion_id ? (institucionesMap[s.institucion_id] ?? "-") : "-")}
+                                                    </td>
                                                     <td>{s.correo ?? "-"}</td>
                                                     <td>
                                                         <div className="action-buttons">

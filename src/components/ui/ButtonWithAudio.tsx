@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { Button } from './button';
-import { speakText, canSpeakOnHover } from '../../utils/textToSpeech';
+import { speakText, canSpeakOnHover, trackAudioHelpUseForCurrentActivity } from '../../utils/textToSpeech';
 
 interface ButtonWithAudioProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -46,6 +46,10 @@ export function ButtonWithAudio({
       const text = getTextToSpeak();
       if (text) {
         speakText(text, { voiceType: 'child' });
+        // Solo contar ayuda en clic explícito de botones tipo "escuchar/repetir".
+        if (/(escuchar|repetir|oir|oír|audio|narrar)/i.test(text)) {
+          trackAudioHelpUseForCurrentActivity();
+        }
       }
     }
   };

@@ -1,0 +1,93 @@
+/**
+ * Escala solo font-size de utilities Tailwind text-* dentro de .nk-a11y-scope.
+ * No cambia el rem global: paddings (p-*, gap-*), width/height (w-*, h-*), etc. se mantienen.
+ */
+.nk-a11y-scope[data-a11y-font="base"] {
+  --nk-text-mult: 1;
+}
+.nk-a11y-scope[data-a11y-font="large"] {
+  --nk-text-mult: 1.125;
+}
+.nk-a11y-scope[data-a11y-font="xlarge"] {
+  --nk-text-mult: 1.25;
+}
+
+/* Reglas por tamaño (default Tailwind v3) */
+.nk-a11y-scope[data-a11y-font] .text-xs { font-size: calc(0.75rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-sm { font-size: calc(0.875rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-base { font-size: calc(1rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-lg { font-size: calc(1.125rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-xl { font-size: calc(1.25rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-2xl { font-size: calc(1.5rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-3xl { font-size: calc(1.875rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-4xl { font-size: calc(2.25rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-5xl { font-size: calc(3rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-6xl { font-size: calc(3.75rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-7xl { font-size: calc(4.5rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-8xl { font-size: calc(6rem * var(--nk-text-mult, 1)) !important; }
+.nk-a11y-scope[data-a11y-font] .text-9xl { font-size: calc(8rem * var(--nk-text-mult, 1)) !important; }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-xs { font-size: calc(0.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-sm { font-size: calc(0.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-base { font-size: calc(1rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-lg { font-size: calc(1.125rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-xl { font-size: calc(1.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-2xl { font-size: calc(1.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-3xl { font-size: calc(1.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-4xl { font-size: calc(2.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-5xl { font-size: calc(3rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-6xl { font-size: calc(3.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-7xl { font-size: calc(4.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-8xl { font-size: calc(6rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 640px) { .nk-a11y-scope[data-a11y-font] .sm\\:text-9xl { font-size: calc(8rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-xs { font-size: calc(0.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-sm { font-size: calc(0.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-base { font-size: calc(1rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-lg { font-size: calc(1.125rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-xl { font-size: calc(1.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-2xl { font-size: calc(1.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-3xl { font-size: calc(1.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-4xl { font-size: calc(2.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-5xl { font-size: calc(3rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-6xl { font-size: calc(3.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-7xl { font-size: calc(4.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-8xl { font-size: calc(6rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 768px) { .nk-a11y-scope[data-a11y-font] .md\\:text-9xl { font-size: calc(8rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-xs { font-size: calc(0.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-sm { font-size: calc(0.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-base { font-size: calc(1rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-lg { font-size: calc(1.125rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-xl { font-size: calc(1.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-2xl { font-size: calc(1.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-3xl { font-size: calc(1.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-4xl { font-size: calc(2.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-5xl { font-size: calc(3rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-6xl { font-size: calc(3.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-7xl { font-size: calc(4.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-8xl { font-size: calc(6rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1024px) { .nk-a11y-scope[data-a11y-font] .lg\\:text-9xl { font-size: calc(8rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-xs { font-size: calc(0.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-sm { font-size: calc(0.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-base { font-size: calc(1rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-lg { font-size: calc(1.125rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-xl { font-size: calc(1.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-2xl { font-size: calc(1.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-3xl { font-size: calc(1.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-4xl { font-size: calc(2.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-5xl { font-size: calc(3rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-6xl { font-size: calc(3.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-7xl { font-size: calc(4.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-8xl { font-size: calc(6rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1280px) { .nk-a11y-scope[data-a11y-font] .xl\\:text-9xl { font-size: calc(8rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-xs { font-size: calc(0.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-sm { font-size: calc(0.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-base { font-size: calc(1rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-lg { font-size: calc(1.125rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-xl { font-size: calc(1.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-2xl { font-size: calc(1.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-3xl { font-size: calc(1.875rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-4xl { font-size: calc(2.25rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-5xl { font-size: calc(3rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-6xl { font-size: calc(3.75rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-7xl { font-size: calc(4.5rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-8xl { font-size: calc(6rem * var(--nk-text-mult, 1)) !important; } }
+@media (min-width: 1536px) { .nk-a11y-scope[data-a11y-font] .2xl\\:text-9xl { font-size: calc(8rem * var(--nk-text-mult, 1)) !important; } }

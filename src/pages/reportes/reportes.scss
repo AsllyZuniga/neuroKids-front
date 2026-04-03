@@ -1,0 +1,245 @@
+.reportes-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.reportes-container {
+  /* Layout via Tailwind: max-w-6xl mx-auto p-8 */
+}
+
+.reportes-back-btn {
+  padding: 8px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.reportes-card {
+  padding: 40px;
+  color: #000;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.reportes-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reportes-title {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.reportes-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.reportes-search {
+  padding: 6px 8px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 14px;
+}
+
+.reportes-search::placeholder {
+  color: #555555;
+}
+
+.reportes-total {
+  padding: 6px 12px;
+  background: #f2f6ff;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #2a4fd7;
+  width: fit-content;
+  font-size: 16px;
+}
+
+.reportes-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.reportes-table th {
+  background: #39cc87;
+  text-align: center;
+  border: 1px solid #a19f9f;
+  padding: 10px 12px;
+}
+
+.reportes-table td {
+  border: 1px solid #a19f9f;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.error {
+  color: #b00020;
+}
+
+.reportes-detail-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.reportes-detail-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.reportes-detail-table th {
+  background: #f1f5f9;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  padding: 8px 10px;
+}
+
+.reportes-detail-table td {
+  border: 1px solid #d1d5db;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.modal-report-detail h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.reportes-detail-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.reportes-detail-tab {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover {
+    color: #3567c4;
+  }
+
+  &.active {
+    color: #3567c4;
+    border-bottom-color: #3567c4;
+  }
+}
+
+.reportes-detail-panel {
+  min-height: 120px;
+}
+
+/* Modal fijo y centrado (igual que admin/docentes) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  max-height: min(90dvh, 90vh);
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: min(95vw, 520px);
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hacer el modal de detalle más ancho para mejor lectura */
+.modal-report-detail {
+  max-width: min(96vw, 960px);
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .reportes-card {
+    padding: 16px 12px;
+  }
+
+  .reportes-title {
+    font-size: 1.5rem;
+  }
+
+  .reportes-table th,
+  .reportes-table td {
+    padding: 6px 8px;
+    font-size: 14px;
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
+  .modal-content:not(.modal-report-detail) {
+    width: min(100%, calc(100vw - 1.5rem));
+  }
+
+  .modal-report-detail {
+    max-height: min(92dvh, 92vh);
+    padding: 1rem 0.75rem;
+  }
+
+  .reportes-detail-tab {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reportes-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reportes-search {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+

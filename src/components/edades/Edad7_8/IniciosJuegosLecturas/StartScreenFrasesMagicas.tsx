@@ -24,7 +24,7 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
 
   return (
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       <ButtonWithAudio
@@ -32,7 +32,7 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
         playOnHover
         playOnClick
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -55,7 +55,7 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
       ))}
 
 
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
+      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -69,7 +69,7 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
         </motion.div>
 
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-7xl text-purple-600 mb-4 leading-none">
+          <h1 className="mb-4 text-4xl leading-tight text-purple-600 sm:text-5xl md:text-7xl">
             {title.replace(/ /g, '\u00A0').split('').map((letter, index) => (
               <span key={index} className="inline-block align-middle">
                 <AnimatedText text={letter} />

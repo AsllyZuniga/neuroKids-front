@@ -21,42 +21,46 @@ export function GameHeader({
 
 
   return (
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-2">
-
+    <header className="mb-6 w-full">
+      <div className="flex w-full items-start justify-between gap-2 sm:gap-4">
         <Button
           onClick={onBack}
           variant="outline"
-          className="bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20"
+          className="bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 shrink-0"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="w-4 h-4 mr-2 shrink-0" />
           Volver
         </Button>
+        <Button
+          onClick={onRestart}
+          variant="outline"
+          className="bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 shrink-0"
+        >
+          <RotateCcw className="w-4 h-4 mr-2 shrink-0" />
+          Reiniciar
+        </Button>
       </div>
-      <div className="text-center">
-        <h1 className="text-4xl text-black mb-2 ">
+
+      <div className="mx-auto mt-4 sm:mt-5 max-w-full text-center px-1">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl text-black mb-2 leading-tight break-words">
           {title}
-          {level !== undefined && <span className="ml-2"> - Nivel {level}</span>}
+          {level !== undefined && (
+            <span className="block sm:inline sm:ml-2 text-xl sm:text-3xl md:text-4xl">
+              {" "}
+              - Nivel {level}
+            </span>
+          )}
         </h1>
-        <motion.div 
+        <motion.div
           key={score}
           initial={{ scale: 1.2, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="flex items-center gap-2 text-black "
+          className="flex items-center justify-center gap-2 text-black"
         >
-          <Star className="w-5 h-5 text-yellow-400 fill-current" />
+          <Star className="w-5 h-5 text-yellow-400 fill-current shrink-0" />
           <span>Puntos: {score}</span>
         </motion.div>
       </div>
-
-      <Button
-        onClick={onRestart}
-        variant="outline"
-        className="bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20"
-      >
-        <RotateCcw className="w-4 h-4 mr-2" />
-        Reiniciar
-      </Button>
-    </div>
+    </header>
   );
 }

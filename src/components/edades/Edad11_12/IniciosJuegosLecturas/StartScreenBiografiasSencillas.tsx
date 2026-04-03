@@ -15,11 +15,14 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
 
   return (
     
-<div className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat flex items-center justify-center p-4" style={{ backgroundImage: `url(${fondo})` }}>
+    <div
+      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat p-4 pb-10 pt-16 sm:pt-20"
+      style={{ backgroundImage: `url(${fondo})` }}
+    >
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -28,7 +31,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
 
 
 
-      <div className="relative z-10 text-center max-w-4xl w-full px-4 -translate-y-24">
+      <div className="relative z-10 w-full max-w-4xl px-2 text-center sm:px-4">
 
 
         <motion.div
@@ -39,7 +42,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
         >
 
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-purple-400/30 via-pink-400/30 to-blue-400/30 blur-xl"
             animate={{
               scale: [1, 1.1, 1],
               opacity: [0.4, 0.7, 0.4],
@@ -57,7 +60,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
                 text={letter}
                 hoverScale={1.3}
                 delay={index * 0.1}
-                className="inline-block text-4xl sm:text-5xl md:text-7xl text-purple-600 "
+                className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-7xl"
                 
               />
             ))}
@@ -102,7 +105,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
             <Button
               onClick={onStart}
               size="lg"
-              className="relative bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 hover:from-purple-600 hover:via-pink-600 hover:to-blue-600 text-white px-16 py-8 rounded-full shadow-2xl text-xl border-4 border-white/50 dyslexia-friendly font-bold"
+              className="relative bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 hover:from-purple-600 hover:via-pink-600 hover:to-blue-600 text-white text-xl px-8 py-6 rounded-full shadow-lg border-2 border-white/50 dyslexia-friendly font-bold"
               style={{
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
               }}

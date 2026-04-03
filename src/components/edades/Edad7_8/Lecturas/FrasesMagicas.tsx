@@ -14,8 +14,15 @@ import { LevelLock } from '@/components/others/LevelLock';
 import { useLevelLock } from '@/hooks/useLevelLock';
 import { speakText } from '@/utils/textToSpeech';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
 import { StartScreenFrasesMagicas } from "../IniciosJuegosLecturas/StartScreenFrasesMagicas";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import sol from "@/assets/7_8/frasesmagicas/sol1.svg"
 import cielo from "@/assets/7_8/frasesmagicas/nublado1.svg"
 import mesa from "@/assets/7_8/frasesmagicas/mesa.svg"
@@ -170,30 +177,8 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   const [showLevelComplete, setShowLevelComplete] = useState(false);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(5); // Frases Mágicas
-
-  const guardarInicioNivel = () => {
-    if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '7-8',
-        level: level,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
-    }
-  };
-
-  useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
-    console.log('🔄 FrasesMagicas - Ejecutando useEffect, nivel:', level);
-    guardarInicioNivel();
-  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+  const activityConfig = getActivityByDbId(2); // Frases Mágicas
+  const { getElapsedSeconds } = useActivityTimer([level]);
 
   const magicSentences = (() => {
     switch (level) {
@@ -213,6 +198,28 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   const totalSentences = magicSentences.length;
   const baseProgress = (currentSentence / totalSentences) * 100;
   const incrementPerMagic = 100 / totalSentences;
+
+  const guardarInicioNivel = () => {
+    if (activityConfig) {
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), level));
+    }
+  };
+
+  useEffect(() => {
+    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
+    console.log('🔄 FrasesMagicas - Ejecutando useEffect, nivel:', level);
+    guardarInicioNivel();
+  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+
+  useEffect(() => {
+    setMessage(
+      level === 1
+        ? '¡Di la palabra mágica para activar la magia!'
+        : level === 2
+          ? 'Las frases son más poderosas ahora. ¡Tú puedes!'
+          : 'Solo los magos expertos como tú pueden controlar estas palabras mágicas.'
+    );
+  }, [level]);
 
   const updateProgress = () => {
     const newProgress = baseProgress + (magicActivated ? incrementPerMagic : 0);
@@ -262,7 +269,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
     setShowMagic(true);
     setMagicActivated(true);
-    setScore(score + (level === 3 ? 40 : level === 2 ? 30 : 20));
+    setScore(score + 5);
     setShowReward(true);
 
     setTimeout(() => {
@@ -398,11 +405,6 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
         setShowReward(false);
         setShowMotivational(true);
       }, 1500);
-
-      setTimeout(() => {
-        setShowMotivational(false);
-        setShowLevelComplete(true);
-      }, 4500);
     }
   };
 
@@ -426,6 +428,18 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   };
 
   const goToNextLevel = () => {
+    if (activityConfig) {
+      const correctCount = totalSentences;
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level,
+          score,
+          maxScore: totalSentences * 5,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
     if (level < 3) {
       setLevel(level + 1);
       restartReading();
@@ -443,11 +457,9 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
   return (
     <LevelLock level={level} isLocked={isLevelLocked}>
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, rgb(210, 168, 253) 0%, rgb(253, 181, 222) 100%)">
       <div
         className="min-h-screen p-6 relative overflow-hidden"
-        style={{ //cambiar color de fondo 
-          background: 'linear-gradient(135deg, rgb(210, 168, 253) 0%, rgb(253, 181, 222) 100%)'
-        }}
       >
         <ConfettiExplosion show={showMagic} />
         <ConfettiExplosion show={readingComplete} />
@@ -471,17 +483,8 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
         />
 
         {/* GUÍA DEL BÚHO */}
-        <div>
-          <AnimalGuide
-            animal="frog"
-            message={
-              level === 1
-                ? '¡Di la palabra mágica para activar la magia!'
-                : level === 2
-                  ? 'Las frases son más poderosas ahora. ¡Tú puedes!'
-                  : 'Solo los magos expertos como tú pueden controlar estas palabras mágicas.'
-            }
-          />
+        <div className="mb-6">
+          <AnimalGuide animal="frog" message={message} />
         </div>
 
         {/* JUEGO */}
@@ -640,6 +643,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
           />
         )}
       </div>
+      </AccessibilitySettingsWrapper>
     </LevelLock>
   );
 }

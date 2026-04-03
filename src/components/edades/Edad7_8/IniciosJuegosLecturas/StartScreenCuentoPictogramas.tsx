@@ -21,8 +21,8 @@ export function StartScreenCuentoPictogramas({
   ];
 
   return (
-<div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+    <div
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
 
@@ -50,10 +50,9 @@ export function StartScreenCuentoPictogramas({
       </div>
 
       {/* CAPA DE CONTENIDO PRINCIPAL (centrada, encima de todo) */}
-      <div className="relative z-20 min-h-screen flex flex-col items-center justify-start px-6 py-10 md:py-24 ">
-0
+      <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:px-6 sm:pt-24">
         {/* Botón Volver */}
-        <div className="absolute top-4 left-4 z-30">
+        <div className="absolute top-4 left-4 z-[100] pointer-events-auto">
           <ButtonWithAudio
             onClick={onBack}
             playOnHover
@@ -77,9 +76,9 @@ export function StartScreenCuentoPictogramas({
             <motion.div
               animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="rounded-full bg-gradient-to-br from-yellow-200 to-orange-200 p-8 shadow-xl"
+              className="rounded-full bg-gradient-to-br from-yellow-200 to-orange-200 p-5 shadow-xl sm:p-8"
             >
-              <BookOpen className="h-20 w-20 text-orange-600" />
+              <BookOpen className="h-14 w-14 text-orange-600 sm:h-20 sm:w-20" />
             </motion.div>
 
             <motion.div
@@ -110,7 +109,7 @@ export function StartScreenCuentoPictogramas({
             playOnHover
             playOnClick
             size="lg"
-            className="rounded-full px-10 py-6 text-xl shadow-2xl"
+            className="rounded-full text-xl px-8 py-6 shadow-lg dyslexia-friendly"
             style={{ backgroundColor: "#FFB7D5", color: "#8B5CF6" }}
           >
             <Play className="w-8 h-8 mr-3 fill-white" />

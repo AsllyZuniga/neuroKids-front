@@ -13,7 +13,14 @@ import { ConfettiExplosion } from '../../../others/ConfettiExplosion';
 import { StartScreenOrdenaHistoria } from "../IniciosJuegosLecturas/StartScreenOrdenaHistoria";
 import { speakText, canSpeakOnHover } from '../../../../utils/textToSpeech';
 import { useProgress } from '../../../../hooks/useProgress';
+import { useActivityTimer } from '@/hooks/useActivityTimer';
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface OrdenaHistoriaProps {
   onBack: () => void;
@@ -187,21 +194,12 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  const activityConfig = getActivityByDbId(9); // Ordena Historia
+  const activityConfig = getActivityByDbId(15); // Ordena Historia
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '9-10',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
@@ -290,7 +288,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
     );
 
     if (isCorrect) {
-      const points = Math.max(30 - (attempts * 5), 10);
+      const points = 5;
       setScore(prev => prev + points);
       setShowReward(true);
       setTimeout(() => {
@@ -308,17 +306,18 @@ const handleFragmentClick = (fragment: StoryFragment) => {
   };
 
   const handleNextLevel = async () => {
-    // Guardar progreso del nivel completado
-    await saveProgress({
-      activityId: 'ordena-historia',
-      activityName: 'Ordena la Historia',
-      activityType: 'juego',
-      ageGroup: '9-10',
-      level: currentLevel,
-      score: score,
-      maxScore: levels[currentLevel - 1].stories.length * 100,
-      completed: true
-    });
+    if (activityConfig) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: levels[currentLevel - 1].stories.length * 100,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: levels[currentLevel - 1].stories.length
+        })
+      );
+    }
 
     if (currentLevel < MAX_LEVEL) {
       setCurrentLevel(prev => prev + 1);
@@ -350,7 +349,8 @@ const handleFragmentClick = (fragment: StoryFragment) => {
 
   if (gameComplete) {
     return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-green-100 via-blue-100 to-purple-100">
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dcfce7 0%, #dbeafe 50%, #f3e8ff 100%)">
+      <div className="min-h-screen p-6">
         <ConfettiExplosion show={true} />
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto text-center">
           <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-200">
@@ -366,6 +366,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
           </Card>
         </motion.div>
       </div>
+      </AccessibilitySettingsWrapper>
     );
   }
 
@@ -377,8 +378,8 @@ const handleFragmentClick = (fragment: StoryFragment) => {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-green-100 via-blue-100 to-purple-100">
-      <div className="max-w-7xl mx-auto">
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dcfce7 0%, #dbeafe 50%, #f3e8ff 100%)">
+    <div className="min-h-screen p-6">
         {/* HEADER */}
         <GameHeader
           title="Ordena la Historia"
@@ -402,6 +403,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
           />
         </motion.div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6">
           <h2 className="text-2xl text-black">"{currentStories[currentStoryIndex].title}"</h2>
         </div>
@@ -548,5 +550,6 @@ const handleFragmentClick = (fragment: StoryFragment) => {
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

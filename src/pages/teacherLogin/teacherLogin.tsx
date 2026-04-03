@@ -5,8 +5,6 @@ import Card from "@/shared/components/Card/Card";
 import "./teacherLogin.scss";
 import { API_CONFIG, buildApiUrl } from "@/config/api";
 
-// CAMBIO IMPORTANTE: Importamos la imagen aquí arriba
-import iconDocente from "@/assets/img/regla.svg"; 
 
 interface LoginResponse {
   success: boolean;
@@ -51,7 +49,7 @@ export default function TeacherLogin() {
     setError("");
 
     try {
-      const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.ADMIN_LOGIN), {
+      const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.DOCENTE_LOGIN), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,12 +60,10 @@ export default function TeacherLogin() {
       const data: LoginResponse = await response.json();
 
       if (data.success && data.data) {
-        // Guardar token en localStorage
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.usuario));
         localStorage.setItem("userType", "docente");
-        
-        // Redirigir a la página de bienvenida para docentes
+
         navigate("/bienvenida/docente");
       } else {
         setError(data.message || "Error al iniciar sesión");
@@ -90,8 +86,7 @@ export default function TeacherLogin() {
         <Card className="teacher-login__card">
           <div className="teacher-login__header">
             <div className="teacher-login__icon">
-              {/* CAMBIO AQUÍ: Usamos la variable importada en lugar del texto fijo */}
-              <img src={iconDocente} alt="Docente" />
+              <img src="/avatars/mujer.svg" alt="Docente" />
             </div>
             <h1 className="teacher-login__title">Acceso Docente</h1>
             <p className="teacher-login__subtitle">

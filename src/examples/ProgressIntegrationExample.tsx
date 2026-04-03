@@ -230,9 +230,8 @@ export const EjemploActividadLectura: React.FC = () => {
 export const EjemploActividadJuego: React.FC = () => {
   const { saveProgress } = useProgress();
   const [nivelActual, setNivelActual] = useState(1);
-  const [puntajeNivel, setPuntajeNivel] = useState(0);
   const [puntajeTotal, setPuntajeTotal] = useState(0);
-  
+
   const ACTIVITY_ID = 'bingo-palabras';
   const activityConfig = getActivityByFrontendId(ACTIVITY_ID);
 
@@ -241,9 +240,9 @@ export const EjemploActividadJuego: React.FC = () => {
 
     const nuevoTotal = puntajeTotal + puntaje;
     setPuntajeTotal(nuevoTotal);
-    
-    const esUltimoNivel = nivelActual >= 3; // Asumiendo 3 niveles
-    
+
+    const esUltimoNivel = nivelActual >= 3;
+
     await saveProgress({
       activityId: activityConfig.dbId,
       activityName: `${activityConfig.title} - Nivel ${nivelActual}`,
@@ -253,23 +252,28 @@ export const EjemploActividadJuego: React.FC = () => {
       score: nuevoTotal,
       maxScore: activityConfig.maxScore,
       completed: esUltimoNivel,
-      timeSpent: 0 // Implementar timer si es necesario
+      nivelCompletado: true,
+      timeSpent: 0
     });
 
     if (esUltimoNivel) {
       console.log('🎮 Juego completado completamente');
     } else {
-      setNivelActual(nivelActual + 1);
-      setPuntajeNivel(0);
+      setNivelActual((n) => n + 1);
     }
   };
 
-  // ... resto de la implementación del juego
-
   return (
-    <div>
-      <h1>{activityConfig?.title} - Nivel {nivelActual}</h1>
-      {/* Implementación del juego */}
+    <div className="p-4">
+      <h1>{activityConfig?.title} — Nivel {nivelActual}</h1>
+      <p className="text-sm text-muted-foreground">Ejemplo de integración (solo desarrollo).</p>
+      <button
+        type="button"
+        className="mt-2 rounded bg-violet-600 px-3 py-1 text-white"
+        onClick={() => void completarNivel(10)}
+      >
+        Simular puntos +10 (demo)
+      </button>
     </div>
   );
 };

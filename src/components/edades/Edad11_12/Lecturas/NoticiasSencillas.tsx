@@ -12,6 +12,15 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenNoticiasSencillas } from '../IniciosJuegosLecturas/StartScreenNoticiasSencillas';
+import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
+import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import panda from '../../../../assets//11_12/noticias_niños/panda1.svg';
 import globos from '../../../../assets//11_12/noticias_niños/globos.svg';
 import manzana from '../../../../assets//11_12/noticias_niños/manzana.svg';
@@ -80,29 +89,34 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
   const [likedMap, setLikedMap] = useState<Record<number, boolean>>({});
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(14); // Noticias Sencillas
+  const activityConfig = getActivityByDbId(9); // Noticias Sencillas
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '11-12',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
+
+  useEffect(() => {
+    if (levelComplete && activityConfig) {
+      const correctCount = Math.max(1, Math.round(score / 15));
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: 140,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
+  }, [levelComplete, activityConfig, score, currentLevel, saveProgress, getElapsedSeconds]);
 
   const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
 
@@ -228,7 +242,7 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
     const isCorrect = index === currentArticle.questions[currentQuestion].correct;
 
     if (isCorrect) {
-      setScore(s => s + 10);
+      setScore(s => s + 5);
       setShowReward(true);
       playSound('correct');
       setTimeout(() => setShowReward(false), 1500);
@@ -305,9 +319,8 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
   const maxPoints = filteredNews.length * 20;
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-br from-blue-100 via-white to-green-100">
-      <div className="max-w-6xl mx-auto">
-
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dbeafe 0%, #ffffff 50%, #dcfce7 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title={`Noticias Sencillas`}
           level={currentLevel}
@@ -320,13 +333,17 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
           current={currentNews + 1}
           total={filteredNews.length}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="bear"
-          message="¡Lee o escucha la noticia y responde las preguntas!"
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="bear"
+            message="¡Lee o escucha la noticia y responde las preguntas!"
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-3 gap-6 mt-6">
           <div className="md:col-span-1">
             <Card className="h-fit">
@@ -516,5 +533,6 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

@@ -7,10 +7,17 @@ import "./prueba.scss";
 export default function Prueba({
   nivel,
   imagen,
+  lecturas: _lecturas,
+  games: _games,
 }: {
   nivel: number;
   imagen: string;
+  /** Reservado para el mapa de actividades (compat. rutas en App) */
+  lecturas?: number;
+  games?: number;
 }) {
+  void _lecturas;
+  void _games;
   const navigate = useNavigate();
 
   const cardImages = {
@@ -69,6 +76,29 @@ export default function Prueba({
 
   const current = cardImages[`nivel${nivel}` as keyof typeof cardImages];
   const titles = titulos[`nivel${nivel}` as keyof typeof titulos];
+
+  if (!current || !titles) {
+    return (
+      <div className={`prueba-page nivel${nivel}`}>
+        <Header />
+        <div className="prueba-header">
+          <button
+            className="home-button"
+            onClick={() => navigate("/")}
+            title="Volver al inicio"
+          >
+            <Home size={28} />
+          </button>
+        </div>
+        <div className="prueba-content" style={{ padding: "2rem", textAlign: "center" }}>
+          <p style={{ marginBottom: "1rem" }}>Este nivel no está disponible.</p>
+          <button type="button" className="home-button" onClick={() => navigate("/")}>
+            Volver al inicio
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`prueba-page nivel${nivel}`}>

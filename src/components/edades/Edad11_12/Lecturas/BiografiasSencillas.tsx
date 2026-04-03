@@ -13,7 +13,14 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenBiografiasSencillas } from '../IniciosJuegosLecturas/StartScreenBiografiasSencillas';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import marie from '../../../../assets/11_12/biografias_sencillas/marieCurie.svg';
 import leonardo from '../../../../assets/11_12/biografias_sencillas/leonardoDaVinci.svg';
 import mandela from '../../../../assets/11_12/biografias_sencillas/nelsonMandela.svg';
@@ -502,32 +509,37 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
   const [showMotivational, setShowMotivational] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [readBiographies, setReadBiographies] = useState<Set<number>>(new Set());
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [, setIsSpeaking] = useState(false);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(16); // Biografías Sencillas
+  const activityConfig = getActivityByDbId(7); // Biografías Sencillas
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '11-12',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
+
+  useEffect(() => {
+    if (levelComplete && activityConfig) {
+      const correctCount = Math.max(1, Math.round(score / 20));
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: 160,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
+  }, [levelComplete, activityConfig, score, currentLevel, saveProgress, getElapsedSeconds]);
 
   const biographies = allBiographies[currentLevel - 1];
   const biography = biographies[currentBio];
@@ -548,7 +560,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
 
   const finishReading = () => {
     setReadBiographies(prev => new Set([...prev, currentBio]));
-    setScore(prev => prev + 30);
+    setScore(prev => prev + 5);
     setShowQuiz(true);
   };
 
@@ -558,7 +570,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
     setSelectedAnswer(answerIndex);
 
     if (answerIndex === biography.quiz.correct) {
-      setScore(prev => prev + 20);
+      setScore(prev => prev + 5);
       setShowReward(true);
       setTimeout(() => setShowReward(false), 1500);
     }
@@ -635,8 +647,8 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
 
   if (showQuiz && !showMotivational && !levelComplete) {
     return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-        <div className="max-w-4xl mx-auto">
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
+        <div className="min-h-screen p-6">
           <GameHeader
             title={`Quiz: ${biography.name} - Nivel ${currentLevel}`}
             score={score}
@@ -644,6 +656,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
             onRestart={restartLevel}
           />
 
+          <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -701,43 +714,43 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                 )}
               </CardContent>
             </Card>
-          </motion.div>
+            </motion.div>
+          </div>
+
+          {/* MENSAJE MOTIVACIONAL*/}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={maxPoints}
+              customMessage="¡Has leído todas las biografías!"
+              customSubtitle="Completaste todas las lecturas del nivel"
+              onComplete={() => {
+                setShowMotivational(false);
+                setLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL  */}
+          {levelComplete && !showMotivational && (
+            <LevelCompleteModal
+              score={score}
+              total={maxPoints}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={loadNextLevel}
+              onRestart={restartLevel}
+              onExit={onBack}
+            />
+          )}
         </div>
-
-        {/* MENSAJE MOTIVACIONAL*/}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={maxPoints}
-            customMessage="¡Has leído todas las biografías!"
-            customSubtitle="Completaste todas las lecturas del nivel"
-            onComplete={() => {
-              setShowMotivational(false);
-              setLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL  */}
-        {levelComplete && !showMotivational && (
-          <LevelCompleteModal
-            score={score}
-            total={maxPoints}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={loadNextLevel}
-            onRestart={restartLevel}
-            onExit={onBack}
-          />
-        )}
-      </div>
+      </AccessibilitySettingsWrapper>
     );
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-      <div className="max-w-6xl mx-auto">
-
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title={`Biografías Sencillas`}
           level={currentLevel}
@@ -750,13 +763,17 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
           current={currentBio + 1}
           total={biographies.length}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="fish"
-          message="¡Conoce personas extraordinarias que cambiaron el mundo! Sus historias nos inspiran a ser mejores."
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="fish"
+            message="¡Conoce personas extraordinarias que cambiaron el mundo! Sus historias nos inspiran a ser mejores."
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-6 mt-6">
           {/* Main Biography */}
           <div className="lg:col-span-2">
@@ -941,5 +958,6 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

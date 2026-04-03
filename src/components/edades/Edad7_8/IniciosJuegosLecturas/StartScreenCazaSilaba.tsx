@@ -18,7 +18,7 @@ const float = (delay: number) => ({
   transition: {
     duration: 3,
     repeat: Infinity,
-    ease: "easeInOut",
+    ease: "easeInOut" as const,
     delay,
   },
 });
@@ -33,10 +33,12 @@ function FloatingLetter({
   bg: string;
   delay: number;
 }) {
+  const { animate, transition } = float(delay);
   return (
     <motion.span
-      animate={float(delay).animate}
-      className={`inline-block ${bg} text-white px-4 py-2 rounded-lg shadow-lg mx-1`}
+      animate={animate}
+      transition={transition}
+      className={`inline-block ${bg} text-white text-2xl font-bold sm:text-4xl md:text-5xl lg:text-6xl px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-md sm:rounded-lg shadow-lg mx-0.5 sm:mx-1`}
     >
       {letter}
     </motion.span>
@@ -48,15 +50,15 @@ export function StartScreenCazaSilaba({
   onBack,
 }: StartScreenCazaSilabaProps) {
   return (
- <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+    <div
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       {/* Botón volver */}
       <ButtonWithAudio
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -77,28 +79,23 @@ export function StartScreenCazaSilaba({
 
 
 
-      {/* Contenedor principal */}
-      <div className="text-center mb-20 translate-y-32">
-
-
+      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-3 pb-10 pt-20 text-center sm:px-6 sm:pt-24">
           {/* CAZA */}
-          <h1 className="text-8xl mb-4">
+          <h1 className="mb-2 flex flex-wrap justify-center sm:mb-4">
             <FloatingLetter letter="C" bg="bg-rose-300" delay={0} />
             <FloatingLetter letter="a" bg="bg-purple-300" delay={0.2} />
             <FloatingLetter letter="z" bg="bg-blue-300" delay={0.4} />
             <FloatingLetter letter="a" bg="bg-teal-300" delay={0.6} />
-            <motion.span
-            />
           </h1>
 
           {/* LA */}
-          <h1 className="text-8xl mb-4">
+          <h1 className="mb-2 flex flex-wrap justify-center sm:mb-4">
             <FloatingLetter letter="l" bg="bg-emerald-300" delay={0.8} />
             <FloatingLetter letter="a" bg="bg-amber-300" delay={1} />
           </h1>
 
           {/* SÍLABA */}
-          <h1 className="text-8xl mb-6">
+          <h1 className="mb-4 flex flex-wrap justify-center sm:mb-6">
             <FloatingLetter letter="S" bg="bg-pink-300" delay={1.2} />
             <FloatingLetter letter="í" bg="bg-violet-300" delay={1.4} />
             <FloatingLetter letter="l" bg="bg-sky-300" delay={1.6} />
@@ -111,13 +108,12 @@ export function StartScreenCazaSilaba({
           <ButtonWithAudio
             onClick={onStart}
             size="lg"
-            className="bg-gradient-to-br from-teal-300 to-green-400 text-white px-16 py-6 rounded-full text-4xl shadow-2xl border-4 border-teal-400 hover:scale-110 transition-transform uppercase tracking-wide"
+            className="bg-gradient-to-br from-teal-300 to-green-400 text-white text-xl px-8 py-6 rounded-full shadow-lg hover:scale-110 transition-transform uppercase tracking-wide border-2 border-teal-400/80"
           >
             <Play className="w-8 h-8 mr-3 fill-white" />
             ¡Comenzar a Jugar!
           </ButtonWithAudio>
-        </div>
       </div>
-
+    </div>
   );
 }

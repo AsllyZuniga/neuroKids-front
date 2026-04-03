@@ -10,6 +10,7 @@ interface SpeechOptions {
   volume?: number;
   voiceType?: 'child' | 'normal' | 'slow';
 }
+import { getActivityByRoute } from "@/config/activities";
 
 // Estado global para cumplir políticas de interacción del usuario
 let userInteracted = false;
@@ -97,6 +98,27 @@ export const speakText = (text: string, options: SpeechOptions = {}): void => {
     window.speechSynthesis.onvoiceschanged = handler;
   } else {
     speakNow();
+  }
+};
+
+/**
+ * Cuenta un uso real de ayuda de audio (clic explícito en botón "escuchar/repetir").
+ */
+export const trackAudioHelpUseForCurrentActivity = (): void => {
+  try {
+    const rawUser = localStorage.getItem("user");
+    const parsed = rawUser ? JSON.parse(rawUser) : null;
+    const studentId = Number(parsed?.id);
+    const route = window.location.pathname;
+    const activity = getActivityByRoute(route);
+    const activityId = Number(activity?.dbId);
+    if (Number.isFinite(studentId) && Number.isFinite(activityId)) {
+      const key = `neurokids-audio-uses-${studentId}-${activityId}`;
+      const prev = Number(localStorage.getItem(key) || "0");
+      localStorage.setItem(key, String((Number.isFinite(prev) ? prev : 0) + 1));
+    }
+  } catch {
+    // ignore
   }
 };
 

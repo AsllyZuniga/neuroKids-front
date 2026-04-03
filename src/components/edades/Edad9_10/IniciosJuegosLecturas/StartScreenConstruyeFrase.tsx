@@ -29,13 +29,13 @@ export function StartScreenConstruyeFrase({
 
   return (
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -50,7 +50,7 @@ export function StartScreenConstruyeFrase({
             y={`${s.y}%`}
             color={s.color}
             delay={index * 0.3}
-            size="text-5xl md:text-6xl"
+            size="text-3xl sm:text-4xl md:text-6xl"
             floatY={120}
             floatX={40}
             rotate
@@ -63,9 +63,9 @@ export function StartScreenConstruyeFrase({
         ))}
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="mb-12 text-center">
-          <h1 className="flex flex-wrap justify-center gap-4 mb-4 text-6xl md:text-7xl lg:text-8xl dyslexia-friendly">
+      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
+        <div className="mb-8 text-center sm:mb-12">
+          <h1 className="mb-4 flex flex-wrap justify-center gap-2 sm:gap-4 text-4xl sm:text-6xl md:text-7xl lg:text-8xl dyslexia-friendly">
             {titleWords.map((wordObj, wordIndex) => {
               let letterCount = 0;
               if (wordIndex > 0) {
@@ -112,7 +112,8 @@ export function StartScreenConstruyeFrase({
         >
           <Button
             onClick={onStart}
-            className="px-12 py-6 text-4xl rounded-3xl bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-2xl flex items-center gap-4"
+            size="lg"
+            className="text-xl px-8 py-6 rounded-full shadow-lg bg-gradient-to-r from-pink-500 to-purple-500 text-white flex items-center gap-3 dyslexia-friendly"
           >
             <Play className="w-8 h-8 mr-3 fill-white" />
             ¡Comenzar a Jugar!

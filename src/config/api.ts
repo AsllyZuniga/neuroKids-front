@@ -17,6 +17,8 @@ export const API_CONFIG = {
         STUDENT_INSIGNIAS: "/insignias-estudiante/estudiante",
         STUDENT_NOTIFICATIONS: "/notificaciones-estudiante/pendientes",
         MARK_NOTIFICATION_READ: "/notificaciones-estudiante/completar-bienvenida",
+        /** PUT .../marcar-leida/:estudiante_id/:notificacion_id */
+        MARK_ONE_NOTIFICATION_READ: "/notificaciones-estudiante/marcar-leida",
 
         // Endpoints para progreso de actividades
         PROGRESS_SAVE: "/progreso-actividades",

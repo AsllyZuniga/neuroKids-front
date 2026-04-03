@@ -33,13 +33,13 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
   return (
 
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -54,7 +54,7 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
             style={{ top: item.y, left: item.x }}
           >
             {typeof item.el === "string" ? (
-              <div className="text-6xl opacity-80">{item.el}</div>
+              <div className="text-4xl opacity-80 sm:text-6xl">{item.el}</div>
             ) : (
               item.el
             )}
@@ -64,7 +64,7 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
 
 
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 -translate-y-24">
+      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -111,7 +111,7 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
           <Button
             onClick={onStart}
             size="lg"
-            className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-xl px-12 py-6 rounded-full shadow-2xl transform transition-all dyslexia-friendly"
+            className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-xl px-8 py-6 rounded-full shadow-lg transform transition-all dyslexia-friendly"
           >
            <Play className="w-8 h-8 mr-3 fill-white" />
           ¡Comenzar a Jugar!

@@ -18,12 +18,17 @@ body {
 
 .estudiantes-page {
     background-color: #b0eef7;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    box-sizing: border-box;
 
     .estudiantes-container {
         max-width: 1200px;
+        width: 100%;
         margin: 48px auto;
-        padding: 0 16px;
-        ;
+        padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+        padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
     }
 
     .estudiantes-filters-panel {
@@ -43,11 +48,14 @@ body {
     .estudiantes-card {
         padding: 40px;
         color: black;
-
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
     }
 
     .estudiantes-table {
         width: 100%;
+        min-width: 560px;
         border-collapse: collapse;
         margin-top: 12px;
     }
@@ -101,26 +109,24 @@ body {
             font-size: 16px;
         }
 
-
-
-        .estudiantes-search::placeholder {
+        .estudiantes-search {
+            padding: 6px 8px;
+            border: 1px solid #888;
+            background: #ffffff;
+            border-radius: 6px;
             color: #000000;
         }
 
-
-        .estudiantes-search {
-            padding: 6px 8px;
-            border: 1px solid #ffffff;
-            background: rgb(159, 166, 190);
-            border-radius: 6px;
-            color: rgb(255, 255, 255);
+        .estudiantes-search::placeholder {
+            color: #555555;
         }
 
         .estudiantes-pagesize {
             padding: 6px;
             border-radius: 6px;
-            border: 1px solid #ddd;
-            background: #00d169;
+            border: 1px solid #888;
+            background: #ffffff;
+            color: #000000;
         }
 
 
@@ -378,4 +384,91 @@ body {
         gap: 6px;
     }
 
+    @media (max-width: 768px) {
+        .estudiantes-container {
+            margin: 24px auto;
+        }
+
+        .estudiantes-title {
+            font-size: 1.5rem;
+        }
+
+        .estudiantes-card {
+            padding: 16px 12px;
+        }
+
+        .estudiantes-table td,
+        .estudiantes-table th {
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+
+        .modal-overlay {
+            padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
+                max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+            align-items: flex-end;
+        }
+
+        .modal-content {
+            width: min(100%, calc(100vw - 1.5rem));
+            max-width: none;
+            padding: 1.25rem 1rem;
+            max-height: min(90dvh, 90vh);
+        }
+
+        .modal-actions {
+            flex-direction: column;
+            align-items: stretch;
+
+            .btn-save,
+            .btn-cancel,
+            .btn-delete {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    }
+
+    @media (max-width: 480px) {
+        .estudiantes-header {
+            font-size: 18px;
+        }
+
+        .estudiantes-filters-panel {
+            gap: 12px;
+            padding: 10px;
+        }
+
+        .estudiantes-table {
+            min-width: 480px;
+        }
+    }
+}
+
+/* Asegurar legibilidad de inputs y selects de filtros en cualquier contenedor */
+.estudiantes-search {
+    padding: 6px 8px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 14px;
+}
+
+.estudiantes-search::placeholder {
+    color: #555555;
+}
+
+.estudiantes-pagesize {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 14px;
+}
+
+.estudiantes-filter-hint {
+    font-size: 14px;
+    color: #000000;
 }

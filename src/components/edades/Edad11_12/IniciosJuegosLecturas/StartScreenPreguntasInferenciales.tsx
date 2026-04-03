@@ -26,19 +26,20 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
 
   return (
     <div
-      className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat flex items-center justify-center"
+      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${fondo})` }}
     >
 
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
       </Button>
 
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
 
       {bubbles.map((bubble) => (
         <motion.div
@@ -87,8 +88,9 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
         />
       ))}
 
+      </div>
 
-      <div className="relative z-10 max-w-5xl w-full -translate-y-24">
+      <div className="relative z-10 w-full max-w-5xl px-4 pb-10 pt-20 text-center sm:pt-24">
 
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -170,7 +172,7 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
                   {word.split("").map((letter, index) => (
                     <motion.span
                       key={index}
-                      className="inline-block text-4xl sm:text-5xl md:text-7xl text-purple-600 "
+                      className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-7xl"
                       initial={{ opacity: 0, y: -100, rotate: -180 }}
                       animate={{
                         opacity: 1,
@@ -247,7 +249,7 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
             <Button
               onClick={onStart}
               size="lg"
-              className="relative bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 hover:from-purple-500 hover:via-pink-500 hover:to-blue-500 text-white px-8 py-6 rounded-full shadow-2xl text-xl border-4 border-white/50 "
+              className="relative bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 hover:from-purple-500 hover:via-pink-500 hover:to-blue-500 text-white text-xl px-8 py-6 rounded-full shadow-lg border-2 border-white/50 dyslexia-friendly"
             >
               <Play className="w-8 h-8 mr-3 fill-white" />
               ¡Comenzar a Jugar!

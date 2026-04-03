@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../../ui/button';
@@ -11,7 +11,14 @@ import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { StartScreenMiniAventuras } from '../IniciosJuegosLecturas/StartScreenMiniAventuras';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import img1 from '../../../../assets/9_10/mini_aventuras/nivel1/1.png';
 import img2 from '../../../../assets/9_10/mini_aventuras/nivel1/2.png';
 import img3 from '../../../../assets/9_10/mini_aventuras/nivel1/3.png';
@@ -285,40 +292,29 @@ export function MiniAventuras({ onBack }: MiniAventurasProps) {
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [interactionComplete, setInteractionComplete] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [, setSelectedOption] = useState<number | null>(null);
   const [showQuestion, setShowQuestion] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(8); // Mini Aventuras
+  const activityConfig = getActivityByDbId(5); // Mini Aventuras
+  const { getElapsedSeconds } = useActivityTimer([currentAdventure]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '9-10',
-        level: 1,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), currentAdventure + 1));
     }
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura
     console.log('🔄 MiniAventuras - Ejecutando useEffect');
     guardarInicioNivel();
-  }, [activityConfig, saveProgress]); // Se ejecuta al montar y cuando cambian las dependencias
+  }, [currentAdventure, activityConfig, saveProgress]);
 
   const adventure = adventures[currentAdventure];
-  const page = adventure.pages[currentPage];
   const totalPages = adventure.pages.length;
+
+  const page = adventure.pages[currentPage];
   const progress = (currentPage / totalPages) * 100;
 
 
@@ -357,7 +353,7 @@ const playPageAudio = () => {
   const isCorrect = page.interactive?.correct === optionIndex;
 
   if (isCorrect) {
-    setScore(prev => prev + 15);
+    setScore(prev => prev + 5);
     setShowReward(true);
     setTimeout(() => setShowReward(false), 1500);
   }
@@ -396,6 +392,19 @@ const playPageAudio = () => {
   };
 
   const handleNextLevel = () => {
+    if (activityConfig) {
+      const correctCount = Math.max(1, Math.round(score / 5));
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentAdventure + 1,
+          maxLevels: adventures.length,
+          score,
+          maxScore: totalPages * 10,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
     if (currentAdventure < adventures.length - 1) {
       setCurrentAdventure(currentAdventure + 1);
       setCurrentPage(0);
@@ -413,14 +422,6 @@ const playPageAudio = () => {
     return "¡Lee con atención y disfruta la historia!";
   };
 
-  const getThemeGradient = (theme: string) => {
-    switch (theme) {
-      case 'pirates': return 'from-amber-100 via-orange-100 to-red-100';
-      case 'space': return 'from-indigo-100 via-purple-100 to-pink-100';
-      case 'jungle': return 'from-green-100 via-lime-100 to-emerald-100';
-      default: return 'from-blue-100 via-purple-100 to-pink-100';
-    }
-  };
 useEffect(() => {
   window.speechSynthesis.cancel();
   setIsSpeaking(false);
@@ -433,9 +434,8 @@ useEffect(() => {
   }
 
   return (
-    <div className={`min-h-screen p-6 bg-gradient-to-br ${getThemeGradient(adventure.theme)}`}>
-      <div className="max-w-7xl mx-auto">
-
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #E3F2FD 0%, #C8E6C9 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title="Mini Aventuras"
           level={currentAdventure + 1}
@@ -448,13 +448,17 @@ useEffect(() => {
           current={currentPage + 1}
           total={totalPages}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="frog"
-          message={getAnimalMessage()}
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="frog"
+            message={getAnimalMessage()}
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-4">
           <h2 className="text-2xl  text-gray-800 ">
             {adventure.title}
@@ -581,5 +585,6 @@ useEffect(() => {
 
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

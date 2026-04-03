@@ -13,7 +13,14 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenCoheteLector } from '../IniciosJuegosLecturas/StartScreenCoheteLector';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 
 interface CoheteLectorProps {
@@ -232,29 +239,18 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   const [streak, setStreak] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [levelComplete, setLevelComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [showMotivational, setShowMotivational] = useState(false);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(17); // Cohete Lector
+  const activityConfig = getActivityByDbId(16); // Cohete Lector
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '11-12',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
@@ -275,7 +271,6 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
     setRocketHeight(0);
     setScore(0);
     setStreak(0);
-    setLevelComplete(false);
     setShowMotivational(false);
     setShowLevelComplete(false);
 
@@ -308,12 +303,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
     setShowResult(true);
 
     if (answerIndex === challenge.correct) {
-      let points = challenge.points;
-
-      const streakBonus = streak * 10;
-      const totalPoints = points + streakBonus;
-
-      setScore(score + totalPoints);
+      setScore(score + 5);
       setStreak(streak + 1);
       const newHeight = Math.min(rocketHeight + heightPerQuestion, maxHeight);
       setRocketHeight(newHeight);
@@ -341,13 +331,24 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
     setRocketHeight(0);
     setScore(0);
     setStreak(0);
-    setLevelComplete(false);
     setShowMotivational(false);
     setShowLevelComplete(false);
     setGameStarted(true);
   };
 
-  const loadNextLevel = () => {
+  const loadNextLevel = async () => {
+    if (activityConfig) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: maxPoints,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: currentChallenges.length
+        })
+      );
+    }
     setShowLevelComplete(false);
     if (currentLevel < MAX_LEVEL) {
       const nextLevel = currentLevel + 1;
@@ -357,13 +358,11 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
       setRocketHeight(0);
       setScore(0);
       setStreak(0);
-      setLevelComplete(false);
       setShowMotivational(false);
       setShowLevelComplete(false);
       setGameStarted(true);
     } else {
 
-      setLevelComplete(false);
       setShowLevelComplete(false);
       setGameStarted(false);
     }
@@ -395,10 +394,8 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-slate-200 via-sky-200 to-blue-100 text-slate-800">
-
-
-      <div className="max-w-7xl mx-auto">
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e2e8f0 0%, #bae6fd 50%, #dbeafe 100%)">
+    <div className="min-h-screen p-6 text-slate-800">
         <GameHeader
           title={`Cohete Lector`}
           level={currentLevel}
@@ -411,13 +408,17 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
           current={currentChallenge + 1}
           total={currentChallenges.length}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="owl"
-          message="¡Responde rápido para elevar el cohete!"
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="owl"
+            message="¡Responde rápido para elevar el cohete!"
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
           <div className="lg:col-span-5">
             <Card className="bg-purple-300 border border-slate-200 shadow-sm">
@@ -556,6 +557,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }
 

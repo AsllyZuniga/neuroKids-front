@@ -27,27 +27,27 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
 
   return (
     <div
-    className="relative min-h-screen overflow-hidden absolute inset-0 bg-gradient-to-br from-pink-800 via-purple-500 to-blue-500 z-0"
-    style={{
-      backgroundImage: `url(${fondo})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-    }}
-    
-  >
+      className="relative z-0 min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-gradient-to-br from-pink-800 via-purple-500 to-blue-500"
+      style={{
+        backgroundImage: `url(${fondo})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
 
 
 
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
       </Button>
 
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
       {floatingElements.map((element, index) => (
         <motion.div
           key={index}
@@ -87,6 +87,7 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
           )}
         </motion.div>
       ))}
+      </div>
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -99,11 +100,11 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
           </div>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-4 max-w-4xl -mt-80">
+        <div className="mb-4 flex max-w-4xl flex-wrap justify-center gap-1 sm:gap-2">
           {letters.map((letter, index) => (
             <motion.span
               key={index}
-              className="inline-block text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-400"
+              className="inline-block text-2xl text-transparent bg-clip-text bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-400 sm:text-4xl md:text-6xl"
               style={{ 
                 textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
               }}
@@ -135,7 +136,8 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
         >
           <Button
             onClick={onStart}
-            className="px-12 py-6 text-2xl bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 hover:from-pink-400 hover:via-purple-400 hover:to-indigo-400 text-purple-800 shadow-2xl rounded-full border-4 border-white dyslexia-friendly"
+            size="lg"
+            className="text-xl px-8 py-6 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 hover:from-pink-400 hover:via-purple-400 hover:to-indigo-400 text-purple-800 rounded-full shadow-lg border-2 border-white/90 dyslexia-friendly"
           >
             <Play className="w-8 h-8 mr-3 fill-white" />
             ¡Comenzar a Jugar!

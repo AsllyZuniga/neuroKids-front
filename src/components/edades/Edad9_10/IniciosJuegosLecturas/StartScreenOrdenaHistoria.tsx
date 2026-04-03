@@ -17,13 +17,15 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
 
 
   return (
-    <div className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}>
+    <div
+      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${fondo})` }}
+    >
 
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -48,7 +50,7 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
 
 
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
         <div className="mb-8 text-center">
           <div className="mb-10 text-center">
             <div className="flex flex-col items-center gap-2">
@@ -83,7 +85,7 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
                 {letters2.map((letter, index) => (
                   <motion.span
                     key={index}
-                    className="inline-block text-5xl md:text-7xl lg:text-8xl text-transparent bg-clip-text bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dyslexia-friendly"
+                    className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 sm:text-5xl md:text-7xl lg:text-8xl dyslexia-friendly"
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                     initial={{ opacity: 0, y: -40, rotate: -10 }}
                     animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -118,7 +120,7 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
           <Button
             onClick={onStart}
             size="lg"
-            className="px-12 py-6 text-2xl bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white shadow-2xl rounded-full border-4 border-white dyslexia-friendly"
+            className="text-xl px-8 py-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-full shadow-lg border-2 border-white/90 dyslexia-friendly"
           >
             <Play className="w-8 h-8 mr-3 fill-white" />
             ¡Comenzar a Jugar!

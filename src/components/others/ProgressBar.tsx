@@ -31,7 +31,7 @@ export function ProgressBar({
       </div>
 
       {showText && (
-        <div className="text-center text-black mt-2">
+        <div className="text-center text-sm text-black mt-2">
           Progreso: {displayProgress.toFixed(0)}% 
           <span className="text-gray-600 ml-1">
             ({current} de {total})

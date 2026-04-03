@@ -28,17 +28,24 @@ export default function Header() {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
     const userTypeData = localStorage.getItem("userType");
-   
 
-    if (token && userData) {
-      setIsAuthenticated(true);
-      setUser(JSON.parse(userData));
-      setUserType(userTypeData || "");
-    } else {
-      setIsAuthenticated(false);
-      setUser(null);
-      setUserType("");
+    // Evita errores cuando no hay usuario o el valor guardado no es JSON válido
+    if (token && userData && userData !== "undefined") {
+      try {
+        const parsedUser: User = JSON.parse(userData);
+        setIsAuthenticated(true);
+        setUser(parsedUser);
+        setUserType(userTypeData || "");
+        return;
+      } catch {
+        // Si falla el parseo, limpiamos cualquier dato corrupto
+        localStorage.removeItem("user");
+      }
     }
+
+    setIsAuthenticated(false);
+    setUser(null);
+    setUserType("");
   };
 
   const handleLogin = () => {
@@ -46,6 +53,7 @@ export default function Header() {
   };
 
   const handleLogout = () => {
+    // No eliminar claves neurokids-progress-*, neurokids-streak-*, neurokids-student-panel-ui-* (progreso persistente)
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("userType");
@@ -92,8 +100,10 @@ export default function Header() {
                 variant="primary"
                 size="medium"
                 onClick={() => {
-                  if (userType === "docente" || userType === "admin") {
+                  if (userType === "docente") {
                     navigate("/perfil/docente");
+                  } else if (userType === "admin") {
+                    navigate("/perfil/admin");
                   } else {
                     navigate("/perfil/estudiante");
                   }

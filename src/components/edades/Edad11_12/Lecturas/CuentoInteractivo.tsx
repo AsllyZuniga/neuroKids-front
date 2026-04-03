@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { BookOpen, Users, Brain, Volume2 } from 'lucide-react';
 import { Button } from '../../../ui/button';
 import { Card, CardContent } from '../../../ui/card';
-import { Progress } from '../../../ui/progress';
 import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
 import { RewardAnimation } from '../../../others/RewardAnimation';
@@ -14,7 +13,14 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenCuentoInteractivo } from '../IniciosJuegosLecturas/StartScreenCuentoInteractivo';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface CuentoInteractivoProps {
   onBack: () => void;
@@ -361,40 +367,46 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
   const [currentSection, setCurrentSection] = useState(0);
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   const [currentScore, setCurrentScore] = useState(0);
-  const [levelPaths, setLevelPaths] = useState<string[][]>(() => Array.from({ length: MAX_LEVEL }, () => []));
+  const [, setLevelPaths] = useState<string[][]>(() => Array.from({ length: MAX_LEVEL }, () => []));
   const [levelScores, setLevelScores] = useState<number[]>(() => Array.from({ length: MAX_LEVEL }, () => 0));
   const [showReward, setShowReward] = useState(false);
   const [showMotivational, setShowMotivational] = useState(false);
   const [levelComplete, setLevelComplete] = useState(false);
-  const [highlightedWord, setHighlightedWord] = useState(-1);
+  const [, setHighlightedWord] = useState(-1);
   const [isPlayingFinal, setIsPlayingFinal] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [, setIsSpeaking] = useState(false);
   const [visitedSections, setVisitedSections] = useState<StorySection[]>([]);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(4); // Cuento Interactivo
+  const activityConfig = getActivityByDbId(8); // Cuento Interactivo
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '11-12',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
+
+  useEffect(() => {
+    if (levelComplete && activityConfig) {
+      const totalScoreVal = levelScores.reduce((a, b) => a + b, 0) + currentScore;
+      const correctCount = Math.max(1, Math.round(totalScoreVal / 20));
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score: totalScoreVal,
+          maxScore: 200,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
+  }, [levelComplete, activityConfig, currentLevel, levelScores, currentScore, saveProgress, getElapsedSeconds]);
 
   const MIN_FINAL_TIME = 10000;
   const [finalStartTime, setFinalStartTime] = useState<number | null>(null);
@@ -526,18 +538,6 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
     }
   };
 
-  const restartAll = () => {
-    setCurrentLevel(1);
-    setCurrentSection(1);
-    setCurrentPath([]);
-    setCurrentScore(0);
-    setLevelPaths(Array.from({ length: MAX_LEVEL }, () => []));
-    setLevelScores(Array.from({ length: MAX_LEVEL }, () => 0));
-    setLevelComplete(false);
-    setVisitedSections([]);
-
-  };
-
   if (!gameStarted) {
     return <StartScreenCuentoInteractivo onStart={() => { setCurrentSection(1); setGameStarted(true); }} onBack={onBack} />;
   }
@@ -589,9 +589,8 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
 
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-purple-100 via-blue-100 to-green-100">
-      <div className="max-w-6xl mx-auto">
-
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #f3e8ff 0%, #dbeafe 50%, #dcfce7 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title={`Cuento Interactivo`}
           level={currentLevel}
@@ -604,13 +603,17 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
           current={currentSection}
           total={story.sections.length}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="frog"
-          message="¡Tú decides el final! Cada elección enseña una lección valiosa."
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="frog"
+            message="¡Tú decides el final! Cada elección enseña una lección valiosa."
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-8 mt-6">
 
           <div className="lg:col-span-2">
@@ -793,5 +796,6 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

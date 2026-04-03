@@ -9,13 +9,14 @@
 html, body, #root {
   height: 100%;
   width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
 }
 
 /* Evita el negro global de Vite */
 :root {
-  font-family: OpenDyslexic, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "OpenDyslexic";
   line-height: 1.5;
   font-weight: 400;
 
@@ -35,7 +36,9 @@ html, body, #root {
 /* Fondo del body neutro (por si algo no cubre) */
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   background: #ffffff;
+  overflow-x: clip;
 }
 
 /* (Opcional) anclas/botones */

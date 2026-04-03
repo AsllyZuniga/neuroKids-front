@@ -11,7 +11,14 @@ import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenLaberintoLector } from "../IniciosJuegosLecturas/StartScreenLaberintoLector";
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface LaberintoLectorProps {
   onBack: () => void;
@@ -141,22 +148,12 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(12); // Laberinto Lector
+  const activityConfig = getActivityByDbId(14); // Laberinto Lector
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '9-10',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
@@ -324,7 +321,19 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
     }, 3000);
   };
 
-  const handleNextLevel = () => {
+  const handleNextLevel = async () => {
+    if (activityConfig) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score: finalScore,
+          maxScore: 1000,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: questionsAnsweredCount + treasuresFound
+        })
+      );
+    }
     const nextLevel = currentLevel < MAX_LEVEL ? currentLevel + 1 : 1;
     setCurrentLevel(nextLevel);
     setShowMotivational(false);
@@ -357,8 +366,8 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-emerald-100 via-teal-100 to-blue-100">
-      <div className="max-w-7xl mx-auto">
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #d1fae5 0%, #ccfbf1 50%, #dbeafe 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title={`Laberinto Lector`}
           level={currentLevel}
@@ -387,6 +396,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
           />
         </motion.div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-teal-200 mb-4">
@@ -569,5 +579,6 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }

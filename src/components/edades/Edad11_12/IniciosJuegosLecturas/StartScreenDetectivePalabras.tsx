@@ -17,13 +17,15 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
 
   return (
 
-    <div className="min-h-screen overflow-hidden relative bg-cover bg-center bg-no-repeat flex items-center justify-center"
-      style={{ backgroundImage: `url(${fondo})` }}>
+    <div
+      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${fondo})` }}
+    >
 
       <Button
         onClick={onBack}
         variant="outline"
-        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-20"
+        className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm text-white hover:text-white border-white/20 z-[100] pointer-events-auto"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Volver
@@ -47,7 +49,7 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
                 {word.split("").map((letter, index) => (
                   <motion.span
                     key={index}
-                    className="inline-block text-4xl sm:text-5xl md:text-7xl text-purple-600"
+                    className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-7xl"
                     initial={{ opacity: 0, y: -100, rotate: -180 }}
                     animate={{
                       opacity: 1,
@@ -106,7 +108,7 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
             onClick={onStart}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white px-12 py-8 rounded-full shadow-2xl text-2xl relative overflow-hidden dyslexia-friendly"
+            className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-xl px-8 py-6 rounded-full shadow-lg relative overflow-hidden dyslexia-friendly"
             size="lg"
           >
             <motion.span
@@ -122,7 +124,7 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
 
 
             <motion.div
-              className="absolute inset-0 bg-white opacity-0"
+              className="pointer-events-none absolute inset-0 bg-white opacity-0"
               animate={{
                 opacity: isHovered ? 0.2 : 0,
               }}

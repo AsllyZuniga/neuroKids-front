@@ -269,9 +269,20 @@ export function getActivityByFrontendId(id: string): ActivityConfig | undefined 
 
 /**
  * Obtiene la configuración de una actividad por su ID de base de datos
+ * (acepta número o string: la API/JSON suelen devolver bigint como string)
  */
-export function getActivityByDbId(dbId: number): ActivityConfig | undefined {
-    return ACTIVITIES_CONFIG.find(activity => activity.dbId === dbId);
+export function getActivityByDbId(dbId: number | string): ActivityConfig | undefined {
+    const n = Number(dbId);
+    if (Number.isNaN(n)) return undefined;
+    return ACTIVITIES_CONFIG.find((activity) => activity.dbId === n);
+}
+
+/**
+ * Obtiene la configuración de una actividad por ruta exacta.
+ */
+export function getActivityByRoute(route: string): ActivityConfig | undefined {
+    const normalized = (route || "").trim();
+    return ACTIVITIES_CONFIG.find((activity) => (activity.route || "").trim() === normalized);
 }
 
 /**

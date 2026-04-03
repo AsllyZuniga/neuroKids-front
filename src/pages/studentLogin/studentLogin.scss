@@ -37,10 +37,16 @@
         overflow: visible;
         z-index: 1;
 
+        /* Contenido por encima del brillo ::after (evita que tape icono y formulario) */
+        .card__body {
+            position: relative;
+            z-index: 1;
+        }
+
         &::after {
             content: '';
             position: absolute;
-            background: radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.25), transparent 60%);
+            background: radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.18), transparent 58%);
             width: 200%;
             height: 200%;
             top: -60%;
@@ -80,10 +86,11 @@
         }
 
         img {
-            width: 28px;
-            height: 28px;
+            width: 36px;
+            height: 36px;
             object-fit: contain;
-            filter: brightness(0) invert(1);
+            position: relative;
+            z-index: 1;
         }
     }
 

@@ -12,7 +12,15 @@ import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
 import { StartScreenRevistaInfantil } from "../IniciosJuegosLecturas/StartScreenRevistaInfantil";import { useProgress } from "@/hooks/useProgress";
-import { getActivityByDbId } from "@/config/activities";import delfin from '../../../../assets/9_10/revista_infantil/delfin1.svg';
+import { useActivityTimer } from "@/hooks/useActivityTimer";
+import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
+import delfin from '../../../../assets/9_10/revista_infantil/delfin1.svg';
 import planta from '../../../../assets/9_10/revista_infantil/planta2.svg';
 import volcan from '../../../../assets/9_10/revista_infantil/volcan3.svg';
 import robots from '../../../../assets/9_10/revista_infantil/robots4.svg';
@@ -266,29 +274,18 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
   const [levelComplete, setLevelComplete] = useState(false);
 
   const { saveProgress } = useProgress();
-
-  const activityConfig = getActivityByDbId(7); // Revista Infantil
+  const activityConfig = getActivityByDbId(6); // Revista Infantil
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '9-10',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(readingStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   const currentArticles = articlesByLevel[currentLevel - 1];
   const article = currentArticles[currentArticle];
@@ -316,7 +313,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
     setSelectedAnswer(answerIndex);
 
     if (answerIndex === article.quiz.correct) {
-      setScore(s => s + 30);
+      setScore(s => s + 5);
       setShowReward(true);
       setTimeout(() => setShowReward(false), 1500);
     }
@@ -356,6 +353,20 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
   };
 
   const loadNextLevel = () => {
+    if (activityConfig && levelComplete) {
+      const arts = articlesByLevel[currentLevel - 1];
+      const correctCount = Math.max(1, Math.round(score / 5));
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: MAX_LEVEL,
+          score,
+          maxScore: (arts?.length || 2) * 50,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
     if (currentLevel < MAX_LEVEL) {
       setCurrentLevel(currentLevel + 1);
       setCurrentArticle(0);
@@ -385,16 +396,13 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
   if (levelComplete && !showMotivational) {
     return (
       <div className="min-h-screen p-6 bg-gradient-to-br from-blue-100 via-green-100 to-yellow-100">
-        <div className="max-w-7xl mx-auto">
-          {/* HEADER*/}
-          <GameHeader
-            title={`Revista Infantil`}
-            level={currentLevel}
-            score={score}
-            onBack={onBack}
-            onRestart={restartLevel}
-          />
-        </div>
+        <GameHeader
+          title={`Revista Infantil`}
+          level={currentLevel}
+          score={score}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
         <LevelCompleteModal
           score={score}
           total={currentArticles.length * 50}
@@ -411,16 +419,15 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
   if (showQuiz && !showMotivational && !levelComplete) {
     return (
       <div className="min-h-screen p-6 bg-gradient-to-br from-blue-100 via-green-100 to-yellow-100">
+        <GameHeader
+          title={`Revista Infantil - Quiz`}
+          level={currentLevel}
+          score={score}
+          onBack={onBack}
+          onRestart={restartLevel}
+        />
+
         <div className="max-w-7xl mx-auto">
-
-          <GameHeader
-            title={`Revista Infantil - Quiz`}
-            level={currentLevel}
-            score={score}
-            onBack={onBack}
-            onRestart={restartLevel}
-          />
-
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -505,9 +512,8 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-100 via-green-100 to-yellow-100">
-      <div className="max-w-7xl mx-auto">
-
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dbeafe 0%, #dcfce7 50%, #fef9c3 100%)">
+    <div className="min-h-screen p-6">
         <GameHeader
           title={`Revista Infantil`}
           level={currentLevel}
@@ -520,13 +526,17 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
           current={currentArticle + 1}
           total={currentArticles.length}
           progress={progress}
+          className="mb-6"
         />
 
-        <AnimalGuide
-          animal="bear"
-          message="¡Lee con atención el articulo y marca como leído para hacer el quiz!"
-        />
+        <div className="mb-6">
+          <AnimalGuide
+            animal="bear"
+            message="¡Lee con atención el articulo y marca como leído para hacer el quiz!"
+          />
+        </div>
 
+      <div className="max-w-7xl mx-auto">
         <motion.div
           key={currentArticle}
           initial={{ x: 50, opacity: 0 }}
@@ -664,6 +674,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
         )}
       </div>
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }
 

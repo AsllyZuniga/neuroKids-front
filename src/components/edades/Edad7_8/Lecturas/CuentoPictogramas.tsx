@@ -14,7 +14,14 @@ import { LevelLock } from '../../../others/LevelLock';
 import { useLevelLock } from '../../../../hooks/useLevelLock';
 import { speakText } from '../../../../utils/textToSpeech';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  readingLevelFinished,
+  readingStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import image1 from "@/assets/7_8/cuentospictogramas/nivel1/1.png";
 import image2 from "@/assets/7_8/cuentospictogramas/nivel1/2.png";
 import image3 from "@/assets/7_8/cuentospictogramas/nivel1/3.png";  
@@ -50,7 +57,7 @@ const storyPagesLevel1: StoryPage[] = [
     id: 1,
     text: "Había una vez un pequeño {gato} que vivía en una {casa} amarilla.",
     pictograms: [
-      { word: "gato", emoji: "🐱" },
+      { word: "gato", emoji: "🐈" },
       { word: "casa", emoji: "🏠" }
     ],
     image: image1,
@@ -60,7 +67,7 @@ const storyPagesLevel1: StoryPage[] = [
     id: 2,
     text: "Cada mañana, el {gato} salía a jugar bajo el {sol} brillante.",
     pictograms: [
-      { word: "gato", emoji: "🐱" },
+      { word: "gato", emoji: "🐈" },
       { word: "sol", emoji: "☀️" }
     ],
     image: image2,
@@ -80,7 +87,7 @@ const storyPagesLevel1: StoryPage[] = [
     id: 4,
     text: "El {gato} bebió {agua} fresca de un pequeño arroyo.",
     pictograms: [
-      { word: "gato", emoji: "🐱" },
+      { word: "gato", emoji: "🐈" },
       { word: "agua", emoji: "💧" }
     ],
     image: image4,
@@ -90,9 +97,9 @@ const storyPagesLevel1: StoryPage[] = [
     id: 5,
     text: "Por la noche, el {gato} miraba la {luna} y las {estrellas}.",
     pictograms: [
-      { word: "gato", emoji: "🐱" },
+      { word: "gato", emoji: "🐈" },
       { word: "luna", emoji: "🌙" },
-      { word: "estrellas", emoji: "⭐" }
+      { word: "estrellas", emoji: "✨" }
     ],
     image: image5,
     audio: "/audio/page5.mp3"
@@ -101,7 +108,7 @@ const storyPagesLevel1: StoryPage[] = [
     id: 6,
     text: "Y así, el pequeño {gato} vivía feliz en su {casa} llena de amor.",
     pictograms: [
-      { word: "gato", emoji: "🐱" },
+      { word: "gato", emoji: "🐈" },
       { word: "casa", emoji: "🏠" }
     ],
     image: image6,
@@ -115,7 +122,7 @@ const storyPagesLevel2: StoryPage[] = [
     text: "El {niño} fue al {parque} a jugar con su {pelota}.",
     pictograms: [
       { word: "niño", emoji: "🧒" },
-      { word: "parque", emoji: "🌳" },
+      { word: "parque", emoji: "🛝" },
       { word: "pelota", emoji: "⚽" }
     ],
     image: img1,
@@ -125,9 +132,9 @@ const storyPagesLevel2: StoryPage[] = [
     id: 2,
     text: "En el {parque}, el {niño} vio un {perro} que corría feliz.",
     pictograms: [
-      { word: "parque", emoji: "🌳" },
+      { word: "parque", emoji: "🛝" },
       { word: "niño", emoji: "🧒" },
-      { word: "perro", emoji: "🐶" }
+      { word: "perro", emoji: "🐕" }
     ],
     image: img2,
     audio: "/audio/lv2_page2.mp3"
@@ -136,7 +143,7 @@ const storyPagesLevel2: StoryPage[] = [
     id: 3,
     text: "El {perro} tomó la {pelota} y la llevó al {niño}.",
     pictograms: [
-      { word: "perro", emoji: "🐶" },
+      { word: "perro", emoji: "🐕" },
       { word: "pelota", emoji: "⚽" },
       { word: "niño", emoji: "🧒" }
     ],
@@ -147,7 +154,7 @@ const storyPagesLevel2: StoryPage[] = [
     id: 4,
     text: "Ambos jugaron juntos hasta que cayó la {noche}.",
     pictograms: [
-      { word: "noche", emoji: "🌙" }
+      { word: "noche", emoji: "🌃" }
     ],
     image: img4,
     audio: "/audio/lv2_page4.mp3"
@@ -160,7 +167,7 @@ const storyPagesLevel3: StoryPage[] = [
     text: "La {niña} caminaba por el {bosque} y escuchó un {ruido} extraño detrás del {árbol}.",
     pictograms: [
       { word: "niña", emoji: "👧" },
-      { word: "bosque", emoji: "🌲" },
+      { word: "bosque", emoji: "🌲🌲" },
       { word: "ruido", emoji: "🔊" },
       { word: "árbol", emoji: "🌳" }
     ],
@@ -219,31 +226,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
   // 💾 Simple: Solo guardar al iniciar nivel como dashboard
   const { saveProgress } = useProgress();
   const activityConfig = getActivityByDbId(1); // ID 1 = Cuento con Pictogramas
-
-  // 💾 Guardar progreso CADA vez que se entra a la actividad
-  useEffect(() => {
-    if (activityConfig) {
-      const guardarInicioNivel = async () => {
-        try {
-          await saveProgress({
-            activityId: activityConfig.dbId,
-            activityName: activityConfig.name,
-            activityType: activityConfig.type,
-            ageGroup: '7-8',
-            level: level,
-            score: 0,
-            maxScore: 100,
-            completed: false,
-            timeSpent: 0
-          });
-          console.log(`📚 Cuento Nivel ${level} iniciado`);
-        } catch (error) {
-          console.error('Error guardando progreso:', error);
-        }
-      };
-      guardarInicioNivel();
-    }
-  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+  const { getElapsedSeconds } = useActivityTimer([level]);
 
   let storyPages: StoryPage[] = [];
   switch (level) {
@@ -260,15 +243,28 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
       storyPages = storyPagesLevel1;
   }
 
-  const currentStoryPage = storyPages[currentPage];
+  const currentStoryPage = storyPages[currentPage] ?? storyPages[0];
   const totalPages = storyPages.length;
-  const baseProgress = (currentPage / totalPages) * 100; // Progreso base por páginas
-  const incrementPerPictogram = 100 / (totalPages * currentStoryPage.pictograms.length); // Incremento por pictograma
-  const maxPageProgress = 100 / totalPages; // Máximo progreso por página
-
-  const requiredClicks = Math.ceil(currentStoryPage.pictograms.length * 0.75);
+  const baseProgress = (currentPage / totalPages) * 100;
+  const incrementPerPictogram = 100 / (totalPages * (currentStoryPage?.pictograms?.length || 1));
+  const maxPageProgress = 100 / totalPages;
+  const requiredClicks = Math.ceil((currentStoryPage?.pictograms?.length || 0) * 0.75);
   const hasEnoughClicks = clickedPictograms.size >= requiredClicks;
 
+  // 💾 Guardar progreso CADA vez que se entra a la actividad
+  useEffect(() => {
+    if (activityConfig) {
+      const guardarInicioNivel = async () => {
+        try {
+          await saveProgress(readingStart(baseFromActivityConfig(activityConfig), level));
+          console.log(`📚 Cuento Nivel ${level} iniciado`);
+        } catch (error) {
+          console.error('Error guardando progreso:', error);
+        }
+      };
+      guardarInicioNivel();
+    }
+  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
 
   const updateProgress = () => {
     const newProgress = baseProgress + (clickedPictograms.size * incrementPerPictogram);
@@ -350,11 +346,6 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
           setShowReward(false);
           setShowMotivational(true);
         }, 1500);
-
-        setTimeout(() => {
-          setShowMotivational(false);
-          setShowLevelComplete(true);
-        }, 4500);
       }
     } else {
       setShowWarning(true);
@@ -383,6 +374,18 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
   };
 
   const goToNextLevel = () => {
+    if (activityConfig) {
+      const correctCount = Math.round(score / 5) || 1;
+      saveProgress(
+        readingLevelFinished(baseFromActivityConfig(activityConfig), {
+          level,
+          score,
+          maxScore: totalPages * 10,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: correctCount
+        })
+      );
+    }
     if (level < 3) {
       setLevel(level + 1);
       setCurrentPage(0);
@@ -406,11 +409,9 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
 
   return (
     <LevelLock level={level} isLocked={isLevelLocked}>
+      <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)">
     <div
       className="min-h-screen p-6"
-      style={{
-        background: 'linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)'
-      }}
     >
       <RewardAnimation type="star" show={showReward} />
 
@@ -432,7 +433,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
       />
 
       {/* ANIMAL GUIDE */}
-      <div>
+      <div className="mb-6">
         <AnimalGuide
           animal="fish"
           message="¡Lee la historia y haz clic en los pictogramas para descubrir su significado! Cada emoji te da puntos."
@@ -582,6 +583,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
         />
       )}
     </div>
+    </AccessibilitySettingsWrapper>
     </LevelLock>
   );
 }

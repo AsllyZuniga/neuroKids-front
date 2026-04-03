@@ -16,7 +16,14 @@ import { StartScreenConstruyeFrase } from "../IniciosJuegosLecturas/StartScreenC
 import { speakText, stopSpeech, isSpeechSupported } from '../../../../utils/textToSpeech';
 import { isUserAuthenticated } from '../../../../hooks/useLevelLock';
 import { useProgress } from "@/hooks/useProgress";
+import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
+import {
+  baseFromActivityConfig,
+  gameLevelFinished,
+  gameLevelStart
+} from "@/utils/activityProgressPayloads";
+import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import gato from '../../../../assets/9_10/construye_frase/1gatonegro.svg';
 import flores from '../../../../assets/9_10/construye_frase/2florescoloridas.svg';
 import abuela from '../../../../assets/9_10/construye_frase/3abuelaypastel.svg';
@@ -131,22 +138,12 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   const [draggedWord, setDraggedWord] = useState<{ word: string; index: number } | null>(null);
 
   const { saveProgress } = useProgress();
-
   const activityConfig = getActivityByDbId(13); // Construye Frase
+  const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
     if (activityConfig) {
-      saveProgress({
-        activityId: activityConfig.dbId,
-        activityName: activityConfig.name,
-        activityType: activityConfig.type,
-        ageGroup: '9-10',
-        level: currentLevel,
-        score: 0,
-        maxScore: 100,
-        completed: false,
-        timeSpent: 0
-      });
+      saveProgress(gameLevelStart(baseFromActivityConfig(activityConfig), currentLevel));
     }
   };
 
@@ -233,12 +230,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
     setShowResult(true);
 
     if (isCorrect) {
-      const baseScore = currentLevel * 20;
-      const attemptBonus = Math.max(10 - attempts * 2, 0);
-      const hintPenalty = showHint ? -5 : 0;
-      const totalScore = baseScore + attemptBonus + hintPenalty;
-
-      setScore(prev => prev + Math.max(totalScore, 5));
+      setScore(prev => prev + 5);
       setShowReward(true);
 
       setTimeout(() => {
@@ -269,7 +261,19 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
     resetChallenge();
   };
 
-  const nextLevel = () => {
+  const nextLevel = async () => {
+    if (activityConfig) {
+      await saveProgress(
+        gameLevelFinished(baseFromActivityConfig(activityConfig), {
+          level: currentLevel,
+          maxLevels: levels.length,
+          score,
+          maxScore: totalChallenges * 100,
+          timeSpent: getElapsedSeconds(),
+          correctAnswers: totalChallenges
+        })
+      );
+    }
     if (currentLevel < levels.length) {
       const next = currentLevel + 1;
       if (next >= 2 && !isUserAuthenticated()) {
@@ -292,8 +296,8 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   }
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-orange-100 via-yellow-100 to-amber-100">
-      <div className="max-w-7xl mx-auto">
+    <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #ffedd5 0%, #fef9c3 50%, #fef3c7 100%)">
+    <div className="min-h-screen p-6">
         <ConfettiExplosion show={showReward} />
         <RewardAnimation type="confetti" show={showReward} />
 
@@ -326,6 +330,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
           />
         </motion.div>
 
+      <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-yellow-200 mb-4">
@@ -551,5 +556,6 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
         />
       )}
     </div>
+    </AccessibilitySettingsWrapper>
   );
 }
