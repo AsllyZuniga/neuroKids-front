@@ -7,6 +7,7 @@ import {insigniaService, type InsigniaCatalogoItem, type NotificacionInsignia} f
 import { getActivitiesByAgeGroup, type ActivityConfig } from "@/config/activities";
 import { progressService, type StudentProgress, type ActivityProgress, type LevelDetail } from "@/services/progressService";
 import { registerStudentPlatformVisit } from "@/services/studentAccessService";
+import { buildApiUrl } from "@/config/api";
 import "./studentWelcome.scss";
 
 /** Preferencia de panel por estudiante (sobrevive cierre de sesión y otras rutas) */
@@ -323,7 +324,7 @@ export default function StudentWelcome() {
         <motion.img
           src={
             insigniaToShow?.insignia?.icono ||
-            "https://api.neurokids.click/imagenes/primer_paso.svg"
+            buildApiUrl("/imagenes/primer_paso.svg")
           }
           alt={insigniaToShow?.insignia?.nombre || insigniaToShow?.titulo || "Insignia"}
           className="insignia-icon"
@@ -397,7 +398,7 @@ export default function StudentWelcome() {
               id: "14",
               nombre: "Primer Registro",
               descripcion: "Completaste tu registro exitosamente",
-              icono: "https://api.neurokids.click/imagenes/primer_paso.svg",
+              icono: buildApiUrl("/imagenes/primer_paso.svg"),
               color_hex: "#FFD700",
               categoria: "logro",
               rareza: "comun",
