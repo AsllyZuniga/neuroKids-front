@@ -23,38 +23,38 @@ export default function Prueba({
   const cardImages = {
     nivel1: {
       juegos: [
-        "public/niveles/assets/cards/nivel1/Bingo-de-palabras.webp",
-        "public/niveles/assets/cards/nivel1/Caza-la-silaba.webp",
-        "public/niveles/assets/cards/nivel1/Escucha-y-elige.webp",
+        "/niveles/assets/cards/nivel1/Bingo-de-palabras.webp",
+        "/niveles/assets/cards/nivel1/Caza-la-silaba.webp",
+        "/niveles/assets/cards/nivel1/Escucha-y-elige.webp",
       ],
       lecturas: [
-        "public/niveles/assets/cards/nivel1/Cuentos-pictogramas.webp",
-        "public/niveles/assets/cards/nivel1/Frases-magicas.webp",
-        "public/niveles/assets/cards/nivel1/Mi-primera-palabra.webp",
+        "/niveles/assets/cards/nivel1/Cuentos-pictogramas.webp",
+        "/niveles/assets/cards/nivel1/Frases-magicas.webp",
+        "/niveles/assets/cards/nivel1/Mi-primera-palabra.webp",
       ],
     },
     nivel2: {
       juegos: [
-        "/public/niveles/assets/cards/nivel2/Construye-la-frase.webp",
-        "public/niveles/assets/cards/nivel2/Laberinto-lector.webp",
-        "public/niveles/assets/cards/nivel2/Ordena-la-historia.webp",
+        "/niveles/assets/cards/nivel2/Construye-la-frase.webp",
+        "/niveles/assets/cards/nivel2/Laberinto-lector.webp",
+        "/niveles/assets/cards/nivel2/Ordena-la-historia.webp",
       ],
       lecturas: [
-        "/public/niveles/assets/cards/nivel2/Historias-interactivas.webp",
-        "public/niveles/assets/cards/nivel2/Mini-aventuras.webp",
-        "/public/niveles/assets/cards/nivel2/Revista-infantil.webp",
+        "/niveles/assets/cards/nivel2/Historias-interactivas.webp",
+        "/niveles/assets/cards/nivel2/Mini-aventuras.webp",
+        "/niveles/assets/cards/nivel2/Revista-infantil.webp",
       ],
     },
     nivel3: {
       juegos: [
-        "public/niveles/assets/cards/nivel3/Cohete-lector.webp",
-        "/public/niveles/assets/cards/nivel3/Detective-de-palabras.webp",
-        "public/niveles/assets/cards/nivel3/Preguntas-inferenciales.webp",
+        "/niveles/assets/cards/nivel3/Cohete-lector.webp",
+        "/niveles/assets/cards/nivel3/Detective-de-palabras.webp",
+        "/niveles/assets/cards/nivel3/Preguntas-inferenciales.webp",
       ],
       lecturas: [
-        "public/niveles/assets/cards/nivel3/Biografias-sencillas.webp",
-        "public/niveles/assets/cards/nivel3/Cuento-interactivo.webp",
-        "public/niveles/assets/cards/nivel3/Noticias-para-niños.webp",
+        "/niveles/assets/cards/nivel3/Biografias-sencillas.webp",
+        "/niveles/assets/cards/nivel3/Cuento-interactivo.webp",
+        "/niveles/assets/cards/nivel3/Noticias-para-niños.webp",
       ],
     },
   };
