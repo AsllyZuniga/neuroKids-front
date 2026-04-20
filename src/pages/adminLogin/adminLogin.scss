@@ -1,10 +1,10 @@
-.teacher-login {
+.admin-login {
   min-height: 100dvh;
   height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #2a9d8f 0%, #52c9b8 100%);
+  background: linear-gradient(135deg, #5c6bc0 0%, #9575cd 100%);
   padding: clamp(0.6rem, 2vh, 2rem);
   box-sizing: border-box;
   overflow: hidden;
@@ -40,7 +40,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: linear-gradient(135deg, #2a9d8f, #21867a);
+    background: linear-gradient(135deg, #5c6bc0, #3949ab);
 
     img {
       width: 85%;
@@ -96,8 +96,8 @@
 
     &:focus {
       outline: none;
-      border-color: #2a9d8f;
-      box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15);
+      border-color: #5c6bc0;
+      box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.15);
     }
 
     &:disabled {
@@ -130,18 +130,18 @@
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    background-color: #2a9d8f;
+    background-color: #5c6bc0;
     transition: background-color 0.2s ease, transform 0.15s ease;
 
     &:hover:not(:disabled) {
-      background-color: #21867a;
+      background-color: #3949ab;
       transform: scale(1.02);
     }
 
     &:active { transform: scale(0.98); }
 
     &:disabled {
-      background-color: #b2dfdb;
+      background-color: #c5cae9;
       cursor: not-allowed;
       transform: none;
     }
@@ -160,7 +160,7 @@
     text-decoration: none;
     transition: color 0.2s ease;
 
-    &:hover { color: #2a9d8f; }
+    &:hover { color: #5c6bc0; }
   }
 
   @media (max-width: 768px) {
