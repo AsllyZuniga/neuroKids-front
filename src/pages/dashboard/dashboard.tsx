@@ -9,6 +9,7 @@ import AgeCircle from "@/components/ageCircle/AgeCircle";
 import Btn1 from "@/assets/img/btn_7-8.webp";
 import Btn2 from "@/assets/img/btn-9-10.webp";
 import Btn3 from "@/assets/img/btn-11-12.webp";
+import logo from "@/assets/logo.png";
 
 interface User {
   id: number;
@@ -65,7 +66,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="dashboard-mobile__header">
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             alt="NeuroKids"
             className="dashboard-mobile__logo"
             onClick={() => navigate("/")}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./header.scss";
 import { HEADER_TEXT } from "./header.constants";
+import logo from "@/assets/logo.png";
 import Button from "@/shared/components/Button/Button";
 import { useLocation } from "react-router-dom";
 
@@ -77,7 +78,7 @@ export default function Header() {
     <header className="header">
       <div className="header__container">
         <div className="header__logo">
-          <img src="/src/assets/logo.png" alt="NeuroKids" className="header__logo-img" onClick={() => navigate("/bienvenida/estudiante")} />
+          <img src={logo} alt="NeuroKids" className="header__logo-img" onClick={() => navigate("/bienvenida/estudiante")} />
 
         </div>
 
