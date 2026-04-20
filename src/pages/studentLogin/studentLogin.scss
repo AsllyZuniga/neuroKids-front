@@ -1,8 +1,9 @@
 .student-login {
     width: 100%;
     min-height: 100dvh;
+    height: 100dvh;
     margin: 0;
-    padding: 1rem; /* Reducido para maximizar el espacio */
+    padding: clamp(0.45rem, 1.6vh, 1rem);
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -21,14 +22,17 @@
 
     &__container {
         width: 100%;
-        max-width: 420px; /* Ligeramente más estrecho para mantener la proporción visual */
+        max-width: 420px;
+        max-height: 100%;
         position: relative;
         z-index: 1;
     }
 
     &__card {
         position: relative;
-        padding: 1.5rem 1.5rem; /* Margen interno muy reducido */
+        width: 100%;
+        max-height: calc(100dvh - clamp(0.9rem, 4vh, 2.4rem));
+        padding: clamp(0.85rem, 2.2vh, 1.5rem);
         border-radius: 20px;
         box-shadow: 0 15px 40px rgba(118, 75, 162, 0.35);
         background: rgba(255, 255, 255, 0.18);
@@ -37,10 +41,12 @@
         overflow: visible;
         z-index: 1;
 
-        /* Contenido por encima del brillo ::after (evita que tape icono y formulario) */
         .card__body {
             position: relative;
             z-index: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         &::after {
@@ -59,13 +65,13 @@
 
     &__header {
         text-align: center;
-        margin-bottom: 0.8rem; /* Reducido */
+        margin-bottom: clamp(0.45rem, 1.4vh, 0.8rem);
     }
 
     &__icon {
-        width: 55px; /* Ícono más pequeño */
-        height: 55px;
-        margin: 0 auto 0.5rem;
+        width: clamp(44px, 6vh, 55px);
+        height: clamp(44px, 6vh, 55px);
+        margin: 0 auto clamp(0.3rem, 1vh, 0.5rem);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -73,7 +79,6 @@
         position: relative;
         background: linear-gradient(135deg, #667eea, #764ba2);
         box-shadow: 0 10px 25px rgba(102, 126, 234, 0.45);
-        animation: iconFloat 3s ease-in-out infinite;
 
         &::before {
             content: '';
@@ -86,37 +91,26 @@
         }
 
         img {
-            width: 36px;
-            height: 36px;
+            width: clamp(28px, 4.2vh, 36px);
+            height: clamp(28px, 4.2vh, 36px);
             object-fit: contain;
             position: relative;
             z-index: 1;
         }
     }
 
-    @keyframes iconFloat {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-4px); }
-    }
-
     &__title {
-        font-size: 1.4rem; /* Letra más pequeña */
+        font-size: clamp(1.1rem, 3vh, 1.4rem);
         margin-bottom: 0.2rem;
         font-weight: 900;
         text-align: center;
         color: #ffffff;
         text-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
-        animation: titleFloat 3s ease-in-out infinite;
         letter-spacing: 0.5px;
     }
 
-    @keyframes titleFloat {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-3px); }
-    }
-
     &__subtitle {
-        font-size: 0.85rem; /* Más pequeño */
+        font-size: clamp(0.76rem, 1.8vh, 0.85rem);
         color: rgba(255, 255, 255, 0.9);
         margin: 0;
         text-align: center;
@@ -127,7 +121,7 @@
     &__form {
         display: flex;
         flex-direction: column;
-        gap: 0.8rem; /* Espaciado entre inputs muy reducido */
+        gap: clamp(0.45rem, 1.4vh, 0.8rem);
     }
 
     &__field {
@@ -137,7 +131,7 @@
     }
 
     &__label {
-        font-size: 0.85rem;
+        font-size: clamp(0.78rem, 1.8vh, 0.85rem);
         font-weight: 800;
         color: #ffffff;
         display: flex;
@@ -156,10 +150,11 @@
 
     &__input,
     &__select {
-        padding: 0.65rem 0.85rem; /* Inputs mucho más delgados */
+        min-height: 40px;
+        padding: clamp(0.5rem, 1.5vh, 0.65rem) clamp(0.68rem, 1.8vh, 0.85rem);
         border: 2px solid rgba(255, 255, 255, 0.35);
         border-radius: 10px;
-        font-size: 0.9rem;
+        font-size: clamp(0.82rem, 1.9vh, 0.9rem);
         color: #111827;
         transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
         background: rgba(255, 255, 255, 0.9);
@@ -188,26 +183,23 @@
         width: 100%;
         position: relative;
         z-index: 1002;
-
-        option {
-            padding: 0.5rem;
-        }
     }
 
     &__error {
         background: rgba(255, 235, 238, 0.9);
         color: #c62828;
-        padding: 0.6rem 0.8rem; /* Alerta más delgada */
+        padding: clamp(0.45rem, 1.5vh, 0.6rem) clamp(0.6rem, 1.8vh, 0.8rem);
         border-radius: 8px;
-        font-size: 0.8rem;
+        font-size: clamp(0.72rem, 1.7vh, 0.8rem);
         border-left: 4px solid #f44336;
         box-shadow: 0 5px 15px rgba(244, 67, 54, 0.1);
     }
 
     &__submit {
-        margin-top: 0.2rem;
-        padding: 0.75rem !important; /* Botón más delgado */
-        font-size: 0.95rem !important;
+        margin-top: clamp(0rem, 0.6vh, 0.2rem);
+        min-height: 40px;
+        padding: clamp(0.58rem, 1.8vh, 0.75rem) !important;
+        font-size: clamp(0.84rem, 2vh, 0.95rem) !important;
         font-weight: 800 !important;
         border-radius: 12px !important;
         background: linear-gradient(135deg, #667eea, #764ba2) !important;
@@ -228,15 +220,15 @@
 
     &__footer {
         text-align: center;
-        margin-top: 1rem;
-        padding-top: 1rem;
+        margin-top: clamp(0.55rem, 1.8vh, 1rem);
+        padding-top: clamp(0.55rem, 1.8vh, 1rem);
         border-top: 1px solid rgba(255, 255, 255, 0.35);
     }
 
     &__register-text {
-        font-size: 0.85rem;
+        font-size: clamp(0.78rem, 1.8vh, 0.85rem);
         color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 0.6rem;
+        margin-bottom: clamp(0.4rem, 1.2vh, 0.6rem);
         font-weight: 700;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
     }
@@ -259,7 +251,7 @@
 
     &__back {
         color: #e5e7eb;
-        font-size: 0.85rem;
+        font-size: clamp(0.78rem, 1.8vh, 0.85rem);
         font-weight: 800;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 
@@ -268,7 +260,7 @@
 
     &__loading-text,
     &__error-text {
-        font-size: 0.8rem;
+        font-size: clamp(0.7rem, 1.7vh, 0.8rem);
         margin-top: 0.25rem;
         font-style: italic;
         font-weight: 600;
@@ -277,17 +269,16 @@
     &__loading-text { color: #667eea; }
     &__error-text { color: #c62828; }
 
-    /* Floating decorations */
     &__floating {
         position: absolute;
         inset: 0;
         pointer-events: none;
-        opacity: 0.6;
+        opacity: 0.58;
         z-index: 0;
 
         .item {
             position: absolute;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             animation: floatItem 6s ease-in-out infinite;
         }
 
@@ -303,15 +294,170 @@
         50% { transform: translateY(-8px); }
     }
 
-    // Responsive design
-    @media (max-width: 768px) {
-        padding: 0.5rem;
+    @media (min-width: 1024px) {
+        padding: 1.3rem;
 
-        &__card {
-            padding: 1.25rem 1.25rem;
+        &__container {
+            max-width: 440px;
         }
 
-        &__title { font-size: 1.35rem; }
-        &__input, &__select { padding: 0.6rem; }
+        &__card {
+            min-height: min(760px, 82dvh);
+            max-height: min(840px, 88dvh);
+            padding: 1.25rem 1.2rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: linear-gradient(175deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15));
+            box-shadow: 0 22px 54px rgba(20, 49, 102, 0.34);
+            backdrop-filter: blur(14px);
+        }
+
+        &__header {
+            margin-bottom: 1rem;
+        }
+
+        &__icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 0.55rem;
+
+            img {
+                width: 38px;
+                height: 38px;
+            }
+        }
+
+        &__title {
+            font-size: 1.55rem;
+            letter-spacing: 0.4px;
+        }
+
+        &__subtitle {
+            font-size: 0.92rem;
+        }
+
+        &__form {
+            gap: 0.82rem;
+        }
+
+        &__label {
+            font-size: 0.9rem;
+        }
+
+        &__input,
+        &__select {
+            min-height: 46px;
+            font-size: 0.95rem;
+            border-radius: 13px;
+        }
+
+        &__submit {
+            min-height: 46px;
+            font-size: 1rem !important;
+            border-radius: 14px !important;
+            box-shadow: 0 12px 26px rgba(80, 90, 220, 0.38) !important;
+        }
+
+        &__footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+        }
+
+        &__register-text,
+        &__back {
+            font-size: 0.9rem;
+        }
+
+        &__floating {
+            opacity: 0.65;
+
+            .item {
+                font-size: 1.45rem;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: max(0.45rem, env(safe-area-inset-top)) 0.5rem max(0.45rem, env(safe-area-inset-bottom));
+
+        &__card {
+            border-radius: 16px;
+        }
+
+        &__floating {
+            .item { font-size: 1.05rem; }
+        }
+    }
+
+    @media (max-width: 420px), (max-height: 760px) {
+        &__card {
+            max-height: calc(100dvh - 0.85rem);
+            border-radius: 15px;
+            padding: 0.8rem 0.72rem;
+        }
+
+        &__icon {
+            width: 40px;
+            height: 40px;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        &__title {
+            font-size: clamp(1rem, 2.5vh, 1.18rem);
+        }
+
+        &__subtitle {
+            font-size: 0.74rem;
+        }
+
+        &__form {
+            gap: 0.45rem;
+        }
+
+        &__input,
+        &__select,
+        &__submit {
+            min-height: 39px;
+        }
+
+        &__footer {
+            margin-top: 0.45rem;
+            padding-top: 0.45rem;
+        }
+    }
+
+    @media (max-height: 670px) {
+        &__floating {
+            display: none;
+        }
+
+        &__icon {
+            display: none;
+        }
+
+        &__header {
+            margin-bottom: 0.35rem;
+        }
+
+        &__form {
+            gap: 0.34rem;
+        }
+
+        &__field {
+            gap: 0.14rem;
+        }
+
+        &__footer {
+            margin-top: 0.28rem;
+            padding-top: 0.28rem;
+        }
+
+        &__register-text {
+            margin-bottom: 0.18rem;
+        }
     }
 }
