@@ -10,6 +10,10 @@ import Btn1 from "@/assets/img/btn_7-8.webp";
 import Btn2 from "@/assets/img/btn-9-10.webp";
 import Btn3 from "@/assets/img/btn-11-12.webp";
 import logo from "@/assets/logo.png";
+import Koala from "@/assets/Animalguia/koala.svg";
+import Buho from "@/assets/Animalguia/buho.svg";
+import Rana from "@/assets/Animalguia/rana.svg";
+import Nube from "@/assets/img/nube.svg";
 
 interface User {
   id: number;
@@ -63,6 +67,13 @@ const Dashboard = () => {
 
       {/* ── Vista móvil ≤480px ── */}
       <div className="dashboard-mobile">
+        <div className="dashboard-mobile__clouds" aria-hidden="true">
+          <img src={Nube} alt="" className="dashboard-mobile__cloud dashboard-mobile__cloud--1" />
+          <img src={Nube} alt="" className="dashboard-mobile__cloud dashboard-mobile__cloud--2" />
+          <img src={Nube} alt="" className="dashboard-mobile__cloud dashboard-mobile__cloud--3" />
+          <img src={Nube} alt="" className="dashboard-mobile__cloud dashboard-mobile__cloud--4" />
+        </div>
+
         {/* Header */}
         <div className="dashboard-mobile__header">
           <img
@@ -97,32 +108,45 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* Saludo */}
-        <p className="dashboard-mobile__greeting">
-          {isAuthenticated && user
-            ? `¡Hola, ${user.nombre}!`
-            : "¡Bienvenido a NeuroKids!"}
-        </p>
-        <p className="dashboard-mobile__subtitle">
-          Elige tu grupo de edad para comenzar
-        </p>
+        <section className="dashboard-mobile__content">
+          {/* Saludo */}
+          <p className="dashboard-mobile__greeting">
+            {isAuthenticated && user
+              ? `¡Hola, ${user.nombre}!`
+              : "¡Bienvenido a NeuroKids!"}
+          </p>
+          <p className="dashboard-mobile__subtitle">
+            Elige tu grupo de edad para comenzar
+          </p>
 
-        {/* Botones de edad */}
-        <div className="dashboard-mobile__buttons">
-          {ageButtons.map((btn) => (
-            <div
-              key={btn.to}
-              className="dashboard-mobile__age-btn"
-              onClick={() => navigate(btn.to)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") navigate(btn.to);
-              }}
-            >
-              <img src={btn.image} alt={btn.label} />
-            </div>
-          ))}
+          {/* Botones de edad */}
+          <div className="dashboard-mobile__buttons">
+            {ageButtons.map((btn) => (
+              <div
+                key={btn.to}
+                className="dashboard-mobile__age-btn"
+                onClick={() => navigate(btn.to)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Ir a ${btn.label}`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    navigate(btn.to);
+                  }
+                }}
+              >
+                <img src={btn.image} alt={btn.label} />
+                <span className="dashboard-mobile__age-label">{btn.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <div className="dashboard-mobile__animals" aria-hidden="true">
+          <img src={Koala} alt="" className="dashboard-mobile__animal dashboard-mobile__animal--koala" />
+          <img src={Buho} alt="" className="dashboard-mobile__animal dashboard-mobile__animal--buho" />
+          <img src={Rana} alt="" className="dashboard-mobile__animal dashboard-mobile__animal--rana" />
         </div>
       </div>
     </>

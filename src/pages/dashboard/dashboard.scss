@@ -1,5 +1,5 @@
 /* ===================== */
-/* DASHBOARD */
+/* DASHBOARD DESKTOP */
 /* ===================== */
 .dashboard-container {
   display: grid;
@@ -23,12 +23,14 @@ footer {
   gap: 2rem;
 }
 
-/* Vista móvil simplificada — oculta por defecto */
+/* Vista móvil oculta por defecto */
 .dashboard-mobile {
   display: none;
 }
 
-/* Media queries - Dashboard */
+/* ===================== */
+/* TABLET */
+/* ===================== */
 @media (max-width: 1024px) {
   .dashboard-container {
     grid-template-rows: auto 1fr auto;
@@ -48,57 +50,86 @@ footer {
   }
 }
 
-@media (max-width: 768px) {
-  .dashboard-container {
-    grid-template-rows: auto 1fr auto;
-  }
-
-  .age-circles {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    padding: 1rem 0;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-}
-
-footer {
-  height: 60px;
-}
-
 /* ===================== */
-/* MÓVIL/TABLET ≤768px   */
+/* MÓVIL / TABLET <=768px */
 /* ===================== */
 @media (max-width: 768px) {
-  /* Ocultar TODA la vista desktop */
   .dashboard-container {
     display: none;
   }
 
-  /* ── Estilos base compartidos portrait + landscape ── */
   .dashboard-mobile {
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100dvh;
-    background: linear-gradient(160deg, #d6f3f7 0%, #b8eaf0 40%, #c8f5c8 100%);
+    background:
+      radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.52), transparent 36%),
+      radial-gradient(circle at 85% 8%, rgba(255, 255, 255, 0.34), transparent 30%),
+      linear-gradient(160deg, #d6f3f7 0%, #b8eaf0 40%, #c8f5c8 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dashboard-mobile__clouds {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .dashboard-mobile__cloud {
+    position: absolute;
+    width: 190px;
+    opacity: 0.55;
+    animation: dashboardMobileCloud 34s linear infinite;
+  }
+
+  .dashboard-mobile__cloud--1 {
+    top: 86px;
+    left: 100%;
+    animation-delay: 0s;
+  }
+
+  .dashboard-mobile__cloud--2 {
+    top: 200px;
+    left: 115%;
+    width: 160px;
+    animation-delay: 7s;
+  }
+
+  .dashboard-mobile__cloud--3 {
+    top: 340px;
+    left: 108%;
+    width: 170px;
+    animation-delay: 14s;
+  }
+
+  .dashboard-mobile__cloud--4 {
+    top: 500px;
+    left: 125%;
+    width: 145px;
+    animation-delay: 21s;
   }
 
   .dashboard-mobile__header {
     width: 100%;
-    background: #008081;
+    background: rgba(0, 128, 129, 0.95);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1rem;
     box-sizing: border-box;
     flex-shrink: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(5px);
+    position: relative;
+    z-index: 3;
   }
 
   .dashboard-mobile__logo {
-    height: 48px;
+    height: 42px;
     width: auto;
     object-fit: contain;
     cursor: pointer;
@@ -109,14 +140,16 @@ footer {
     font-size: 14px;
     font-weight: bold;
     border-radius: 8px;
-    padding: 0.5rem 1.2rem;
+    padding: 0.5rem 1rem;
     background-color: transparent;
     color: #fff;
     border: 2px solid #fff;
     cursor: pointer;
     transition: background 0.2s ease;
+  }
 
-    &:active { background-color: rgba(255,255,255,0.15); }
+  .dashboard-mobile__login-btn:active {
+    background-color: rgba(255, 255, 255, 0.15);
   }
 
   .dashboard-mobile__user {
@@ -138,117 +171,316 @@ footer {
     padding: 0.4rem 0.8rem;
     background-color: transparent;
     color: #fff;
-    border: 2px solid rgba(255,255,255,0.6);
+    border: 2px solid rgba(255, 255, 255, 0.6);
     cursor: pointer;
     transition: background 0.2s ease;
+  }
 
-    &:active { background-color: rgba(255,255,255,0.15); }
+  .dashboard-mobile__user-btn:active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .dashboard-mobile__content {
+    width: min(100%, calc(100% - 0.8rem));
+    margin: 0.25rem auto 0.15rem;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    padding: 0.35rem 0.5rem 0.25rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: calc(100dvh - 72px - 0.4rem);
+    position: relative;
+    z-index: 2;
+    animation: mobileCardReveal 0.45s ease-out;
   }
 
   .dashboard-mobile__greeting {
     font-family: "OpenDyslexic", sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.22rem;
     font-weight: 700;
     color: #005f5f;
     text-align: center;
-    padding: 2rem 2rem 0.4rem;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto 0.15rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    line-height: 1.28;
   }
 
   .dashboard-mobile__subtitle {
     font-family: "OpenDyslexic", sans-serif;
-    font-size: 0.9rem;
-    color: #2d7d7d;
+    font-size: 0.94rem;
+    color: #246d6d;
     text-align: center;
-    padding: 0 2rem 1.5rem;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto 0.35rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    line-height: 1.35;
   }
 
-  /* Portrait: botones apilados verticalmente */
   .dashboard-mobile__buttons {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.2rem;
     width: 100%;
-    padding: 0 2rem 2rem;
-    box-sizing: border-box;
     flex: 1;
-    justify-content: center;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 2;
   }
 
   .dashboard-mobile__age-btn {
-    width: min(60vw, 230px);
+    width: 100%;
+    max-width: 470px;
+    min-height: 158px;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
     cursor: pointer;
-    transition: transform 0.18s ease, filter 0.18s ease;
+    transition: transform 0.18s ease, filter 0.2s ease;
+  }
 
-    img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 16px;
-      filter: drop-shadow(0 4px 14px rgba(0,0,0,0.15));
+  .dashboard-mobile__age-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.04);
+  }
+
+  .dashboard-mobile__age-btn:active {
+    transform: scale(0.97);
+  }
+
+  .dashboard-mobile__age-btn:focus-visible {
+    outline: 3px solid rgba(0, 128, 129, 0.24);
+    outline-offset: 2px;
+  }
+
+  .dashboard-mobile__age-btn img {
+    width: 100%;
+    max-width: 430px;
+    height: auto;
+    max-height: 154px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.12));
+  }
+
+  .dashboard-mobile__age-label {
+    display: none;
+  }
+
+  .dashboard-mobile__animals {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .dashboard-mobile__animal {
+    position: absolute;
+    opacity: 0.42;
+    filter: drop-shadow(0 8px 14px rgba(0, 90, 90, 0.14));
+    animation: floatAnimal 7s ease-in-out infinite;
+  }
+
+  .dashboard-mobile__animal--koala {
+    width: 270px;
+    bottom: 6px;
+    left: -8px;
+    animation-delay: 0s;
+  }
+
+  .dashboard-mobile__animal--buho {
+    width: 220px;
+    right: -4px;
+    top: 118px;
+    animation-delay: 1.1s;
+  }
+
+  .dashboard-mobile__animal--rana {
+    width: 205px;
+    right: 6px;
+    bottom: 8px;
+    animation-delay: 2s;
+  }
+
+  @keyframes floatAnimal {
+    0%, 100% {
+      transform: translateY(0);
     }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
 
-    &:active {
-      transform: scale(0.97);
-      filter: brightness(0.95);
+  @keyframes dashboardMobileCloud {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-135vw);
+    }
+  }
+
+  @keyframes mobileCardReveal {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
 
 /* ===================== */
-/* LANDSCAPE (móvil/tablet girado) */
+/* RANGO INTERMEDIO */
+/* evita que desaparezca el texto */
 /* ===================== */
-@media (max-width: 768px) and (orientation: landscape) {
-  .dashboard-mobile {
-    min-height: 100dvh;
+@media (min-width: 481px) and (max-width: 768px) {
+  .dashboard-mobile__greeting {
+    font-size: 1.28rem;
+    max-width: 420px;
+    margin: 0 auto 0.18rem;
+    padding: 0 1.2rem;
   }
 
+  .dashboard-mobile__subtitle {
+    font-size: 0.98rem;
+    max-width: 430px;
+    margin: 0 auto 0.4rem;
+    padding: 0 1.3rem;
+  }
+
+  .dashboard-mobile__buttons {
+    gap: 0.25rem;
+  }
+
+  .dashboard-mobile__age-btn {
+    min-height: 170px;
+  }
+
+  .dashboard-mobile__age-btn img {
+    max-width: 445px;
+    max-height: 160px;
+  }
+
+  .dashboard-mobile__animal--koala {
+    width: 320px;
+  }
+
+  .dashboard-mobile__animal--buho {
+    width: 255px;
+  }
+
+  .dashboard-mobile__animal--rana {
+    width: 240px;
+  }
+}
+
+/* ===================== */
+/* LANDSCAPE */
+/* ===================== */
+@media (max-width: 768px) and (orientation: landscape) {
   .dashboard-mobile__header {
-    padding: 0.5rem 1.5rem;
+    padding: 0.45rem 0.85rem;
   }
 
   .dashboard-mobile__logo {
-    height: 38px;
+    height: 35px;
+  }
+
+  .dashboard-mobile__content {
+    width: min(100%, calc(100% - 0.8rem));
+    margin: 0.2rem auto 0.1rem;
+    border-radius: 0;
+    padding: 0.25rem 0.35rem 0.2rem;
+    min-height: calc(100dvh - 48px - 0.3rem);
+  }
+
+  /* YA NO ocultamos clouds ni animales */
+  .dashboard-mobile__clouds {
+    display: block;
+  }
+
+  .dashboard-mobile__animals {
+    display: block;
   }
 
   .dashboard-mobile__greeting {
     font-size: 1rem;
-    padding: 0.8rem 2rem 0.2rem;
+    max-width: 360px;
+    margin-bottom: 0.1rem;
+    padding: 0 0.8rem;
   }
 
   .dashboard-mobile__subtitle {
     font-size: 0.8rem;
-    padding: 0 2rem 0.6rem;
+    max-width: 380px;
+    margin-bottom: 0.18rem;
+    padding: 0 0.9rem;
   }
 
-  /* Botones en fila horizontal en landscape */
   .dashboard-mobile__buttons {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    padding: 0 1.5rem 1rem;
+    gap: 0.3rem;
     flex-wrap: nowrap;
   }
 
   .dashboard-mobile__age-btn {
-    width: auto;
-    max-width: none;
     flex: 1;
-    max-width: 130px;
+    max-width: 230px;
+    min-height: 104px;
+    padding: 0.1rem;
+  }
 
-    img {
-      border-radius: 12px;
-    }
+  .dashboard-mobile__age-btn img {
+    max-width: 200px;
+    max-height: 90px;
+  }
+
+  .dashboard-mobile__animal--koala {
+    width: 185px;
+    left: 0;
+    bottom: 0;
+  }
+
+  .dashboard-mobile__animal--buho {
+    width: 150px;
+    right: 0;
+    top: 85px;
+  }
+
+  .dashboard-mobile__animal--rana {
+    width: 145px;
+    right: 8px;
+    bottom: 0;
   }
 }
 
 /* ===================== */
-/* MÓVIL pequeño ≤480px  */
+/* MÓVIL pequeño <=480px */
 /* ===================== */
 @media (max-width: 480px) {
   .dashboard-mobile__logo {
-    height: 40px;
+    height: 38px;
   }
 
   .dashboard-mobile__login-btn {
@@ -256,22 +488,60 @@ footer {
     padding: 0.45rem 0.9rem;
   }
 
+  .dashboard-mobile__content {
+    width: calc(100% - 0.25rem);
+    margin: 0.18rem auto 0.08rem;
+    padding: 0.25rem 0.12rem 0.18rem;
+    border-radius: 0;
+    min-height: calc(100dvh - 66px - 0.3rem);
+  }
+
   .dashboard-mobile__greeting {
-    font-size: 1.05rem;
-    padding: 1.5rem 1.2rem 0.3rem;
+    font-size: 1.08rem;
+    max-width: 310px;
+    padding: 0 1rem;
+    margin: 0 auto 0.12rem;
   }
 
   .dashboard-mobile__subtitle {
-    font-size: 0.8rem;
-    padding: 0 1.2rem 1rem;
+    font-size: 0.86rem;
+    max-width: 320px;
+    padding: 0 1rem;
+    margin: 0 auto 0.28rem;
   }
 
   .dashboard-mobile__buttons {
-    gap: 0.75rem;
-    padding: 0 1.2rem 1.5rem;
+    gap: 0.15rem;
   }
 
   .dashboard-mobile__age-btn {
-    width: min(56vw, 180px);
+    min-height: 148px;
+    max-width: 100%;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .dashboard-mobile__age-btn img {
+    width: 100%;
+    max-width: 395px;
+    max-height: 142px;
+  }
+
+  .dashboard-mobile__animal--koala {
+    width: 220px;
+    left: -6px;
+    bottom: 4px;
+  }
+
+  .dashboard-mobile__animal--buho {
+    width: 180px;
+    right: -4px;
+    top: 104px;
+  }
+
+  .dashboard-mobile__animal--rana {
+    width: 170px;
+    right: 4px;
+    bottom: 4px;
   }
 }
