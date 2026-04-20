@@ -69,23 +69,21 @@ footer {
 }
 
 /* ===================== */
-/* MÓVIL ≤480px          */
+/* MÓVIL/TABLET ≤768px   */
 /* ===================== */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   /* Ocultar TODA la vista desktop */
   .dashboard-container {
     display: none;
   }
 
-  /* Activar layout móvil */
+  /* ── Estilos base compartidos portrait + landscape ── */
   .dashboard-mobile {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     min-height: 100dvh;
     background: linear-gradient(160deg, #d6f3f7 0%, #b8eaf0 40%, #c8f5c8 100%);
-    padding: 0 0 2rem;
   }
 
   .dashboard-mobile__header {
@@ -94,12 +92,13 @@ footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1.2rem;
+    padding: 0.75rem 1.5rem;
     box-sizing: border-box;
+    flex-shrink: 0;
   }
 
   .dashboard-mobile__logo {
-    height: 44px;
+    height: 48px;
     width: auto;
     object-fit: contain;
     cursor: pointer;
@@ -107,73 +106,70 @@ footer {
 
   .dashboard-mobile__login-btn {
     font-family: "OpenDyslexic", sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: bold;
     border-radius: 8px;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     background-color: transparent;
     color: #fff;
     border: 2px solid #fff;
     cursor: pointer;
     transition: background 0.2s ease;
 
-    &:active {
-      background-color: rgba(255,255,255,0.15);
-    }
+    &:active { background-color: rgba(255,255,255,0.15); }
   }
 
   .dashboard-mobile__user {
     font-family: "OpenDyslexic", sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     color: #fff;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
     justify-content: flex-end;
   }
 
   .dashboard-mobile__user-btn {
     font-family: "OpenDyslexic", sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: bold;
     border-radius: 6px;
-    padding: 0.35rem 0.7rem;
+    padding: 0.4rem 0.8rem;
     background-color: transparent;
     color: #fff;
     border: 2px solid rgba(255,255,255,0.6);
     cursor: pointer;
     transition: background 0.2s ease;
 
-    &:active {
-      background-color: rgba(255,255,255,0.15);
-    }
+    &:active { background-color: rgba(255,255,255,0.15); }
   }
 
   .dashboard-mobile__greeting {
     font-family: "OpenDyslexic", sans-serif;
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #005f5f;
     text-align: center;
-    padding: 1.8rem 1.5rem 0.5rem;
+    padding: 2rem 2rem 0.4rem;
   }
 
   .dashboard-mobile__subtitle {
     font-family: "OpenDyslexic", sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: #2d7d7d;
     text-align: center;
-    padding: 0 1.5rem 1.5rem;
+    padding: 0 2rem 1.5rem;
   }
 
+  /* Portrait: botones apilados verticalmente */
   .dashboard-mobile__buttons {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.1rem;
+    gap: 1.2rem;
     width: 100%;
-    padding: 0 1.5rem;
+    padding: 0 2rem 2rem;
     box-sizing: border-box;
     flex: 1;
     justify-content: center;
@@ -181,7 +177,7 @@ footer {
 
   .dashboard-mobile__age-btn {
     width: 100%;
-    max-width: 320px;
+    max-width: 380px;
     cursor: pointer;
     transition: transform 0.18s ease, filter 0.18s ease;
 
@@ -190,12 +186,93 @@ footer {
       height: auto;
       display: block;
       border-radius: 16px;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,0.15));
     }
 
     &:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
       filter: brightness(0.95);
     }
+  }
+}
+
+/* ===================== */
+/* LANDSCAPE (móvil/tablet girado) */
+/* ===================== */
+@media (max-width: 768px) and (orientation: landscape) {
+  .dashboard-mobile {
+    min-height: 100dvh;
+  }
+
+  .dashboard-mobile__header {
+    padding: 0.5rem 1.5rem;
+  }
+
+  .dashboard-mobile__logo {
+    height: 38px;
+  }
+
+  .dashboard-mobile__greeting {
+    font-size: 1rem;
+    padding: 0.8rem 2rem 0.2rem;
+  }
+
+  .dashboard-mobile__subtitle {
+    font-size: 0.8rem;
+    padding: 0 2rem 0.6rem;
+  }
+
+  /* Botones en fila horizontal en landscape */
+  .dashboard-mobile__buttons {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1.5rem 1rem;
+    flex-wrap: nowrap;
+  }
+
+  .dashboard-mobile__age-btn {
+    width: auto;
+    max-width: none;
+    flex: 1;
+    max-width: 200px;
+
+    img {
+      border-radius: 12px;
+    }
+  }
+}
+
+/* ===================== */
+/* MÓVIL pequeño ≤480px  */
+/* ===================== */
+@media (max-width: 480px) {
+  .dashboard-mobile__logo {
+    height: 40px;
+  }
+
+  .dashboard-mobile__login-btn {
+    font-size: 12px;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .dashboard-mobile__greeting {
+    font-size: 1.05rem;
+    padding: 1.5rem 1.2rem 0.3rem;
+  }
+
+  .dashboard-mobile__subtitle {
+    font-size: 0.8rem;
+    padding: 0 1.2rem 1rem;
+  }
+
+  .dashboard-mobile__buttons {
+    gap: 0.9rem;
+    padding: 0 1.2rem 1.5rem;
+  }
+
+  .dashboard-mobile__age-btn {
+    max-width: 300px;
   }
 }
