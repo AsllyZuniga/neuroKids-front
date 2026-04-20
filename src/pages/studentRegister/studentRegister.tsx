@@ -306,7 +306,7 @@ export default function StudentRegister() {
         localStorage.setItem("userType", "estudiante");
 
         setTimeout(() => {
-          navigate("/bienvenida/estudiante");
+          navigate("/evaluacion-inicial");
         }, 800);
       } else {
         setError(data?.message || "Error al crear la cuenta");

@@ -15,6 +15,7 @@ const Instituciones = lazy(() => import("./pages/instituciones/instituciones"));
 const Reportes = lazy(() => import("./pages/reportes/reportes"));
 const TestInstituciones = lazy(() => import("./pages/testInstituciones/testInstituciones"));
 const Estudiantes = lazy(() => import("./pages/estudiantes/estudiantes"));
+const EvaluacionInicial = lazy(() => import("./pages/evaluacionInicial/evaluacionInicial"));
 
 import { BingoPalabras } from "./components/edades/Edad7_8/Juegos/BingoPalabras";
 import { EscuchaElige } from "./components/edades/Edad7_8/Juegos/EscuchaElige";
@@ -82,6 +83,7 @@ function App() {
           <Route path="/bienvenida/docente" element={<TeacherWelcome />} />
           <Route path="/test-instituciones" element={<TestInstituciones />} />
           <Route path="/estudiantes" element={<Estudiantes />} />
+          <Route path="/evaluacion-inicial" element={<EvaluacionInicial />} />
 
           <Route path="/" element={<Dashboard />} />
 

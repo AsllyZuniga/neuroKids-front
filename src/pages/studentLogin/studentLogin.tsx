@@ -6,6 +6,20 @@ import "./studentLogin.scss";
 
 import { API_CONFIG, buildApiUrl } from "@/config/api";
 
+async function verificarEvaluacion(estudianteId: number, token: string): Promise<boolean> {
+  try {
+    const res = await fetch(
+      buildApiUrl(`${API_CONFIG.ENDPOINTS.EVAL_VERIFICAR}/${estudianteId}`),
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (!res.ok) return false;
+    const json = await res.json();
+    return json?.tiene_evaluacion === true || json?.data?.tiene_evaluacion === true;
+  } catch {
+    return false;
+  }
+}
+
 interface Institucion {
   id: string;
   nombre: string;
@@ -158,9 +172,13 @@ export default function StudentLogin() {
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.estudiante));
         localStorage.setItem("userType", "estudiante");
-        
-        // Redirigir a la página de bienvenida para estudiantes
-        navigate("/bienvenida/estudiante");
+
+        // Verificar si ya completó evaluación inicial
+        const yaEvaluado = await verificarEvaluacion(
+          data.data.estudiante.id,
+          data.data.token
+        );
+        navigate(yaEvaluado ? "/bienvenida/estudiante" : "/evaluacion-inicial");
       } else {
         setError(data.message || "Error al iniciar sesión");
       }

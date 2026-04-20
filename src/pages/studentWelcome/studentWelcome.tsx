@@ -793,9 +793,9 @@ export default function StudentWelcome() {
                   </svg>
 
                   {currentActivities.map((activity, index) => (
-                    <motion.div
+                    <motion.button
                       key={activity.id}
-                      className={`student-welcome__activity student-welcome__activity--map-readonly student-welcome__map-node student-welcome__map-node--${activity.mapState} ${activity.type}`}
+                      className={`student-welcome__activity student-welcome__activity--map-interactive student-welcome__map-node student-welcome__map-node--${activity.mapState} ${activity.type}`}
                       style={{
                         left: `${activity.position.x}%`,
                         top: `${activity.position.y}%`,
@@ -803,7 +803,13 @@ export default function StudentWelcome() {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ delay: index * 0.08 }}
-                      role="group"
+                      onClick={() => {
+                        if (activity.mapState !== "locked") {
+                          navigate(activity.route);
+                        }
+                      }}
+                      disabled={activity.mapState === "locked"}
+                      type="button"
                       aria-label={`Paso ${index + 1}: ${activity.title}`}
                     >
                       <div className="student-welcome__map-node-order">{index + 1}</div>
@@ -853,7 +859,7 @@ export default function StudentWelcome() {
                           </span>
                         </div>
                       </div>
-                    </motion.div>
+                    </motion.button>
                   ))}
                 </div>
               </div>

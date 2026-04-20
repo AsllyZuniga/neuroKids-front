@@ -27,6 +27,12 @@ export const API_CONFIG = {
         PROGRESS_SUMMARY: "/progreso-actividades/resumen",
         PROGRESS_PENDING: "/progreso-actividades/pendientes",
 
+        // Endpoints evaluación inicial
+        EVAL_TEMAS: "/evaluacion-inicial/temas",
+        EVAL_SETUP: "/evaluacion-inicial/setup",
+        EVAL_RESPONDER: "/evaluacion-inicial/responder",
+        EVAL_VERIFICAR: "/evaluacion-inicial/verificar",
+
         // Endpoints comunes
         LOGOUT: "auth/logout",
         ME: "/me",

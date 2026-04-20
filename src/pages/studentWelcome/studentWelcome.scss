@@ -560,6 +560,32 @@
     }
   }
 
+  .student-welcome--figma .student-welcome__activity--map-interactive {
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+
+    &:not(:disabled):hover {
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    &:not(:disabled):active {
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .student-welcome__activity-tooltip {
+      display: none;
+    }
+  }
+
   .student-welcome__map-node {
     width: 5.5rem;
   }
