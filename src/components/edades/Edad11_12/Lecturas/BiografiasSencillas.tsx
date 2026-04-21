@@ -648,7 +648,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
   if (showQuiz && !showMotivational && !levelComplete) {
     return (
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-        <div className="min-h-screen p-6">
+        <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
           <GameHeader
             title={`Quiz: ${biography.name} - Nivel ${currentLevel}`}
             score={score}
@@ -662,9 +662,9 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
             animate={{ scale: 1, opacity: 1 }}
             className="mt-8"
           >
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200">
-              <CardContent className="p-8">
-                <h3 className="text-xl mb-6 text-black">{biography.quiz.question}</h3>
+            <Card className="border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+              <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                <h3 className="mb-6 break-words text-xl text-black max-[480px]:text-lg">{biography.quiz.question}</h3>
 
                 <div className="grid gap-4">
                   {biography.quiz.options.map((option, index) => (
@@ -677,7 +677,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                         onClick={() => handleQuizAnswer(index)}
                         disabled={selectedAnswer !== null}
                         variant="outline"
-                        className={`w-full justify-start text-left p-6 h-auto transition-all ${selectedAnswer === null
+                        className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
                           ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-indigo-300'
                           : selectedAnswer === index
                             ? index === biography.quiz.correct
@@ -692,7 +692,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                           <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm">
                             {String.fromCharCode(65 + index)}
                           </div>
-                          <span className="text-lg text-black flex-1">{option}</span>
+                          <span className="flex-1 text-lg text-black max-[480px]:text-sm">{option}</span>
                           {selectedAnswer !== null && index === biography.quiz.correct && (
                             <CheckCircle className="w-5 h-5 text-green-600" />
                           )}
@@ -708,8 +708,8 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200"
                   >
-                    <h4 className="text-lg mb-2 text-indigo-800">Explicación:</h4>
-                    <p className="text-indigo-700">{biography.quiz.explanation}</p>
+                    <h4 className="mb-2 text-lg text-indigo-800 max-[480px]:text-base">Explicación:</h4>
+                    <p className="break-words text-indigo-700 max-[480px]:text-sm">{biography.quiz.explanation}</p>
                   </motion.div>
                 )}
               </CardContent>
@@ -750,7 +750,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Biografías Sencillas`}
           level={currentLevel}
@@ -773,25 +773,26 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
           />
         </div>
 
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-3 gap-6 mt-6">
-          {/* Main Biography */}
-          <div className="lg:col-span-2">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
+        <div className="mt-6 grid gap-6 lg:grid-cols-3">
+          {/* Main Biography — en móvil va después de cronología/datos curiosos (order-2) */}
+          <div className="max-[480px]:order-2 lg:col-span-2">
             <motion.div
               key={currentBio}
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-300 mb-6">
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-6 mb-6">
-                    <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-indigo-300 shadow-lg">
-                      <img src={biography.image} className="w-full h-full object-cover" /></div>
-                    <div className="flex-1">
-                      <h2 className="text-3xl text-black mb-2">{biography.name}</h2>
-                      <p className="text-xl text-black mb-3">{biography.title}</p>
-                      <div className="flex flex-wrap items-center gap-3">
+              <Card className="mb-6 border-2 border-indigo-300 bg-white/90 backdrop-blur-sm">
+                <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                  <div className="mb-6 flex items-center gap-6 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-3 max-[480px]:text-center">
+                    <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full border-4 border-indigo-300 shadow-lg">
+                      <img src={biography.image} className="h-full w-full object-cover" alt="" />
+                    </div>
+                    <div className="min-w-0 flex-1 max-[480px]:w-full">
+                      <h2 className="mb-2 break-words text-3xl text-black max-[480px]:text-2xl">{biography.name}</h2>
+                      <p className="mb-3 break-words text-xl text-black max-[480px]:text-lg">{biography.title}</p>
+                      <div className="flex flex-wrap items-center gap-3 max-[480px]:justify-center sm:justify-start">
                         <Badge className={`${getCategoryColor(biography.category)} border`}>
                           {biography.category}
                         </Badge>
@@ -807,28 +808,30 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
                     </div>
                   </div>
 
-                  <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200 mb-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Award className="w-5 h-5 text-yellow-600" />
-                      <h3 className="text-lg text-yellow-800">Principal Logro:</h3>
+                  <div className="mb-6 rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4 max-[480px]:p-3">
+                    <div className="mb-2 flex items-center gap-2">
+                      <Award className="h-5 w-5 shrink-0 text-yellow-600" />
+                      <h3 className="text-lg text-yellow-800 max-[480px]:text-base">Principal Logro:</h3>
                     </div>
-                    <p className="text-yellow-700">{biography.mainAchievement}</p>
+                    <p className="break-words text-yellow-700 max-[480px]:text-sm">{biography.mainAchievement}</p>
                   </div>
 
                   <div className="mb-6">
                     <AudioPlayer text={biography.story} onSpeakingChange={setIsSpeaking} />
                   </div>
 
-                  <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-200 mb-6">
-                    <p className="text-lg leading-relaxed text-black">{biography.story}</p>
+                  <div className="mb-6 rounded-lg border-2 border-indigo-200 bg-indigo-50 p-6 max-[480px]:p-3">
+                    <p className="break-words text-lg leading-relaxed text-black max-[480px]:text-sm">
+                      {biography.story}
+                    </p>
                   </div>
 
-                  <div className="bg-purple-100 p-4 rounded-lg border-2 border-purple-300">
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className="rounded-lg border-2 border-purple-300 bg-purple-100 p-4 max-[480px]:p-3">
+                    <div className="mb-2 flex items-center gap-2">
                       <span className="text-2xl">💫</span>
-                      <h4 className="text-lg text-purple-800">Inspiración:</h4>
+                      <h4 className="text-lg text-purple-800 max-[480px]:text-base">Inspiración:</h4>
                     </div>
-                    <p className="text-purple-700">"{biography.inspiration}"</p>
+                    <p className="break-words text-purple-700 max-[480px]:text-sm">"{biography.inspiration}"</p>
                   </div>
                 </CardContent>
               </Card>
@@ -848,65 +851,75 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
           </div>
 
 
-          <div className="lg:col-span-1">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-300 mb-6">
-              <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-black flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-green-500" />
-                  Cronología de Vida
-                </h3>
-                <div className="space-y-4">
-                  {biography.timeline.map((event, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
-                        {event.age}
+          {/* Cronología y datos curiosos — en móvil arriba (order-1); dos columnas lado a lado solo en móvil */}
+          <div className="max-[480px]:order-1 lg:col-span-1">
+            <div className="flex flex-col gap-6 max-[480px]:grid max-[480px]:grid-cols-2 max-[480px]:gap-2 max-[480px]:items-stretch">
+              <Card className="min-w-0 border-2 border-green-300 bg-white/90 backdrop-blur-sm max-[480px]:h-full">
+                <CardContent className="min-w-0 p-6 max-[480px]:p-2 max-[480px]:pt-3">
+                  <h3 className="mb-4 flex items-center gap-1.5 text-lg text-black max-[480px]:mb-2 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-1 max-[480px]:text-center max-[480px]:text-[11px] max-[480px]:leading-tight">
+                    <Calendar className="h-5 w-5 shrink-0 text-green-500 max-[480px]:h-3.5 max-[480px]:w-3.5" />
+                    <span className="break-words">Cronología</span>
+                  </h3>
+                  <div className="space-y-4 max-[480px]:space-y-2">
+                    {biography.timeline.map((event, index) => (
+                      <div key={index} className="flex items-start gap-2 max-[480px]:gap-1">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500 text-sm text-white max-[480px]:h-5 max-[480px]:w-5 max-[480px]:text-[9px]">
+                          {event.age}
+                        </div>
+                        <p className="min-w-0 break-words text-sm text-black max-[480px]:text-[10px] max-[480px]:leading-snug">
+                          {event.event}
+                        </p>
                       </div>
-                      <p className="text-black text-sm">{event.event}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
 
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-300">
-              <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-black flex items-center gap-2">
-                  <span className="text-orange-500">🤔</span>
-                  Datos Curiosos
-                </h3>
-                <div className="space-y-3">
-                  {biography.funFacts.map((fact, index) => (
-                    <div key={index} className="bg-orange-50 p-3 rounded-lg border border-orange-200">
-                      <p className="text-orange-800 text-sm">{fact}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+              <Card className="min-w-0 border-2 border-orange-300 bg-white/90 backdrop-blur-sm max-[480px]:h-full">
+                <CardContent className="min-w-0 p-6 max-[480px]:p-2 max-[480px]:pt-3">
+                  <h3 className="mb-4 flex items-center gap-1.5 text-lg text-black max-[480px]:mb-2 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-1 max-[480px]:text-center max-[480px]:text-[11px] max-[480px]:leading-tight">
+                    <span className="text-orange-500 max-[480px]:text-sm">🤔</span>
+                    <span className="break-words">Datos curiosos</span>
+                  </h3>
+                  <div className="space-y-3 max-[480px]:space-y-1.5">
+                    {biography.funFacts.map((fact, index) => (
+                      <div
+                        key={index}
+                        className="rounded-lg border border-orange-200 bg-orange-50 p-3 max-[480px]:p-1.5"
+                      >
+                        <p className="break-words text-sm text-orange-800 max-[480px]:text-[10px] max-[480px]:leading-snug">
+                          {fact}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
 
 
-        <div className="flex justify-between items-center mt-8">
+        <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <Button
             onClick={previousBiography}
             disabled={currentBio === 0}
             variant="outline"
-            className="bg-white/80 backdrop-blur-sm"
+            className="order-2 min-h-11 w-full bg-white/80 backdrop-blur-sm sm:order-1 sm:w-auto"
           >
-            <ChevronLeft className="w-4 h-4 mr-2" />
+            <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
             Anterior
           </Button>
 
-          <div className="flex gap-2">
+          <div className="order-1 flex max-w-full flex-wrap justify-center gap-1.5 overflow-x-auto px-1 py-1 sm:order-2 sm:max-w-[min(100%,14rem)] sm:gap-2 md:max-w-none">
             {biographies.map((_, index) => (
               <div
                 key={index}
-                className={`w-3 h-3 rounded-full transition-colors ${index === currentBio
-                  ? 'bg-indigo-500'
+                className={`h-2.5 shrink-0 rounded-full transition-colors sm:h-3 ${index === currentBio
+                  ? 'w-7 bg-indigo-500 sm:w-8'
                   : readBiographies.has(index)
-                    ? 'bg-green-400'
-                    : 'bg-gray-300'
+                    ? 'w-2.5 bg-green-400 sm:w-3'
+                    : 'w-2.5 bg-gray-300 sm:w-3'
                   }`}
               />
             ))}
@@ -915,10 +928,10 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
           <Button
             onClick={nextBiography}
             disabled={currentBio === biographies.length - 1 || !readBiographies.has(currentBio)}
-            className="bg-indigo-500 hover:bg-indigo-600 text-white"
+            className="order-3 min-h-11 w-full bg-indigo-500 text-white hover:bg-indigo-600 sm:w-auto"
           >
             {currentBio === biographies.length - 1 ? "Finalizar Nivel" : "Siguiente"}
-            <ChevronRight className="w-4 h-4 ml-2" />
+            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
           </Button>
         </div>
 

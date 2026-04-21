@@ -320,7 +320,7 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dbeafe 0%, #ffffff 50%, #dcfce7 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Noticias Sencillas`}
           level={currentLevel}
@@ -343,26 +343,26 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
           />
         </div>
 
-      <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-6 mt-6">
-          <div className="md:col-span-1">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
+          <div className="min-w-0 md:col-span-1">
             <Card className="h-fit">
-              <CardContent className="p-4">
-                <h3 className="flex items-center gap-2 mb-4 text-black">
-                  <Newspaper className="w-5 h-5 text-blue-600" /> Noticias
+              <CardContent className="min-w-0 p-4 max-[480px]:p-3">
+                <h3 className="mb-4 flex items-center gap-2 text-black max-[480px]:text-sm">
+                  <Newspaper className="h-5 w-5 shrink-0 text-blue-600" /> Noticias
                 </h3>
                 <div className="space-y-3">
                   {filteredNews.map((news, i) => (
                     <motion.div
                       key={news.id}
-                      className={`p-3 rounded-lg cursor-pointer transition-all ${i === currentNews ? 'bg-blue-100 border-2 border-blue-300' : 'bg-gray-50 hover:bg-gray-100'}`}
+                      className={`cursor-pointer rounded-lg p-3 transition-all max-[480px]:p-2 ${i === currentNews ? 'border-2 border-blue-300 bg-blue-100' : 'bg-gray-50 hover:bg-gray-100'}`}
                       onClick={() => setCurrentNews(i)}
                       whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                     >
-                      <div className="flex items-start gap-2">
-                        <span className="text-2xl">{news.icon}</span>
-                        <div className="flex-1">
-                          <p className="text-sm text-black line-clamp-2">{news.title}</p>
+                      <div className="flex min-w-0 items-start gap-2">
+                        <span className="shrink-0 text-2xl max-[480px]:text-xl">{news.icon}</span>
+                        <div className="min-w-0 flex-1">
+                          <p className="line-clamp-2 break-words text-sm text-black max-[480px]:text-xs">{news.title}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <Badge variant="secondary" className="text-xs text-black">{news.category}</Badge>
                             <span className="text-xs text-gray-600">{news.date}</span>
@@ -377,71 +377,76 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
           </div>
 
 
-          <div className="md:col-span-2">
-            <Card className="h-fit">
-              <CardContent className="p-6">
+          <div className="min-w-0 md:col-span-2">
+            <Card className="h-fit min-w-0">
+              <CardContent className="min-w-0 p-4 sm:p-6 max-[480px]:p-3">
                 {!showQuestions ? (
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Badge className="bg-blue-100 text-blue-700">{currentArticle.category}</Badge>
-                      <div className="flex items-center gap-2 text-sm text-black">
-                        <Calendar className="w-4 h-4" /> {currentArticle.date}
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <Badge className="w-fit bg-blue-100 text-blue-700 max-[480px]:text-[10px]">{currentArticle.category}</Badge>
+                      <div className="flex items-center gap-2 text-sm text-black max-[480px]:text-xs">
+                        <Calendar className="h-4 w-4 shrink-0" /> {currentArticle.date}
                       </div>
                     </div>
 
-                    <h1 className="text-2xl  text-black">{currentArticle.title}</h1>
-                    <div className="w-full h-48 rounded-xl overflow-hidden shadow-lg bg-gray-100">
+                    <h1 className="break-words text-xl text-black sm:text-2xl max-[480px]:text-lg">{currentArticle.title}</h1>
+                    <div className="h-48 w-full max-h-[40vh] overflow-hidden rounded-xl bg-gray-100 shadow-lg max-[480px]:h-40">
                       <img
                         src={currentArticle.image}
                         alt={currentArticle.title}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </div>
 
-                    <div className="flex items-center gap-4 py-2">
+                    <div className="flex flex-wrap items-center gap-3 py-2 max-[480px]:gap-2">
                       <Button
                         onClick={handleListen}
                         disabled={isSpeaking}
-                        className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white"
+                        className="flex shrink-0 items-center gap-2 bg-purple-500 text-white hover:bg-purple-600 max-[480px]:min-h-10 max-[480px]:px-3 max-[480px]:text-sm"
                       >
-                        {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                        {isSpeaking ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                         {isSpeaking ? "Escuchando..." : "Escuchar"}
                       </Button>
-                      <div className="flex items-center gap-2 text-black">
-                        <Eye className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm">124 lecturas</span>
+                      <div className="flex min-w-0 items-center gap-2 text-black">
+                        <Eye className="h-4 w-4 shrink-0 text-gray-400" />
+                        <span className="text-sm max-[480px]:text-xs">124 lecturas</span>
                       </div>
                     </div>
 
-                    <div className="text-lg leading-relaxed text-black space-y-4">
-                      <p className=" text-blue-700 bg-blue-50 p-3 rounded-lg">{currentArticle.summary}</p>
-                      <div className="max-h-96 overflow-y-auto p-4 bg-white rounded-lg border">
-                        <p className="text-base">{currentArticle.content}</p>
+                    <div className="space-y-4 text-lg leading-relaxed text-black max-[480px]:text-base">
+                      <p className="break-words rounded-lg bg-blue-50 p-3 text-blue-700 max-[480px]:p-2 max-[480px]:text-sm">
+                        {currentArticle.summary}
+                      </p>
+                      <div className="max-h-96 overflow-y-auto rounded-lg border bg-white p-4 max-[480px]:max-h-[50vh] max-[480px]:p-3">
+                        <p className="break-words text-base max-[480px]:text-sm">{currentArticle.content}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 pt-4 border-t">
+                    <div className="flex flex-wrap items-center gap-3 border-t pt-4 max-[480px]:gap-2">
                       <Button
                         variant="outline"
                         onClick={() => handleLike(currentArticle.id)}
-                        className={`flex items-center gap-2 border-gray-300 transition-all ${isLiked ? "bg-blue-100 text-blue-700 border-blue-300" : "text-black"
+                        className={`flex min-w-0 flex-1 items-center gap-2 border-gray-300 transition-all max-[480px]:h-auto max-[480px]:flex-1 max-[480px]:whitespace-normal max-[480px]:break-words max-[480px]:px-2 max-[480px]:py-2 max-[480px]:text-xs ${isLiked ? "border-blue-300 bg-blue-100 text-blue-700" : "text-black"
                           }`}
                       >
                         <ThumbsUp
-                          className={`w-4 h-4 ${isLiked ? "fill-blue-500 text-blue-500" : ""}`}
+                          className={`h-4 w-4 shrink-0 ${isLiked ? "fill-blue-500 text-blue-500" : ""}`}
                         />
                         Me gusta ({displayLikes})
                       </Button>
 
-                      <Button variant="outline" className="flex items-center gap-2 text-black border-gray-300">
-                        <Share2 className="w-4 h-4" /> Compartir
+                      <Button
+                        variant="outline"
+                        className="flex min-w-0 flex-1 items-center gap-2 border-gray-300 text-black max-[480px]:h-auto max-[480px]:whitespace-normal max-[480px]:break-words max-[480px]:px-2 max-[480px]:py-2 max-[480px]:text-xs"
+                      >
+                        <Share2 className="h-4 w-4 shrink-0" /> Compartir
                       </Button>
                     </div>
 
                     <Button
                       onClick={() => setShowQuestions(true)}
                       disabled={!canAnswer}
-                      className="w-full bg-green-500 hover:bg-green-600 text-white"
+                      className="h-auto w-full whitespace-normal break-words bg-green-500 text-white hover:bg-green-600 max-[480px]:px-3 max-[480px]:py-3 max-[480px]:text-sm"
                     >
                       {canAnswer ? "¡Responder preguntas!" : "Espera un momento..."}
                     </Button>
@@ -449,22 +454,24 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
                 ) : (
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
                     <div className="text-center">
-                      <h2 className="text-xl  text-black mb-2">Pregunta {currentQuestion + 1} de {totalQuestions}</h2>
-                      <Progress value={((currentQuestion + 1) / totalQuestions) * 100} className="w-full max-w-md mx-auto" />
+                      <h2 className="mb-2 text-xl text-black max-[480px]:text-base">
+                        Pregunta {currentQuestion + 1} de {totalQuestions}
+                      </h2>
+                      <Progress value={((currentQuestion + 1) / totalQuestions) * 100} className="mx-auto w-full max-w-md" />
                     </div>
 
-                    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
-                      <CardContent className="p-6">
-                        <h3 className="text-lg  mb-4 text-center text-black">
+                    <Card className="min-w-0 border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50">
+                      <CardContent className="min-w-0 p-6 max-[480px]:p-3">
+                        <h3 className="mb-4 break-words text-center text-lg text-black max-[480px]:text-sm">
                           {currentArticle.questions[currentQuestion].question}
                         </h3>
-                        <div className="grid gap-3">
+                        <div className="grid gap-3 max-[480px]:gap-2">
                           {currentArticle.questions[currentQuestion].options.map((opt, i) => (
                             <motion.button
                               key={i}
                               onClick={() => handleAnswerSelect(i)}
                               disabled={answered}
-                              className={`p-4 rounded-lg text-left transition-all border-2 text-black ${selectedAnswer === i
+                              className={`rounded-lg border-2 p-4 text-left text-black transition-all max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === i
                                 ? selectedAnswer === currentArticle.questions[currentQuestion].correct
                                   ? 'bg-green-100 border-green-300'
                                   : 'bg-red-100 border-red-300'
@@ -475,7 +482,9 @@ export function NoticiasSencillas({ onBack, level: initialLevel = 1 }: NoticiasS
                               whileHover={!answered ? { scale: 1.02 } : {}}
                               whileTap={!answered ? { scale: 0.98 } : {}}
                             >
-                              <span className="">{String.fromCharCode(65 + i)}. {opt}</span>
+                              <span className="block break-words whitespace-normal">
+                                {String.fromCharCode(65 + i)}. {opt}
+                              </span>
                             </motion.button>
                           ))}
                         </div>

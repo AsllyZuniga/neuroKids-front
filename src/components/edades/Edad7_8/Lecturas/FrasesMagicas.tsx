@@ -459,7 +459,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
     <LevelLock level={level} isLocked={isLevelLocked}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, rgb(210, 168, 253) 0%, rgb(253, 181, 222) 100%)">
       <div
-        className="min-h-screen p-6 relative overflow-hidden"
+        className="relative min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8"
       >
         <ConfettiExplosion show={showMagic} />
         <ConfettiExplosion show={readingComplete} />
@@ -493,19 +493,19 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
             key={currentSentence}
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="max-w-7xl mx-auto"
+            className="mx-auto w-full min-w-0 max-w-7xl"
           >
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-500 mb-6">
-              <CardContent className="p-6">
-                <div className="grid md:grid-cols-2 gap-8 items-center">
-                  <div className="text-center">
-                    <div className="bg-gradient-to-br from-purple-200 to-pink-200 rounded-2xl p-8 border-4 border-purple-300 min-h-[220px] flex items-center justify-center">
+            <Card className="mb-6 border-2 border-purple-500 bg-white/90 backdrop-blur-sm">
+              <CardContent className="p-4 sm:p-6 lg:p-8">
+                <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-8">
+                  <div className="min-w-0 text-center">
+                    <div className="flex min-h-[min(42vh,14rem)] items-center justify-center rounded-2xl border-4 border-purple-300 bg-gradient-to-br from-purple-200 to-pink-200 p-4 sm:min-h-[220px] sm:p-8">
                       {!showMagic ? (
                         <motion.img
                           key="before"
                           src={sentence.beforeImage}
                           alt="Antes de la magia"
-                          className="w-50 h-50 object-contain"
+                          className="mx-auto h-auto max-h-[min(38vh,12rem)] w-full max-w-[260px] object-contain sm:max-h-52 sm:max-w-[280px]"
                           animate={{ scale: [1, 1.05, 1] }}
                           
                         />
@@ -514,7 +514,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                           key="after"
                           src={sentence.afterImage}
                           alt="Después de la magia"
-                          className="w-50 h-50 object-contain"
+                          className="mx-auto h-auto max-h-[min(38vh,12rem)] w-full max-w-[260px] object-contain sm:max-h-52 sm:max-w-[280px]"
                          
                           
                         />
@@ -524,11 +524,11 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
 
 
                   </div>
-                  <div className="space-y-6">
+                  <div className="min-w-0 space-y-4 sm:space-y-6">
 
-                    <div className="text-center bg-pink-100 p-5 rounded-xl border-2 border-purple-500">
-                      <h4 className="text-lg text-black mb-2">Palabra mágica</h4>
-                      <div className="text-5xl text-purple-700 ">
+                    <div className="rounded-xl border-2 border-purple-500 bg-pink-100 p-4 text-center sm:p-5">
+                      <h4 className="mb-2 text-base text-black sm:text-lg">Palabra mágica</h4>
+                      <div className="text-4xl font-bold text-purple-700 sm:text-5xl">
                         {sentence.magicWord}
                       </div>
 
@@ -538,7 +538,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                       disabled={isListening || magicActivated}
                       playOnClick
                       playOnHover={false}
-                      className={`w-full text-lg py-6 ${magicActivated
+                      className={`min-h-12 w-full touch-manipulation py-4 text-base sm:py-6 sm:text-lg ${magicActivated
                         ? 'bg-gray-400 cursor-not-allowed'
                         : isListening
                           ? 'bg-red-400 animate-pulse'
@@ -554,15 +554,15 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                       )}
                     </ButtonWithAudio>
 
-                    <div className="bg-yellow-50 p-5 rounded-xl border-2 border-yellow-200">
-                      <h4 className="text-lg text-yellow-800 mb-2">Consejo 💡</h4>
-                      <p className="text-yellow-700">
+                    <div className="rounded-xl border-2 border-yellow-200 bg-yellow-50 p-4 sm:p-5">
+                      <h4 className="mb-2 text-base text-yellow-800 sm:text-lg">Consejo 💡</h4>
+                      <p className="text-sm leading-snug text-yellow-700 sm:text-base">
                         Activa el microfono y di con voz clara la palabra mágica resaltada. ¡Recuerda pronunciarla igual que aparece!
                       </p>
                     </div>
 
-                    <div className="text-center text-gray-800 bg-gradient-to-r from-blue-100 to-green-100 p-6 rounded-xl border-2 border-blue-500">
-                      <p className="text-xl">
+                    <div className="rounded-xl border-2 border-blue-500 bg-gradient-to-r from-blue-100 to-green-100 p-4 text-center text-gray-800 sm:p-6">
+                      <p className="text-lg leading-snug sm:text-xl">
                         {!showMagic ? sentence.beforeMagic : sentence.afterMagic}
                       </p>
                     </div>
@@ -572,7 +572,7 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                         disabled={isPlaying}
                         playOnClick
                         playOnHover={false}
-                        className={`w-full text-lg py-6 ${isPlaying
+                        className={`min-h-12 w-full touch-manipulation py-4 text-base sm:py-6 sm:text-lg ${isPlaying
                           ? 'bg-green-500 text-black animate-pulse'
                           : 'bg-blue-500 hover:bg-blue-600 text-black'
                           }`}
@@ -588,16 +588,16 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
             </Card>
 
             {/* NAVEGACIÓN */}
-            <div className="flex justify-between items-center mt-6">
+            <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-between">
               <ButtonWithAudio
                 onClick={goToPreviousSentence}
                 disabled={currentSentence === 0}
                 playOnHover
                 playOnClick
                 variant="outline"
-                className="bg-green-500"
+                className="min-h-11 w-full bg-green-500 text-sm sm:w-auto sm:text-base"
               >
-                <ChevronLeft className="w-5 h-5 mr-2" />
+                <ChevronLeft className="mr-2 h-5 w-5 shrink-0" />
                 Anterior
               </ButtonWithAudio>
 
@@ -606,10 +606,10 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
                 disabled={!magicActivated}
                 playOnHover
                 playOnClick
-                className="bg-purple-500 hover:bg-purple-600 text-white"
+                className="min-h-11 w-full bg-purple-500 text-sm text-white hover:bg-purple-600 sm:w-auto sm:text-base"
               >
                 Siguiente
-                <ChevronRight className="w-5 h-5 ml-2" />
+                <ChevronRight className="ml-2 h-5 w-5 shrink-0" />
               </ButtonWithAudio>
             </div>
           </motion.div>

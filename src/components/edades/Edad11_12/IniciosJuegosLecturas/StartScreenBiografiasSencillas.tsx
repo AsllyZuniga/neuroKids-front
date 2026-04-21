@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Play, ArrowLeft } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { AnimatedText } from "@/components/ui/AnimatedText";
-import fondo from '../../../../assets/11_12/biografias_sencillas/fondo.svg';
+import fondo from "@/assets/11_12/biografias_sencillas/fondo.svg";
+import fondoTelefono from "@/assets/11_12/biografias_sencillas/fondo_telefono.svg";
 
 interface StartScreenBiografiasSencillasProps {
   onStart: () => void;
@@ -14,11 +17,17 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
 
 
   return (
-    
-    <div
-      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat p-4 pb-10 pt-16 sm:pt-20"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto p-4 pb-10 pt-16 sm:pt-20">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       <Button
         onClick={onBack}
         variant="outline"
@@ -31,7 +40,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
 
 
 
-      <div className="relative z-10 w-full max-w-4xl px-2 text-center sm:px-4">
+      <div className="relative z-20 w-full max-w-4xl px-2 text-center sm:px-4">
 
 
         <motion.div
@@ -60,7 +69,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
                 text={letter}
                 hoverScale={1.3}
                 delay={index * 0.1}
-                className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-7xl"
+                className="inline-block max-[480px]:text-2xl text-3xl text-purple-600 sm:text-5xl md:text-7xl"
                 
               />
             ))}
@@ -105,13 +114,16 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
             <Button
               onClick={onStart}
               size="lg"
-              className="relative bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 hover:from-purple-600 hover:via-pink-600 hover:to-blue-600 text-white text-xl px-8 py-6 rounded-full shadow-lg border-2 border-white/50 dyslexia-friendly font-bold"
+              className={cn(
+                "relative rounded-full border-2 border-white/50 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 px-8 py-6 text-xl font-bold text-white shadow-lg hover:from-purple-600 hover:via-pink-600 hover:to-blue-600 dyslexia-friendly",
+                startScreenMobileComenzarButton
+              )}
               style={{
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
               }}
             >
               
-        <Play className="w-8 h-8 mr-3 fill-white" />
+        <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
           ¡Comenzar a Jugar!
               <motion.div
                 animate={{ rotate: [0, 20, -20, 0] }}

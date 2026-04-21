@@ -395,7 +395,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
 
   if (levelComplete && !showMotivational) {
     return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-blue-100 via-green-100 to-yellow-100">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8 bg-gradient-to-br from-blue-100 via-green-100 to-yellow-100">
         <GameHeader
           title={`Revista Infantil`}
           level={currentLevel}
@@ -418,7 +418,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
 
   if (showQuiz && !showMotivational && !levelComplete) {
     return (
-      <div className="min-h-screen p-6 bg-gradient-to-br from-blue-100 via-green-100 to-yellow-100">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8 bg-gradient-to-br from-blue-100 via-green-100 to-yellow-100">
         <GameHeader
           title={`Revista Infantil - Quiz`}
           level={currentLevel}
@@ -427,39 +427,40 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
           onRestart={restartLevel}
         />
 
-        <div className="max-w-7xl mx-auto">
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
           >
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-200">
-              <CardContent className="p-8">
-                <h3 className="text-xl mb-6 text-black">
+            <Card className="min-w-0 border-2 border-blue-200 bg-white/90 backdrop-blur-sm">
+              <CardContent className="min-w-0 overflow-hidden p-4 sm:p-8">
+                <h3 className="mb-4 break-words text-lg text-black sm:mb-6 sm:text-xl">
                   {article.quiz.question}
                 </h3>
 
-                <div className="grid gap-4">
+                <div className="grid gap-3 sm:gap-4">
                   {article.quiz.options.map((option, index) => (
                     <motion.div
                       key={index}
                       whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
                       whileTap={{ scale: 0.98 }}
+                      className="min-w-0"
                     >
                       <Button
                         onClick={() => handleQuizAnswer(index)}
                         disabled={selectedAnswer !== null}
                         variant="outline"
-                        className={`w-full justify-start text-left p-6 h-auto transition-all text-black ${selectedAnswer === null
+                        className={`h-auto min-h-12 w-full justify-start whitespace-normal break-words p-4 text-left text-sm transition-all text-black sm:p-6 sm:text-base ${selectedAnswer === null
                           ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-blue-300'
                           : 'bg-white border-gray-300 opacity-70'
                           }`}
 
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm">
+                        <div className="flex items-start gap-3">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-500 text-sm text-white">
                             {String.fromCharCode(65 + index)}
                           </div>
-                          <span className="text-lg">{option}</span>
+                          <span className="min-w-0 flex-1 leading-snug">{option}</span>
                         </div>
                       </Button>
                     </motion.div>
@@ -470,10 +471,10 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200"
+                    className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-4 sm:mt-6"
                   >
-                    <h4 className="text-lg mb-2 text-blue-800">Explicación:</h4>
-                    <p className="text-blue-700">{article.quiz.explanation}</p>
+                    <h4 className="mb-2 text-base text-blue-800 sm:text-lg">Explicación:</h4>
+                    <p className="break-words text-sm text-blue-700 sm:text-base">{article.quiz.explanation}</p>
                   </motion.div>
                 )}
               </CardContent>
@@ -513,7 +514,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dbeafe 0%, #dcfce7 50%, #fef9c3 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Revista Infantil`}
           level={currentLevel}
@@ -536,7 +537,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
           />
         </div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <motion.div
           key={currentArticle}
           initial={{ x: 50, opacity: 0 }}
@@ -545,24 +546,31 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
           transition={{ duration: 0.5 }}
           className="mb-6"
         >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-200">
-            <CardContent className="p-8">
-              <div className="border-b-2 border-gray-200 pb-6 mb-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <img src={article.image} alt={article.title} className="w-30 h-24 object-contain rounded-xl" />
-                  <div className="flex-1">
-                    <h2 className="text-2xl text-black mb-2">{article.title}</h2>
-                    <div className="flex flex-wrap items-center gap-3">
+          <Card className="min-w-0 border-2 border-blue-200 bg-white/90 backdrop-blur-sm">
+            <CardContent className="min-w-0 overflow-hidden p-4 sm:p-8">
+              <div className="mb-6 border-b-2 border-gray-200 pb-6">
+                {/* Móvil: imagen arriba, título y meta abajo · sm+: fila como antes */}
+                <div className="mb-4 flex flex-col items-center gap-4 sm:mb-0 sm:flex-row sm:items-start sm:gap-4">
+                  <div className="flex w-full shrink-0 justify-center sm:w-auto sm:justify-start">
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="h-28 max-h-32 w-full max-w-[220px] rounded-xl object-contain sm:h-24 sm:max-h-none sm:w-32 sm:max-w-[8.5rem]"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1 text-center sm:text-left">
+                    <h2 className="mb-2 break-words text-xl text-black sm:text-2xl">{article.title}</h2>
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start sm:gap-3">
                       <Badge className={`${getCategoryColor(article.category)} border`}>
-                        <Tag className="w-3 h-3 mr-1" />
+                        <Tag className="mr-1 h-3 w-3" />
                         {article.category}
                       </Badge>
                       <div className="flex items-center gap-1 text-sm text-black">
-                        <User className="w-4 h-4" />
-                        {article.author}
+                        <User className="h-4 w-4 shrink-0" />
+                        <span className="break-words">{article.author}</span>
                       </div>
                       <div className="flex items-center gap-1 text-sm text-black">
-                        <Calendar className="w-4 h-4" />
+                        <Calendar className="h-4 w-4 shrink-0" />
                         {article.date}
                       </div>
                     </div>
@@ -570,17 +578,17 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
                 </div>
               </div>
 
-              <div className="mb-6">
+              <div className="mb-6 min-w-0">
                 <AudioPlayer text={article.content} />
               </div>
 
-              <div className="mb-6">
-                <div className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-lg border-2 border-blue-200">
-                  <p className="text-lg leading-relaxed text-black">{article.content}</p>
+              <div className="mb-6 min-w-0">
+                <div className="rounded-lg border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-green-50 p-4 sm:p-6">
+                  <p className="break-words text-base leading-relaxed text-black sm:text-lg">{article.content}</p>
                 </div>
               </div>
 
-              <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-200 mb-6">
+              <div className="mb-6 rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">💡</span>
                   <h4 className="text-lg text-yellow-800">Dato Curioso:</h4>
@@ -589,11 +597,10 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
               </div>
 
               {!readArticles.has(currentArticle) && (
-                <div className="text-center " >
+                <div className="mx-auto max-w-full text-center">
                   <Button
                     onClick={markAsRead}
-
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 text-lg"
+                    className="h-auto min-h-11 w-full max-w-full !whitespace-normal break-words bg-blue-500 px-3 py-2.5 text-center text-sm leading-snug text-white hover:bg-blue-600 sm:w-auto sm:max-w-md sm:px-8 sm:py-3 sm:text-lg sm:leading-normal"
                   >
                     Marcar como leído y hacer quiz
                   </Button>
@@ -603,26 +610,26 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
           </Card>
         </motion.div>
 
-        <div className="flex justify-between items-center">
+        <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <Button
             onClick={previousArticle}
             disabled={currentArticle === 0}
             variant="outline"
-            className="bg-green-500 backdrop-blur-sm border-2"
+            className="order-2 min-h-11 w-full border-2 bg-green-500 backdrop-blur-sm sm:order-1 sm:w-auto"
           >
-            <ChevronLeft className="w-4 h-4 mr-2" />
+            <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
             Artículo Anterior
           </Button>
 
-          <div className="flex gap-2">
+          <div className="order-1 flex max-w-full flex-wrap justify-center gap-1.5 overflow-x-auto px-1 py-1 sm:order-2 sm:max-w-[min(100%,14rem)] sm:gap-2 md:max-w-none">
             {currentArticles.map((_, index) => (
               <div
                 key={index}
-                className={`w-3 h-3 rounded-full transition-colors ${index === currentArticle
-                  ? 'bg-blue-500'
+                className={`h-2.5 shrink-0 rounded-full transition-colors sm:h-3 ${index === currentArticle
+                  ? 'w-7 bg-blue-500 sm:w-8'
                   : readArticles.has(index)
-                    ? 'bg-green-400'
-                    : 'bg-gray-300'
+                    ? 'w-2.5 bg-green-400 sm:w-3'
+                    : 'w-2.5 bg-gray-300 sm:w-3'
                   }`}
               />
             ))}
@@ -631,10 +638,10 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
           <Button
             onClick={nextArticle}
             disabled={currentArticle === currentArticles.length - 1 || !readArticles.has(currentArticle)}
-            className="bg-blue-500 hover:bg-blue-600 text-white"
+            className="order-3 min-h-11 w-full bg-blue-500 text-white hover:bg-blue-600 sm:w-auto"
           >
             {currentArticle === currentArticles.length - 1 ? "Finalizar Nivel" : "Siguiente Artículo"}
-            <ChevronRight className="w-4 h-4 ml-2" />
+            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
           </Button>
         </div>
 

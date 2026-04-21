@@ -435,7 +435,7 @@ useEffect(() => {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #E3F2FD 0%, #C8E6C9 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title="Mini Aventuras"
           level={currentAdventure + 1}
@@ -458,9 +458,9 @@ useEffect(() => {
           />
         </div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <div className="text-center mb-4">
-          <h2 className="text-2xl  text-gray-800 ">
+          <h2 className="text-xl text-gray-800 sm:text-2xl">
             {adventure.title}
           </h2>
         </div>
@@ -471,28 +471,30 @@ useEffect(() => {
           animate={{ x: 0, opacity: 1 }}
           className="mb-6"
         >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-200 text-black">
-            <CardContent className="p-14">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="text-center">
-                  <motion.img src={page.image} alt="ilustración" className="w-64 h-64 mx-auto object-contain mb-4" 
-                  initial={{ scale: 0.8, opacity: 0}}
-                  animate={{ scale: 1, opacity: 1 }}
+          <Card className="min-w-0 border-2 border-blue-200 bg-white/90 text-black">
+            <CardContent className="min-w-0 overflow-x-hidden p-4 sm:p-8 lg:p-10">
+              <div className="grid min-w-0 grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
+                <div className="min-w-0 text-center">
+                  <motion.img
+                    src={page.image}
+                    alt="ilustración"
+                    className="mx-auto mb-4 h-auto max-h-52 w-full max-w-[min(100%,16rem)] object-contain sm:max-h-64 md:max-w-[14rem]"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
                   />
                   <Button
                     onClick={playPageAudio}
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
+                    className="min-h-11 bg-blue-500 text-white hover:bg-blue-600"
                   >
-                    <Volume2 className="w-4 h-4 mr-2" />
+                    <Volume2 className="mr-2 h-4 w-4 shrink-0" />
                     {isSpeaking ? "Reproduciendo..." : "Escuchar"}
                   </Button>
                 </div>
 
-
-                <div>
+                <div className="min-w-0 overflow-x-hidden">
                   {/* TEXTO */}
                   {(!page.interactive || !showQuestion) && (
-                    <p className="text-xl md:text-2xl lg:text-2xl leading-relaxed text-black mb-6">
+                    <p className="mb-4 break-words text-base leading-relaxed text-black sm:mb-6 sm:text-xl md:text-2xl">
                       {page.text}
                     </p>
                   )}
@@ -501,7 +503,7 @@ useEffect(() => {
                   {page.interactive && !showQuestion && (
                     <Button
                       onClick={() => setShowQuestion(true)}
-                      className="mb-4 bg-purple-500 hover:bg-purple-600 text-white"
+                      className="mb-4 min-h-11 w-full bg-purple-500 text-white hover:bg-purple-600 sm:w-auto"
                     >
                       Responder pregunta
                     </Button>
@@ -509,20 +511,22 @@ useEffect(() => {
 
                   {/* PREGUNTA */}
                   {page.interactive && showQuestion && (
-                    <Card className="bg-yellow-50 border-2 border-yellow-200">
-                      <CardContent className="p-4">
-                        <h4 className=" text-xl md:text-xl lg:text-xl leading-relaxed mb-3 text-yellow-800">
+                    <Card className="max-w-full min-w-0 border-2 border-yellow-200 bg-yellow-50">
+                      <CardContent className="flex max-h-[min(75dvh,36rem)] min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto p-3 sm:max-h-[min(80dvh,40rem)] sm:p-4">
+                        <h4 className="shrink-0 break-words whitespace-pre-wrap text-sm font-semibold leading-relaxed text-yellow-800 [overflow-wrap:anywhere] sm:text-lg md:text-xl">
                           {page.interactive.content}
                         </h4>
-                        <div className="space-y-2">
+                        <div className="min-h-0 space-y-2 sm:space-y-3">
                           {page.interactive.options.map((opt, i) => (
                             <Button
                               key={i}
                               onClick={() => handleInteraction(i)}
                               disabled={interactionComplete}
-                              className="w-full justify-start"
+                              className="h-auto min-h-12 w-full min-w-0 shrink items-start justify-start gap-2 whitespace-normal rounded-md px-3 py-3 text-left text-xs leading-snug sm:text-base sm:leading-relaxed"
                             >
-                              {opt}
+                              <span className="block min-w-0 flex-1 whitespace-pre-wrap break-words text-left [overflow-wrap:anywhere]">
+                                {opt}
+                              </span>
                             </Button>
                           ))}
                         </div>
@@ -535,21 +539,21 @@ useEffect(() => {
           </Card>
         </motion.div>
 
-        <div className="flex justify-between">
+        <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-between">
           <Button onClick={goToPreviousPage} 
-          className="bg-green-500 backdrop-blur-sm"
+          className="min-h-11 w-full bg-green-500 backdrop-blur-sm sm:w-auto"
           >       
-        <ChevronLeft className="w-4 h-4 mr-2" />
+        <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
             Anterior
           </Button>
 
           <Button
             onClick={goToNextPage}
             disabled={page.interactive && !interactionComplete}
-            className="bg-blue-500 hover:bg-blue-600 text-white"
+            className="min-h-11 w-full bg-blue-500 text-white hover:bg-blue-600 sm:w-auto"
           >
             {currentPage === totalPages - 1 ? "Finalizar" : "Siguiente"}
-            <ChevronRight className="w-4 h-4 ml-2" />
+            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
           </Button>
         </div>
 

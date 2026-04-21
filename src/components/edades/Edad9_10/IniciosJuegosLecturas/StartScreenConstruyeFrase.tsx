@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import fondo from "@/assets/9_10/construye_frase/background_construye_frase.svg";
+import fondoTelefono from "@/assets/9_10/construye_frase/fondo_telefono.svg";
 
 interface StartScreenConstruyeFraseProps {
   onStart: () => void;
@@ -28,10 +31,17 @@ export function StartScreenConstruyeFrase({
   ];
 
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       <Button
         onClick={onBack}
         variant="outline"
@@ -63,9 +73,9 @@ export function StartScreenConstruyeFrase({
         ))}
       </div>
 
-      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
+      <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
         <div className="mb-8 text-center sm:mb-12">
-          <h1 className="mb-4 flex flex-wrap justify-center gap-2 sm:gap-4 text-4xl sm:text-6xl md:text-7xl lg:text-8xl dyslexia-friendly">
+          <h1 className="mb-4 flex max-[480px]:text-3xl flex-wrap justify-center gap-2 text-4xl sm:gap-4 sm:text-6xl md:text-7xl lg:text-8xl dyslexia-friendly">
             {titleWords.map((wordObj, wordIndex) => {
               let letterCount = 0;
               if (wordIndex > 0) {
@@ -113,9 +123,12 @@ export function StartScreenConstruyeFrase({
           <Button
             onClick={onStart}
             size="lg"
-            className="text-xl px-8 py-6 rounded-full shadow-lg bg-gradient-to-r from-pink-500 to-purple-500 text-white flex items-center gap-3 dyslexia-friendly"
+            className={cn(
+              "flex items-center gap-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-6 text-xl text-white shadow-lg dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
           >
-            <Play className="w-8 h-8 mr-3 fill-white" />
+            <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
             ¡Comenzar a Jugar!
           </Button>
         </motion.div>

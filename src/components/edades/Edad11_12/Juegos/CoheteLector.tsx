@@ -395,7 +395,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e2e8f0 0%, #bae6fd 50%, #dbeafe 100%)">
-    <div className="min-h-screen p-6 text-slate-800">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8 text-slate-800">
         <GameHeader
           title={`Cohete Lector`}
           level={currentLevel}
@@ -418,11 +418,11 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
           />
         </div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
           <div className="lg:col-span-5">
             <Card className="bg-purple-300 border border-slate-200 shadow-sm">
-              <CardContent className="p-8">
+              <CardContent className="p-8 max-[480px]:p-4">
                 <h3 className="text-lg mb-6 text-center">Progreso del Cohete</h3>
                 <div className="relative h-96 bg-gradient-to-t from-blue-800 to-black rounded-lg border border-white/20 overflow-hidden">
                   <motion.div
@@ -450,8 +450,8 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
               animate={{ x: 0, opacity: 1 }}
             >
               <Card className="bg-blue-100 backdrop-blur-sm border-2 border-blue-400">
-                <CardContent className="p-8">
-                  <div className="flex items-center gap-3 mb-6">
+                <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                  <div className="mb-6 flex flex-wrap items-center gap-3">
                     <Badge className={`${getTypeColor(challenge.type)} border`}>
                       {getTypeLabel(challenge.type)}
                     </Badge>
@@ -463,15 +463,19 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
                   </div>
 
                   {challenge.text && (
-                    <div className="mb-6 p-5 bg-slate-50 rounded-lg border border-slate-200">
+                    <div className="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-5 max-[480px]:p-3">
                       <div className="mb-3">
                         <AudioPlayer text={challenge.text || ""} />
                       </div>
-                      <p className="text-slate-700 leading-relaxed tracking-wide">{challenge.text}</p>
+                      <p className="break-words text-slate-700 leading-relaxed tracking-wide max-[480px]:text-sm">
+                        {challenge.text}
+                      </p>
                     </div>
                   )}
 
-                  <h3 className="text-xl mb-6 text-slate-800">{challenge.question}</h3>
+                  <h3 className="mb-6 break-words text-xl text-slate-800 max-[480px]:mb-4 max-[480px]:text-base">
+                    {challenge.question}
+                  </h3>
 
 
                   <div className="grid gap-4">
@@ -485,7 +489,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
                           onClick={() => handleAnswerSelect(index)}
                           disabled={selectedAnswer !== null}
                           variant="outline"
-                          className={`w-full justify-start text-left p-6 h-auto transition-all ${selectedAnswer === null
+                          className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
                             ? 'bg-white hover:bg-sky-50 border-slate-300'
                             : selectedAnswer === index
                               ? index === challenge.correct
@@ -497,7 +501,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
 
                             }`}
                         >
-                          <span>{option}</span>
+                          <span className="text-left">{option}</span>
                         </Button>
                       </motion.div>
                     ))}
@@ -507,11 +511,10 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 p-5 bg-blue-100 rounded-lg border border-blue-300"
-
+                      className="mt-6 rounded-lg border border-blue-300 bg-blue-100 p-5 max-[480px]:p-3"
                     >
-                      <h4 className="text-lg mb-2 text-blue-800">Explicación:</h4>
-                      <p className="text-blue-700">{challenge.explanation}</p>
+                      <h4 className="mb-2 text-lg text-blue-800 max-[480px]:text-base">Explicación:</h4>
+                      <p className="break-words text-blue-700 max-[480px]:text-sm">{challenge.explanation}</p>
 
                     </motion.div>
                   )}

@@ -223,17 +223,21 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
   return (
     <LevelLock level={level} isLocked={isLevelLocked}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)">
-      <div className="min-h-screen p-6 relative overflow-hidden">
+      <div className="relative min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <ConfettiExplosion show={showBingo} />
         <RewardAnimation type="star" show={showReward} />
         {showBingo && (
           <motion.div
             initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1.5, rotate: 0 }}
+            animate={{ scale: 1, rotate: 0 }}
             exit={{ scale: 0, rotate: 180 }}
-            className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
+            transition={{ type: "spring", stiffness: 260, damping: 22 }}
+            className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none px-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
           >
-            <div className="text-8xl text-yellow-400 drop-shadow-2xl animate-pulse">
+            <div
+              className="max-w-[min(100%,20ch)] text-center font-extrabold leading-none text-yellow-400 drop-shadow-2xl animate-pulse"
+              style={{ fontSize: "clamp(2.75rem, 14vw, 6rem)" }}
+            >
               ¡BINGO!
             </div>
           </motion.div>
@@ -265,7 +269,7 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
 
         {/* JUEGO */}
         {!bingoAchieved && !showMotivational && !showLevelComplete && (
-          <div className="grid md:grid-cols-3 gap-5 max-w-7xl mx-auto">
+          <div className="mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 gap-3 sm:gap-5 md:grid-cols-3">
             <motion.div
               key={currentWord}
               initial={{ scale: 0.8, opacity: 0 }}
@@ -303,12 +307,12 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
               </ButtonWithAudio>
             </motion.div>
 
-            <div className="md:col-span-2 bg-white/90 p-4 rounded-2xl shadow-lg">
+            <div className="md:col-span-2 bg-white/90 p-2 sm:p-4 rounded-2xl shadow-lg w-full min-w-0">
               <div
-                className="grid gap-3"
+                className="grid gap-1.5 sm:gap-3 w-full min-w-0"
                 style={{
-                  gridTemplateColumns: `repeat(${data.gridSize}, minmax(100px, 1fr))`,
-                  gridTemplateRows: `repeat(${data.rows || data.gridSize}, minmax(100px, 1fr))`,
+                  gridTemplateColumns: `repeat(${data.gridSize}, minmax(0, 1fr))`,
+                  gridTemplateRows: `repeat(${data.rows || data.gridSize}, minmax(0, auto))`,
                 }}
               >
                 {grid.map((cell, i) => (
@@ -331,7 +335,7 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
                   >
                     <Card
                       onClick={() => handleCellClick(cell.word)}
-                      className={`cursor-pointer text-center p-3 border-2 rounded-xl transition-all h-full flex flex-col justify-center
+                      className={`cursor-pointer text-center p-1.5 sm:p-3 border-2 rounded-lg sm:rounded-xl transition-all h-full min-h-[4.5rem] sm:min-h-[5.5rem] flex flex-col justify-center min-w-0
                       ${cell.matched
                           ? "border-green-500 bg-green-100 shadow-2xl scale-110"
                           : "border-blue-200 hover:bg-blue-50"
@@ -343,11 +347,11 @@ export function BingoPalabras({ onBack }: { onBack: () => void }) {
                           rotate: [0, 360],
                         } : {}}
                         transition={{ duration: 0.8 }}
-                        className="text-5xl mb-1"
+                        className="text-2xl sm:text-4xl md:text-5xl mb-0.5 sm:mb-1 leading-none"
                       >
                         {cell.emoji}
                       </motion.div>
-                      <div className="text-lg  text-gray-800">{cell.word}</div>
+                      <div className="text-[0.65rem] sm:text-xs md:text-sm lg:text-lg font-semibold text-gray-800 break-words leading-tight">{cell.word}</div>
                     </Card>
                   </motion.div>
                 ))}

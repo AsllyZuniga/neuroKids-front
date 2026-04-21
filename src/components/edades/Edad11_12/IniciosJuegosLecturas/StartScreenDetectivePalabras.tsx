@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { motion } from "framer-motion";
 import { ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
-import fondo from '../../../../assets/11_12/detective_palabras/fondo.svg';
+import { cn } from "@/components/ui/utils";
+import fondo from "@/assets/11_12/detective_palabras/fondo.svg";
+import fondoTelefono from "@/assets/11_12/detective_palabras/fondo_telefono.svg";
 
 interface StartScreenDetectivePalabrasProps {
   onStart: () => void;
@@ -16,11 +19,17 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
 
 
   return (
-
-    <div
-      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       <Button
         onClick={onBack}
@@ -32,7 +41,7 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
       </Button>
 
 
-      <div className="max-w-4xl w-full text-center relative z-10 mx-auto">
+      <div className="relative z-20 mx-auto w-full max-w-4xl text-center">
         <motion.div
           className="flex justify-center gap-8 mb-8"
           initial={{ opacity: 0, y: -50 }}
@@ -49,7 +58,7 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
                 {word.split("").map((letter, index) => (
                   <motion.span
                     key={index}
-                    className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-7xl"
+                    className="inline-block max-[480px]:text-2xl text-3xl text-purple-600 sm:text-5xl md:text-7xl"
                     initial={{ opacity: 0, y: -100, rotate: -180 }}
                     animate={{
                       opacity: 1,
@@ -108,7 +117,10 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
             onClick={onStart}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-xl px-8 py-6 rounded-full shadow-lg relative overflow-hidden dyslexia-friendly"
+            className={cn(
+              "relative overflow-hidden rounded-full bg-gradient-to-r from-purple-400 to-pink-400 px-8 py-6 text-xl text-white shadow-lg hover:from-purple-500 hover:to-pink-500 dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
             size="lg"
           >
             <motion.span
@@ -116,9 +128,9 @@ export function StartScreenDetectivePalabras({ onStart, onBack }: StartScreenDet
                 scale: isHovered ? 1.1 : 1,
               }}
               transition={{ duration: 0.2 }}
-              className="relative z-10 flex items-center gap-3"
+              className="relative z-10 flex items-center gap-3 max-[480px]:gap-2"
             >
-              <Play className="w-8 h-8 mr-3 fill-white" />
+              <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
               ¡Comenzar a Jugar!
             </motion.span>
 

@@ -317,7 +317,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
     <LevelLock level={localLevel} isLocked={isLevelLocked}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #f79facff 0%, #87CEEB 100%)">
     <div
-      className="min-h-screen p-6"
+      className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8"
     >
       <RewardAnimation type="star" show={showReward} />
 
@@ -352,20 +352,20 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
           key={currentQuestion}
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="grid md:grid-cols-2 gap-8 max-w-7xl mx-auto"
+          className="mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 gap-4 md:grid-cols-2 sm:gap-8"
         >
           {/* BOTÓN DE SONIDO */}
           <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 flex items-center justify-center">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <ButtonWithAudio
                 onClick={playAudio}
                 playOnClick
                 playOnHover
                 disabled={isPlaying}
                 audioText={currentQ.soundLabel}
-                className="bg-orange-500 hover:bg-orange-600 text-white text-xl px-10 py-6 w-full"
+                className="bg-orange-500 hover:bg-orange-600 text-white text-base sm:text-xl px-4 py-4 sm:px-10 sm:py-6 w-full min-h-[3rem] sm:min-h-0"
               >
-                <Volume2 className="w-8 h-8 mr-3" />
+                <Volume2 className="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3 shrink-0" />
                 {isPlaying ? "Reproduciendo..." : currentQ.soundLabel}
               </ButtonWithAudio>
             </CardContent>
@@ -380,7 +380,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
                 whileTap={{ scale: 0.98 }}
               >
                 <Card
-                  className={`cursor-pointer transition-all border-2 p-4 text-lg
+                  className={`cursor-pointer transition-all border-2 p-3 sm:p-4 text-base sm:text-lg min-h-[3rem] flex items-center
                   ${selectedAnswer === null
                       ? 'bg-white hover:bg-orange-50 border-gray-200 hover:border-orange-300 text-black'
                       : selectedAnswer === index

@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Rocket, Star, Sparkles, ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import fondo from "@/assets/11_12/cohete_lector/fondo.svg";
+import fondoTelefono from "@/assets/11_12/cohete_lector/fondo_telefono.svg";
 
 interface StartScreenCoheteLectorProps {
   onStart: () => void;
@@ -15,10 +18,17 @@ const letters = title.split("");
 
 export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLectorProps) {
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       <Button
         onClick={onBack}
@@ -80,7 +90,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
 
 
     
-      <div className="relative z-10 mx-auto flex max-w-4xl min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 text-center sm:pt-24">
+      <div className="relative z-20 mx-auto flex min-h-[100dvh] min-h-screen max-w-4xl flex-col items-center justify-center px-4 pb-10 pt-20 text-center sm:pt-24">
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -93,7 +103,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
                       {letters.map((letter, index) => (
                         <motion.span
                           key={index}
-                          className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
+                          className="inline-block max-[480px]:text-3xl text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
                           style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                           initial={{ opacity: 0, y: -40, rotate: -10 }}
                           animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -126,14 +136,17 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
           <Button
             onClick={onStart}
             size="lg"
-            className="text-xl px-8 py-6 rounded-full shadow-lg transform transition-all hover:scale-110 dyslexia-friendly"
+            className={cn(
+              "transform rounded-full px-8 py-6 text-xl shadow-lg transition-all hover:scale-110 dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
             style={{
               background: 'linear-gradient(135deg, #FFB3D9 0%, #B8A3FF 100%)',
               border: 'none',
               color: 'white'
             }}
           >
-           <Play className="w-8 h-8 mr-3 fill-white" />
+           <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
           ¡Comenzar a Jugar!
           </Button>
         </motion.div>

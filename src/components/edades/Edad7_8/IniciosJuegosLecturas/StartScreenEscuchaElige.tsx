@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Play, ArrowLeft } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { cn } from "@/components/ui/utils";
 import escuchaLeft from "@/assets/Iniciosimages/escuchaelige.svg";
-import fondo from "@/assets/7_8/escuchaelige/fondo.svg"
+import fondo from "@/assets/7_8/escuchaelige/fondo.svg";
+import fondoTelefono from "@/assets/7_8/escuchaelige/fondo_telefono.svg";
 
 interface StartScreenEscuchaEligeProps {
   onStart: () => void;
@@ -46,10 +49,17 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
   };
 
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       <ButtonWithAudio
         onClick={onBack}
         playOnClick
@@ -150,10 +160,11 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
               <motion.span
                 key={index}
                 variants={letterVariants}
-                className={`inline-block ${letter === ' ' ? 'w-4' : ''
-                  }`}
+                className={cn(
+                  "inline-block text-[clamp(2rem,8vw,5rem)] max-[480px]:text-[clamp(1.35rem,6vw,2.75rem)]",
+                  letter === " " ? "w-4" : ""
+                )}
                 style={{
-                  fontSize: 'clamp(2rem, 8vw, 5rem)',
                   color: letter === ' ' ? 'transparent' :
                     index % 5 === 0 ? '#FF6B9D' :
                       index % 5 === 1 ? '#C06BE0' :
@@ -252,9 +263,12 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
                   playOnHover
                   playOnClick
                   size="lg"
-                  className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly"
+                  className={cn(
+                    "rounded-full bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 px-8 py-6 text-xl text-white shadow-lg hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 dyslexia-friendly",
+                    startScreenMobileComenzarButton
+                  )}
                 >
-                  <Play className="w-8 h-8 mr-3 fill-white" />
+                  <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
                   ¡Comenzar a Jugar!
                 </ButtonWithAudio>
               </div>

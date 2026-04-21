@@ -40,12 +40,24 @@
   &__auth {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    min-width: 0;
   }
 
   &__user-info {
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    min-width: 0;
+  }
+
+  /* Inicio + Perfil siempre en la misma fila (evita apilar en móvil) */
+  &__nav-pair {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
   }
 
   &__welcome {
@@ -111,22 +123,59 @@
       height: 45px;
     }
 
+    &__auth {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
     &__user-info {
-      gap: 0.5rem;
+      gap: 0.45rem;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     &__welcome {
       font-size: 0.8rem;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__nav-pair {
+      gap: 0.3rem;
+    }
+
+    &__profile-btn.button--medium {
+      min-width: 4.25rem;
+      height: 40px;
+      font-size: 12px;
+      padding: 0.35rem 0.55rem;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+
+    &__logout-btn.button--medium {
+      /* Misma altura que Inicio/Perfil; texto en 2 líneas si hace falta */
+      min-width: 3.75rem;
+      max-width: 5.4rem;
+      height: 40px;
+      font-size: 11px;
+      padding: 0.3rem 0.4rem;
+      line-height: 1.1;
+      white-space: normal;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     &__login-btn {
       font-size: 13px;
       padding: 0.5rem 1rem;
-    }
-
-    &__logout-btn {
-      font-size: 11px;
-      padding: 0.4rem 0.8rem;
     }
   }
 }
@@ -153,16 +202,34 @@
       padding: 0.4rem 0.8rem;
     }
 
-    &__logout-btn {
-      font-size: 10px;
-      padding: 0.35rem 0.6rem;
-    }
-
     &__user-info {
       gap: 0.35rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: flex-end;
       min-width: 0;
+    }
+
+    &__profile-btn.button--medium {
+      min-width: 3.75rem;
+      height: 38px;
+      font-size: 11px;
+      padding: 0.3rem 0.45rem;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+
+    &__logout-btn.button--medium {
+      min-width: 3.5rem;
+      max-width: 4.85rem;
+      height: 38px;
+      font-size: 10px;
+      padding: 0.25rem 0.35rem;
+      line-height: 1.08;
+      white-space: normal;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
   }
 }

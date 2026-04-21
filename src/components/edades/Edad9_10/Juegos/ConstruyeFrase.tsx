@@ -297,7 +297,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #ffedd5 0%, #fef9c3 50%, #fef3c7 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <ConfettiExplosion show={showReward} />
         <RewardAnimation type="confetti" show={showReward} />
 
@@ -330,11 +330,11 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
           />
         </motion.div>
 
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="lg:col-span-1">
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-yellow-200 mb-4">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="text-center mb-4">
                   <Badge variant="secondary" className="mb-2 text-black">
                     Tema: {challenge.theme}
@@ -344,7 +344,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
                       <img
                         src={challenge.image}
                         alt={challenge.theme}
-                        className="w-50 h-50 object-contain"
+                        className="mx-auto h-auto max-h-48 w-full max-w-[200px] object-contain sm:max-h-52 sm:max-w-[220px]"
                         draggable={false}
                       />
                     ) : (
@@ -401,7 +401,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
 
           <div className="lg:col-span-2">
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 mb-6">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <h3 className="text-lg mb-4 text-gray-800 flex items-center gap-2">
                   <Wrench className="w-5 h-5 text-orange-500" />
                   Tu frase construida:
@@ -441,7 +441,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
                   )}
                 </div>
 
-                <div className="flex justify-between items-center mt-4">
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="text-sm text-gray-600">
                     Palabras usadas: {userSentence.length} / {challenge.words?.length || 0}
                   </div>
@@ -449,7 +449,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
                   <Button
                     onClick={checkSentence}
                     disabled={userSentence.length !== (challenge.words?.length || 0) || showResult}
-                    className="bg-green-500 hover:bg-green-600 text-white"
+                    className="min-h-11 w-full bg-green-500 text-white hover:bg-green-600 sm:w-auto"
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Verificar Frase
@@ -460,7 +460,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
 
             {/* PALABRAS DISPONIBLES */}
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-amber-200">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <h3 className="text-lg mb-4 text-gray-800">Palabras disponibles:</h3>
 
                 <div className="flex flex-wrap gap-3">

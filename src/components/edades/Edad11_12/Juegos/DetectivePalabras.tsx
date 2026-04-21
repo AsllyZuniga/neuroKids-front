@@ -448,7 +448,7 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Detective de Palabras`}
           level={currentLevel}
@@ -472,14 +472,14 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
           />
         </div>
 
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-8 mt-6">
-          <div>
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl text-gray-800">{current.task}</h2>
-                  <div className="flex items-center gap-2">
+      <div className="mx-auto mt-6 w-full min-w-0 max-w-7xl">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="min-w-0">
+            <Card className="mb-6 border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+              <CardContent className="p-4 sm:p-6">
+                <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <h2 className="text-lg text-gray-800 sm:text-xl">{current.task}</h2>
+                  <div className="flex shrink-0 items-center gap-2">
                     <Crosshair className="w-5 h-5 text-indigo-500" />
                     <span className="text-gray-600">
                       {selectedWords.size} / {current.targetWords.length}
@@ -541,9 +541,9 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
             </Card>
           </div>
 
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 h-full">
-            <CardContent className="p-6">
-              <h2 className="text-xl mb-4 text-gray-800">¿Qué buscar?</h2>
+          <Card className="h-full border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+            <CardContent className="p-4 sm:p-6">
+              <h2 className="mb-4 text-lg text-gray-800 sm:text-xl">¿Qué buscar?</h2>
               <div className="space-y-4">
                 <div className="bg-blue-50 p-3 rounded-lg border-2 border-blue-200">
                   <div className="text-blue-600 mb-1 font-semibold">Sustantivos</div>

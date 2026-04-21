@@ -350,7 +350,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
   if (gameComplete) {
     return (
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dcfce7 0%, #dbeafe 50%, #f3e8ff 100%)">
-      <div className="min-h-screen p-6">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <ConfettiExplosion show={true} />
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto text-center">
           <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-200">
@@ -379,7 +379,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dcfce7 0%, #dbeafe 50%, #f3e8ff 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         {/* HEADER */}
         <GameHeader
           title="Ordena la Historia"
@@ -403,7 +403,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
           />
         </motion.div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <div className="text-center mb-6">
           <h2 className="text-2xl text-black">"{currentStories[currentStoryIndex].title}"</h2>
         </div>
@@ -451,9 +451,9 @@ const handleFragmentClick = (fragment: StoryFragment) => {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <h3 className="text-lg text-black">Tu historia ordenada:</h3>
-              <ButtonWithAudio onClick={initializeStory} variant="outline" size="sm" className="bg-blue-500" playOnHover audioText="Reiniciar historia">
+              <ButtonWithAudio onClick={initializeStory} variant="outline" size="sm" className="w-full bg-blue-500 sm:w-auto" playOnHover audioText="Reiniciar historia">
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reiniciar
               </ButtonWithAudio>

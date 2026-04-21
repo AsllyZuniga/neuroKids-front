@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { BookOpen, Newspaper, FileText, Star, ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import fondo from "@/assets/9_10/revista_infantil/fondo.svg";
+import fondoTelefono from "@/assets/9_10/revista_infantil/fondo_telefono.svg";
 
 interface StartScreenRevistaInfantilProps {
   onStart: () => void;
@@ -25,10 +28,17 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
 
   return (
 
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       <Button
         onClick={onBack}
@@ -57,7 +67,7 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
       ))}
 
 
-      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
+      <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
 
         <motion.div
           className="mb-12 text-center"
@@ -69,7 +79,7 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
             {letters.map((letter, index) => (
               <motion.span
                 key={index}
-                className="inline-block text-4xl sm:text-5xl md:text-7xl lg:text-8xl"
+                className="inline-block max-[480px]:text-3xl text-4xl sm:text-5xl md:text-7xl lg:text-8xl"
                 style={{
                   color: index % 2 === 0 ? '#FF6B9D' : '#C084FC',
                   textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
@@ -111,7 +121,10 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
           <Button
             onClick={onStart}
             size="lg"
-            className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly max-w-[calc(100vw-2rem)]"
+            className={cn(
+              "max-w-[calc(100vw-2rem)] rounded-full bg-gradient-to-r from-pink-400 to-purple-400 px-8 py-6 text-xl text-white shadow-lg hover:from-pink-500 hover:to-purple-500 dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
           >
             <motion.span
               animate={{
@@ -122,8 +135,9 @@ export function StartScreenRevistaInfantil({ onStart, onBack }: StartScreenRevis
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
+              className="inline-flex items-center gap-3 max-[480px]:gap-2"
             >
-              <Play className="w-8 h-8 mr-3 fill-white" />
+              <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
               ¡Comenzar a Jugar!
             </motion.span>
           </Button>

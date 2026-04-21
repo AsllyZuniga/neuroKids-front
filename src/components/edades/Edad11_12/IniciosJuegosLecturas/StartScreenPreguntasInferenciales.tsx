@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Brain, ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 
 import fondo from "@/assets/11_12/preguntas_inferenciales/fondo.svg";
+import fondoTelefono from "@/assets/11_12/preguntas_inferenciales/fondo_telefono.svg";
 
 interface StartScreenPreguntasInferencialesProps {
   onStart: () => void;
@@ -25,10 +28,17 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
 
 
   return (
-    <div
-      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       <Button
         onClick={onBack}
@@ -90,7 +100,7 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
 
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl px-4 pb-10 pt-20 text-center sm:pt-24">
+      <div className="relative z-20 w-full max-w-5xl px-4 pb-10 pt-20 text-center sm:pt-24">
 
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -172,7 +182,7 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
                   {word.split("").map((letter, index) => (
                     <motion.span
                       key={index}
-                      className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-7xl"
+                      className="inline-block max-[480px]:text-2xl text-3xl text-purple-600 sm:text-5xl md:text-7xl"
                       initial={{ opacity: 0, y: -100, rotate: -180 }}
                       animate={{
                         opacity: 1,
@@ -249,9 +259,12 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
             <Button
               onClick={onStart}
               size="lg"
-              className="relative bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 hover:from-purple-500 hover:via-pink-500 hover:to-blue-500 text-white text-xl px-8 py-6 rounded-full shadow-lg border-2 border-white/50 dyslexia-friendly"
+              className={cn(
+                "relative rounded-full border-2 border-white/50 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 px-8 py-6 text-xl text-white shadow-lg hover:from-purple-500 hover:via-pink-500 hover:to-blue-500 dyslexia-friendly",
+                startScreenMobileComenzarButton
+              )}
             >
-              <Play className="w-8 h-8 mr-3 fill-white" />
+              <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
               ¡Comenzar a Jugar!
 
             </Button>

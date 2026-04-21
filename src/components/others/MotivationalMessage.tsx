@@ -105,14 +105,15 @@ export function MotivationalMessage({
       {!showMotivationalCard && (
         <motion.div
           initial={{ scale: 0, rotate: -180, y: 200 }}
-          animate={{ scale: 1.4, rotate: 0, y: 0 }}
+          animate={{ scale: 1, rotate: 0, y: 0 }}
           exit={{ scale: 0, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          className="fixed inset-0 flex items-center justify-center pointer-events-none z-[9999]"
+          transition={{ type: "spring", stiffness: 400, damping: 22 }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none px-3 sm:px-6"
         >
           <div
-            className="text-6xl md:text-8xl drop-shadow-2xl animate-pulse"
+            className="max-w-[min(100%,18ch)] text-center font-extrabold leading-tight drop-shadow-2xl animate-pulse break-words hyphens-auto"
             style={{
+              fontSize: "clamp(1.75rem, 9vw, 5.5rem)",
               background: "linear-gradient(45deg, #FFD700, #FF6B6B, #4ECDC4)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -129,20 +130,22 @@ export function MotivationalMessage({
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0, opacity: 0 }}
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm sm:p-6"
         >
-          <Card className="bg-white/95 backdrop-blur-sm max-w-md mx-auto shadow-2xl">
-            <CardContent className="p-8 text-center">
-              <div className="text-6xl mb-4">⭐</div>
-              <h2 className="text-2xl mb-4 text-gray-800 ">¡Nivel Completado!</h2>
-              <p className="text-lg mb-4 text-purple-600 ">
+          <Card className="mx-auto max-h-[min(90dvh,32rem)] w-full max-w-md overflow-y-auto overscroll-contain shadow-2xl bg-white/95 backdrop-blur-sm">
+            <CardContent className="p-4 text-center sm:p-8">
+              <div className="mb-3 text-5xl sm:mb-4 sm:text-6xl">⭐</div>
+              <h2 className="mb-3 text-xl font-bold text-gray-800 sm:mb-4 sm:text-2xl">
+                ¡Nivel Completado!
+              </h2>
+              <p className="mb-3 text-base text-purple-600 sm:mb-4 sm:text-lg">
                 {customMessage || defaultMessage()}
               </p>
-              <p className="text-gray-600 mb-4">
+              <p className="mb-3 text-sm text-gray-600 sm:mb-4 sm:text-base">
                 {customSubtitle || defaultSubtitle}
               </p>
-              <div className="flex items-center justify-center gap-2">
-                <Trophy className="w-5 h-5 text-yellow-500" />
+              <div className="flex items-center justify-center gap-2 text-sm sm:text-base">
+                <Trophy className="h-5 w-5 shrink-0 text-yellow-500" />
                 <span className="text-yellow-600">+{score} XP ganados</span>
               </div>
             </CardContent>

@@ -443,7 +443,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Preguntas Inferenciales`}
           level={currentLevel}
@@ -466,15 +466,17 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
           />
         </div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <motion.div
           key={currentChallenge}
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           className="mt-6"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <Badge className={`${getTypeColor(challenge.type)} border text-lg px-3 py-1`}>
+          <div className="mb-6 flex flex-wrap items-center gap-3 max-[480px]:gap-2">
+            <Badge
+              className={`${getTypeColor(challenge.type)} border px-3 py-1 text-lg max-[480px]:text-xs max-[480px]:px-2 max-[480px]:py-0.5`}
+            >
               <span className="mr-2">{getTypeIcon(challenge.type)}</span>
               {getTypeLabel(challenge.type)}
             </Badge>
@@ -485,12 +487,12 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 mb-6">
-              <CardContent className="p-8">
+            <Card className="mb-6 border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+              <CardContent className="min-w-0 p-8 max-[480px]:p-4">
                 <div className="mb-4">
                   <AudioPlayer text={currentLevelData.text} onSpeakingChange={setIsSpeaking} />
                 </div>
-                <div className="text-lg leading-relaxed text-black bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border-2 border-indigo-200">
+                <div className="rounded-lg border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 text-lg leading-relaxed text-black max-[480px]:p-3 max-[480px]:text-sm">
                   {currentLevelData.text}
                 </div>
 
@@ -509,18 +511,19 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-4 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200 mt-4"
                   >
-                    <p className="text-yellow-800">{challenge.hint}</p>
+                    <p className="break-words text-yellow-800 max-[480px]:text-sm">{challenge.hint}</p>
                   </motion.div>
                 )}
 
               </CardContent>
             </Card>
 
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 mb-8 w-full max-w-full">
-
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl text-black">{challenge.question}</h3>
+            <Card className="mb-8 w-full max-w-full border-2 border-purple-200 bg-white/90 backdrop-blur-sm">
+              <CardContent className="min-w-0 p-4 sm:p-6">
+                <div className="mb-6">
+                  <h3 className="break-words text-lg leading-snug text-black max-[480px]:text-base sm:text-xl">
+                    {challenge.question}
+                  </h3>
 
                 </div>
 
@@ -537,7 +540,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
                         onClick={() => handleAnswerSelect(index)}
                         disabled={selectedAnswer !== null}
                         variant="outline"
-                        className={`w-full justify-start text-left p-6 h-auto transition-all ${selectedAnswer === null
+                        className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
                           ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-purple-300'
                           : selectedAnswer === index
                             ? 'bg-indigo-200 border-indigo-400 text-indigo-800'
@@ -549,7 +552,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
                           <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm">
                             {String.fromCharCode(65 + index)}
                           </div>
-                          <span className="text-lg text-black flex-1">{option}</span>
+                          <span className="flex-1 text-lg text-black max-[480px]:text-sm">{option}</span>
 
                         </div>
                       </Button>
@@ -583,7 +586,9 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
                     <Brain className="w-5 h-5" />
                     Explicación de la Inferencia:
                   </h4>
-                  <p className="text-blue-700 leading-relaxed">{challenge.explanation}</p>
+                  <p className="break-words leading-relaxed text-blue-700 max-[480px]:text-sm">
+                    {challenge.explanation}
+                  </p>
                 </CardContent>
               </Card>
             </motion.div>

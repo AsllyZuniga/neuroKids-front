@@ -367,7 +367,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #d1fae5 0%, #ccfbf1 50%, #dbeafe 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Laberinto Lector`}
           level={currentLevel}
@@ -396,7 +396,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
           />
         </motion.div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <Card className="bg-white/90 backdrop-blur-sm border-2 border-teal-200 mb-4">
@@ -475,12 +475,12 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
             <motion.div initial={{ scale: 0.8, y: 50 }} animate={{ scale: 1, y: 0 }} className="max-w-lg w-full">
               <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 border-4 border-blue-400">
                 <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 2, repeat: Infinity }}><Book className="w-6 h-6 text-blue-500" /></motion.div>
-                      <h3 className="text-xl text-black"> 🤔 Pregunta del Laberinto</h3>
+                  <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 2, repeat: Infinity }}><Book className="h-6 w-6 shrink-0 text-blue-500" /></motion.div>
+                      <h3 className="text-lg text-black sm:text-xl"> 🤔 Pregunta del Laberinto</h3>
                     </div>
-                    <motion.div animate={{ scale: [1, 1.1, 1] }} className="bg-blue-500 text-white px-3 py-1 rounded-full">
+                    <motion.div animate={{ scale: [1, 1.1, 1] }} className="w-fit shrink-0 self-start rounded-full bg-blue-500 px-3 py-1 text-white sm:self-center">
                       <span className="text-sm">+{currentQuestion.points} pts</span>
                     </motion.div>
                   </div>

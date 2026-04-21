@@ -315,14 +315,14 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
       return pictogram ? (
         <span
           key={index}
-          className={`inline-flex items-center mx-1 cursor-pointer transform hover:scale-110 transition-transform rounded-lg px-2 py-1 ${clickedPictograms.has(part)
+          className={`inline-flex max-w-full cursor-pointer items-center rounded-lg px-1 py-0.5 transition-transform sm:mx-1 sm:px-2 sm:py-1 transform hover:scale-105 sm:hover:scale-110 ${clickedPictograms.has(part)
             ? 'bg-green-100 border-2 border-green-300'
             : 'bg-yellow-100 border-2 border-yellow-300'
             }`}
           onClick={() => handlePictogramClick(part)}
         >
-          <span className="text-3xl">{pictogram.emoji}</span>
-          {clickedPictograms.has(part) && <span className="ml-2 text-lg">{pictogram.word}</span>}
+          <span className="text-2xl sm:text-3xl">{pictogram.emoji}</span>
+          {clickedPictograms.has(part) && <span className="ml-1 text-sm font-medium sm:ml-2 sm:text-lg">{pictogram.word}</span>}
         </span>
       ) : (
         <span key={index}>{part}</span>
@@ -411,7 +411,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
     <LevelLock level={level} isLocked={isLevelLocked}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #FFB6C1 0%, #87CEEB 100%)">
     <div
-      className="min-h-screen p-6"
+      className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8"
     >
       <RewardAnimation type="star" show={showReward} />
 
@@ -446,17 +446,17 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
           key={currentPage}
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="max-w-7xl mx-auto"
+          className="mx-auto w-full min-w-0 max-w-7xl"
         >
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-200 mb-6">
-            <CardContent className="p-8">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
+          <Card className="mb-6 border-2 border-blue-200 bg-white/90 backdrop-blur-sm">
+            <CardContent className="p-4 sm:p-6 lg:p-8">
+              <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2 md:gap-6 lg:gap-8">
                 {/* IMAGEN + AUDIO */}
-                <div className="text-center">
+                <div className="min-w-0 text-center">
                   <img
   src={currentStoryPage.image}
   alt="Ilustración del cuento"
-  className="mx-auto mb-4 max-h-80 object-contain rounded-xl"
+  className="mx-auto mb-3 max-h-[min(45vh,20rem)] w-full max-w-md rounded-xl object-contain sm:mb-4 sm:max-h-80"
 />
 
                   <ButtonWithAudio
@@ -475,14 +475,14 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
                 </div>
 
                 {/* TEXTO CON PICTOGRAMAS */}
-                <div className="text-center md:text-left">
-                  <div className="text-xl leading-relaxed text-gray-800 ">
+                <div className="min-w-0 text-center md:text-left">
+                  <div className="text-base leading-relaxed text-gray-800 sm:text-lg lg:text-xl">
                     {renderTextWithPictograms(currentStoryPage.text, currentStoryPage.pictograms)}
                   </div>
 
-                  <div className="mt-8 p-6 bg-yellow-50 rounded-lg border-2 border-yellow-200">
-                    <h4 className="text-sm text-gray-600 mb-3">Pictogramas en esta página:</h4>
-                    <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                  <div className="mt-4 rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4 sm:mt-8 sm:p-6">
+                    <h4 className="mb-2 text-xs text-gray-600 sm:mb-3 sm:text-sm">Pictogramas en esta página:</h4>
+                    <div className="flex flex-wrap justify-center gap-2 md:justify-start">
                       {currentStoryPage.pictograms.map(({ word, emoji }) => (
                         <div
                           key={word}
@@ -492,7 +492,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
                               : 'bg-gray-100 text-gray-600 border-2 border-gray-300'
                             }`}
                         >
-                          <span className="text-xl">{emoji}</span>
+                          <span className="text-lg sm:text-xl">{emoji}</span>
                           {clickedPictograms.has(word) && <span className="ml-1">{word}</span>}
                         </div>
                       ))}
@@ -504,25 +504,25 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
           </Card>
 
           {/* NAVEGACIÓN */}
-          <div className="flex justify-between items-center mt-6">
+          <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <ButtonWithAudio
               onClick={goToPreviousPage}
               disabled={currentPage === 0}
               playOnHover
               playOnClick
               variant="outline"
-              className="bg-green-500"
+              className="order-2 min-h-11 w-full bg-green-500 text-sm sm:order-1 sm:w-auto sm:shrink-0 sm:text-base"
             >
-              <ChevronLeft className="w-5 h-5 mr-2" />
+              <ChevronLeft className="mr-2 h-5 w-5 shrink-0" />
               Anterior
             </ButtonWithAudio>
 
-            <div className="flex gap-2">
+            <div className="order-1 flex max-w-full flex-wrap justify-center gap-1.5 overflow-x-auto px-1 py-1 sm:order-2 sm:max-w-[min(100%,14rem)] sm:gap-2 md:max-w-none">
               {storyPages.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-3 h-3 rounded-full transition-all
-                  ${index === currentPage ? 'bg-blue-500 w-8' : index < currentPage ? 'bg-green-400' : 'bg-gray-300'
+                  className={`h-2.5 shrink-0 rounded-full transition-all sm:h-3
+                  ${index === currentPage ? 'w-7 bg-blue-500 sm:w-8' : index < currentPage ? 'w-2.5 bg-green-400 sm:w-3' : 'w-2.5 bg-gray-300 sm:w-3'
                     }`}
                 />
               ))}
@@ -532,12 +532,12 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
               onClick={goToNextPage}
               playOnHover
               playOnClick
-              className="bg-blue-500 hover:bg-blue-600 text-white"
+              className="order-3 min-h-11 w-full bg-blue-500 text-sm text-white hover:bg-blue-600 sm:w-auto sm:shrink-0 sm:text-base"
               disabled={!hasEnoughClicks}
               audioText={currentPage === storyPages.length - 1 ? 'Finalizar' : 'Siguiente'}
             >
               {currentPage === storyPages.length - 1 ? 'Finalizar' : 'Siguiente'}
-              <ChevronRight className="w-5 h-5 ml-2" />
+              <ChevronRight className="ml-2 h-5 w-5 shrink-0" />
             </ButtonWithAudio>
           </div>
 
@@ -547,7 +547,7 @@ export function CuentoPictogramas({ onBack }: { onBack: () => void }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-100 border-2 border-yellow-300 p-4 rounded-xl shadow-lg text-center text-yellow-800"
+              className="fixed bottom-4 left-4 right-4 z-40 mx-auto max-w-lg rounded-xl border-2 border-yellow-300 bg-yellow-100 p-3 text-center text-sm text-yellow-800 shadow-lg sm:bottom-6 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:transform sm:p-4 sm:text-base"
             >
               ¡Haz clic en al menos {requiredClicks} pictogramas para continuar!
             </motion.div>

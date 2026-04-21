@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import fondo from "@/assets/9_10/ordena_historia/fondo.svg";
+import fondoTelefono from "@/assets/9_10/ordena_historia/fondo_telefono.svg";
 
 interface StartScreenOrdenaHistoriaProps {
   onStart: () => void;
@@ -17,10 +20,17 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
 
 
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       <Button
         onClick={onBack}
@@ -50,7 +60,7 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
 
 
 
-      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
+      <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
         <div className="mb-8 text-center">
           <div className="mb-10 text-center">
             <div className="flex flex-col items-center gap-2">
@@ -59,7 +69,7 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
                 {letters1.map((letter, index) => (
                   <motion.span
                     key={index}
-                    className="inline-block text-5xl md:text-7xl lg:text-8xl  text-transparent bg-clip-text bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 dyslexia-friendly"
+                    className="inline-block max-[480px]:text-3xl text-5xl text-transparent bg-clip-text bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 md:text-7xl lg:text-8xl dyslexia-friendly"
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                     initial={{ opacity: 0, y: -40, rotate: -10 }}
                     animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -85,7 +95,7 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
                 {letters2.map((letter, index) => (
                   <motion.span
                     key={index}
-                    className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 sm:text-5xl md:text-7xl lg:text-8xl dyslexia-friendly"
+                    className="inline-block max-[480px]:text-2xl text-4xl text-transparent bg-clip-text bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 sm:text-5xl md:text-7xl lg:text-8xl dyslexia-friendly"
                     style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                     initial={{ opacity: 0, y: -40, rotate: -10 }}
                     animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -120,9 +130,12 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
           <Button
             onClick={onStart}
             size="lg"
-            className="text-xl px-8 py-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white rounded-full shadow-lg border-2 border-white/90 dyslexia-friendly"
+            className={cn(
+              "rounded-full border-2 border-white/90 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 px-8 py-6 text-xl text-white shadow-lg hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
           >
-            <Play className="w-8 h-8 mr-3 fill-white" />
+            <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
             ¡Comenzar a Jugar!
           </Button>
         </motion.div>

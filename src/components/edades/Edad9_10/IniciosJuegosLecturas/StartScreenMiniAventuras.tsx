@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Compass, Map, Gem, ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import fondo from "@/assets/9_10/mini_aventuras/fondo.svg";
+import fondoTelefono from "@/assets/9_10/mini_aventuras/fondo_telefono.svg";
 
 interface StartScreenMiniAventurasProps {
   onStart: () => void;
@@ -32,10 +35,17 @@ const floatingItems = [
 export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAventurasProps) {
   return (
 
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       <Button
         onClick={onBack}
         variant="outline"
@@ -64,7 +74,7 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
 
 
 
-      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
+      <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:pt-24">
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -76,7 +86,7 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
             {letters.map((letter, index) => (
               <motion.span
                 key={index}
-                className="inline-block text-7xl md:text-7xl lg:text-7xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400"
+                className="inline-block max-[480px]:text-4xl text-7xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400"
                 style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                 initial={{ opacity: 0, y: -40, rotate: -10 }}
                 animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -111,9 +121,12 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
           <Button
             onClick={onStart}
             size="lg"
-            className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-xl px-8 py-6 rounded-full shadow-lg transform transition-all dyslexia-friendly"
+            className={cn(
+              "transform rounded-full bg-gradient-to-r from-purple-400 to-pink-400 px-8 py-6 text-xl text-white shadow-lg transition-all hover:from-purple-500 hover:to-pink-500 dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
           >
-           <Play className="w-8 h-8 mr-3 fill-white" />
+           <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
           ¡Comenzar a Jugar!
           </Button>
         </motion.div>

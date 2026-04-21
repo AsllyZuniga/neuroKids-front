@@ -849,7 +849,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title="Historias Interactivas"
           level={currentLevel}
@@ -880,16 +880,16 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
           />
         </motion.div>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <div className="text-center mb-6">
-          <h2 className="text-2xl text-black">{story.title}</h2>
+          <h2 className="text-xl text-black sm:text-2xl">{story.title}</h2>
         </div>
-        <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-indigo-200 lg:col-span-2">
-            <CardContent className="p-8">
-              <div className="flex flex-col gap-6">
-                <div className="text-center">
-                  <div className="bg-gradient-to-br from-indigo-200 to-purple-200 rounded-2xl p-8 mb-4 min-h-[200px] flex items-center justify-center border-4 border-indigo-300">
+        <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="grid min-w-0 grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">
+          <Card className="min-w-0 bg-white/90 backdrop-blur-sm border-2 border-indigo-200 lg:col-span-2">
+            <CardContent className="min-w-0 overflow-hidden p-3 sm:p-6 lg:p-8">
+              <div className="flex min-w-0 flex-col gap-4 sm:gap-6">
+                <div className="min-w-0 text-center">
+                  <div className="bg-gradient-to-br from-indigo-200 to-purple-200 rounded-2xl border-4 border-indigo-300 p-4 sm:p-8 mb-4 flex min-h-[min(40vh,12rem)] sm:min-h-[200px] items-center justify-center">
                     <motion.div
                       animate={{ scale: [1, 1.05, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
@@ -898,7 +898,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                       <img
                         src={part.image}
                         alt="Escena de la historia"
-                        className="w-full h-full max-h-[260px] object-contain"
+                        className="mx-auto h-auto max-h-[min(42vh,14rem)] w-full max-w-full object-contain sm:max-h-[260px]"
                         draggable={false}
                       />
 
@@ -912,8 +912,8 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                   />
                 </div>
 
-                <div className="text-center md:text-left">
-                  <div className="text-lg leading-relaxed text-black mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border-2 border-indigo-200">
+                <div className="min-w-0 text-center md:text-left">
+                  <div className="mb-6 break-words rounded-lg border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 p-4 text-sm leading-relaxed text-black sm:p-6 sm:text-lg">
                     {part.text}
                   </div>
 
@@ -943,29 +943,29 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
           </Card>
 
           {part.choices.length > 0 && (
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200 h-fit">
-              <CardContent className="p-6 ">
-                <h3 className="text-lg mb-4 text-black flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-purple-500" />
-                  ¿Qué decides hacer?
+            <Card className="h-fit min-w-0 w-full max-w-full overflow-hidden border-2 border-purple-200 bg-white/90 backdrop-blur-sm lg:min-w-0">
+              <CardContent className="min-w-0 overflow-hidden p-3 sm:p-6">
+                <h3 className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-black sm:mb-4 sm:text-lg">
+                  <Brain className="h-5 w-5 shrink-0 text-purple-500" />
+                  <span className="min-w-0 break-words">¿Qué decides hacer?</span>
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {part.choices.map((choice, index) => (
-                    <motion.div key={index} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <motion.div key={index} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="min-w-0">
                       <ButtonWithAudio
                         onClick={() => makeChoice(index)}
                         variant="outline"
-                        className="w-full justify-start text-left p-6 h-auto bg-white/80 hover:bg-white border-2 hover:border-purple-300 transition-all text-black"
+                        className="h-auto min-h-0 w-full max-w-full whitespace-normal break-words border-2 bg-white/80 p-3 text-left text-black transition-all hover:border-purple-300 hover:bg-white sm:p-5"
                         playOnHover
                         audioText={`${removeEmojis(choice.text)}. ${formatPointsForSpeech(choice.points)}`}
                       >
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm flex-shrink-0 mt-1">
+                        <div className="flex items-start gap-2 sm:gap-3">
+                          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-500 text-sm text-white">
                             {String.fromCharCode(65 + index)}
                           </div>
-                          <div className="flex-1">
-                            <div className="text-lg">{choice.text}</div>
-                            <div className="text-sm text-purple-600 mt-1">+{choice.points} puntos</div>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-xs leading-snug sm:text-base">{choice.text}</div>
+                            <div className="mt-1 text-xs text-purple-600 sm:text-sm">+{choice.points} puntos</div>
                           </div>
                         </div>
                       </ButtonWithAudio>
@@ -995,13 +995,13 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
         )}
         {showFinalStory && (
           <motion.div
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 text-black"
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-3 text-black sm:p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <Card className="max-w-3xl w-full bg-white border-4 border-purple-300">
-              <CardContent className="p-8 space-y-6">
-                <h2 className="text-2xl text-center text-purple-700">
+            <Card className="max-h-[min(92dvh,40rem)] w-full max-w-3xl overflow-hidden border-4 border-purple-300 bg-white">
+              <CardContent className="max-h-[inherit] space-y-4 overflow-y-auto p-4 sm:p-8 sm:space-y-6">
+                <h2 className="text-center text-xl text-purple-700 sm:text-2xl">
                   📖 Tu Historia Completa
                 </h2>
 
@@ -1011,17 +1011,17 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
                   voice="child"
                 />
 
-                <div className="max-h-[300px] overflow-y-auto p-4 bg-purple-50 rounded-lg border-2 border-purple-200 text-lg leading-relaxed">
+                <div className="max-h-[min(40vh,16rem)] overflow-y-auto rounded-lg border-2 border-purple-200 bg-purple-50 p-3 text-sm leading-relaxed break-words sm:max-h-[300px] sm:p-4 sm:text-lg">
                   {finalStoryText}
                 </div>
 
-                <div className="flex justify-center gap-4 pt-4">
+                <div className="flex justify-center gap-4 pt-2 sm:pt-4">
                   <Button
                     onClick={() => {
                       setShowFinalStory(false);
                       setShowMotivational(true);
                     }}
-                    className="px-6 py-3 text-lg bg-purple-500 text-white rounded-xl"
+                    className="min-h-12 rounded-xl bg-purple-500 px-6 py-3 text-base text-white sm:text-lg"
                   >
                     Continuar
                   </Button>

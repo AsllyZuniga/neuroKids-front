@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { Sparkles, Play, ArrowLeft } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
-import fondo from "@/assets/7_8/bingopalabras/fondo.svg"
+import { cn } from "@/components/ui/utils";
+import fondo from "@/assets/7_8/bingopalabras/fondo.svg";
+import fondoTelefono from "@/assets/7_8/bingopalabras/fondo_telefono.svg";
 
 interface StartScreenProps {
   onStart: () => void;
@@ -28,10 +31,18 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
   };
 
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      {/* Móvil: fondo_telefono; desde md: fondo.svg */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       {/* Botón volver */}
       <ButtonWithAudio
         onClick={onBack}
@@ -93,10 +104,8 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
                 ease: "easeInOut",
               }}
               whileHover={{ scale: 1.25 }}
-              className="inline-block"
+              className="inline-block text-[clamp(1.75rem,7vw,6rem)] max-[480px]:text-[clamp(1.35rem,5.5vw,2.65rem)]"
               style={{
-                fontSize: "clamp(1.75rem, 7vw, 6rem)",
-
                 color:
                   index % 5 === 0
                     ? "#FF6B9D"
@@ -120,8 +129,6 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
           {titleLine2.split("").map((letter, index) => (
             <motion.span
               key={`line2-${index}`}
-
-              className="inline-block"
               animate={{ y: [-6, 6, -6] }}
               transition={{
                 duration: 3 + index * 0.15,
@@ -129,8 +136,8 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
                 ease: "easeInOut",
               }}
               whileHover={{ scale: 1.25 }}
+              className="inline-block text-[clamp(1.75rem,7vw,6rem)] max-[480px]:text-[clamp(1.35rem,5.5vw,2.65rem)]"
               style={{
-                fontSize: "clamp(1.75rem, 7vw, 6rem)",
                 color:
                   index % 5 === 0
                     ? "#FF6B9D"
@@ -157,9 +164,12 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
           <ButtonWithAudio
             onClick={onStart}
             size="lg"
-            className="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly max-w-[calc(100vw-2rem)]"
+            className={cn(
+              "flex max-w-[calc(100vw-2rem)] items-center gap-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-8 py-6 text-xl text-white shadow-lg dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
           >
-            <Play className="w-8 h-8 mr-3 shrink-0 fill-white" />
+            <Play className={cn("mr-3 h-8 w-8 shrink-0 fill-white", startScreenMobilePlayIcon)} />
             ¡Comenzar a Jugar!
           </ButtonWithAudio>
         </motion.div>

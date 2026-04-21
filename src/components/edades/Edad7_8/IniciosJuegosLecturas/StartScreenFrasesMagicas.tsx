@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
 import { Play, ArrowLeft } from "lucide-react";
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { AnimatedText } from "@/components/ui/AnimatedText";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import fondo from "@/assets/7_8/frasesmagicas/fondo.svg";
+import fondoTelefono from "@/assets/7_8/frasesmagicas/fondo_telefono.svg";
 
 interface StartScreenFrasesMagicasProps {
   onStart: () => void;
@@ -23,10 +26,17 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
   ];
 
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       <ButtonWithAudio
         onClick={onBack}
         playOnHover
@@ -69,7 +79,7 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
         </motion.div>
 
         <div className="text-center mb-12">
-          <h1 className="mb-4 text-4xl leading-tight text-purple-600 sm:text-5xl md:text-7xl">
+          <h1 className="mb-4 max-[480px]:text-3xl text-4xl leading-tight text-purple-600 sm:text-5xl md:text-7xl">
             {title.replace(/ /g, '\u00A0').split('').map((letter, index) => (
               <span key={index} className="inline-block align-middle">
                 <AnimatedText text={letter} />
@@ -97,9 +107,12 @@ export function StartScreenFrasesMagicas({ onStart, onBack }: StartScreenFrasesM
               playOnHover
               playOnClick
               size="lg"
-              className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly"
+              className={cn(
+                "rounded-full bg-gradient-to-r from-purple-400 to-pink-400 px-8 py-6 text-xl text-white shadow-lg hover:from-purple-500 hover:to-pink-500 dyslexia-friendly",
+                startScreenMobileComenzarButton
+              )}
             >
-              <Play className="w-8 h-8 mr-3 fill-white" />
+              <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
               ¡Comenzar a Jugar!
             </ButtonWithAudio>
           </motion.div>

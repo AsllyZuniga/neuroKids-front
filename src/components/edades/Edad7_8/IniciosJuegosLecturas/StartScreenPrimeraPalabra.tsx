@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Play, ArrowLeft } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
-import fondo from "@/assets/7_8/primerapalabra/fondo.svg"
+import fondo from "@/assets/7_8/primerapalabra/fondo.svg";
+import fondoTelefono from "@/assets/7_8/primerapalabra/fondo_telefono.svg";
 
 interface StartScreenPrimeraPalabraProps {
   onStart: () => void;
@@ -23,10 +26,17 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
   ];
 
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       <ButtonWithAudio
         onClick={onBack}
         variant="outline"
@@ -71,7 +81,7 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
             animate={{ scale: [1, 1.03, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           >
-            <h1 className="text-3xl leading-tight text-red-500 drop-shadow-lg sm:text-5xl md:text-7xl">
+            <h1 className="max-[480px]:text-2xl text-3xl leading-tight text-red-500 drop-shadow-lg sm:text-5xl md:text-7xl">
               Mi Primera Palabra
             </h1>
           </motion.div>
@@ -85,11 +95,14 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
             <ButtonWithAudio
               onClick={onStart}
               size="lg"
-              className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-400 hover:to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg border-2 border-white/90 transform transition-transform hover:scale-105 dyslexia-friendly max-w-full"
+              className={cn(
+                "max-w-full transform rounded-full border-2 border-white/90 bg-gradient-to-r from-pink-400 to-purple-400 px-8 py-6 text-xl text-white shadow-lg transition-transform hover:scale-105 hover:from-pink-400 hover:to-purple-500 dyslexia-friendly",
+                startScreenMobileComenzarButton
+              )}
               playOnHover
               playOnClick
             >
-              <Play className="w-8 h-8 mr-3 fill-white" />
+              <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
               ¡Comenzar a Jugar!
             </ButtonWithAudio>
           </motion.div>

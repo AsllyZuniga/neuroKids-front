@@ -216,9 +216,13 @@
       margin-bottom: 0.8rem;
     }
 
+    /* Solo móvil: una columna y cards un poco más compactas */
     .cards-container {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.6rem;
+      grid-template-columns: 1fr;
+      gap: 0.55rem;
+      max-width: 18.5rem;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .card {

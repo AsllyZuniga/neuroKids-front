@@ -1,8 +1,11 @@
 import { ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
+import { cn } from "@/components/ui/utils";
 import { motion } from "framer-motion";
 
-import fondo from "@/assets/7_8/cazasilaba/fondo.svg"
+import fondo from "@/assets/7_8/cazasilaba/fondo.svg";
+import fondoTelefono from "@/assets/7_8/cazasilaba/fondo_telefono.svg";
 import silabasRight from "@/assets/Iniciosimages/Silabas.svg";
 
 interface StartScreenCazaSilabaProps {
@@ -38,7 +41,7 @@ function FloatingLetter({
     <motion.span
       animate={animate}
       transition={transition}
-      className={`inline-block ${bg} text-white text-2xl font-bold sm:text-4xl md:text-5xl lg:text-6xl px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-md sm:rounded-lg shadow-lg mx-0.5 sm:mx-1`}
+      className={`inline-block ${bg} text-white max-[480px]:text-xl text-2xl font-bold sm:text-4xl md:text-5xl lg:text-6xl px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-md sm:rounded-lg shadow-lg mx-0.5 sm:mx-1`}
     >
       {letter}
     </motion.span>
@@ -50,10 +53,17 @@ export function StartScreenCazaSilaba({
   onBack,
 }: StartScreenCazaSilabaProps) {
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
       {/* Botón volver */}
       <ButtonWithAudio
         onClick={onBack}
@@ -79,7 +89,7 @@ export function StartScreenCazaSilaba({
 
 
 
-      <div className="relative z-10 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-3 pb-10 pt-20 text-center sm:px-6 sm:pt-24">
+      <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-3 pb-10 pt-20 text-center sm:px-6 sm:pt-24">
           {/* CAZA */}
           <h1 className="mb-2 flex flex-wrap justify-center sm:mb-4">
             <FloatingLetter letter="C" bg="bg-rose-300" delay={0} />
@@ -108,9 +118,12 @@ export function StartScreenCazaSilaba({
           <ButtonWithAudio
             onClick={onStart}
             size="lg"
-            className="bg-gradient-to-br from-teal-300 to-green-400 text-white text-xl px-8 py-6 rounded-full shadow-lg hover:scale-110 transition-transform uppercase tracking-wide border-2 border-teal-400/80"
+            className={cn(
+              "rounded-full border-2 border-teal-400/80 bg-gradient-to-br from-teal-300 to-green-400 px-8 py-6 text-xl uppercase tracking-wide text-white shadow-lg transition-transform hover:scale-110",
+              startScreenMobileComenzarButton
+            )}
           >
-            <Play className="w-8 h-8 mr-3 fill-white" />
+            <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
             ¡Comenzar a Jugar!
           </ButtonWithAudio>
       </div>

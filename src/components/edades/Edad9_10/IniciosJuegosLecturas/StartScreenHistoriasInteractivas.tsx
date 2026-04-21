@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Play } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import fondo from "@/assets/9_10/historias_interactivas/fondo.svg";
+import fondoTelefono from "@/assets/9_10/historias_interactivas/fondo_telefono.svg";
 
 
 interface StartScreenHistoriasInteractivasProps {
@@ -35,12 +38,17 @@ const floatingItems = [
 
 export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScreenHistoriasInteractivasProps) {
   return (
-    
-    <div
-      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-white bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
-
+    <div className="relative isolate flex min-h-screen min-h-[100dvh] flex-col overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       <Button
         onClick={onBack}
@@ -71,7 +79,7 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="relative z-10 mx-auto max-w-4xl px-4 pb-10 pt-20 text-center sm:pt-24"
+        className="relative z-20 mx-auto flex min-h-[100dvh] max-w-4xl flex-col justify-center px-4 pb-10 pt-20 text-center sm:pt-24"
       >
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -98,7 +106,7 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
               {letters1.map((letter, index) => (
                 <motion.span
                   key={index}
-                  className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
+                  className="inline-block max-[480px]:text-3xl text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
                   style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                   initial={{ opacity: 0, y: -40, rotate: -10 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -124,7 +132,7 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
               {letters2.map((letter, index) => (
                 <motion.span
                   key={index}
-                  className="inline-block text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
+                  className="inline-block max-[480px]:text-3xl text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
                   style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
                   initial={{ opacity: 0, y: -40, rotate: -10 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -159,14 +167,17 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
           <Button
             onClick={onStart}
             size="lg"
-            className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white text-xl px-8 py-6 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl dyslexia-friendly max-w-[calc(100vw-2rem)]"
+            className={cn(
+              "max-w-[calc(100vw-2rem)] rounded-full bg-gradient-to-r from-pink-400 to-purple-400 px-8 py-6 text-xl text-white shadow-lg transition-all duration-300 hover:from-pink-500 hover:to-purple-500 hover:shadow-xl dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
           >
             <motion.div
-              className="flex items-center gap-3"
+              className="flex items-center gap-3 max-[480px]:gap-2"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Play className="w-8 h-8 mr-3 fill-white" />
+              <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
               ¡Comenzar a Jugar!
 
             </motion.div>

@@ -3,7 +3,10 @@ import { Sparkles, BookOpen, Play, ArrowLeft } from "lucide-react";
 import { ButtonWithAudio } from "@/components/ui/ButtonWithAudio";
 import { FloatingItem } from "@/components/ui/FloatingItem";
 import { AnimatedText } from "@/components/ui/AnimatedText";
-import fondo from "@/assets/7_8/cuentospictogramas/fondo.svg"
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
+import { cn } from "@/components/ui/utils";
+import fondo from "@/assets/7_8/cuentospictogramas/fondo.svg";
+import fondoTelefono from "@/assets/7_8/cuentospictogramas/fondo_telefono.svg";
 
 
 interface StartScreenCuentoPictogramasProps {
@@ -21,10 +24,17 @@ export function StartScreenCuentoPictogramas({
   ];
 
   return (
-    <div
-      className="relative min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
+    <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       {/* CAPA DE FONDO (imágenes + emojis flotantes) */}
       <div className="absolute inset-0 z-0 opacity-80">
@@ -93,7 +103,7 @@ export function StartScreenCuentoPictogramas({
 
         {/* Título */}
         <div className="mb-12 md:mb-14">
-          <div className="text-3xl sm:text-4xl md:text-5xl text-[#FF6B9D]">
+          <div className="max-[480px]:text-2xl text-3xl sm:text-4xl md:text-5xl text-[#FF6B9D]">
             <AnimatedText text="Cuentos con pictogramas" />
           </div>
         </div>
@@ -109,10 +119,13 @@ export function StartScreenCuentoPictogramas({
             playOnHover
             playOnClick
             size="lg"
-            className="rounded-full text-xl px-8 py-6 shadow-lg dyslexia-friendly"
+            className={cn(
+              "rounded-full px-8 py-6 text-xl shadow-lg dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
             style={{ backgroundColor: "#FFB7D5", color: "#8B5CF6" }}
           >
-            <Play className="w-8 h-8 mr-3 fill-white" />
+            <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
             ¡Comenzar a Jugar!
           </ButtonWithAudio>
         </motion.div>

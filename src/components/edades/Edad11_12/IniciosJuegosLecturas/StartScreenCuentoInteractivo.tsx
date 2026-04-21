@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/utils";
 import { ArrowLeft, Play } from "lucide-react";
 import fondo from "@/assets/11_12/cuentos_interactivos/fondo.svg";
+import fondoTelefono from "@/assets/11_12/cuentos_interactivos/fondo_telefono.svg";
 
 interface StartScreenCuentoInteractivoProps {
   onStart: () => void;
@@ -14,11 +17,18 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
   
 
   return (
-    <div
-      className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${fondo})` }}
-    >
-  
+    <div className="relative isolate flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
+
       <Button
         onClick={onBack}
         variant="outline"
@@ -33,7 +43,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="relative z-10 mx-auto flex max-w-6xl flex-col items-center justify-center gap-8 px-4 pb-10 pt-20 sm:gap-12 sm:px-6 sm:pt-24 md:gap-16"
+        className="relative z-20 mx-auto flex max-w-6xl flex-col items-center justify-center gap-8 px-4 pb-10 pt-20 sm:gap-12 sm:px-6 sm:pt-24 md:gap-16"
       >
 
     
@@ -44,7 +54,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
                 {word.split("").map((letter, index) => (
                   <motion.span
                     key={index}
-                    className="inline-block text-3xl text-purple-600 sm:text-5xl md:text-6xl"
+                    className="inline-block max-[480px]:text-2xl text-3xl text-purple-600 sm:text-5xl md:text-6xl"
                     initial={{ opacity: 0, y: -100, rotate: -180 }}
                     animate={{
                       opacity: 1,
@@ -95,7 +105,10 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
             <Button
               onClick={onStart}
               size="lg"
-              className="bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 text-white text-xl px-8 py-6 rounded-full shadow-lg dyslexia-friendly max-w-[calc(100vw-2rem)]"
+              className={cn(
+                "max-w-[calc(100vw-2rem)] rounded-full bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 px-8 py-6 text-xl text-white shadow-lg hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 dyslexia-friendly",
+                startScreenMobileComenzarButton
+              )}
               style={{
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
               }}
@@ -109,9 +122,9 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="flex items-center gap-3"
+                className="flex items-center gap-3 max-[480px]:gap-2"
               >
-                <Play className="w-8 h-8 mr-3 fill-white" />
+                <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
                 ¡Comenzar a Jugar!
               </motion.span>
             </Button>

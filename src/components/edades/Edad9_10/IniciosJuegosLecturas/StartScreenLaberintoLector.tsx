@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { Book, Play, Gem, ArrowLeft } from "lucide-react";
+import { startScreenMobileComenzarButton, startScreenMobilePlayIcon } from "@/components/edades/IniciosJuegosLecturas/startScreenMobileClasses";
 import { Button } from "@/components/ui/button";
-import fondo from '../../../../assets/9_10/laberinto_lector/fondo.svg';
+import { cn } from "@/components/ui/utils";
+import fondo from "@/assets/9_10/laberinto_lector/fondo.svg";
+import fondoTelefono from "@/assets/9_10/laberinto_lector/fondo_telefono.svg";
 
 interface StartScreenLaberintoLectorProps {
   onStart: () => void;
@@ -26,17 +29,17 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
   ];
 
   return (
-    <div
-      className="relative z-0 min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto bg-gradient-to-br from-pink-800 via-purple-500 to-blue-500"
-      style={{
-        backgroundImage: `url(${fondo})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-
-
+    <div className="relative isolate z-0 min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${fondoTelefono})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${fondo})` }}
+      />
 
       <Button
         onClick={onBack}
@@ -88,7 +91,7 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
         </motion.div>
       ))}
       </div>
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+      <div className="relative z-20 flex min-h-screen flex-col items-center justify-center px-4">
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -104,7 +107,7 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
           {letters.map((letter, index) => (
             <motion.span
               key={index}
-              className="inline-block text-2xl text-transparent bg-clip-text bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-400 sm:text-4xl md:text-6xl"
+              className="inline-block max-[480px]:text-xl text-2xl text-transparent bg-clip-text bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-400 sm:text-4xl md:text-6xl"
               style={{ 
                 textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
               }}
@@ -137,9 +140,12 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
           <Button
             onClick={onStart}
             size="lg"
-            className="text-xl px-8 py-6 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 hover:from-pink-400 hover:via-purple-400 hover:to-indigo-400 text-purple-800 rounded-full shadow-lg border-2 border-white/90 dyslexia-friendly"
+            className={cn(
+              "rounded-full border-2 border-white/90 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 px-8 py-6 text-xl text-purple-800 shadow-lg hover:from-pink-400 hover:via-purple-400 hover:to-indigo-400 dyslexia-friendly",
+              startScreenMobileComenzarButton
+            )}
           >
-            <Play className="w-8 h-8 mr-3 fill-white" />
+            <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
             ¡Comenzar a Jugar!
           </Button>
         </motion.div>

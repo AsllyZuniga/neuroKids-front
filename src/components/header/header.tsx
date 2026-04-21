@@ -89,28 +89,30 @@ export default function Header() {
                 {HEADER_TEXT.welcome}  {getUserDisplayName()}
               </span>
 
-              <Button
-                label="Inicio"
-                variant="primary"
-                size="medium"
-                onClick={() => navigate("/bienvenida/estudiante")}
-                className="header__profile-btn"
-              />
-              <Button
-                label="Perfil"
-                variant="primary"
-                size="medium"
-                onClick={() => {
-                  if (userType === "docente") {
-                    navigate("/perfil/docente");
-                  } else if (userType === "admin") {
-                    navigate("/perfil/admin");
-                  } else {
-                    navigate("/perfil/estudiante");
-                  }
-                }}
-                className="header__profile-btn"
-              />
+              <div className="header__nav-pair">
+                <Button
+                  label="Inicio"
+                  variant="primary"
+                  size="medium"
+                  onClick={() => navigate("/bienvenida/estudiante")}
+                  className="header__profile-btn"
+                />
+                <Button
+                  label="Perfil"
+                  variant="primary"
+                  size="medium"
+                  onClick={() => {
+                    if (userType === "docente") {
+                      navigate("/perfil/docente");
+                    } else if (userType === "admin") {
+                      navigate("/perfil/admin");
+                    } else {
+                      navigate("/perfil/estudiante");
+                    }
+                  }}
+                  className="header__profile-btn"
+                />
+              </div>
 
 
 

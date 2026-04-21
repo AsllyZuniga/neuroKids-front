@@ -49,39 +49,41 @@ export function AnimalGuide({ animal, message, onRepeat, className = '' }: Anima
   };
 
   return (
-    <div className={` max-w-4xl mx-auto mb-8 flex items-center gap-4 p-4 bg-white/90 rounded-2xl shadow-lg border-2 border-orange-200 ${className}`}>
-      <div className="relative">
-        <div className="w-20 h-20 rounded-full bg-orange-100 border-2 border-orange-300 flex items-center justify-center">
+    <div
+      className={`mx-auto mb-8 flex max-w-4xl items-center gap-4 rounded-2xl border-2 border-orange-200 bg-white/90 p-4 shadow-lg max-[480px]:min-w-0 max-[480px]:flex-col max-[480px]:items-stretch max-[480px]:overflow-hidden ${className}`}
+    >
+      <div className="relative flex shrink-0 max-[480px]:justify-center">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-orange-300 bg-orange-100">
           <img
             src={animalImages[animal]}
             alt={animalNames[animal]}
-            className="w-20 h-20 object-contain"
+            className="h-20 w-20 object-contain"
           />
         </div>
       </div>
 
-      <div className="flex-1">
-        <h4 className="text-orange-600 mb-1">{animalNames[animal]}</h4>
-        <p className="text-gray-700">{message}</p>
+      <div className="min-w-0 flex-1 max-[480px]:w-full">
+        <h4 className="mb-1 text-orange-600 max-[480px]:text-center">{animalNames[animal]}</h4>
+        <p className="break-words text-gray-700 max-[480px]:text-center">{message}</p>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex shrink-0 flex-col gap-2 max-[480px]:w-full max-[480px]:flex-row max-[480px]:justify-center">
         <Button
           onClick={handleSpeak}
           size="sm"
           variant="outline"
-          className="rounded-full p-2 border-orange-300 hover:bg-orange-50"
+          className="rounded-full border-orange-300 p-2 hover:bg-orange-50"
         >
-          <Volume2 className="w-4 h-4 text-orange-600" />
+          <Volume2 className="h-4 w-4 text-orange-600" />
         </Button>
         {onRepeat && (
           <Button
             onClick={onRepeat}
             size="sm"
             variant="outline"
-            className="rounded-full p-2 border-blue-300 hover:bg-blue-50"
+            className="rounded-full border-blue-300 p-2 hover:bg-blue-50"
           >
-            <RotateCcw className="w-4 h-4 text-blue-600" />
+            <RotateCcw className="h-4 w-4 text-blue-600" />
           </Button>
         )}
       </div>

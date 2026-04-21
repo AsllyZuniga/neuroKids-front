@@ -406,27 +406,32 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const renderLevel1 = () => {
     const item = currentItem as any;
     return (
-      <div className="grid md:grid-cols-2 gap-8 max-w-7xl mx-auto">
-        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
-          <Card className="bg-white/90 backdrop-blur-sm h-full">
-            <CardContent className="p-8 text-center">
+      <div className="mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:gap-8">
+        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="min-w-0">
+          <Card className="h-full bg-white/90 backdrop-blur-sm">
+            <CardContent className="p-4 text-center sm:p-6 lg:p-8">
 
-              <div className="text-8xl text-black mb-6">{item.word}</div>
-              <div className="text-lg text-black mb-4">{item.pronunciation}</div>
-              <div className="flex justify-center gap-3">
+              <div
+                className="mb-4 font-bold leading-none text-black sm:mb-6"
+                style={{ fontSize: "clamp(2rem, 12vw, 5.5rem)" }}
+              >
+                {item.word}
+              </div>
+              <div className="mb-4 text-base text-black sm:text-lg">{item.pronunciation}</div>
+              <div className="flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
                 <ButtonWithAudio
                   onClick={() => speakText(item.word, { voiceType: 'child' })}
-                  className="bg-green-500 hover:bg-green-600 text-white"
+                  className="min-h-11 bg-green-500 text-white hover:bg-green-600"
                   audioText="Escuchar"
                   playOnHover={true}
                   playOnClick={false}
                 >
-                  <Volume2 className="w-4 h-4 mr-2" /> Escuchar
+                  <Volume2 className="mr-2 h-4 w-4 shrink-0" /> Escuchar
                 </ButtonWithAudio>
                 <ButtonWithAudio
                   onClick={() => startRecognition(item.word)}
                   variant="outline"
-                  className="text-black border-black hover:bg-gray-100"
+                  className="min-h-11 border-black text-black hover:bg-gray-100"
                   audioText="Ahora dilo tú"
                   playOnHover={false}
                   playOnClick={false}
@@ -446,12 +451,16 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
             </CardContent>
           </Card>
         </motion.div>
-        <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
-          <Card className="bg-white/90 backdrop-blur-sm h-full">
-            <CardContent className="p-8">
-              <img src={item.image} alt={item.word} className="w-40 h-40 mx-auto mb-6 object-contain" />
-              <h3 className="text-xl mb-4 text-center text-black ">Significado:</h3>
-              <p className="text-lg text-black text-center leading-relaxed">{item.meaning}</p>
+        <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="min-w-0">
+          <Card className="h-full bg-white/90 backdrop-blur-sm">
+            <CardContent className="p-4 sm:p-6 lg:p-8">
+              <img
+                src={item.image}
+                alt={item.word}
+                className="mx-auto mb-4 h-auto max-h-48 w-full max-w-[200px] object-contain sm:mb-6 sm:max-h-52 sm:max-w-[220px]"
+              />
+              <h3 className="mb-3 text-center text-lg text-black sm:mb-4 sm:text-xl">Significado:</h3>
+              <p className="text-center text-base leading-relaxed text-black sm:text-lg">{item.meaning}</p>
               <div className="mt-6 text-center">
                 <ButtonWithAudio
                   onClick={() => speakText(item.meaning, { voiceType: 'child' })}
@@ -476,41 +485,41 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     const item = currentItem as any;
 
     return (
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-          <Card className="bg-white/90 backdrop-blur-sm mb-8">
-            <CardContent className="p-8">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
+          <Card className="mb-8 bg-white/90 backdrop-blur-sm">
+            <CardContent className="p-4 sm:p-6 lg:p-8">
+              <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-8">
 
                 {/* IMAGEN */}
-                <div className="flex justify-center">
+                <div className="flex min-w-0 justify-center">
                   <img
                     src={item.image}
                     alt={item.word}
-                    className="w-50 h-50 object-contain"
+                    className="h-auto max-h-[min(40vh,14rem)] w-full max-w-[280px] object-contain sm:max-h-56"
                   />
                 </div>
 
-                <div className="text-center bg-gradient-to-br from-blue-100 to-green-10 border-2 border-blue-500 rounded-2xl shadow-lg p-6">
-                  <div className="text-3xl mb-6 text-black">
+                <div className="min-w-0 rounded-2xl border-2 border-blue-500 bg-gradient-to-br from-blue-100 to-green-50 p-4 text-center shadow-lg sm:p-6">
+                  <div className="mb-4 text-2xl leading-snug text-black sm:mb-6 sm:text-3xl">
                     {item.sentence}
                   </div>
 
-                  <div className="flex justify-center gap-3 mb-4">
+                  <div className="mb-4 flex flex-col justify-center gap-3 sm:flex-row sm:gap-3">
                     <ButtonWithAudio
                       onClick={() => speakText(item.sentence, { voiceType: 'child' })}
-                      className="bg-green-500 hover:bg-green-600 text-black"
+                      className="min-h-11 bg-green-500 text-black hover:bg-green-600"
                       audioText="Escuchar"
                       playOnHover={true}
                       playOnClick={false}
                     >
-                      <Volume2 className="w-4 h-4 mr-2" /> Escuchar
+                      <Volume2 className="mr-2 h-4 w-4 shrink-0" /> Escuchar
                     </ButtonWithAudio>
 
                     <ButtonWithAudio
                       onClick={() => startRecognition(item.sentence)}
                       variant="outline"
-                      className="text-black bg-blue-500 hover:bg-blue-600"
+                      className="min-h-11 bg-blue-500 text-black hover:bg-blue-600"
                       audioText="Di toda la frase"
                       playOnHover={false}
                       playOnClick={false}
@@ -551,45 +560,45 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     const item = currentItem as any;
 
     return (
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto w-full min-w-0 max-w-7xl">
         <motion.div initial={{ y: -30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-          <Card className="bg-white/90 backdrop-blur-sm mb-8">
-            <CardContent className="p-8">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
+          <Card className="mb-8 bg-white/90 backdrop-blur-sm">
+            <CardContent className="p-4 sm:p-6 lg:p-8">
+              <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
 
 
-                <div className="flex justify-center">
+                <div className="flex min-w-0 justify-center md:sticky md:top-4">
                   <img
                     src={item.image}
                     alt="imagen"
-                    className="w-50 h-50 object-contain"
+                    className="h-auto max-h-[min(38vh,13rem)] w-full max-w-[280px] object-contain sm:max-h-56"
                   />
                 </div>
 
 
-                <div className="bg-white/80 border-2 border-purple-300 rounded-xl shadow-md p-6 text-center">
+                <div className="min-w-0 rounded-xl border-2 border-purple-300 bg-white/80 p-4 text-center shadow-md sm:p-6">
 
                   {!showQuestions && (
                     <>
-                      <div className="text-xl mb-6 text-black leading-relaxed">
+                      <div className="mb-4 text-base leading-relaxed text-black sm:mb-6 sm:text-lg lg:text-xl">
                         {item.story}
                       </div>
 
-                      <div className="flex justify-center gap-4">
+                      <div className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
                         <ButtonWithAudio
                           onClick={() => speakText(item.story, { voiceType: 'child' })}
-                          className="bg-green-500 hover:bg-green-600 text-white"
+                          className="min-h-11 bg-green-500 text-white hover:bg-green-600"
                           audioText="Escuchar historia"
                           playOnHover={true}
                           playOnClick={false}
                         >
-                          <Volume2 className="w-4 h-4 mr-2" /> Escuchar
+                          <Volume2 className="mr-2 h-4 w-4 shrink-0" /> Escuchar
                         </ButtonWithAudio>
 
                         <ButtonWithAudio
                           onClick={() => setShowQuestions(true)}
                           variant="outline"
-                          className="text-black border-black hover:bg-gray-100"
+                          className="min-h-11 border-black text-black hover:bg-gray-100"
                           audioText="Preguntas"
                           playOnHover={true}
                           playOnClick={false}
@@ -604,11 +613,11 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
                     item.questions &&
                     currentQuestion < item.questions.length && (
                       <>
-                        <h3 className="text-xl mb-6 text-black">
+                        <h3 className="mb-4 text-left text-lg text-black sm:mb-6 sm:text-xl">
                           {item.questions[currentQuestion].q}
                         </h3>
 
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-3 sm:gap-4">
                           {item.questions[currentQuestion].options.map(
                             (option: string, index: number) => (
                               <ButtonWithAudio
@@ -619,7 +628,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
                                 audioText={option}
                                 playOnHover={true}
                                 playOnClick={false}
-                                className={`p-4 h-auto text-center border-2 transition-all
+                                className={`h-auto min-h-12 touch-manipulation border-2 p-3 text-center text-sm transition-all sm:p-4 sm:text-base
                                   ${selectedOption === index
                                     ? 'bg-purple-300 border-purple-500 scale-105'
                                     : 'text-black border-black hover:bg-gray-100'}
@@ -655,7 +664,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
 
   if (!data || !currentItem) {
     return (
-      <div className="min-h-screen p-6 flex items-center justify-center">
+      <div className="flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <Card>
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl text-red-600 mb-4">Error: Nivel no encontrado</h2>
@@ -676,7 +685,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   return (
     <LevelLock level={currentLevel} isLocked={locked} onLoginRequired={onBack}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg,#B3E5FC 100%)">
-      <div className="min-h-screen p-6">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         {/* RECOMPENSAS */}
         <RewardAnimation type="star" show={showReward} />
         <ConfettiExplosion show={showLevelComplete} />
@@ -720,32 +729,32 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
         </div>
 
         {/* NAVEGACIÓN - CORREGIDA */}
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
           <ButtonWithAudio
             onClick={handlePrevious}
             disabled={currentIndex === 0}
             variant="outline"
-            className="bg-white/80 text-black border-black hover:bg-gray-100"
+            className="min-h-11 w-full border-black bg-white/80 text-black hover:bg-gray-100 sm:w-auto"
             audioText="Anterior"
             playOnHover={true}
             playOnClick={true}
           >
-            <ChevronLeft className="w-4 h-4 mr-2" /> Anterior
+            <ChevronLeft className="mr-2 h-4 w-4 shrink-0" /> Anterior
           </ButtonWithAudio>
 
           <ButtonWithAudio
             onClick={handleNext}
             disabled={!completedItems[currentIndex]}
-            className={`text-white transition-all ${completedItems[currentIndex]
+            className={`min-h-11 w-full touch-manipulation text-white transition-all sm:w-auto ${completedItems[currentIndex]
               ? 'bg-green-500 hover:bg-green-600'
-              : 'bg-gray-400 cursor-not-allowed'
+              : 'cursor-not-allowed bg-gray-400'
               }`}
             audioText={completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
             playOnHover={false}
             playOnClick={true}
           >
             {completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
-            <ChevronRight className="w-4 h-4 ml-2" />
+            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
           </ButtonWithAudio>
         </div>
 
