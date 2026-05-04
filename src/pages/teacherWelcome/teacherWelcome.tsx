@@ -61,13 +61,15 @@ export default function TeacherWelcome() {
         setTotalStudents(estudiantes.length);
 
         const totalLecturas = estudiantes.reduce(
-          (acc: number, row: any) => acc + Number(row?.resumen?.lecturas_completadas ?? 0),
+          (acc: number, row: any) =>
+            acc + Number(row?.resumen?.lecturas_usadas ?? row?.resumen?.lecturas_completadas ?? 0),
           0
         );
         setTotalReadingsCompleted(totalLecturas);
 
         const totalJuegos = estudiantes.reduce(
-          (acc: number, row: any) => acc + Number(row?.resumen?.juegos_completados ?? 0),
+          (acc: number, row: any) =>
+            acc + Number(row?.resumen?.juegos_usados ?? row?.resumen?.juegos_completados ?? 0),
           0
         );
         setTotalGamesCompleted(totalJuegos);
@@ -267,13 +269,13 @@ export default function TeacherWelcome() {
                 <div className="teacher-welcome__stat-number">
                   {statsLoading ? "..." : totalReadingsCompleted}
                 </div>
-                <div className="teacher-welcome__stat-label">Lecturas Completadas</div>
+                <div className="teacher-welcome__stat-label">Lecturas Usadas</div>
               </div>
               <div className="teacher-welcome__stat-item">
                 <div className="teacher-welcome__stat-number">
                   {statsLoading ? "..." : totalGamesCompleted}
                 </div>
-                <div className="teacher-welcome__stat-label">Juegos Completados</div>
+                <div className="teacher-welcome__stat-label">Juegos Usados</div>
               </div>
               <div className="teacher-welcome__stat-item">
                 <div className="teacher-welcome__stat-number">

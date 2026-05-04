@@ -206,13 +206,13 @@ export default function Instituciones() {
                   <tbody>
                     {filtered.map((i) => (
                       <tr key={i.id}>
-                        <td>{i.id}</td>
-                        <td>{i.nombre}</td>
-                        <td>{i.direccion ?? "-"}</td>
-                        <td>{i.telefono ?? "-"}</td>
-                        <td>{i.correo ?? "-"}</td>
-                        <td>{i.estado ? "Activa" : "Inactiva"}</td>
-                        <td>
+                        <td data-label="ID">{i.id}</td>
+                        <td data-label="Nombre">{i.nombre}</td>
+                        <td data-label="Dirección">{i.direccion ?? "-"}</td>
+                        <td data-label="Teléfono">{i.telefono ?? "-"}</td>
+                        <td data-label="Correo">{i.correo ?? "-"}</td>
+                        <td data-label="Estado">{i.estado ? "Activa" : "Inactiva"}</td>
+                        <td data-label="Acciones">
                           <button
                             className="instituciones-btn"
                             onClick={() => handleEditClick(i)}

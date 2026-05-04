@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState, lazy, Suspense } from "react";
+﻿import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/header/header";
+import { TotalAnalysisModal } from "@/components/reportes/TotalAnalysisModal";
 
 const ReportDetailsModal = lazy(async () => {
   const m = await import("@/components/reportes/ReportDetailsModal");
@@ -34,6 +35,8 @@ type ReportItem = {
     completadas: number;
     lecturas_completadas: number;
     juegos_completados: number;
+    lecturas_usadas?: number;
+    juegos_usados?: number;
     puntos_totales: number;
     ultima_interaccion: string | null;
   };
@@ -117,6 +120,7 @@ export default function Reportes() {
   const [detalleError, setDetalleError] = useState<string | null>(null);
   const [instituciones, setInstituciones] = useState<Array<{ id: number; nombre: string }>>([]);
   const [institucionFiltro, setInstitucionFiltro] = useState<string>("");
+  const [showTotalAnalysis, setShowTotalAnalysis] = useState(false);
 
   const userType = localStorage.getItem("userType");
   const isDocente = userType === "docente";
@@ -175,7 +179,7 @@ export default function Reportes() {
           setInstituciones(Array.isArray(list) ? list : []);
         }
       } catch {
-        // Silenciar error, el filtro quedará vacío
+        // Silenciar error, el filtro quedarÃ¡ vacÃ­o
       }
     };
     fetchInstituciones();
@@ -293,11 +297,8 @@ export default function Reportes() {
     <div className="reportes-page min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
       <Header />
       <div className="reportes-container max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-        <button
-          className="reportes-back-btn mb-6 text-purple-600 hover:text-purple-800 font-medium"
-          onClick={handleBack}
-        >
-          ← Volver
+        <button className="reportes-back-btn" onClick={handleBack}>
+           ← Volver
         </button>
 
         <div className="reportes-controls mb-6 flex flex-wrap gap-4 items-center">
@@ -321,13 +322,21 @@ export default function Reportes() {
               ))}
             </select>
           )}
+          {isAdmin && (
+            <button
+              onClick={() => setShowTotalAnalysis(true)}
+              className="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+            >
+              Análisis interacción
+            </button>
+          )}
           <span className="text-gray-600">
             Total: <strong>{filtered.length}</strong>
           </span>
         </div>
 
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-800 mb-6 lg:mb-8">
-          Panel de Reportes - Plataforma de Comprensión Lectora
+          Panel de Reportes 
         </h1>
 
         {loading && <p className="text-gray-600">Cargando reportes...</p>}
@@ -340,47 +349,104 @@ export default function Reportes() {
                 No hay información de progreso aún.
               </p>
             ) : (
-              <div className="overflow-x-auto">
-              <table className="w-full min-w-[640px]">
-                <thead className="bg-purple-600 text-white">
-                  <tr>
-                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Estudiante</th>
-                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base hidden sm:table-cell">Edad</th>
-                    {isAdmin && (
-                      <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base hidden lg:table-cell">Institución</th>
-                    )}
-                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Lecturas</th>
-                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Juegos</th>
-                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base hidden md:table-cell">Puntos</th>
-                    <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
+              <div>
+                <div className="divide-y divide-gray-200 md:hidden">
                   {filtered.map((r) => (
-                    <tr key={r.estudiante.id} className="border-b border-gray-200 hover:bg-gray-50">
-                      <td className="px-3 sm:px-6 py-3 sm:py-4">
-                        <span className="font-medium">{r.estudiante.nombre} {r.estudiante.apellido}</span>
-                        <span className="sm:hidden text-gray-500 block text-sm">Edad: {r.estudiante.edad ?? "-"}</span>
-                      </td>
-                      <td className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">{r.estudiante.edad ?? "-"}</td>
-                      {isAdmin && (
-                        <td className="px-3 sm:px-6 py-3 sm:py-4 hidden lg:table-cell">{r.estudiante.institucion ?? "-"}</td>
-                      )}
-                      <td className="px-3 sm:px-6 py-3 sm:py-4">{r.resumen.lecturas_completadas}</td>
-                      <td className="px-3 sm:px-6 py-3 sm:py-4">{r.resumen.juegos_completados}</td>
-                      <td className="px-3 sm:px-6 py-3 sm:py-4 hidden md:table-cell">{r.resumen.puntos_totales ?? 0}</td>
-                      <td className="px-3 sm:px-6 py-3 sm:py-4">
+                    <article key={r.estudiante.id} className="p-4">
+                      <div className="mb-3 flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <h2 className="break-words text-base font-semibold text-gray-800">
+                            {r.estudiante.nombre} {r.estudiante.apellido}
+                          </h2>
+                          <p className="text-sm text-gray-500">
+                            Edad: {r.estudiante.edad ?? "-"}
+                          </p>
+                          {isAdmin && (
+                            <p className="mt-1 break-words text-sm text-gray-500">
+                              {r.estudiante.institucion ?? "-"}
+                            </p>
+                          )}
+                        </div>
                         <button
                           onClick={() => handleViewDetail(r)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm transition-colors whitespace-nowrap"
+                          className="shrink-0 rounded-lg bg-blue-500 px-3 py-1.5 text-sm text-white transition-colors hover:bg-blue-600"
                         >
                           Ver detalle
                         </button>
-                      </td>
-                    </tr>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 rounded-lg bg-gray-50 p-3 text-center">
+                        <div>
+                          <p className="text-[11px] font-medium uppercase text-gray-500">
+                            Lecturas
+                          </p>
+                          <p className="mt-1 text-lg font-semibold text-gray-900">
+                            {r.resumen.lecturas_usadas ?? r.resumen.lecturas_completadas}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-medium uppercase text-gray-500">
+                            Juegos
+                          </p>
+                          <p className="mt-1 text-lg font-semibold text-gray-900">
+                            {r.resumen.juegos_usados ?? r.resumen.juegos_completados}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-medium uppercase text-gray-500">
+                            Puntos
+                          </p>
+                          <p className="mt-1 text-lg font-semibold text-gray-900">
+                            {r.resumen.puntos_totales ?? 0}
+                          </p>
+                        </div>
+                      </div>
+                    </article>
                   ))}
-                </tbody>
-              </table>
+                </div>
+
+                <div className="hidden overflow-x-auto md:block">
+                  <table className="w-full min-w-[640px]">
+                    <thead className="bg-purple-600 text-white">
+                      <tr>
+                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Estudiante</th>
+                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base hidden sm:table-cell">Edad</th>
+                        {isAdmin && (
+                          <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base hidden lg:table-cell">Institución</th>
+                        )}
+                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Lecturas usadas</th>
+                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Juegos usados</th>
+                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base hidden md:table-cell">Puntos</th>
+                        <th className="px-3 sm:px-6 py-3 sm:py-4 text-left text-sm sm:text-base">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filtered.map((r) => (
+                        <tr key={r.estudiante.id} className="border-b border-gray-200 hover:bg-gray-50">
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <span className="font-medium">{r.estudiante.nombre} {r.estudiante.apellido}</span>
+                            <span className="sm:hidden text-gray-500 block text-sm">Edad: {r.estudiante.edad ?? "-"}</span>
+                          </td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">{r.estudiante.edad ?? "-"}</td>
+                          {isAdmin && (
+                            <td className="px-3 sm:px-6 py-3 sm:py-4 hidden lg:table-cell">{r.estudiante.institucion ?? "-"}</td>
+                          )}
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">{r.resumen.lecturas_usadas ?? r.resumen.lecturas_completadas}</td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">{r.resumen.juegos_usados ?? r.resumen.juegos_completados}</td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4 hidden md:table-cell">{r.resumen.puntos_totales ?? 0}</td>
+                          <td className="px-3 sm:px-6 py-3 sm:py-4">
+                            <button
+                              onClick={() => handleViewDetail(r)}
+                              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-sm transition-colors whitespace-nowrap"
+                            >
+                              Ver detalle
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
@@ -391,7 +457,7 @@ export default function Reportes() {
           fallback={
             <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40">
               <p className="rounded-xl bg-white px-6 py-4 text-gray-700 shadow-lg">
-                Cargando panel de detalle…
+                Cargando panel de detalles
               </p>
             </div>
           }
@@ -414,7 +480,10 @@ export default function Reportes() {
           />
         </Suspense>
       )}
-    </div>
+      <TotalAnalysisModal
+        open={showTotalAnalysis}
+        onClose={() => setShowTotalAnalysis(false)}
+      />    </div>
   );
 }
 

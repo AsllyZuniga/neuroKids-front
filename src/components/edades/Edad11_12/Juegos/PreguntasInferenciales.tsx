@@ -270,6 +270,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const [showReward, setShowReward] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [timeExpired, setTimeExpired] = useState(false);
 
   const { saveProgress } = useProgress();
   const activityConfig = getActivityByDbId(18); // Preguntas Inferenciales
@@ -305,13 +306,13 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
 
   useEffect(() => {
     if (gameStarted && timeLeft > 0 && !showResult && selectedAnswer === null && !isSpeaking) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 100);
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     }
-    else if (timeLeft === 0 && gameStarted && !showResult && selectedAnswer === null && !isSpeaking) {
+    else if (timeLeft === 0 && gameStarted && !showResult && selectedAnswer === null && !isSpeaking && !timeExpired) {
       handleTimeUp();
     }
-  }, [timeLeft, gameStarted, showResult, selectedAnswer, isSpeaking]);
+  }, [timeLeft, gameStarted, showResult, selectedAnswer, isSpeaking, timeExpired]);
 
 
   useEffect(() => {
@@ -320,6 +321,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
       setSelectedAnswer(null);
       setShowResult(false);
       setShowHint(false);
+      setTimeExpired(false);
     }
   }, [currentChallenge, currentLevel, gameStarted, challenge]);
 
@@ -331,21 +333,20 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
 
   const handleTimeUp = () => {
     if (selectedAnswer === null && !showResult) {
-      setSelectedAnswer(-1);
-      setShowResult(true);
+      setTimeExpired(true);
     }
   };
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null || showResult) return;
 
+    setTimeExpired(false);
     setSelectedAnswer(answerIndex);
     setShowResult(true);
 
     if (answerIndex === challenge.correct) {
       setScore(prev => prev + 5);
       setShowReward(true);
-    } else {
     }
 
     setTimeout(() => {
@@ -370,6 +371,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
     setSelectedAnswer(null);
     setShowResult(false);
     setShowHint(false);
+    setTimeExpired(false);
     setTimeLeft(45);
     setGameStarted(true);
   };
@@ -559,6 +561,11 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
                     </motion.div>
                   ))}
                 </div>
+                {timeExpired && (
+                  <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+                    <p className="text-sm">Se acabó el tiempo, pero aún no se ha seleccionado ninguna respuesta. Elige una opción con clic para marcarla.</p>
+                  </div>
+                )}
                 <div className="mt-4 flex justify-end">
                   <Button
                     onClick={nextChallenge}

@@ -95,41 +95,12 @@ body {
         flex-wrap: wrap;
     }
 
-    .estudiantes-header {
+    .estudiantes-controls {
         display: flex;
-        justify-content: space-between;
+        gap: 8px;
         align-items: center;
-        color: black;
-        font-size: 24px;
-
-        .estudiantes-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            font-size: 16px;
-        }
-
-        .estudiantes-search {
-            padding: 6px 8px;
-            border: 1px solid #888;
-            background: #ffffff;
-            border-radius: 6px;
-            color: #000000;
-        }
-
-        .estudiantes-search::placeholder {
-            color: #555555;
-        }
-
-        .estudiantes-pagesize {
-            padding: 6px;
-            border-radius: 6px;
-            border: 1px solid #888;
-            background: #ffffff;
-            color: #000000;
-        }
-
-
+        font-size: 16px;
+        flex-wrap: wrap;
     }
 
     .estudiantes-refresh {
@@ -397,6 +368,22 @@ body {
             padding: 16px 12px;
         }
 
+        .estudiantes-toolbar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
+        }
+
+        .estudiantes-controls {
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .estudiantes-refresh {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
         .estudiantes-table td,
         .estudiantes-table th {
             padding: 6px 10px;
@@ -439,8 +426,97 @@ body {
             padding: 10px;
         }
 
+        /* Convertir tabla en tarjetas para móviles */
         .estudiantes-table {
-            min-width: 480px;
+            width: 100%;
+            min-width: auto;
+        }
+
+        .estudiantes-table,
+        .estudiantes-table thead,
+        .estudiantes-table tbody,
+        .estudiantes-table th,
+        .estudiantes-table td,
+        .estudiantes-table tr {
+            display: block;
+        }
+
+        .estudiantes-table thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        .estudiantes-table tr {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .estudiantes-table td {
+            border: none;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding: 10px 0;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.5;
+            display: block;
+        }
+
+        .estudiantes-table td:last-child {
+            border-bottom: none;
+            padding-top: 12px;
+        }
+
+        .estudiantes-table td:before {
+            content: attr(data-label);
+            display: block;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .estudiantes-table td:nth-child(1):before { content: "ID"; }
+        .estudiantes-table td:nth-child(2):before { content: "Nombre"; }
+        .estudiantes-table td:nth-child(3):before { content: "Edad"; }
+        .estudiantes-table td:nth-child(4):before { content: "Institución"; }
+        .estudiantes-table td:nth-child(5):before { content: "Correo"; }
+        .estudiantes-table td:nth-child(6):before { content: "Acciones"; }
+
+        .estudiantes-table td:nth-child(6) {
+            padding-top: 14px;
+        }
+
+        .action-buttons {
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            padding: 10px 14px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .estudiantes-card {
+            padding: 20px 16px;
+            margin: 0 8px;
+            width: auto;
+            max-width: calc(100% - 16px);
+        }
+
+        .estudiantes-list {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
         }
     }
 }

@@ -61,13 +61,15 @@ export default function AdminWelcome() {
         setTotalStudents(estudiantes.length);
 
         const totalLecturas = estudiantes.reduce(
-          (acc: number, row: any) => acc + Number(row?.resumen?.lecturas_completadas ?? 0),
+          (acc: number, row: any) =>
+            acc + Number(row?.resumen?.lecturas_usadas ?? row?.resumen?.lecturas_completadas ?? 0),
           0
         );
         setTotalReadingsCompleted(totalLecturas);
 
         const totalJuegos = estudiantes.reduce(
-          (acc: number, row: any) => acc + Number(row?.resumen?.juegos_completados ?? 0),
+          (acc: number, row: any) =>
+            acc + Number(row?.resumen?.juegos_usados ?? row?.resumen?.juegos_completados ?? 0),
           0
         );
         setTotalGamesCompleted(totalJuegos);
@@ -248,13 +250,13 @@ export default function AdminWelcome() {
                 <div className="admin-welcome__stat-number">
                   {statsLoading ? "..." : totalReadingsCompleted}
                 </div>
-                <div className="admin-welcome__stat-label">Lecturas Completadas</div>
+                <div className="admin-welcome__stat-label">Lecturas Usadas</div>
               </div>
               <div className="admin-welcome__stat-item">
                 <div className="admin-welcome__stat-number">
                   {statsLoading ? "..." : totalGamesCompleted}
                 </div>
-                <div className="admin-welcome__stat-label">Juegos Completados</div>
+                <div className="admin-welcome__stat-label">Juegos Usados</div>
               </div>
               <div className="admin-welcome__stat-item">
                 <div className="admin-welcome__stat-number">

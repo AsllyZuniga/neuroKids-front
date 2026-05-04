@@ -180,6 +180,22 @@
     padding: 16px 12px;
   }
 
+  .docentes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .docentes-actions {
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .docentes-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
   .docentes-table th,
   .docentes-table td {
     padding: 6px 10px;
@@ -212,7 +228,81 @@
 
 @media (max-width: 480px) {
   .docentes-table {
-    min-width: 480px;
+    width: 100%;
+    min-width: auto;
+  }
+
+  /* Convertir tabla en tarjetas para móviles */
+  .docentes-table,
+  .docentes-table thead,
+  .docentes-table tbody,
+  .docentes-table th,
+  .docentes-table td,
+  .docentes-table tr {
+    display: block;
+  }
+
+  .docentes-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .docentes-table tr {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .docentes-table td {
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+    padding: 10px 0;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+    display: block;
+  }
+
+  .docentes-table td:last-child {
+    border-bottom: none;
+    padding-top: 16px;
+    justify-content: center;
+  }
+
+  .docentes-table td:before {
+    content: attr(data-label);
+    display: block;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+
+  .docentes-table td:nth-child(1):before { content: "ID:"; }
+  .docentes-table td:nth-child(2):before { content: "Nombre:"; }
+  .docentes-table td:nth-child(3):before { content: "Correo:"; }
+  .docentes-table td:nth-child(4):before { content: "Institución:"; }
+  .docentes-table td:nth-child(5):before { content: "Estado:"; }
+  .docentes-table td:nth-child(6):before {
+    display: none;
+  }
+
+  .docentes-table td:nth-child(6) {
+    text-align: center;
+    padding: 14px 0 0;
+  }
+
+  .btn-icon {
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 10px;
   }
 
   .docentes-filters {
@@ -225,6 +315,19 @@
   .docentes-select {
     width: 100%;
     box-sizing: border-box;
+    margin-bottom: 8px;
+  }
+
+  .docentes-card {
+    padding: 20px 16px;
+    margin: 0 8px;
+    max-width: calc(100% - 16px);
+  }
+
+  .docentes-list {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
   }
 }
 

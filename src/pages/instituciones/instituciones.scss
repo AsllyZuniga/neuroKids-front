@@ -4,14 +4,20 @@
   min-height: 100dvh;
   overflow-x: hidden;
   box-sizing: border-box;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 }
 
 .instituciones-container {
   max-width: 1200px;
   width: 100%;
   margin: 48px auto;
-  padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
-  padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  padding: 0 max(16px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
 }
 
 .instituciones-back-btn {
@@ -29,6 +35,10 @@
 }
 
 .instituciones-card {
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 40px;
   color: #000;
 }
@@ -39,21 +49,33 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  width: 100%;
+  min-width: 0;
 }
 
 .instituciones-title {
+  max-width: 100%;
+  margin: 0;
   font-size: 32px;
   font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .instituciones-actions {
   display: flex;
   gap: 10px;
   align-items: center;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .instituciones-search,
-.instituciones-input {
+.instituciones-input,
+.instituciones-select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 6px 8px;
   border: 1px solid #555;
   border-radius: 6px;
@@ -67,12 +89,17 @@
 }
 
 .instituciones-btn {
+  max-width: 100%;
+  min-width: 0;
   padding: 8px 14px;
   border-radius: 8px;
   border: 1px solid #555;
   background: #ffffff;
   color: #000;
   cursor: pointer;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .instituciones-btn--primary {
@@ -81,13 +108,11 @@
   color: #fff;
 }
 
-.instituciones-select {
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid #555;
-  background-color: #ffffff;
-  color: #000000;
-  font-size: 14px;
+.instituciones-list {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .instituciones-table {
@@ -108,6 +133,8 @@
   border: 1px solid #a19f9f;
   padding: 8px 12px;
   text-align: left;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .error {
@@ -116,10 +143,7 @@
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
@@ -157,12 +181,28 @@
     margin: 24px auto;
   }
 
+  .instituciones-card {
+    padding: 16px 12px;
+  }
+
   .instituciones-title {
     font-size: 1.5rem;
   }
 
-  .instituciones-card {
-    padding: 16px 12px;
+  .instituciones-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .instituciones-actions {
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .instituciones-btn {
+    padding: 6px 12px;
+    font-size: 14px;
   }
 
   .instituciones-table th,
@@ -172,9 +212,9 @@
   }
 
   .modal-overlay {
+    align-items: flex-end;
     padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
       max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
-    align-items: flex-end;
   }
 
   .modal-content {
@@ -196,25 +236,95 @@
 }
 
 @media (max-width: 480px) {
-  .instituciones-table {
-    min-width: 480px;
+  .instituciones-page {
+    overflow-x: clip;
   }
 
-  .instituciones-header {
-    flex-direction: column;
-    align-items: stretch;
+  .instituciones-container {
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+  }
+
+  .instituciones-card {
+    margin: 0;
+    max-width: 100%;
+    padding: 18px 12px;
+  }
+
+  .instituciones-title {
+    font-size: clamp(1.25rem, 8vw, 1.5rem);
   }
 
   .instituciones-actions {
     width: 100%;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .instituciones-search,
-  .instituciones-input,
-  .instituciones-select {
+  .instituciones-actions .instituciones-btn {
+    width: min(100%, 240px);
+    align-self: center;
+  }
+
+  .instituciones-table {
     width: 100%;
-    box-sizing: border-box;
+    min-width: auto;
+  }
+
+  .instituciones-table,
+  .instituciones-table thead,
+  .instituciones-table tbody,
+  .instituciones-table th,
+  .instituciones-table td,
+  .instituciones-table tr {
+    display: block;
+  }
+
+  .instituciones-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .instituciones-table tr {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .instituciones-table td {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .instituciones-table td:last-child {
+    border-bottom: none;
+    padding: 14px 0 0;
+    text-align: center;
+  }
+
+  .instituciones-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 700;
   }
 }
-

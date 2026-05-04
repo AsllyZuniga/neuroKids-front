@@ -10,11 +10,17 @@
 }
 
 .reportes-back-btn {
-  padding: 8px 0;
-  background: transparent;
+  padding: 8px 14px;
+  background: #3567c4;
   border: none;
+  color: #ffffff;
+  font-weight: 600;
   cursor: pointer;
+  margin-bottom: 2rem;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .reportes-card {

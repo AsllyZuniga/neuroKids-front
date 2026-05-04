@@ -431,40 +431,40 @@ export function ReportDetailsModal({
           {!loading && !error && hasReportTabs && (
             <Tabs.Root defaultValue={defaultTab} className="flex-1 flex flex-col overflow-hidden min-h-0">
               <Tabs.List
-                className="flex border-b bg-gray-50 px-2 sm:px-4 shrink-0 overflow-x-auto overscroll-x-contain gap-0.5 sm:gap-1"
+                className="grid grid-cols-2 border-b bg-gray-50 px-2 py-2 shrink-0 gap-1 sm:flex sm:px-4 sm:py-0 sm:overflow-x-auto sm:overscroll-x-contain"
                 style={{ scrollbarWidth: "thin" }}
               >
                 <Tabs.Trigger
                   value="lecturas"
-                  className="shrink-0 px-3 py-3 sm:px-5 sm:py-4 text-sm sm:text-base text-gray-600 border-b-2 border-transparent data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap"
+                  className="min-w-0 justify-center rounded-lg px-2 py-2.5 text-sm text-gray-600 border-b-2 border-transparent data-[state=active]:bg-white data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:shrink-0 sm:rounded-none sm:px-5 sm:py-4 sm:text-base sm:data-[state=active]:bg-transparent sm:gap-2 sm:whitespace-nowrap"
                 >
                   <BookOpen size={18} className="sm:w-5 sm:h-5 shrink-0" />
                   Lecturas
                 </Tabs.Trigger>
                 <Tabs.Trigger
                   value="juegos"
-                  className="shrink-0 px-3 py-3 sm:px-5 sm:py-4 text-sm sm:text-base text-gray-600 border-b-2 border-transparent data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap"
+                  className="min-w-0 justify-center rounded-lg px-2 py-2.5 text-sm text-gray-600 border-b-2 border-transparent data-[state=active]:bg-white data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:shrink-0 sm:rounded-none sm:px-5 sm:py-4 sm:text-base sm:data-[state=active]:bg-transparent sm:gap-2 sm:whitespace-nowrap"
                 >
                   <Gamepad2 size={18} className="sm:w-5 sm:h-5 shrink-0" />
                   Juegos
                 </Tabs.Trigger>
                 <Tabs.Trigger
                   value="insignias"
-                  className="shrink-0 px-3 py-3 sm:px-5 sm:py-4 text-sm sm:text-base text-gray-600 border-b-2 border-transparent data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap"
+                  className="min-w-0 justify-center rounded-lg px-2 py-2.5 text-sm text-gray-600 border-b-2 border-transparent data-[state=active]:bg-white data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:shrink-0 sm:rounded-none sm:px-5 sm:py-4 sm:text-base sm:data-[state=active]:bg-transparent sm:gap-2 sm:whitespace-nowrap"
                 >
                   <Trophy size={18} className="sm:w-5 sm:h-5 shrink-0" />
                   Insignias
                 </Tabs.Trigger>
                 <Tabs.Trigger
                   value="historial"
-                  className="shrink-0 px-3 py-3 sm:px-5 sm:py-4 text-sm sm:text-base text-gray-600 border-b-2 border-transparent data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap"
+                  className="min-w-0 justify-center rounded-lg px-2 py-2.5 text-sm text-gray-600 border-b-2 border-transparent data-[state=active]:bg-white data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:shrink-0 sm:rounded-none sm:px-5 sm:py-4 sm:text-base sm:data-[state=active]:bg-transparent sm:gap-2 sm:whitespace-nowrap"
                 >
                   <History size={18} className="sm:w-5 sm:h-5 shrink-0" />
                   Accesos
                 </Tabs.Trigger>
                 <Tabs.Trigger
                   value="analisis"
-                  className="shrink-0 px-3 py-3 sm:px-5 sm:py-4 text-sm sm:text-base text-gray-600 border-b-2 border-transparent data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap"
+                  className="col-span-2 min-w-0 justify-center rounded-lg px-2 py-2.5 text-sm text-gray-600 border-b-2 border-transparent data-[state=active]:bg-white data-[state=active]:border-purple-600 data-[state=active]:text-purple-600 transition-all flex items-center gap-1.5 sm:col-span-1 sm:shrink-0 sm:rounded-none sm:px-5 sm:py-4 sm:text-base sm:data-[state=active]:bg-transparent sm:gap-2 sm:whitespace-nowrap"
                 >
                   <BarChart size={18} className="sm:w-5 sm:h-5 shrink-0" />
                   Análisis

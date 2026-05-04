@@ -296,12 +296,12 @@ export default function Docentes() {
                   <tbody>
                     {filtered.map((d) => (
                       <tr key={d.id}>
-                        <td>{d.id}</td>
-                        <td>{d.nombre}</td>
-                        <td>{d.correo}</td>
-                        <td>{d.institucion?.nombre ?? (d.institucion_id ? (institucionesMap[d.institucion_id] ?? "-") : "-")}</td>
-                        <td>{d.estado ? "Activo" : "Inactivo"}</td>
-                        <td>
+                        <td data-label="ID">{d.id}</td>
+                        <td data-label="Nombre">{d.nombre}</td>
+                        <td data-label="Correo">{d.correo}</td>
+                        <td data-label="Institución">{d.institucion?.nombre ?? (d.institucion_id ? (institucionesMap[d.institucion_id] ?? "-") : "-")}</td>
+                        <td data-label="Estado">{d.estado ? "Activo" : "Inactivo"}</td>
+                        <td data-label="Acciones">
                           <div className="action-buttons">
                             <button
                               className="btn-icon btn-edit-icon"

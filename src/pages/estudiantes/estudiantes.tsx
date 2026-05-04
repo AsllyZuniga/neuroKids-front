@@ -22,6 +22,7 @@ export default function Estudiantes() {
     const [estudiantes, setEstudiantes] = useState<Usuario[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [totalEstudiantes, setTotalEstudiantes] = useState<number>(0);
     const [institucionesMap, setInstitucionesMap] = useState<Record<number, string>>({});
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [page, setPage] = useState<number>(1);
@@ -73,10 +74,7 @@ export default function Estudiantes() {
                 }
 
                 // Listar estudiantes desde el backend (tabla estudiantes)
-                const endpoint =
-                    isAdmin && institucionFilter
-                        ? `/estudiantes?institucion_id=${encodeURIComponent(institucionFilter)}`
-                        : "/estudiantes";
+                const endpoint = "/estudiantes?limit=1000";
                 const resp = await fetch(buildApiUrl(endpoint), {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -95,6 +93,7 @@ export default function Estudiantes() {
                     data?.data ||
                     [];
                 setEstudiantes(lista);
+                setTotalEstudiantes(Number(data?.data?.pagination?.total ?? lista.length));
             } catch (err: any) {
                 console.error(err);
                 setError(err?.message || "Error al cargar estudiantes");
@@ -104,7 +103,7 @@ export default function Estudiantes() {
         };
 
         fetchUsuarios();
-    }, [navigate, institucionFilter]);
+    }, [navigate, userType]);
 
     const filtered = useMemo(() => {
         return estudiantes.filter((s) => {
@@ -175,7 +174,7 @@ export default function Estudiantes() {
         setEditingError(null);
         
         try {
-            const resp = await fetch(buildApiUrl(`/usuarios/${editingEstudiante.id}`), {
+            const resp = await fetch(buildApiUrl(`/estudiantes/${editingEstudiante.id}`), {
                 method: "PUT",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -226,7 +225,7 @@ export default function Estudiantes() {
         setDeleteError(null);
 
         try {
-            const resp = await fetch(buildApiUrl(`/usuarios/${deletingId}`), {
+            const resp = await fetch(buildApiUrl(`/estudiantes/${deletingId}`), {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -282,7 +281,10 @@ const handleBack = () => {
 
                         <div className="estudiantes-toolbar">
                             <div className="estudiantes-total-bar">
-                                Total <strong>{filtered.length}</strong> estudiantes
+                                Total <strong>{totalEstudiantes}</strong> estudiantes
+                                {filtered.length !== totalEstudiantes && (
+                                    <span> | Mostrando <strong>{filtered.length}</strong></span>
+                                )}
                             </div>
 
                             <div className="estudiantes-controls">
@@ -361,15 +363,15 @@ const handleBack = () => {
                                         <tbody>
                                             {paginated.map((s) => (
                                                 <tr key={s.id}>
-                                                    <td>{s.id}</td>
-                                                    <td>{s.nombre} {s.apellido ?? ""}</td>
-                                                    <td>{s.edad ?? "-"}</td>
-                                                    <td>
+                                                    <td data-label="ID">{s.id}</td>
+                                                    <td data-label="Nombre">{s.nombre} {s.apellido ?? ""}</td>
+                                                    <td data-label="Edad">{s.edad ?? "-"}</td>
+                                                    <td data-label="Institución">
                                                         {s.institucion?.nombre
                                                             ?? (s.institucion_id ? (institucionesMap[s.institucion_id] ?? "-") : "-")}
                                                     </td>
-                                                    <td>{s.correo ?? "-"}</td>
-                                                    <td>
+                                                    <td data-label="Correo">{s.correo ?? "-"}</td>
+                                                    <td data-label="Acciones">
                                                         <div className="action-buttons">
                                                             <button 
                                                                 className="btn-icon btn-edit-icon" 
@@ -406,6 +408,7 @@ const handleBack = () => {
                         </div>
                     )}
                 </Card>
+
 
                 {editingEstudiante && editForm && (
                     <div className="modal-overlay" onClick={handleEditCancel}>
