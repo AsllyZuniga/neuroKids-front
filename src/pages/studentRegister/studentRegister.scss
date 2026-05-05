@@ -486,6 +486,50 @@
     }
   }
 
+  &__terms-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    margin: 1.5rem 0 0.5rem;
+    padding: 1rem 1.25rem;
+    background: rgba(102, 126, 234, 0.06);
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+
+    &:hover {
+      border-color: rgba(102, 126, 234, 0.4);
+      background: rgba(102, 126, 234, 0.1);
+    }
+  }
+
+  &__terms-checkbox {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    cursor: pointer;
+    accent-color: #667eea;
+  }
+
+  &__terms-text {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  &__terms-link {
+    color: #667eea;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      color: #764ba2;
+    }
+  }
+
   &__error {
     background: linear-gradient(135deg, #ffebee, #ffcdd2);
     color: #c62828;

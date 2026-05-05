@@ -66,6 +66,7 @@ export default function StudentRegister() {
   const [loadingInstituciones, setLoadingInstituciones] = useState(false);
   const [error, setError] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const successSfx = useRef<HTMLAudioElement | null>(null);
   const audioCtx = useRef<AudioContext | null>(null);
   const navigate = useNavigate();
@@ -714,6 +715,26 @@ export default function StudentRegister() {
                     </div>
                   )}
                 </div>
+                <label className="student-register__terms-check">
+                  <input
+                    type="checkbox"
+                    checked={termsAccepted}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                    className="student-register__terms-checkbox"
+                    disabled={loading}
+                  />
+                  <span className="student-register__terms-text">
+                    Acepto las{" "}
+                    <a
+                      href="/terminos-y-condiciones"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="student-register__terms-link"
+                    >
+                      Políticas de Tratamiento de Datos y Términos y Condiciones
+                    </a>
+                  </span>
+                </label>
                 {error && <div className="student-register__error">{error}</div>}
                 {loading && (
                   <div className="student-register__success">
@@ -733,7 +754,7 @@ export default function StudentRegister() {
                     variant="primary"
                     size="large"
                     onClick={handleSubmit}
-                    disabled={loading}
+                    disabled={loading || !termsAccepted}
                     className="student-register__submit-button"
                   />
                 </div>
