@@ -14,7 +14,7 @@ interface StartScreenCuentoInteractivoProps {
 export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCuentoInteractivoProps) {
   const title = "Cuentos Interactivos";
 
-  
+
 
   return (
     <div className="relative isolate flex min-h-screen min-h-[100dvh] items-center justify-center overflow-x-hidden overflow-y-auto">
@@ -38,7 +38,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
         Volver
       </Button>
 
- 
+
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -46,7 +46,7 @@ export function StartScreenCuentoInteractivo({ onStart, onBack }: StartScreenCue
         className="relative z-20 mx-auto flex max-w-6xl flex-col items-center justify-center gap-8 px-4 pb-10 pt-20 sm:gap-12 sm:px-6 sm:pt-24 md:gap-16"
       >
 
-    
+
         <div className="mb-4 px-4 -translate-y-20">
           <div className="flex flex-row flex-wrap items-center gap-4 mb-2 ">
             {title.split("").map((word, wordIndex) => (

@@ -13,7 +13,7 @@ interface StartScreenCazaSilabaProps {
   onBack: () => void;
 }
 
-/* Animación de flotación */
+
 const float = (delay: number) => ({
   animate: {
     y: [0, -8, 0],
@@ -26,7 +26,6 @@ const float = (delay: number) => ({
   },
 });
 
-/* Componente reutilizable para cada letra */
 function FloatingLetter({
   letter,
   bg,
@@ -64,7 +63,7 @@ export function StartScreenCazaSilaba({
         className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
         style={{ backgroundImage: `url(${fondo})` }}
       />
-      {/* Botón volver */}
+
       <ButtonWithAudio
         onClick={onBack}
         variant="outline"
@@ -74,7 +73,7 @@ export function StartScreenCazaSilaba({
         Volver
       </ButtonWithAudio>
 
-      {/*imagen izquierda*/}
+
       <motion.img
         src={silabasRight}
         alt="Sílabas"
@@ -90,7 +89,7 @@ export function StartScreenCazaSilaba({
 
 
       <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-3 pb-10 pt-20 text-center sm:px-6 sm:pt-24">
-          {/* CAZA */}
+
           <h1 className="mb-2 flex flex-wrap justify-center sm:mb-4">
             <FloatingLetter letter="C" bg="bg-rose-300" delay={0} />
             <FloatingLetter letter="a" bg="bg-purple-300" delay={0.2} />
@@ -98,13 +97,13 @@ export function StartScreenCazaSilaba({
             <FloatingLetter letter="a" bg="bg-teal-300" delay={0.6} />
           </h1>
 
-          {/* LA */}
+
           <h1 className="mb-2 flex flex-wrap justify-center sm:mb-4">
             <FloatingLetter letter="l" bg="bg-emerald-300" delay={0.8} />
             <FloatingLetter letter="a" bg="bg-amber-300" delay={1} />
           </h1>
 
-          {/* SÍLABA */}
+  
           <h1 className="mb-4 flex flex-wrap justify-center sm:mb-6">
             <FloatingLetter letter="S" bg="bg-pink-300" delay={1.2} />
             <FloatingLetter letter="í" bg="bg-violet-300" delay={1.4} />
@@ -114,7 +113,6 @@ export function StartScreenCazaSilaba({
             <FloatingLetter letter="a" bg="bg-orange-300" delay={2.2} />
           </h1>
 
-          {/* Botón jugar */}
           <ButtonWithAudio
             onClick={onStart}
             size="lg"

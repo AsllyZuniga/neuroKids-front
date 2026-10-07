@@ -13,7 +13,7 @@ interface StartScreenBiografiasSencillasProps {
 }
 
 export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenBiografiasSencillasProps) {
-    const title = ["Biografias", "Sencillas"];
+  const title = ["Biografias", "Sencillas"];
 
 
   return (
@@ -70,7 +70,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
                 hoverScale={1.3}
                 delay={index * 0.1}
                 className="inline-block max-[480px]:text-2xl text-3xl text-purple-600 sm:text-5xl md:text-7xl"
-                
+
               />
             ))}
           </h1>
@@ -122,9 +122,9 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
               }}
             >
-              
-        <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
-          ¡Comenzar a Jugar!
+
+              <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
+              ¡Comenzar a Jugar!
               <motion.div
                 animate={{ rotate: [0, 20, -20, 0] }}
                 transition={{ duration: 1, repeat: Infinity }}
@@ -134,7 +134,7 @@ export function StartScreenBiografiasSencillas({ onStart, onBack }: StartScreenB
           </motion.div>
         </motion.div>
 
-        
+
       </div>
     </div>
   );

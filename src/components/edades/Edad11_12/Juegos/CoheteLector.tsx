@@ -15,11 +15,7 @@ import { StartScreenCoheteLector } from '../IniciosJuegosLecturas/StartScreenCoh
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  gameLevelFinished,
-  gameLevelStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, gameLevelFinished, gameLevelStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 
@@ -245,7 +241,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   const [gameStarted, setGameStarted] = useState(false);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(16); // Cohete Lector
+  const activityConfig = getActivityByDbId(16);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -255,9 +251,8 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   const challenge = currentChallenges[currentChallenge];
   const maxHeight = 100;
@@ -276,9 +271,6 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
 
   }, [level]);
 
-
-
-
   useEffect(() => {
     if (!gameStarted) return;
 
@@ -290,11 +282,6 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
   const startGame = () => {
     setGameStarted(true);
   };
-
-
-
-
-
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null || showResult) return;
@@ -395,7 +382,7 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e2e8f0 0%, #bae6fd 50%, #dbeafe 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8 text-slate-800">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8 text-slate-800">
         <GameHeader
           title={`Cohete Lector`}
           level={currentLevel}
@@ -418,148 +405,148 @@ export function CoheteLector({ onBack, level }: CoheteLectorProps) {
           />
         </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
-          <div className="lg:col-span-5">
-            <Card className="bg-purple-300 border border-slate-200 shadow-sm">
-              <CardContent className="p-8 max-[480px]:p-4">
-                <h3 className="text-lg mb-6 text-center">Progreso del Cohete</h3>
-                <div className="relative h-96 bg-gradient-to-t from-blue-800 to-black rounded-lg border border-white/20 overflow-hidden">
-                  <motion.div
-                    animate={{ bottom: `${rocketHeight}%` }}
-                    className="absolute left-1/2 transform -translate-x-1/2 text-5xl"
-                    style={{ bottom: `${rocketHeight}%` }}
-                  >
-                    🚀
-                  </motion.div>
-                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-yellow-400">
-                    <div className="text-xs text-yellow-400 absolute right-0 -top-4">ESPACIO</div>
-                  </div>
-                </div>
-                <div className="mt-4 text-center">
-                  <div className="text-sm">Altura: {Math.round(rocketHeight)}%</div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="lg:col-span-7">
-            <motion.div
-              key={currentChallenge}
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-            >
-              <Card className="bg-blue-100 backdrop-blur-sm border-2 border-blue-400">
-                <CardContent className="min-w-0 p-8 max-[480px]:p-4">
-                  <div className="mb-6 flex flex-wrap items-center gap-3">
-                    <Badge className={`${getTypeColor(challenge.type)} border`}>
-                      {getTypeLabel(challenge.type)}
-                    </Badge>
-                    <div className="flex items-center gap-1">
-                      <Target className="w-4 h-4 text-amber-500" />
-
-                      <span>{challenge.points} puntos</span>
-                    </div>
-                  </div>
-
-                  {challenge.text && (
-                    <div className="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-5 max-[480px]:p-3">
-                      <div className="mb-3">
-                        <AudioPlayer text={challenge.text || ""} />
-                      </div>
-                      <p className="break-words text-slate-700 leading-relaxed tracking-wide max-[480px]:text-sm">
-                        {challenge.text}
-                      </p>
-                    </div>
-                  )}
-
-                  <h3 className="mb-6 break-words text-xl text-slate-800 max-[480px]:mb-4 max-[480px]:text-base">
-                    {challenge.question}
-                  </h3>
-
-
-                  <div className="grid gap-4">
-                    {challenge.options.map((option, index) => (
-                      <motion.div
-                        key={index}
-                        whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <Button
-                          onClick={() => handleAnswerSelect(index)}
-                          disabled={selectedAnswer !== null}
-                          variant="outline"
-                          className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
-                            ? 'bg-white hover:bg-sky-50 border-slate-300'
-                            : selectedAnswer === index
-                              ? index === challenge.correct
-                                ? 'bg-green-200 border-green-400 text-green-800'
-                                : 'bg-red-200 border-red-400 text-red-800'
-                              : showResult && selectedAnswer !== null && index === challenge.correct
-                                ? 'bg-green-200 border-green-400 text-green-800'
-                                : 'bg-slate-100 border-slate-200'
-
-                            }`}
-                        >
-                          <span className="text-left">{option}</span>
-                        </Button>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {showResult && (
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+            <div className="lg:col-span-5">
+              <Card className="bg-purple-300 border border-slate-200 shadow-sm">
+                <CardContent className="p-8 max-[480px]:p-4">
+                  <h3 className="text-lg mb-6 text-center">Progreso del Cohete</h3>
+                  <div className="relative h-96 bg-gradient-to-t from-blue-800 to-black rounded-lg border border-white/20 overflow-hidden">
                     <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-6 rounded-lg border border-blue-300 bg-blue-100 p-5 max-[480px]:p-3"
+                      animate={{ bottom: `${rocketHeight}%` }}
+                      className="absolute left-1/2 transform -translate-x-1/2 text-5xl"
+                      style={{ bottom: `${rocketHeight}%` }}
                     >
-                      <h4 className="mb-2 text-lg text-blue-800 max-[480px]:text-base">Explicación:</h4>
-                      <p className="break-words text-blue-700 max-[480px]:text-sm">{challenge.explanation}</p>
-
+                      🚀
                     </motion.div>
-                  )}
+                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-yellow-400">
+                      <div className="text-xs text-yellow-400 absolute right-0 -top-4">ESPACIO</div>
+                    </div>
+                  </div>
+                  <div className="mt-4 text-center">
+                    <div className="text-sm">Altura: {Math.round(rocketHeight)}%</div>
+                  </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
+
+            <div className="lg:col-span-7">
+              <motion.div
+                key={currentChallenge}
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+              >
+                <Card className="bg-blue-100 backdrop-blur-sm border-2 border-blue-400">
+                  <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                    <div className="mb-6 flex flex-wrap items-center gap-3">
+                      <Badge className={`${getTypeColor(challenge.type)} border`}>
+                        {getTypeLabel(challenge.type)}
+                      </Badge>
+                      <div className="flex items-center gap-1">
+                        <Target className="w-4 h-4 text-amber-500" />
+
+                        <span>{challenge.points} puntos</span>
+                      </div>
+                    </div>
+
+                    {challenge.text && (
+                      <div className="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-5 max-[480px]:p-3">
+                        <div className="mb-3">
+                          <AudioPlayer text={challenge.text || ""} />
+                        </div>
+                        <p className="break-words text-slate-700 leading-relaxed tracking-wide max-[480px]:text-sm">
+                          {challenge.text}
+                        </p>
+                      </div>
+                    )}
+
+                    <h3 className="mb-6 break-words text-xl text-slate-800 max-[480px]:mb-4 max-[480px]:text-base">
+                      {challenge.question}
+                    </h3>
+
+
+                    <div className="grid gap-4">
+                      {challenge.options.map((option, index) => (
+                        <motion.div
+                          key={index}
+                          whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <Button
+                            onClick={() => handleAnswerSelect(index)}
+                            disabled={selectedAnswer !== null}
+                            variant="outline"
+                            className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
+                              ? 'bg-white hover:bg-sky-50 border-slate-300'
+                              : selectedAnswer === index
+                                ? index === challenge.correct
+                                  ? 'bg-green-200 border-green-400 text-green-800'
+                                  : 'bg-red-200 border-red-400 text-red-800'
+                                : showResult && selectedAnswer !== null && index === challenge.correct
+                                  ? 'bg-green-200 border-green-400 text-green-800'
+                                  : 'bg-slate-100 border-slate-200'
+
+                              }`}
+                          >
+                            <span className="text-left">{option}</span>
+                          </Button>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    {showResult && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-6 rounded-lg border border-blue-300 bg-blue-100 p-5 max-[480px]:p-3"
+                      >
+                        <h4 className="mb-2 text-lg text-blue-800 max-[480px]:text-base">Explicación:</h4>
+                        <p className="break-words text-blue-700 max-[480px]:text-sm">{challenge.explanation}</p>
+
+                      </motion.div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
           </div>
+
+          <RewardAnimation
+            type="star"
+            show={showReward}
+            message="¡El cohete sube!"
+            onComplete={() => setShowReward(false)}
+          />
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={currentChallenges.reduce((sum, c) => sum + c.points, 0)}
+              customMessage="¡Has completado el nivel!"
+              customSubtitle="Resolviste todos los desafíos del cohete"
+              celebrationText="¡Increíble trabajo!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={maxPoints}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={loadNextLevel}
+              onRestart={restartLevel}
+              onExit={onBack}
+            />
+          )}
         </div>
-
-        <RewardAnimation
-          type="star"
-          show={showReward}
-          message="¡El cohete sube!"
-          onComplete={() => setShowReward(false)}
-        />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={currentChallenges.reduce((sum, c) => sum + c.points, 0)}
-            customMessage="¡Has completado el nivel!"
-            customSubtitle="Resolviste todos los desafíos del cohete"
-            celebrationText="¡Increíble trabajo!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL */}
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={maxPoints}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={loadNextLevel}
-            onRestart={restartLevel}
-            onExit={onBack}
-          />
-        )}
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

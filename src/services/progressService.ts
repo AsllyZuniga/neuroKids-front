@@ -1,6 +1,5 @@
 import { API_CONFIG, buildApiUrl } from '../config/api';
 
-/** Desde `progreso_actividades.detalle_niveles` (JSON) */
 export interface LevelDetail {
   levelScores: Record<number, number>;
   levelsCompleted: number[];
@@ -9,7 +8,7 @@ export interface LevelDetail {
 }
 
 export interface ActivityProgress {
-  activityId: number; // Cambio a number para coincidir con DB
+  activityId: number;
   activityName: string;
   activityType: 'lectura' | 'juego';
   ageGroup: '7-8' | '9-10' | '11-12';
@@ -19,8 +18,7 @@ export interface ActivityProgress {
   completed: boolean;
   completedAt?: string;
   attempts: number;
-  timeSpent?: number; // en segundos
-  /** Progreso por niveles (juegos 1–3 o lectura completada en bloque) */
+  timeSpent?: number;
   levelDetail?: LevelDetail;
 }
 
@@ -116,7 +114,7 @@ class ProgressService {
           return parsed;
         }
       } catch {
-        // ignore
+
       }
     }
 
@@ -135,10 +133,6 @@ class ProgressService {
     return match || null;
   }
 
-  /**
-   * Guarda progreso usando la ruta actual (window.location.pathname).
-   * Requiere que en DB la actividad tenga `ruta_recurso` igual a esa ruta.
-   */
   async saveCurrentRouteProgress(params: {
     score: number;
     completed: boolean;
@@ -171,14 +165,10 @@ class ProgressService {
     });
   }
 
-  /**
-   * Guarda o actualiza el progreso de una actividad
-   */
+
   async saveActivityProgress(
     activityProgress: Omit<ActivityProgress, 'completedAt' | 'attempts' | 'levelDetail'> & {
-      /** true al terminar un nivel del juego (1–3) */
       nivelCompletado?: boolean;
-      /** true al entrar a un nivel (no suma puntos ni marca nivel) */
       soloRegistro?: boolean;
       correctAnswers?: number;
       incorrectAnswers?: number;
@@ -186,13 +176,13 @@ class ProgressService {
     }
   ): Promise<
     | {
-        insignias_desbloqueadas?: Array<{
-          insignia_id: number;
-          nombre: string;
-          descripcion: string;
-          puntos_otorgados: number;
-        }>;
-      }
+      insignias_desbloqueadas?: Array<{
+        insignia_id: number;
+        nombre: string;
+        descripcion: string;
+        puntos_otorgados: number;
+      }>;
+    }
     | undefined
   > {
     const estudianteId = this.getStudentId();
@@ -224,8 +214,7 @@ class ProgressService {
         tiempo_total: activityProgress.timeSpent || 0
       });
 
-      // Guardamos directamente en el backend usando el endpoint real
-      // Agregamos timestamp único para forzar registro cada vez
+
       const ap = activityProgress as {
         correctAnswers?: number;
         incorrectAnswers?: number;
@@ -235,7 +224,7 @@ class ProgressService {
       };
       let trackedAudioUses = 0;
       if (ap.soloRegistro === true) {
-        // Reiniciar contador al iniciar nivel para no arrastrar usos viejos.
+
         this.consumeTrackedAudioUses(Number(estudianteId), Number(activityProgress.activityId));
       } else {
         trackedAudioUses = this.consumeTrackedAudioUses(Number(estudianteId), Number(activityProgress.activityId));
@@ -291,18 +280,18 @@ class ProgressService {
           result: result
         });
 
-        // También guardamos en localStorage como caché
+
         this.saveToLocalStorage(Number(estudianteId), { ...activityProgress, activityId: Number(activityProgress.activityId) });
         return { insignias_desbloqueadas };
       } else {
-        const errorData = await response.text(); // Cambio a text() para capturar errores HTML
+        const errorData = await response.text();
         console.error('❌ Error del servidor:', {
           status: response.status,
           statusText: response.statusText,
           data: errorData
         });
 
-        // Guardar en localStorage como fallback
+
         console.log('💾 Guardando en localStorage como fallback');
         this.saveToLocalStorage(Number(estudianteId), { ...activityProgress, activityId: Number(activityProgress.activityId) });
       }
@@ -310,14 +299,11 @@ class ProgressService {
       console.error('❌ Error guardando progreso (catch block):', error);
       console.log('💾 Guardando en localStorage debido a error de red');
 
-      // Guardar en localStorage como fallback
       this.saveToLocalStorage(Number(estudianteId), { ...activityProgress, activityId: Number(activityProgress.activityId) });
     }
   }
 
-  /**
-   * Obtiene el progreso completo del estudiante
-   */
+
   async getStudentProgress(): Promise<StudentProgress | null> {
     const estudianteId = this.getStudentId();
 
@@ -326,17 +312,17 @@ class ProgressService {
     }
 
     try {
-      // Intentamos obtener del backend
+
       const response = await fetch(
         buildApiUrl(`${API_CONFIG.ENDPOINTS.PROGRESS_STUDENT}/${encodeURIComponent(String(estudianteId))}`)
       );
 
       if (response.ok) {
         const data = await response.json();
-        console.log('📊 Progreso obtenido del servidor:', data);
+        console.log('Progreso obtenido del servidor:', data);
 
         if (data.success && data.data) {
-          // Transformar los datos del backend al formato esperado
+
           const backendData = data.data;
           return {
             estudianteId,
@@ -366,7 +352,7 @@ class ProgressService {
         }
       }
 
-      // Si falla, usamos localStorage como fallback
+
       console.log('⚠️ Usando localStorage como fallback');
       return this.getFromLocalStorage(estudianteId);
     } catch (error) {
@@ -385,15 +371,13 @@ class ProgressService {
     }
   }
 
-  /**
-   * Obtiene el progreso de una actividad específica
-   */
+
   async getActivityProgress(activityId: number): Promise<ActivityProgress | null> {
     const estudianteId = this.getStudentId();
     if (!estudianteId) return null;
 
     try {
-      // Primero intentamos del backend
+
       const response = await fetch(
         buildApiUrl(
           `${API_CONFIG.ENDPOINTS.PROGRESS_ACTIVITY}/${encodeURIComponent(String(activityId))}/estudiante/${encodeURIComponent(String(estudianteId))}`
@@ -424,24 +408,20 @@ class ProgressService {
       console.error('Error obteniendo progreso de actividad:', error);
     }
 
-    // Fallback a localStorage
+
     const progress = await this.getStudentProgress();
     if (!progress) return null;
 
     return progress.activities.find(a => Number(a.activityId) === Number(activityId)) || null;
   }
 
-  /**
-   * Verifica si una actividad está completada
-   */
+
   async isActivityCompleted(activityId: number): Promise<boolean> {
     const activityProgress = await this.getActivityProgress(activityId);
     return activityProgress?.completed || false;
   }
 
-  /**
-   * Obtiene las actividades completadas por tipo
-   */
+
   async getCompletedActivities(type?: 'lectura' | 'juego'): Promise<ActivityProgress[]> {
     const progress = await this.getStudentProgress();
     if (!progress) return [];
@@ -454,9 +434,7 @@ class ProgressService {
     return completed;
   }
 
-  /**
-   * Guarda en localStorage como respaldo
-   */
+
   private saveToLocalStorage(
     estudianteId: number,
     activityProgress: Omit<ActivityProgress, 'completedAt' | 'attempts'>
@@ -488,13 +466,13 @@ class ProgressService {
       };
     }
 
-    // Normalizar IDs viejos en caché (string vs number)
+
     progress.activities = progress.activities.map((a) => ({
       ...a,
       activityId: Number(a.activityId)
     }));
 
-    // Una entrada por actividad (no por nivel)
+
     const existingIndex = progress.activities.findIndex((a) => Number(a.activityId) === normalizedId);
 
     const now = new Date().toISOString();
@@ -505,7 +483,7 @@ class ProgressService {
     };
 
     if (existingIndex >= 0) {
-      // Actualizar actividad existente
+
       const oldActivity = progress.activities[existingIndex];
       progress.activities[existingIndex] = {
         ...newActivity,
@@ -513,11 +491,11 @@ class ProgressService {
         attempts: oldActivity.attempts + 1
       };
     } else {
-      // Agregar nueva actividad
+
       progress.activities.push(newActivity);
     }
 
-    // Actualizar estadísticas globales
+
     progress.totalPoints = progress.activities.reduce((sum, a) => sum + (Number(a.score) || 0), 0);
     progress.gamesCompleted = progress.activities.filter(a => a.activityType === 'juego' && a.completed).length;
     progress.readingsCompleted = progress.activities.filter(a => a.activityType === 'lectura' && a.completed).length;
@@ -525,13 +503,13 @@ class ProgressService {
 
     localStorage.setItem(key, JSON.stringify(progress));
 
-    /** Racha de días (localStorage); no se borra al cerrar sesión */
+
     if (merged.completed) {
       this.bumpStreakOnCompletion(estudianteId);
     }
   }
 
-  /** Días consecutivos con al menos una actividad completada (persistente entre sesiones) */
+
   private bumpStreakOnCompletion(estudianteId: number): void {
     const key = `neurokids-streak-${estudianteId}`;
     const today = new Date().toISOString().slice(0, 10);
@@ -540,7 +518,7 @@ class ProgressService {
       const raw = localStorage.getItem(key);
       if (raw) data = JSON.parse(raw);
     } catch {
-      /* ignore */
+
     }
     if (data.lastDate === today) return;
     const y = new Date();
@@ -555,9 +533,8 @@ class ProgressService {
     localStorage.setItem(key, JSON.stringify(data));
   }
 
-  /**
-   * Obtiene del localStorage
-   */
+
+
   private getFromLocalStorage(estudianteId: number): StudentProgress {
     const key = `neurokids-progress-${estudianteId}`;
     const stored = localStorage.getItem(key);
@@ -579,7 +556,7 @@ class ProgressService {
     };
   }
 
-  /** Días de racha guardados en localStorage (persisten al cerrar sesión) */
+
   getStreakDays(estudianteId: number): number {
     try {
       const raw = localStorage.getItem(`neurokids-streak-${estudianteId}`);
@@ -591,9 +568,7 @@ class ProgressService {
     }
   }
 
-  /**
-   * Limpia el progreso (útil para testing o reset)
-   */
+
   clearProgress(): void {
     const estudianteId = this.getStudentId();
     if (estudianteId) {

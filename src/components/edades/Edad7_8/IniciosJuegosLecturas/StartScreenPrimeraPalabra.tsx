@@ -48,7 +48,7 @@ export function StartScreenPrimeraPalabra({ onStart, onBack }: StartScreenPrimer
         Volver
       </ButtonWithAudio>
 
-      {/* 🌟 Floating words */}
+
       <div className="absolute inset-0 pointer-events-none">
         {letters.map((item, index) => (
           <FloatingItem

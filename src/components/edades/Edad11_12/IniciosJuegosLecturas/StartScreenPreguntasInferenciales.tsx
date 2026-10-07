@@ -51,52 +51,52 @@ export function StartScreenPreguntasInferenciales({ onStart, onBack }: StartScre
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
 
-      {bubbles.map((bubble) => (
-        <motion.div
-          key={bubble.id}
-          className="absolute rounded-full opacity-10"
-          style={{
-            width: bubble.size,
-            height: bubble.size,
-            left: `${bubble.left}%`,
-            background: `radial-gradient(circle at 30% 30%, rgba(255, 192, 203, 0.8), rgba(147, 112, 219, 0.6))`,
-          }}
-          animate={{
-            y: ['100vh', '-20vh'],
-            x: [0, Math.random() * 100 - 50],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: bubble.duration,
-            delay: bubble.delay,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-        />
-      ))}
+        {bubbles.map((bubble) => (
+          <motion.div
+            key={bubble.id}
+            className="absolute rounded-full opacity-10"
+            style={{
+              width: bubble.size,
+              height: bubble.size,
+              left: `${bubble.left}%`,
+              background: `radial-gradient(circle at 30% 30%, rgba(255, 192, 203, 0.8), rgba(147, 112, 219, 0.6))`,
+            }}
+            animate={{
+              y: ['100vh', '-20vh'],
+              x: [0, Math.random() * 100 - 50],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: bubble.duration,
+              delay: bubble.delay,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
+        ))}
 
 
 
 
-      {Array.from({ length: 30 }).map((_, i) => (
-        <motion.div
-          key={`particle-${i}`}
-          className="absolute w-2 h-2 bg-white rounded-full"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1.5, 0],
-          }}
-          transition={{
-            duration: 2 + Math.random() * 2,
-            delay: Math.random() * 3,
-            repeat: Infinity,
-          }}
-        />
-      ))}
+        {Array.from({ length: 30 }).map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-2 h-2 bg-white rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0, 1, 0],
+              scale: [0, 1.5, 0],
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              delay: Math.random() * 3,
+              repeat: Infinity,
+            }}
+          />
+        ))}
 
       </div>
 

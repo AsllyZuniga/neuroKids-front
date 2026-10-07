@@ -10,7 +10,7 @@ import { registerStudentPlatformVisit } from "@/services/studentAccessService";
 import { buildApiUrl } from "@/config/api";
 import "./studentWelcome.scss";
 
-/** Preferencia de panel por estudiante (sobrevive cierre de sesión y otras rutas) */
+
 const LEGACY_PANEL_UI_KEY = "neurokids-student-panel-ui";
 function panelUiKey(studentId: number) {
   return `neurokids-student-panel-ui-${studentId}`;
@@ -115,7 +115,7 @@ function MapLevelDots({ activity }: { activity: Activity }) {
   );
 }
 
-/** Estados del mapa (diseño: completado / en curso / siguiente / bloqueado) */
+
 function computeMapStates(activities: { completed: boolean }[]): MapNodeState[] {
   const firstIncomplete = activities.findIndex((a) => !a.completed);
   if (firstIncomplete === -1) {
@@ -129,14 +129,14 @@ function computeMapStates(activities: { completed: boolean }[]): MapNodeState[] 
   });
 }
 
-/** Camino en zigzag: filas alternas izquierda↔derecha + desplazamiento por fila */
+
 function buildSnakePositions(count: number, cols: number): { x: number; y: number }[] {
   if (count === 0) return [];
   const rows = Math.ceil(count / cols);
   const vertPad = 6;
   const ySpan = 100 - 2 * vertPad;
   const out: { x: number; y: number }[] = [];
-  /** Más contraste horizontal entre filas = zigzag más legible */
+
   const rowShiftAmp = cols <= 2 ? 7.5 : 5.5;
   for (let i = 0; i < count; i++) {
     const row = Math.floor(i / cols);
@@ -153,7 +153,6 @@ function buildSnakePositions(count: number, cols: number): { x: number; y: numbe
   return out;
 }
 
-/** Prioriza 2 columnas cuando hay varias actividades = más filas, mapa más alto y zigzag más visible */
 function snakeColsForCount(count: number): number {
   if (count <= 1) return 1;
   if (count <= 3) return 2;
@@ -162,7 +161,7 @@ function snakeColsForCount(count: number): number {
   return 4;
 }
 
-/** Rutas públicas: neuroKids-front/public/avatars/panelestudiante */
+
 const AVATARES_PANEL_ESTUDIANTE = Array.from(
   { length: 9 },
   (_, i) => `/avatars/panelestudiante/avatar${i + 1}.svg`
@@ -220,7 +219,7 @@ export default function StudentWelcome() {
       if (p.avatar) setSelectedAvatar(normalizeStoredAvatar(p.avatar));
       if (p.background) setSelectedBackground(p.background);
     } catch {
-      /* ignore */
+
     }
   }, []);
 
@@ -229,9 +228,9 @@ export default function StudentWelcome() {
     try {
       const p = await progressService.getStudentProgress();
       setStudentProgress(p);
-      /* mapa usa studentProgress.activities directamente */
+    
     } catch {
-      /* ignore */
+
     } finally {
       setProgressLoading(false);
       try {
@@ -241,7 +240,7 @@ export default function StudentWelcome() {
           if (u?.id != null) setStreakDays(progressService.getStreakDays(u.id));
         }
       } catch {
-        /* ignore */
+
       }
     }
   }, []);
@@ -454,7 +453,7 @@ export default function StudentWelcome() {
   }, [loadInsigniasCatalogo, refreshProgress]);
 
   const handleLogout = () => {
-    // Solo cerrar sesión: no borrar neurokids-progress-*, panel UI, racha ni caché de progreso
+
     localStorage.removeItem("user");
     localStorage.removeItem("userType");
     navigate("/tipo-usuario");

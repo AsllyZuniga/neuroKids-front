@@ -12,7 +12,6 @@ export default function Prueba({
 }: {
   nivel: number;
   imagen: string;
-  /** Reservado para el mapa de actividades (compat. rutas en App) */
   lecturas?: number;
   games?: number;
 }) {

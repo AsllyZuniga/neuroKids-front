@@ -47,7 +47,7 @@ function Button({
   }) {
   const Comp = asChild ? Slot : "button";
   const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Respetar handler externo primero
+
     props.onMouseEnter?.(e);
     const el = e.currentTarget as HTMLButtonElement;
     if (el?.dataset?.noaudio === "true") return;
@@ -69,5 +69,5 @@ function Button({
   );
 }
 
-// Mantener solo exportación del componente principal para fast refresh
+
 export { Button };

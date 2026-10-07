@@ -55,7 +55,6 @@ export default function Estudiantes() {
             setLoading(true);
             setError(null);
             try {
-                // Obtener instituciones (endpoint público)
                 try {
                     const instResp = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.STUDENT_INSTITUCIONES));
                     if (instResp.ok) {
@@ -69,11 +68,10 @@ export default function Estudiantes() {
                         setInstitucionesMap(map);
                     }
                 } catch (e) {
-                    // No crítico: continuamos incluso si falla obtener instituciones
                     console.warn("No se pudieron cargar instituciones:", e);
                 }
 
-                // Listar estudiantes desde el backend (tabla estudiantes)
+
                 const endpoint = "/estudiantes?limit=1000";
                 const resp = await fetch(buildApiUrl(endpoint), {
                     headers: {
@@ -144,18 +142,15 @@ export default function Estudiantes() {
         setSearchTerm("");
         setEdadFilter("");
         setInstitucionFilter("");
-
-        // re-run effect by calling fetch inside (quick approach)
         setLoading(true);
         setTimeout(() => {
-            // small delay to show loading
             window.location.reload();
         }, 200);
     };
 
     const handleEditClick = (estudiante: Usuario) => {
         setEditingEstudiante(estudiante);
-        setEditForm(JSON.parse(JSON.stringify(estudiante))); // Deep copy
+        setEditForm(JSON.parse(JSON.stringify(estudiante)));
         setEditingError(null);
     };
 
@@ -172,7 +167,7 @@ export default function Estudiantes() {
         if (!editForm || !editingEstudiante) return;
         setEditingSaving(true);
         setEditingError(null);
-        
+
         try {
             const resp = await fetch(buildApiUrl(`/estudiantes/${editingEstudiante.id}`), {
                 method: "PUT",
@@ -194,8 +189,8 @@ export default function Estudiantes() {
                 throw new Error(text || "Error al actualizar estudiante");
             }
 
-            // Actualizar lista local
-            setEstudiantes(estudiantes.map(e => 
+
+            setEstudiantes(estudiantes.map(e =>
                 e.id === editingEstudiante.id ? editForm : e
             ));
 
@@ -238,7 +233,7 @@ export default function Estudiantes() {
                 throw new Error(text || "Error al eliminar estudiante");
             }
 
-            // Actualizar lista local
+
             setEstudiantes(estudiantes.filter(e => e.id !== deletingId));
             setDeletingId(null);
         } catch (err: any) {
@@ -260,23 +255,23 @@ export default function Estudiantes() {
         setEditingError(null);
     };
 
-const handleBack = () => {
-    navigate(userType === "admin" ? "/perfil/admin" : "/perfil/docente");
-};
+    const handleBack = () => {
+        navigate(userType === "admin" ? "/perfil/admin" : "/perfil/docente");
+    };
 
     return (
         <div className="estudiantes-page">
             <Header />
             <div className="estudiantes-container">
-                <button 
-        className="estudiantes-back-btn"
-        onClick={handleBack}
-    >
-        ← Volver
-    </button>
+                <button
+                    className="estudiantes-back-btn"
+                    onClick={handleBack}
+                >
+                    ← Volver
+                </button>
                 <Card className="estudiantes-card">
                     <div className="estudiantes-header">
-                        
+
                         <h2 className="estudiantes-title">Listado de Estudiantes</h2>
 
                         <div className="estudiantes-toolbar">
@@ -373,15 +368,15 @@ const handleBack = () => {
                                                     <td data-label="Correo">{s.correo ?? "-"}</td>
                                                     <td data-label="Acciones">
                                                         <div className="action-buttons">
-                                                            <button 
-                                                                className="btn-icon btn-edit-icon" 
+                                                            <button
+                                                                className="btn-icon btn-edit-icon"
                                                                 onClick={() => handleEditClick(s)}
                                                                 title="Editar"
                                                             >
                                                                 ✏️
                                                             </button>
-                                                            <button 
-                                                                className="btn-icon btn-delete-icon" 
+                                                            <button
+                                                                className="btn-icon btn-delete-icon"
                                                                 onClick={() => handleDeleteClick(s.id)}
                                                                 title="Eliminar"
                                                             >
@@ -415,7 +410,7 @@ const handleBack = () => {
                         <div onClick={(e) => e.stopPropagation()}>
                             <Card className="modal-content">
                                 <h3>Editar Estudiante</h3>
-                                
+
                                 {editingError && <p className="error">{editingError}</p>}
 
                                 <div className="edit-form">
@@ -462,9 +457,9 @@ const handleBack = () => {
                                 </div>
 
                                 <div className="modal-actions">
-                                    <button 
-                                        className="btn-save" 
-                                        onClick={handleEditConfirm} 
+                                    <button
+                                        className="btn-save"
+                                        onClick={handleEditConfirm}
                                         disabled={editingSaving || confirmingSave}
                                     >
                                         {editingSaving ? "Guardando..." : "Guardar Cambios"}
@@ -480,25 +475,25 @@ const handleBack = () => {
 
                 {confirmingSave && editForm && editingEstudiante && (
                     <div className="modal-overlay" onClick={() => setConfirmingSave(false)}>
-                        <Card className="modal-content modal-confirm" onClick={() => {}}>
+                        <Card className="modal-content modal-confirm" onClick={() => { }}>
                             <div onClick={(e) => e.stopPropagation()}>
-                            <h3>¿Confirmar cambios?</h3>
-                            <p>¿Estás seguro de que deseas guardar los cambios para <strong>{editForm.nombre} {editForm.apellido}</strong>?</p>
-                            <div className="modal-actions">
-                                <button 
-                                    className="btn-save" 
-                                    onClick={handleEditSave}
-                                    disabled={editingSaving}
-                                >
-                                    {editingSaving ? "Guardando..." : "Sí, Guardar"}
-                                </button>
-                                <button 
-                                    className="btn-cancel" 
-                                    onClick={() => setConfirmingSave(false)}
-                                >
-                                    Cancelar
-                                </button>
-                            </div>
+                                <h3>¿Confirmar cambios?</h3>
+                                <p>¿Estás seguro de que deseas guardar los cambios para <strong>{editForm.nombre} {editForm.apellido}</strong>?</p>
+                                <div className="modal-actions">
+                                    <button
+                                        className="btn-save"
+                                        onClick={handleEditSave}
+                                        disabled={editingSaving}
+                                    >
+                                        {editingSaving ? "Guardando..." : "Sí, Guardar"}
+                                    </button>
+                                    <button
+                                        className="btn-cancel"
+                                        onClick={() => setConfirmingSave(false)}
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
                             </div>
                         </Card>
                     </div>
@@ -506,27 +501,27 @@ const handleBack = () => {
 
                 {deletingId !== null && (
                     <div className="modal-overlay" onClick={handleDeleteCancel}>
-                        <Card className="modal-content modal-confirm" onClick={() => {}}>
+                        <Card className="modal-content modal-confirm" onClick={() => { }}>
                             <div onClick={(e) => e.stopPropagation()}>
-                            <h3>⚠️ Eliminar Estudiante</h3>
-                            <p>¿Estás seguro de que deseas eliminar este estudiante? Esta acción no se puede deshacer.</p>
-                            {deleteError && <p className="error">{deleteError}</p>}
-                            <div className="modal-actions">
-                                <button 
-                                    className="btn-delete" 
-                                    onClick={handleDeleteConfirm}
-                                    disabled={deleteLoading}
-                                >
-                                    {deleteLoading ? "Eliminando..." : "Sí, Eliminar"}
-                                </button>
-                                <button 
-                                    className="btn-cancel" 
-                                    onClick={handleDeleteCancel}
-                                    disabled={deleteLoading}
-                                >
-                                    Cancelar
-                                </button>
-                            </div>
+                                <h3>⚠️ Eliminar Estudiante</h3>
+                                <p>¿Estás seguro de que deseas eliminar este estudiante? Esta acción no se puede deshacer.</p>
+                                {deleteError && <p className="error">{deleteError}</p>}
+                                <div className="modal-actions">
+                                    <button
+                                        className="btn-delete"
+                                        onClick={handleDeleteConfirm}
+                                        disabled={deleteLoading}
+                                    >
+                                        {deleteLoading ? "Eliminando..." : "Sí, Eliminar"}
+                                    </button>
+                                    <button
+                                        className="btn-cancel"
+                                        onClick={handleDeleteCancel}
+                                        disabled={deleteLoading}
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
                             </div>
                         </Card>
                     </div>

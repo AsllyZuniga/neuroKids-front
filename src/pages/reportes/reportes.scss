@@ -5,9 +5,7 @@
   box-sizing: border-box;
 }
 
-.reportes-container {
-  /* Layout via Tailwind: max-w-6xl mx-auto p-8 */
-}
+
 
 .reportes-back-btn {
   padding: 8px 14px;
@@ -168,7 +166,7 @@
   min-height: 120px;
 }
 
-/* Modal fijo y centrado (igual que admin/docentes) */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -197,7 +195,7 @@
   box-sizing: border-box;
 }
 
-/* Hacer el modal de detalle más ancho para mejor lectura */
+
 .modal-report-detail {
   max-width: min(96vw, 960px);
   width: 100%;

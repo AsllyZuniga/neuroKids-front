@@ -22,43 +22,42 @@ export function LevelCompleteModal({
   onRestart,
   onExit
 }: LevelCompleteModalProps) {
- const passed = true;
- const [isSubmitting, setIsSubmitting] = useState(false);
+  const passed = true;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
- const runOnce = async (action: () => void | Promise<void>) => {
-   if (isSubmitting) return;
-   setIsSubmitting(true);
-   try {
-     await Promise.resolve(action());
-   } catch {
-     // Si falla algo inesperado, re-habilitamos botones para reintentar.
-     setIsSubmitting(false);
-   }
- };
+  const runOnce = async (action: () => void | Promise<void>) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await Promise.resolve(action());
+    } catch {
+      setIsSubmitting(false);
+    }
+  };
 
- const handlePrimaryAction = () => {
-   runOnce(() => {
-     if (isLastLevel) {
-       if (onNextLevel) onNextLevel();
-       return onExit();
-     }
-     if (onNextLevel) {
-       return onNextLevel();
-     }
-     return onExit();
-   });
- };
+  const handlePrimaryAction = () => {
+    runOnce(() => {
+      if (isLastLevel) {
+        if (onNextLevel) onNextLevel();
+        return onExit();
+      }
+      if (onNextLevel) {
+        return onNextLevel();
+      }
+      return onExit();
+    });
+  };
 
- const handleExit = () => {
-   runOnce(() => {
-     // En el último nivel, primero persistimos y luego salimos sí o sí.
-     if (isLastLevel && onNextLevel) {
-       onNextLevel();
-       return onExit();
-     }
-     return onExit();
-   });
- };
+  const handleExit = () => {
+    runOnce(() => {
+
+      if (isLastLevel && onNextLevel) {
+        onNextLevel();
+        return onExit();
+      }
+      return onExit();
+    });
+  };
 
 
   return (

@@ -15,11 +15,7 @@ import { StartScreenCuentoInteractivo } from '../IniciosJuegosLecturas/StartScre
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  readingLevelFinished,
-  readingStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, readingLevelFinished, readingStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface CuentoInteractivoProps {
@@ -378,7 +374,7 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
   const [visitedSections, setVisitedSections] = useState<StorySection[]>([]);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(8); // Cuento Interactivo
+  const activityConfig = getActivityByDbId(8);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -590,7 +586,7 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #f3e8ff 0%, #dbeafe 50%, #dcfce7 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Cuento Interactivo`}
           level={currentLevel}
@@ -613,193 +609,193 @@ export function CuentoInteractivo({ onBack, level: initialLevel = 1 }: CuentoInt
           />
         </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="grid lg:grid-cols-3 gap-8 mt-6">
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="grid lg:grid-cols-3 gap-8 mt-6">
 
-          <div className="lg:col-span-2">
-            <motion.div
-              key={currentSection}
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card className={`min-w-0 bg-white/90 backdrop-blur-sm border-2 text-black ${"Emoción:" + getEmotionColor(section.emotion)}`}>
-                <CardContent className="min-w-0 p-8 max-[480px]:p-4">
-                  <div className="mb-6 flex min-w-0 items-center gap-3 text-black max-[480px]:flex-wrap">
-                    <div className="text-4xl text-black max-[480px]:text-3xl">{getEmotionEmoji("Emoción:" + section.emotion)}</div>
-                    <div className="min-w-0">
-                      <h3 className="break-words text-lg text-black max-[480px]:text-base">{section.character}</h3>
-                      <Badge variant="secondary" className="max-w-full whitespace-normal break-words text-xs">
-                        {"Emoción: " + section.emotion}
-                      </Badge>
-                    </div>
-                  </div>
-
-
-                  {!isLastSection && !isPlayingFinal && (
-                    <div className="mb-6">
-                      <AudioPlayer text={section.text} onSpeakingChange={setIsSpeaking} />
-                    </div>
-                  )}
-
-
-                  {isLastSection && isPlayingFinal && (
-                    <div className="mb-6">
-                      <AudioPlayer
-                        text={fullStoryText}
-                        onEnd={handleFinalNarrationComplete}
-                        voice="child"
-                        autoPlay
-                      />
-                    </div>
-                  )}
-
-                  <div className="mb-6 rounded-lg border border-gray-200 bg-white/80 p-6 max-[480px]:p-3">
-                    <p className="break-words text-lg leading-relaxed text-black max-[480px]:text-sm">
-                      {words.map((word, i) => (
-                        <span key={i} >
-                          {word}{' '}
-                        </span>
-                      ))}
-                    </p>
-                  </div>
-
-                  {section.reflectionQuestion && (
-                    <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 max-[480px]:p-3">
-                      <div className="mb-2 flex items-center gap-2">
-                        <Brain className="h-5 w-5 shrink-0 text-blue-500" />
-                        <h4 className="text-lg text-blue-800 max-[480px]:text-base">Reflexiona:</h4>
+            <div className="lg:col-span-2">
+              <motion.div
+                key={currentSection}
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className={`min-w-0 bg-white/90 backdrop-blur-sm border-2 text-black ${"Emoción:" + getEmotionColor(section.emotion)}`}>
+                  <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                    <div className="mb-6 flex min-w-0 items-center gap-3 text-black max-[480px]:flex-wrap">
+                      <div className="text-4xl text-black max-[480px]:text-3xl">{getEmotionEmoji("Emoción:" + section.emotion)}</div>
+                      <div className="min-w-0">
+                        <h3 className="break-words text-lg text-black max-[480px]:text-base">{section.character}</h3>
+                        <Badge variant="secondary" className="max-w-full whitespace-normal break-words text-xs">
+                          {"Emoción: " + section.emotion}
+                        </Badge>
                       </div>
-                      <p className="break-words text-blue-700 max-[480px]:text-sm">{section.reflectionQuestion}</p>
                     </div>
-                  )}
 
 
-                  {isLastSection && !isPlayingFinal && section.choices.length === 0 && (
-                    <div className="mt-6 text-center">
-                      <Button
-                        onClick={startFinalNarration}
-                        className="flex h-auto flex-row items-center gap-3 whitespace-normal break-words bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-6 text-lg font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 max-[480px]:w-full max-[480px]:flex-col max-[480px]:gap-2 max-[480px]:px-4 max-[480px]:py-4 max-[480px]:text-sm"
-                      >
-                        <Volume2 className="h-6 w-6 shrink-0" />
-                        Escuchar mi historia completa
-                      </Button>
+                    {!isLastSection && !isPlayingFinal && (
+                      <div className="mb-6">
+                        <AudioPlayer text={section.text} onSpeakingChange={setIsSpeaking} />
+                      </div>
+                    )}
+
+
+                    {isLastSection && isPlayingFinal && (
+                      <div className="mb-6">
+                        <AudioPlayer
+                          text={fullStoryText}
+                          onEnd={handleFinalNarrationComplete}
+                          voice="child"
+                          autoPlay
+                        />
+                      </div>
+                    )}
+
+                    <div className="mb-6 rounded-lg border border-gray-200 bg-white/80 p-6 max-[480px]:p-3">
+                      <p className="break-words text-lg leading-relaxed text-black max-[480px]:text-sm">
+                        {words.map((word, i) => (
+                          <span key={i} >
+                            {word}{' '}
+                          </span>
+                        ))}
+                      </p>
                     </div>
-                  )}
 
-                  {section.choices.length > 0 && (
-                    <div className="space-y-4 text-left">
-                      <h4 className="flex items-center gap-2 text-lg text-black max-[480px]:text-base">
-                        <Users className="h-5 w-5 shrink-0 text-purple-500" /> ¿Qué decides?
-                      </h4>
-                      {section.choices.map((choice, i) => (
-                        <motion.div key={i} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                          <Button
-                            onClick={() => makeChoice(choice)}
-                            variant="outline"
-                            className="flex h-auto w-full items-start justify-start whitespace-normal break-words bg-white/80 p-4 pl-2 text-left hover:border-purple-300 border-2 hover:bg-white max-[480px]:p-3"
-                          >
-                            <div className="flex w-full items-start gap-3">
-                              <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
-                                {String.fromCharCode(65 + i)}
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <div className="mb-1 break-words text-lg text-black max-[480px]:text-sm">
-                                  {choice.text}
+                    {section.reflectionQuestion && (
+                      <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-4 max-[480px]:p-3">
+                        <div className="mb-2 flex items-center gap-2">
+                          <Brain className="h-5 w-5 shrink-0 text-blue-500" />
+                          <h4 className="text-lg text-blue-800 max-[480px]:text-base">Reflexiona:</h4>
+                        </div>
+                        <p className="break-words text-blue-700 max-[480px]:text-sm">{section.reflectionQuestion}</p>
+                      </div>
+                    )}
+
+
+                    {isLastSection && !isPlayingFinal && section.choices.length === 0 && (
+                      <div className="mt-6 text-center">
+                        <Button
+                          onClick={startFinalNarration}
+                          className="flex h-auto flex-row items-center gap-3 whitespace-normal break-words bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-6 text-lg font-semibold text-white shadow-lg hover:from-purple-600 hover:to-pink-600 max-[480px]:w-full max-[480px]:flex-col max-[480px]:gap-2 max-[480px]:px-4 max-[480px]:py-4 max-[480px]:text-sm"
+                        >
+                          <Volume2 className="h-6 w-6 shrink-0" />
+                          Escuchar mi historia completa
+                        </Button>
+                      </div>
+                    )}
+
+                    {section.choices.length > 0 && (
+                      <div className="space-y-4 text-left">
+                        <h4 className="flex items-center gap-2 text-lg text-black max-[480px]:text-base">
+                          <Users className="h-5 w-5 shrink-0 text-purple-500" /> ¿Qué decides?
+                        </h4>
+                        {section.choices.map((choice, i) => (
+                          <motion.div key={i} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                            <Button
+                              onClick={() => makeChoice(choice)}
+                              variant="outline"
+                              className="flex h-auto w-full items-start justify-start whitespace-normal break-words bg-white/80 p-4 pl-2 text-left hover:border-purple-300 border-2 hover:bg-white max-[480px]:p-3"
+                            >
+                              <div className="flex w-full items-start gap-3">
+                                <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-500 text-xs text-white">
+                                  {String.fromCharCode(65 + i)}
                                 </div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="mb-1 break-words text-lg text-black max-[480px]:text-sm">
+                                    {choice.text}
+                                  </div>
 
+                                </div>
                               </div>
+                            </Button>
+                          </motion.div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+
+            <div className="lg:col-span-1">
+              <Card className="border-2 border-green-200 bg-white/90 backdrop-blur-sm">
+                <CardContent className="min-w-0 p-6 max-[480px]:p-4">
+                  <h3 className="mb-4 flex items-center gap-2 text-lg text-black max-[480px]:text-base">
+                    <BookOpen className="h-5 w-5 shrink-0 text-green-500" /> Sobre esta Historia
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="min-w-0">
+                      <h4 className="mb-1 text-sm text-gray-600">Tema:</h4>
+                      <p className="break-words text-black max-[480px]:text-sm">{story.theme}</p>
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="mb-1 text-sm text-gray-600">Lección:</h4>
+                      <p className="break-words text-sm text-black max-[480px]:text-xs">{story.moralLesson}</p>
+                    </div>
+                    <div>
+
+                    </div>
+                  </div>
+
+                  {currentPath.length > 0 && (
+                    <div className="mt-6">
+                      <h4 className="mb-2 text-sm text-gray-600">Tu camino:</h4>
+                      <div className="max-h-32 space-y-2 overflow-y-auto">
+                        {currentPath.map((p, i) => (
+                          <div key={i} className="rounded border bg-gray-50 p-2 text-xs">
+                            <div className="mb-1 flex items-center gap-1">
+                              <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-gray-400 text-xs text-white">
+                                {i + 1}
+                              </div>
+                              <span className="text-gray-600">Decisión</span>
                             </div>
-                          </Button>
-                        </motion.div>
-                      ))}
+                            <p className="break-words text-black max-[480px]:text-[11px]">{p}</p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           </div>
 
+          <RewardAnimation
+            type="star"
+            show={showReward}
+            message="¡Buena decisión!"
+            onComplete={() => setShowReward(false)}
+          />
 
-          <div className="lg:col-span-1">
-            <Card className="border-2 border-green-200 bg-white/90 backdrop-blur-sm">
-              <CardContent className="min-w-0 p-6 max-[480px]:p-4">
-                <h3 className="mb-4 flex items-center gap-2 text-lg text-black max-[480px]:text-base">
-                  <BookOpen className="h-5 w-5 shrink-0 text-green-500" /> Sobre esta Historia
-                </h3>
-                <div className="space-y-4">
-                  <div className="min-w-0">
-                    <h4 className="mb-1 text-sm text-gray-600">Tema:</h4>
-                    <p className="break-words text-black max-[480px]:text-sm">{story.theme}</p>
-                  </div>
-                  <div className="min-w-0">
-                    <h4 className="mb-1 text-sm text-gray-600">Lección:</h4>
-                    <p className="break-words text-sm text-black max-[480px]:text-xs">{story.moralLesson}</p>
-                  </div>
-                  <div>
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={currentScore}
+              total={maxPoints}
+              customMessage="¡Tu historia ha terminado!"
+              customSubtitle="Completaste todas las secciones del cuento"
+              celebrationText="¡Excelente!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setLevelComplete(true);
+              }}
+            />
+          )}
 
-                  </div>
-                </div>
-
-                {currentPath.length > 0 && (
-                  <div className="mt-6">
-                    <h4 className="mb-2 text-sm text-gray-600">Tu camino:</h4>
-                    <div className="max-h-32 space-y-2 overflow-y-auto">
-                      {currentPath.map((p, i) => (
-                        <div key={i} className="rounded border bg-gray-50 p-2 text-xs">
-                          <div className="mb-1 flex items-center gap-1">
-                            <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-gray-400 text-xs text-white">
-                              {i + 1}
-                            </div>
-                            <span className="text-gray-600">Decisión</span>
-                          </div>
-                          <p className="break-words text-black max-[480px]:text-[11px]">{p}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+          {/* MODAL FINAL */}
+          {levelComplete && !showMotivational && (
+            <LevelCompleteModal
+              score={currentScore}
+              total={maxPoints}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={loadNextLevel}
+              onRestart={restartLevel}
+              onExit={onBack}
+            />
+          )}
         </div>
-
-        <RewardAnimation
-          type="star"
-          show={showReward}
-          message="¡Buena decisión!"
-          onComplete={() => setShowReward(false)}
-        />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={currentScore}
-            total={maxPoints}
-            customMessage="¡Tu historia ha terminado!"
-            customSubtitle="Completaste todas las secciones del cuento"
-            celebrationText="¡Excelente!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL */}
-        {levelComplete && !showMotivational && (
-          <LevelCompleteModal
-            score={currentScore}
-            total={maxPoints}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={loadNextLevel}
-            onRestart={restartLevel}
-            onExit={onBack}
-          />
-        )}
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

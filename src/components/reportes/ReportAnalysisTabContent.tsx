@@ -1,16 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell, } from "recharts";
 import { Calendar, BarChart3, PieChart as PieChartIcon } from "lucide-react";
 
 type SesionData = {
@@ -234,7 +223,7 @@ export function ReportAnalysisTabContent({
           Análisis por periodo
         </h3>
         <p className="text-sm text-gray-600 max-w-3xl">
-          Compara cuántas sesiones dedicó a cada lectura o juego en el rango elegido. 
+          Compara cuántas sesiones dedicó a cada lectura o juego en el rango elegido.
         </p>
       </div>
 

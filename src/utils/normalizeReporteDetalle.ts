@@ -1,7 +1,3 @@
-/**
- * El detalle del reporte puede traer sesiones con snake_case o camelCase
- * (según Sequelize/JSON). Unifica a un solo formato numérico para el modal.
- */
 
 export type SesionNormalizada = {
   fecha: string;

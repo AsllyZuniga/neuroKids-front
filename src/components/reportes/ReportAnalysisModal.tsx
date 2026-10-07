@@ -1,24 +1,7 @@
 import { useState, useMemo } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from "recharts";
-import {
-  X,
-  TrendingUp,
-  TrendingDown,
-  Calendar,
-  BarChart3,
-  Gamepad2,
-  BookOpen,
-} from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, } from "recharts";
+import { X, TrendingUp, TrendingDown, Calendar, BarChart3, Gamepad2, BookOpen, } from "lucide-react";
 
 export type SesionDataWithActividad = {
   fecha: string;
@@ -43,14 +26,14 @@ type ReportAnalysisModalProps = {
 };
 
 const CHART_COLORS = [
-  "#8b5cf6", // purple-500
-  "#6366f1", // indigo-500
-  "#06b6d4", // cyan-500
-  "#10b981", // emerald-500
-  "#f59e0b", // amber-500
-  "#ec4899", // pink-500
-  "#14b8a6", // teal-500
-  "#f97316", // orange-500
+  "#8b5cf6",
+  "#6366f1",
+  "#06b6d4",
+  "#10b981",
+  "#f59e0b",
+  "#ec4899",
+  "#14b8a6",
+  "#f97316",
 ];
 
 function formatDateShort(d: string): string {
@@ -174,7 +157,7 @@ export function ReportAnalysisModal({
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
               Los datos son reales: provienen del registro en base de datos cuando el estudiante completa juegos y lecturas.
             </div>
-            {/* Selector de fechas */}
+
             <div className="mb-8 p-4 bg-gradient-to-r from-slate-50 to-purple-50 rounded-xl border border-purple-100">
               <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
                 <Calendar className="text-purple-600" size={20} />
@@ -210,7 +193,7 @@ export function ReportAnalysisModal({
               </div>
             ) : (
               <>
-                {/* Resumen rápido */}
+
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
                   <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-4 shadow-lg">
                     <p className="text-sm opacity-90">Total puntos</p>
@@ -225,13 +208,12 @@ export function ReportAnalysisModal({
                     <p className="text-xl md:text-2xl font-bold">{totalTiempoFormato}</p>
                   </div>
                   <div
-                    className={`rounded-xl p-4 shadow-lg ${
-                      tendencia?.subio
+                    className={`rounded-xl p-4 shadow-lg ${tendencia?.subio
                         ? "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white"
                         : tendencia && !tendencia.subio
                           ? "bg-gradient-to-br from-rose-500 to-rose-600 text-white"
                           : "bg-gradient-to-br from-slate-400 to-slate-500 text-white"
-                    }`}
+                      }`}
                   >
                     <p className="text-sm opacity-90 flex items-center gap-1">
                       {tendencia?.subio ? (
@@ -268,7 +250,6 @@ export function ReportAnalysisModal({
                   </div>
                 </div>
 
-                {/* Gráfica: Puntos por fecha */}
                 <div className="mb-8 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     <BarChart3 className="text-purple-600" size={20} />
@@ -303,7 +284,7 @@ export function ReportAnalysisModal({
                   </div>
                 </div>
 
-                {/* Gráfica: Actividades más jugadas */}
+
                 <div className="mb-8 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                   <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
                     <BookOpen className="text-indigo-600" size={20} />

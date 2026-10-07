@@ -77,11 +77,11 @@ export default function AdminWelcome() {
         const avg =
           estudiantes.length > 0
             ? Math.round(
-                estudiantes.reduce(
-                  (acc: number, row: any) => acc + Number(row?.resumen?.puntos_totales ?? 0),
-                  0
-                ) / estudiantes.length
-              )
+              estudiantes.reduce(
+                (acc: number, row: any) => acc + Number(row?.resumen?.puntos_totales ?? 0),
+                0
+              ) / estudiantes.length
+            )
             : 0;
         setGeneralAverage(avg);
       } catch (e) {
@@ -115,7 +115,6 @@ export default function AdminWelcome() {
   const handleViewInstitutions = () => navigate("/instituciones");
   const handleViewReports = () => navigate("/reportes");
 
-  // const handleManageReadings = () => navigate("/lecturas");
 
   if (!admin) {
     return <div className="admin-welcome-loading">Cargando...</div>;
@@ -219,22 +218,8 @@ export default function AdminWelcome() {
                 className="admin-welcome__card-button"
               />
             </Card>
-            {/* <Card className="admin-welcome__card admin-welcome__card--secondary">
-              <div className="admin-welcome__card-icon">
-                <img src="/avatars/lecturas.svg" alt="Lecturas" />
-              </div>
-              <h3 className="admin-welcome__card-title">Lecturas</h3>
-              <p className="admin-welcome__card-description">
-                Administra el contenido de lectura disponible
-              </p>
-              <Button
-                label="Gestionar Lecturas"
-                variant="secondary"
-                size="large"
-                onClick={handleManageReadings}
-                className="admin-welcome__card-button"
-              />
-            </Card> */}
+
+
           </div>
         </div>
 

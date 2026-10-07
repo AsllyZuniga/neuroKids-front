@@ -1,19 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, BarChart3, Loader } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  PieChart,
-  Pie,
-  ResponsiveContainer,
-  Cell,
-  Legend,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, ResponsiveContainer, Cell, Legend, } from "recharts";
 import { buildApiUrl } from "@/config/api";
 
 type TotalAnalysisData = {
@@ -109,7 +97,7 @@ export function TotalAnalysisModal({ open, onClose }: TotalAnalysisModalProps) {
     fetchData();
   }, [open]);
 
-  // 📊 Datos para gráfica de barras
+
   const studentsBarData = useMemo(() => {
     if (!analysisData) return [];
 
@@ -132,7 +120,7 @@ export function TotalAnalysisModal({ open, onClose }: TotalAnalysisModalProps) {
     ];
   }, [analysisData]);
 
-  // 🥧 Datos para gráfica de pastel
+
   const activityStudentsData = useMemo(() => {
     if (!analysisData) return [];
 
@@ -239,7 +227,7 @@ export function TotalAnalysisModal({ open, onClose }: TotalAnalysisModalProps) {
                 </div>
               </div>
 
-              {/* 📊 BARRAS */}
+              {/*  BARRAS */}
               <div className="bg-white border border-gray-200 rounded-xl p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">
                   Comparación de estudiantes

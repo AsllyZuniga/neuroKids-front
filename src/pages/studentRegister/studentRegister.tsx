@@ -71,7 +71,7 @@ export default function StudentRegister() {
   const audioCtx = useRef<AudioContext | null>(null);
   const navigate = useNavigate();
 
-  // Soft synthesized click using Web Audio API (non-intrusive)
+
   const playClick = () => {
     try {
       if (!audioCtx.current) {
@@ -83,13 +83,13 @@ export default function StudentRegister() {
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
-      osc.frequency.value = 800; // gentle frequency
-      gain.gain.setValueAtTime(0.05, ctx.currentTime); // very low volume
+      osc.frequency.value = 800; 
+      gain.gain.setValueAtTime(0.05, ctx.currentTime); 
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
       osc.start(ctx.currentTime);
       osc.stop(ctx.currentTime + 0.05);
     } catch {
-      // Ignorar errores
+  
     }
   };
 
@@ -98,7 +98,7 @@ export default function StudentRegister() {
       if (!successSfx.current) successSfx.current = new Audio(successMp3);
       successSfx.current.play().catch(() => { });
     } catch {
-      // Ignorar errores de reproducción
+    
     }
   };
 
@@ -151,14 +151,14 @@ export default function StudentRegister() {
         }
         break;
       case 'studentAge':
-        // La edad es obligatoria solo si está con un adulto. Si está solo puede omitirla.
+
         if (withParent) {
           if (!formData.edad || parseInt(formData.edad) < 7 || parseInt(formData.edad) > 18) {
             setError("Por favor ingresa una edad válida (7-18 años)");
             return false;
           }
         } else if (formData.edad) {
-          // Si la ingresó voluntariamente, validar rango
+       
           if (parseInt(formData.edad) < 7 || parseInt(formData.edad) > 18) {
             setError("La edad debe estar entre 7 y 18 años o déjala en blanco si no la recuerdas");
             return false;
@@ -239,22 +239,18 @@ export default function StudentRegister() {
 
 
     try {
-      // Solo enviar los campos requeridos por el backend
-
-      // Enviar los campos en el orden esperado por el backend
       const requestData: Record<string, string | number | boolean> = {
         nombre: formData.nombre.trim(),
         apellido: formData.apellido.trim(),
         institucion_id: formData.institucion_id
       };
 
-      // Incluir edad solo si existe (estudiante solo puede omitirla)
       if (formData.edad) {
         requestData.edad = parseInt(formData.edad);
       }
 
       if (withParent) {
-        requestData.con_padres = true; // necesario para que backend aplique required_if
+        requestData.con_padres = true; 
         requestData.num_documento = formData.num_documento.trim();
         requestData.correo = formData.correo.trim();
       }
@@ -275,11 +271,11 @@ export default function StudentRegister() {
       try {
         parsed = await response.json();
       } catch {
-        // Si no es JSON, dejamos parsed como null
+
       }
 
       if (!response.ok) {
-        // Manejo de errores 4xx/5xx
+
         let message: string | undefined;
         if (parsed && typeof parsed === 'object') {
           const p = parsed as { message?: string; errors?: Record<string, unknown>; error?: string };
@@ -331,7 +327,7 @@ export default function StudentRegister() {
 
   return (
     <div className="student-register">
-      {/* Floating decorative elements */}
+ 
       <div className="student-register__floating-elements">
         {['🎓', '📚', '✏️', '🌟', '🎨', '🚀', '💡', '🏆', '⭐', '🎯'].map((emoji, index) => (
           <motion.div

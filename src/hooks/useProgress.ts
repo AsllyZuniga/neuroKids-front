@@ -11,9 +11,7 @@ export interface SaveProgressParams {
   score: number;
   maxScore: number;
   completed: boolean;
-  /** Juegos: true al terminar el nivel actual (1–3). */
   nivelCompletado?: boolean;
-  /** Solo registro de entrada a un nivel (no cuenta puntos ni completa nivel). */
   soloRegistro?: boolean;
   timeSpent?: number;
   correctAnswers?: number;
@@ -22,9 +20,7 @@ export interface SaveProgressParams {
 }
 
 export function useProgress() {
-  /**
-   * Guarda el progreso de una actividad
-   */
+
   const saveProgress = useCallback(async (params: SaveProgressParams) => {
     try {
       await progressService.saveActivityProgress({
@@ -52,9 +48,7 @@ export function useProgress() {
     }
   }, []);
 
-  /**
-   * Obtiene el progreso de una actividad específica
-   */
+
   const getActivityProgress = useCallback(async (activityId: number): Promise<ActivityProgress | null> => {
     try {
       return await progressService.getActivityProgress(activityId);
@@ -64,9 +58,7 @@ export function useProgress() {
     }
   }, []);
 
-  /**
-   * Verifica si una actividad está completada
-   */
+
   const isActivityCompleted = useCallback(async (activityId: number): Promise<boolean> => {
     try {
       const progress = await progressService.getActivityProgress(activityId);
@@ -77,9 +69,7 @@ export function useProgress() {
     }
   }, []);
 
-  /**
-   * Obtiene el progreso completo del estudiante
-   */
+
   const getStudentProgress = useCallback(async () => {
     try {
       return await progressService.getStudentProgress();

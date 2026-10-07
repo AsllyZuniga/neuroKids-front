@@ -12,7 +12,7 @@ interface AvatarProps {
 
 export function Avatar({ name, level, xp, maxXp, badges, className = '' }: AvatarProps) {
   const xpPercentage = (xp / maxXp) * 100;
-  
+
   const getBadgeIcon = (badge: string) => {
     switch (badge) {
       case 'star': return <Star className="w-4 h-4 text-yellow-500 fill-current" />;
@@ -25,22 +25,22 @@ export function Avatar({ name, level, xp, maxXp, badges, className = '' }: Avata
   return (
     <div className={`bg-white rounded-2xl p-4 shadow-lg border-2 border-blue-200 ${className}`}>
       <div className="flex items-center gap-4">
-  
+
         <div className="relative">
           <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-2xl hover:scale-105 transition-transform">
             👤
           </div>
-          
-   
+
+
           <div className="absolute -top-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm ">
             {level}
           </div>
         </div>
-        
+
 
         <div className="flex-1">
           <h3 className="text-lg text-gray-800 mb-1">{name}</h3>
-          
+
 
           <div className="mb-2">
             <div className="flex justify-between text-xs text-gray-600 mb-1">
@@ -54,8 +54,8 @@ export function Avatar({ name, level, xp, maxXp, badges, className = '' }: Avata
               />
             </div>
           </div>
-          
-   
+
+
           <div className="flex gap-1 flex-wrap">
             {badges.map((badge, index) => (
               <div
@@ -66,8 +66,8 @@ export function Avatar({ name, level, xp, maxXp, badges, className = '' }: Avata
                   transitionDelay: `${index * 100}ms`
                 }}
               >
-                <Badge 
-                  variant="secondary" 
+                <Badge
+                  variant="secondary"
                   className="p-1 bg-gradient-to-r from-yellow-100 to-orange-100"
                 >
                   {getBadgeIcon(badge)}

@@ -128,7 +128,7 @@
   color: #b00020;
 }
 
-/* Modal (reutiliza clases globales si existen) */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -232,7 +232,6 @@
     min-width: auto;
   }
 
-  /* Convertir tabla en tarjetas para móviles */
   .docentes-table,
   .docentes-table thead,
   .docentes-table tbody,

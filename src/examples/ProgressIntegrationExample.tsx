@@ -1,48 +1,33 @@
-/**
- * EJEMPLO DE INTEGRACIÓN DEL SISTEMA DE PROGRESO
- * 
- * Este archivo muestra cómo integrar el sistema de seguimiento de progreso
- * en cualquier actividad del sistema NeuroKids.
- * 
- * PASOS PARA INTEGRAR:
- * 1. Importar el hook useProgress
- * 2. Identificar el dbId de la actividad usando activities.ts
- * 3. Guardar progreso al iniciar, durante y al completar la actividad
- * 4. Manejar estados de carga y errores apropiadamente
- */
 
 import React, { useState, useEffect } from 'react';
 import { useProgress } from '@/hooks/useProgress';
 import { getActivityByFrontendId } from '@/config/activities';
 
-// Ejemplo: Componente de una actividad de lectura
+
 export const EjemploActividadLectura: React.FC = () => {
   const { saveProgress, getActivityProgress } = useProgress();
-  
-  // Estados de la actividad
+
+
   const [currentScore, setCurrentScore] = useState(0);
   const [timeSpent, setTimeSpent] = useState(0);
   const [activityCompleted, setActivityCompleted] = useState(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
-  
-  // Obtener configuración de la actividad
-  const ACTIVITY_ID = 'cuento-pictogramas'; // ID definido en activities.ts
+
+
+  const ACTIVITY_ID = 'cuento-pictogramas';
   const activityConfig = getActivityByFrontendId(ACTIVITY_ID);
-  
-  // Timer para tiempo transcurrido
+
+
   useEffect(() => {
     if (!startTime || activityCompleted) return;
-    
+
     const interval = setInterval(() => {
       setTimeSpent(Math.floor((Date.now() - startTime.getTime()) / 1000));
     }, 1000);
-    
+
     return () => clearInterval(interval);
   }, [startTime, activityCompleted]);
 
-  /**
-   * PASO 1: Iniciar la actividad - guardar estado inicial
-   */
   const iniciarActividad = async () => {
     if (!activityConfig) {
       console.error('Configuración de actividad no encontrada');
@@ -54,7 +39,7 @@ export const EjemploActividadLectura: React.FC = () => {
 
     try {
       await saveProgress({
-        activityId: activityConfig.dbId, // Usar el ID de la base de datos
+        activityId: activityConfig.dbId,
         activityName: activityConfig.title,
         activityType: activityConfig.type,
         ageGroup: activityConfig.ageGroup,
@@ -71,14 +56,12 @@ export const EjemploActividadLectura: React.FC = () => {
     }
   };
 
-  /**
-   * PASO 2: Actualizar progreso durante la actividad
-   */
+
   const actualizarProgreso = async (nuevoPuntaje: number) => {
     if (!activityConfig || !startTime) return;
 
     setCurrentScore(nuevoPuntaje);
-    
+
     try {
       await saveProgress({
         activityId: activityConfig.dbId,
@@ -98,9 +81,7 @@ export const EjemploActividadLectura: React.FC = () => {
     }
   };
 
-  /**
-   * PASO 3: Completar la actividad - guardar resultado final
-   */
+
   const completarActividad = async (puntajeFinal: number) => {
     if (!activityConfig || !startTime) return;
 
@@ -121,33 +102,28 @@ export const EjemploActividadLectura: React.FC = () => {
       });
 
       console.log(`🎉 Actividad completada: ${puntajeFinal}/${activityConfig.maxScore} puntos en ${timeSpent}s`);
-      
-      // Aquí podrías disparar efectos adicionales como:
-      // - Mostrar modal de completado
-      // - Otorgar insignias
-      // - Redirigir al dashboard
-      
+
+
+
     } catch (error) {
       console.error('Error al completar actividad:', error);
     }
   };
 
-  /**
-   * PASO 4: Cargar progreso previo (opcional)
-   */
+
   const cargarProgresoAnterior = async () => {
     if (!activityConfig) return;
 
     try {
       const progresoPrevio = await getActivityProgress(activityConfig.dbId);
-      
+
       if (progresoPrevio) {
         setCurrentScore(progresoPrevio.score);
         setActivityCompleted(progresoPrevio.completed);
-        
+
         console.log('📂 Progreso cargado:', progresoPrevio);
-        
-        // Si la actividad ya estaba completada, mostrar resultado
+
+
         if (progresoPrevio.completed) {
           console.log('✅ Esta actividad ya fue completada anteriormente');
         }
@@ -157,20 +133,20 @@ export const EjemploActividadLectura: React.FC = () => {
     }
   };
 
-  // Cargar progreso al montar el componente
+
   useEffect(() => {
     cargarProgresoAnterior();
   }, []);
 
-  // Simular mecánica de juego
+
   const responderPregunta = (esCorrecta: boolean) => {
     if (activityCompleted) return;
-    
+
     if (esCorrecta) {
       const nuevoPuntaje = Math.min(currentScore + 10, activityConfig?.maxScore || 100);
       actualizarProgreso(nuevoPuntaje);
-      
-      // Si alcanza el puntaje máximo, completar automáticamente
+
+
       if (nuevoPuntaje >= (activityConfig?.maxScore || 100)) {
         completarActividad(nuevoPuntaje);
       }
@@ -222,11 +198,7 @@ export const EjemploActividadLectura: React.FC = () => {
   );
 };
 
-/**
- * EJEMPLO DE ACTIVIDAD DE JUEGO
- * 
- * Para juegos más complejos con niveles múltiples
- */
+
 export const EjemploActividadJuego: React.FC = () => {
   const { saveProgress } = useProgress();
   const [nivelActual, setNivelActual] = useState(1);

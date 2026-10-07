@@ -1,9 +1,7 @@
-// Configuración de actividades con mapeo a IDs de base de datos
-// Basado en el JSON proporcionado del backend
 
 export interface ActivityConfig {
-    id: string; // ID del frontend
-    dbId: number; // ID de la base de datos
+    id: string;
+    dbId: number;
     type: 'lectura' | 'juego';
     title: string;
     icon: string;
@@ -11,21 +9,10 @@ export interface ActivityConfig {
     ageGroup: '7-8' | '9-10' | '11-12';
     maxScore: number;
     level: number;
-    route: string; // Ruta de navegación
+    route: string;
 }
 
-/**
- * Mapeo completo de actividades con sus IDs de base de datos
- * 
- * Estructura de la DB:
- * - Tipo 1 (tipo_actividad_id): Lecturas
- * - Tipo 2 (tipo_actividad_id): Juegos
- * 
- * IDs 1-9: Lecturas (por edad)
- * IDs 10-18: Juegos (por edad)
- */
 export const ACTIVITIES_CONFIG: ActivityConfig[] = [
-    // ===== LECTURAS (tipo_actividad_id: 1) =====
 
     // Edad 7-8
     {
@@ -141,7 +128,6 @@ export const ACTIVITIES_CONFIG: ActivityConfig[] = [
         route: '/nivel3/lectura3'
     },
 
-    // ===== JUEGOS (tipo_actividad_id: 2) =====
 
     // Edad 7-8
     {
@@ -258,50 +244,32 @@ export const ACTIVITIES_CONFIG: ActivityConfig[] = [
     }
 ];
 
-// Funciones de utilidad para trabajar con las actividades
-
-/**
- * Obtiene la configuración de una actividad por su ID de frontend
- */
 export function getActivityByFrontendId(id: string): ActivityConfig | undefined {
     return ACTIVITIES_CONFIG.find(activity => activity.id === id);
 }
 
-/**
- * Obtiene la configuración de una actividad por su ID de base de datos
- * (acepta número o string: la API/JSON suelen devolver bigint como string)
- */
 export function getActivityByDbId(dbId: number | string): ActivityConfig | undefined {
     const n = Number(dbId);
     if (Number.isNaN(n)) return undefined;
     return ACTIVITIES_CONFIG.find((activity) => activity.dbId === n);
 }
 
-/**
- * Obtiene la configuración de una actividad por ruta exacta.
- */
 export function getActivityByRoute(route: string): ActivityConfig | undefined {
     const normalized = (route || "").trim();
     return ACTIVITIES_CONFIG.find((activity) => (activity.route || "").trim() === normalized);
 }
 
-/**
- * Obtiene todas las actividades de un grupo de edad específico
- */
+
 export function getActivitiesByAgeGroup(ageGroup: '7-8' | '9-10' | '11-12'): ActivityConfig[] {
     return ACTIVITIES_CONFIG.filter(activity => activity.ageGroup === ageGroup);
 }
 
-/**
- * Obtiene todas las actividades de un tipo específico
- */
+
 export function getActivitiesByType(type: 'lectura' | 'juego'): ActivityConfig[] {
     return ACTIVITIES_CONFIG.filter(activity => activity.type === type);
 }
 
-/**
- * Obtiene el mapeo de rutas para todas las actividades
- */
+
 export function getRouteMap(): Record<string, string> {
     return ACTIVITIES_CONFIG.reduce((acc, activity) => {
         acc[activity.id] = activity.route;
@@ -309,9 +277,7 @@ export function getRouteMap(): Record<string, string> {
     }, {} as Record<string, string>);
 }
 
-/**
- * Obtiene el mapeo de IDs de base de datos
- */
+
 export function getDbIdMap(): Record<string, number> {
     return ACTIVITIES_CONFIG.reduce((acc, activity) => {
         acc[activity.id] = activity.dbId;

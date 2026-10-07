@@ -72,17 +72,17 @@ export default function StudentLogin() {
     try {
       const url = buildApiUrl(API_CONFIG.ENDPOINTS.STUDENT_INSTITUCIONES);
       console.log("Cargando instituciones desde:", url);
-      
+
       const response = await fetch(url);
       console.log("Respuesta del servidor:", response.status, response.statusText);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data: InstitucionesResponse = await response.json();
       console.log("Datos recibidos:", data);
-      
+
       if (data.success && data.data) {
         setInstituciones(data.data);
         console.log("Instituciones cargadas:", data.data.length);
@@ -109,19 +109,19 @@ export default function StudentLogin() {
 
   const playClick = useCallback(() => {
     try {
-  const AnyWindow = window as typeof window & { webkitAudioContext?: typeof AudioContext };
-  const ctx = new (window.AudioContext || AnyWindow.webkitAudioContext!)();
+      const AnyWindow = window as typeof window & { webkitAudioContext?: typeof AudioContext };
+      const ctx = new (window.AudioContext || AnyWindow.webkitAudioContext!)();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.value = 800; // subtle tone
-      gain.gain.value = 0.05; // soft volume
+      osc.frequency.value = 800;
+      gain.gain.value = 0.05;
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
-      osc.stop(ctx.currentTime + 0.05); // very short
+      osc.stop(ctx.currentTime + 0.05);
     } catch {
-      // ignore audio errors silently
+
     }
   }, []);
 
@@ -132,7 +132,7 @@ export default function StudentLogin() {
     setError("");
 
     try {
-      // Validar que todos los campos estén completos
+
       if (!formData.nombre.trim() || !formData.apellido.trim() || !formData.institucion_id) {
         setError("Por favor completa todos los campos");
         setLoading(false);
@@ -144,16 +144,16 @@ export default function StudentLogin() {
         apellido: formData.apellido.trim(),
         institucion_id: formData.institucion_id
       };
-      
-      // Verificar que institucion_id esté seleccionado
+
+
       if (!requestData.institucion_id) {
         setError("Por favor selecciona una escuela válida");
         setLoading(false);
         return;
       }
-      
+
       console.log("Datos enviados al login de estudiante:", requestData);
-      
+
       const response = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.STUDENT_LOGIN), {
         method: "POST",
         headers: {
@@ -173,7 +173,7 @@ export default function StudentLogin() {
         localStorage.setItem("user", JSON.stringify(data.data.estudiante));
         localStorage.setItem("userType", "estudiante");
 
-        // Verificar si ya completó evaluación inicial
+
         const yaEvaluado = await verificarEvaluacion(
           data.data.estudiante.id,
           data.data.token
@@ -272,9 +272,9 @@ export default function StudentLogin() {
                 disabled={loading || loadingInstituciones}
               >
                 <option value="">
-                  {loadingInstituciones ? "Cargando escuelas..." : 
-                   instituciones.length === 0 ? "No se pudieron cargar las escuelas" :
-                   "Selecciona tu escuela"}
+                  {loadingInstituciones ? "Cargando escuelas..." :
+                    instituciones.length === 0 ? "No se pudieron cargar las escuelas" :
+                      "Selecciona tu escuela"}
                 </option>
                 {instituciones.map((institucion) => (
                   <option key={institucion.id} value={institucion.id}>
@@ -320,7 +320,7 @@ export default function StudentLogin() {
                 Regístrate aquí
               </button>
             </p>
-            
+
             <Button
               label="← Volver a selección"
               variant="text"

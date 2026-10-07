@@ -71,7 +71,7 @@ export function StartScreenEscuchaElige({ onStart, onBack }: StartScreenEscuchaE
         Volver
       </ButtonWithAudio>
 
-      {/*imagen izquierda*/}
+
       <motion.img
         src={escuchaLeft}
         alt="Sílabas"

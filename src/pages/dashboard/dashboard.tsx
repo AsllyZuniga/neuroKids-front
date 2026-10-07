@@ -1,4 +1,4 @@
-//..ok
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/header/header";
@@ -55,7 +55,6 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* ── Vista desktop/tablet (sin cambios) ── */}
       <div className="dashboard-container">
         <Header />
         <div className="main-scene-wrapper">
@@ -65,7 +64,7 @@ const Dashboard = () => {
         <footer />
       </div>
 
-      {/* ── Vista móvil ≤480px ── */}
+
       <div className="dashboard-mobile">
         <div className="dashboard-mobile__clouds" aria-hidden="true">
           <img src={Nube} alt="" className="dashboard-mobile__cloud dashboard-mobile__cloud--1" />
@@ -109,7 +108,6 @@ const Dashboard = () => {
         </div>
 
         <section className="dashboard-mobile__content">
-          {/* Saludo */}
           <p className="dashboard-mobile__greeting">
             {isAuthenticated && user
               ? `¡Hola, ${user.nombre}!`
@@ -119,7 +117,7 @@ const Dashboard = () => {
             Elige tu grupo de edad para comenzar
           </p>
 
-          {/* Botones de edad */}
+    
           <div className="dashboard-mobile__buttons">
             {ageButtons.map((btn) => (
               <div

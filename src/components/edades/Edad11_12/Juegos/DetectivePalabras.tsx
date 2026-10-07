@@ -1,7 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-
 import { CheckCircle, Crosshair } from 'lucide-react';
-
 import { Card, CardContent } from '../../../ui/card';
 import { Badge } from '../../../ui/badge';
 import { AnimalGuide } from '../../../others/AnimalGuide';
@@ -14,11 +12,7 @@ import { StartScreenDetectivePalabras } from '../IniciosJuegosLecturas/StartScre
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  gameLevelFinished,
-  gameLevelStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, gameLevelFinished, gameLevelStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface DetectivePalabrasProps {
@@ -287,7 +281,7 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
   const [selectedWords, setSelectedWords] = useState<Set<string>>(new Set());
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(17); // Detective de Palabras
+  const activityConfig = getActivityByDbId(17);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -297,16 +291,14 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   const challenges = gameChallenges[currentLevel as keyof typeof gameChallenges] || gameChallenges[1];
   const current = challenges[currentChallenge];
-
   const progress = (currentChallenge / challenges.length) * 100;
 
-  // Reset al cambiar nivel
+
   useEffect(() => {
     setCurrentLevel(level);
     setCurrentChallenge(0);
@@ -370,17 +362,14 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
 
     setScore(newScore);
 
-    // cuando ya eligió N palabras
     if (newSelected.size === current.targetWords.length) {
       setChallengeComplete(true);
 
       setTimeout(() => {
         nextChallenge();
-      }, 2500); // 👈 tiempo para analizar
+      }, 2500);
     }
   };
-
-
 
   const nextChallenge = () => {
     if (currentChallenge < challenges.length - 1) {
@@ -448,7 +437,7 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Detective de Palabras`}
           level={currentLevel}
@@ -472,135 +461,135 @@ export function DetectivePalabras({ onBack, level }: DetectivePalabrasProps) {
           />
         </div>
 
-      <div className="mx-auto mt-6 w-full min-w-0 max-w-7xl">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-          <div className="min-w-0">
-            <Card className="mb-6 border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
-              <CardContent className="p-4 sm:p-6">
-                <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                  <h2 className="text-lg text-gray-800 sm:text-xl">{current.task}</h2>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Crosshair className="w-5 h-5 text-indigo-500" />
-                    <span className="text-gray-600">
-                      {selectedWords.size} / {current.targetWords.length}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {current.targetWords.map((target, index) => (
-                    <Badge
-                      key={index}
-                      className={`${getWordTypeColor(target.type)} ${foundWords[target.word.toLowerCase()] ? 'opacity-50' : ''
-                        }`}
-                    >
-                      {foundWords[target.word.toLowerCase()] && (
-                        <CheckCircle className="w-3 h-3 mr-1" />
-                      )}
-                      {target.type}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200">
-              <CardContent className="p-8">
-                <div className="text-xl leading-relaxed">
-                  {textWords.map(({ word, originalWord, index }) => {
-                    const clean = word.toLowerCase();
-                    const isSelected = selectedWords.has(clean);
-                    const foundType = foundWords[clean];
-
-
-                    return (
-                      <span key={index}>
-                        <span
-                          className={`cursor-pointer transition-all duration-200 rounded px-1 text-black ${foundType === 'sustantivo'
-                            ? 'bg-blue-200 text-blue-800'
-                            : foundType === 'verbo'
-                              ? 'bg-green-200 text-green-800'
-                              : foundType === 'adjetivo'
-                                ? 'bg-purple-200 text-purple-800'
-                                : isSelected
-                                  ? 'bg-red-200 text-red-800'
-                                  : 'hover:bg-gray-100'
-                            }`}
-
-
-                          onClick={() => handleWordClick(word)}
-                        >
-                          {originalWord}
-                        </span>
-                        {index < textWords.length - 1 && ' '}
+        <div className="mx-auto mt-6 w-full min-w-0 max-w-7xl">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+            <div className="min-w-0">
+              <Card className="mb-6 border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <h2 className="text-lg text-gray-800 sm:text-xl">{current.task}</h2>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <Crosshair className="w-5 h-5 text-indigo-500" />
+                      <span className="text-gray-600">
+                        {selectedWords.size} / {current.targetWords.length}
                       </span>
-                    );
-                  })}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {current.targetWords.map((target, index) => (
+                      <Badge
+                        key={index}
+                        className={`${getWordTypeColor(target.type)} ${foundWords[target.word.toLowerCase()] ? 'opacity-50' : ''
+                          }`}
+                      >
+                        {foundWords[target.word.toLowerCase()] && (
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                        )}
+                        {target.type}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-purple-200">
+                <CardContent className="p-8">
+                  <div className="text-xl leading-relaxed">
+                    {textWords.map(({ word, originalWord, index }) => {
+                      const clean = word.toLowerCase();
+                      const isSelected = selectedWords.has(clean);
+                      const foundType = foundWords[clean];
+
+
+                      return (
+                        <span key={index}>
+                          <span
+                            className={`cursor-pointer transition-all duration-200 rounded px-1 text-black ${foundType === 'sustantivo'
+                              ? 'bg-blue-200 text-blue-800'
+                              : foundType === 'verbo'
+                                ? 'bg-green-200 text-green-800'
+                                : foundType === 'adjetivo'
+                                  ? 'bg-purple-200 text-purple-800'
+                                  : isSelected
+                                    ? 'bg-red-200 text-red-800'
+                                    : 'hover:bg-gray-100'
+                              }`}
+
+
+                            onClick={() => handleWordClick(word)}
+                          >
+                            {originalWord}
+                          </span>
+                          {index < textWords.length - 1 && ' '}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="h-full border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+              <CardContent className="p-4 sm:p-6">
+                <h2 className="mb-4 text-lg text-gray-800 sm:text-xl">¿Qué buscar?</h2>
+                <div className="space-y-4">
+                  <div className="bg-blue-50 p-3 rounded-lg border-2 border-blue-200">
+                    <div className="text-blue-600 mb-1 font-semibold">Sustantivos</div>
+                    <div className="text-sm text-blue-700">Palabras que nombran personas, lugares, cosas u objetos.</div>
+                    <div className="text-xs text-blue-600 mt-1">Ejemplo: casa, perro, María</div>
+                  </div>
+                  <div className="bg-green-50 p-3 rounded-lg border-2 border-green-200">
+                    <div className="text-green-600 mb-1 font-semibold">Verbos</div>
+                    <div className="text-sm text-green-700">Palabras que expresan acciones, estados o procesos.</div>
+                    <div className="text-xs text-green-600 mt-1">Ejemplo: correr, estudiar, saltar</div>
+                  </div>
+                  <div className="bg-purple-50 p-3 rounded-lg border-2 border-purple-200">
+                    <div className="text-purple-600 mb-1 font-semibold">Adjetivos</div>
+                    <div className="text-sm text-purple-700">Palabras que describen o califican a un sustantivo.</div>
+                    <div className="text-xs text-purple-600 mt-1">Ejemplo: grande, hermoso, rápido</div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          <Card className="h-full border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
-            <CardContent className="p-4 sm:p-6">
-              <h2 className="mb-4 text-lg text-gray-800 sm:text-xl">¿Qué buscar?</h2>
-              <div className="space-y-4">
-                <div className="bg-blue-50 p-3 rounded-lg border-2 border-blue-200">
-                  <div className="text-blue-600 mb-1 font-semibold">Sustantivos</div>
-                  <div className="text-sm text-blue-700">Palabras que nombran personas, lugares, cosas u objetos.</div>
-                  <div className="text-xs text-blue-600 mt-1">Ejemplo: casa, perro, María</div>
-                </div>
-                <div className="bg-green-50 p-3 rounded-lg border-2 border-green-200">
-                  <div className="text-green-600 mb-1 font-semibold">Verbos</div>
-                  <div className="text-sm text-green-700">Palabras que expresan acciones, estados o procesos.</div>
-                  <div className="text-xs text-green-600 mt-1">Ejemplo: correr, estudiar, saltar</div>
-                </div>
-                <div className="bg-purple-50 p-3 rounded-lg border-2 border-purple-200">
-                  <div className="text-purple-600 mb-1 font-semibold">Adjetivos</div>
-                  <div className="text-sm text-purple-700">Palabras que describen o califican a un sustantivo.</div>
-                  <div className="text-xs text-purple-600 mt-1">Ejemplo: grande, hermoso, rápido</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <RewardAnimation
+            type="star"
+            show={showReward}
+            message="¡Palabra correcta!"
+            onComplete={() => setShowReward(false)}
+          />
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={maxPoints}
+              customMessage="¡Has completado el nivel!"
+              customSubtitle="Encontraste todas las palabras ocultas"
+              celebrationText="¡Eres un explorador"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={maxPoints}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={loadNextLevel}
+              onRestart={restartLevel}
+              onExit={onBack}
+            />
+          )}
         </div>
-
-        <RewardAnimation
-          type="star"
-          show={showReward}
-          message="¡Palabra correcta!"
-          onComplete={() => setShowReward(false)}
-        />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={maxPoints}
-            customMessage="¡Has completado el nivel!"
-            customSubtitle="Encontraste todas las palabras ocultas"
-            celebrationText="¡Eres un explorador"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL */}
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={maxPoints}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={loadNextLevel}
-            onRestart={restartLevel}
-            onExit={onBack}
-          />
-        )}
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

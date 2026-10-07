@@ -15,11 +15,7 @@ import { Button } from '../../../ui/button';
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  readingLevelFinished,
-  readingStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, readingLevelFinished, readingStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import img1 from '../../../../assets/9_10/historias_interactivas/nivel1/1.png';
 import img2 from '../../../../assets/9_10/historias_interactivas/nivel1/2.png';
@@ -81,12 +77,6 @@ import imag17 from '../../../../assets/9_10/historias_interactivas/nivel3/17.png
 import imag18 from '../../../../assets/9_10/historias_interactivas/nivel3/18.png';
 import imag19 from '../../../../assets/9_10/historias_interactivas/nivel3/19.png';
 import imag20 from '../../../../assets/9_10/historias_interactivas/nivel3/20.png';
-
-
-
-
-
-
 
 
 interface HistoriasInteractivasProps {
@@ -749,7 +739,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   const [showFinalStory, setShowFinalStory] = useState(false);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(4); // Historias Interactivas
+  const activityConfig = getActivityByDbId(4);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -759,9 +749,8 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   useEffect(() => {
     if (showLevelComplete && activityConfig) {
@@ -785,12 +774,10 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
 
   const progress = (storyPath.length / 8) * 100;
 
-  // Función para mejorar la pronunciación de números con signos
   const formatPointsForSpeech = (points: number): string => {
     return points >= 0 ? `más ${Math.abs(points)} puntos` : `menos ${Math.abs(points)} puntos`;
   };
 
-  // Función para limpiar emojis del texto antes de hablar
   const removeEmojis = (text: string): string => {
     return text.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '').trim();
   };
@@ -849,7 +836,7 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title="Historias Interactivas"
           level={currentLevel}
@@ -880,187 +867,187 @@ export function HistoriasInteractivas({ onBack, onNextLevel, level: initialLevel
           />
         </motion.div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="text-center mb-6">
-          <h2 className="text-xl text-black sm:text-2xl">{story.title}</h2>
-        </div>
-        <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="grid min-w-0 grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">
-          <Card className="min-w-0 bg-white/90 backdrop-blur-sm border-2 border-indigo-200 lg:col-span-2">
-            <CardContent className="min-w-0 overflow-hidden p-3 sm:p-6 lg:p-8">
-              <div className="flex min-w-0 flex-col gap-4 sm:gap-6">
-                <div className="min-w-0 text-center">
-                  <div className="bg-gradient-to-br from-indigo-200 to-purple-200 rounded-2xl border-4 border-indigo-300 p-4 sm:p-8 mb-4 flex min-h-[min(40vh,12rem)] sm:min-h-[200px] items-center justify-center">
-                    <motion.div
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="flex items-center justify-center"
-                    >
-                      <img
-                        src={part.image}
-                        alt="Escena de la historia"
-                        className="mx-auto h-auto max-h-[min(42vh,14rem)] w-full max-w-full object-contain sm:max-h-[260px]"
-                        draggable={false}
-                      />
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="text-center mb-6">
+            <h2 className="text-xl text-black sm:text-2xl">{story.title}</h2>
+          </div>
+          <motion.div key={currentPart} initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="grid min-w-0 grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">
+            <Card className="min-w-0 bg-white/90 backdrop-blur-sm border-2 border-indigo-200 lg:col-span-2">
+              <CardContent className="min-w-0 overflow-hidden p-3 sm:p-6 lg:p-8">
+                <div className="flex min-w-0 flex-col gap-4 sm:gap-6">
+                  <div className="min-w-0 text-center">
+                    <div className="bg-gradient-to-br from-indigo-200 to-purple-200 rounded-2xl border-4 border-indigo-300 p-4 sm:p-8 mb-4 flex min-h-[min(40vh,12rem)] sm:min-h-[200px] items-center justify-center">
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="flex items-center justify-center"
+                      >
+                        <img
+                          src={part.image}
+                          alt="Escena de la historia"
+                          className="mx-auto h-auto max-h-[min(42vh,14rem)] w-full max-w-full object-contain sm:max-h-[260px]"
+                          draggable={false}
+                        />
 
-                    </motion.div>
+                      </motion.div>
 
+                    </div>
+                    <AudioPlayer
+                      text={removeEmojis(part.text)}
+                      duration={removeEmojis(part.text).length * 100}
+                      voice="child"
+                    />
                   </div>
+
+                  <div className="min-w-0 text-center md:text-left">
+                    <div className="mb-6 break-words rounded-lg border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 p-4 text-sm leading-relaxed text-black sm:p-6 sm:text-lg">
+                      {part.text}
+                    </div>
+
+                    {storyPath.length > 1 && (
+                      <div className="bg-purple-50 p-4 rounded-lg border-2 border-purple-200">
+                        <h4 className="text-sm text-purple-800 mb-2 flex items-center gap-2">
+                          <Users className="w-4 h-4" />
+                          Tu aventura hasta ahora:
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {storyPath.map((index) => (
+                            <div key={index} className="flex items-center">
+                              <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs">
+                                {index + 1}
+                              </div>
+                              {index < storyPath.length - 1 && (
+                                <div className="w-4 h-0.5 bg-purple-300 mx-1"></div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {part.choices.length > 0 && (
+              <Card className="h-fit min-w-0 w-full max-w-full overflow-hidden border-2 border-purple-200 bg-white/90 backdrop-blur-sm lg:min-w-0">
+                <CardContent className="min-w-0 overflow-hidden p-3 sm:p-6">
+                  <h3 className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-black sm:mb-4 sm:text-lg">
+                    <Brain className="h-5 w-5 shrink-0 text-purple-500" />
+                    <span className="min-w-0 break-words">¿Qué decides hacer?</span>
+                  </h3>
+                  <div className="space-y-2 sm:space-y-3">
+                    {part.choices.map((choice, index) => (
+                      <motion.div key={index} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="min-w-0">
+                        <ButtonWithAudio
+                          onClick={() => makeChoice(index)}
+                          variant="outline"
+                          className="h-auto min-h-0 w-full max-w-full whitespace-normal break-words border-2 bg-white/80 p-3 text-left text-black transition-all hover:border-purple-300 hover:bg-white sm:p-5"
+                          playOnHover
+                          audioText={`${removeEmojis(choice.text)}. ${formatPointsForSpeech(choice.points)}`}
+                        >
+                          <div className="flex items-start gap-2 sm:gap-3">
+                            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-500 text-sm text-white">
+                              {String.fromCharCode(65 + index)}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs leading-snug sm:text-base">{choice.text}</div>
+                              <div className="mt-1 text-xs text-purple-600 sm:text-sm">+{choice.points} puntos</div>
+                            </div>
+                          </div>
+                        </ButtonWithAudio>
+                      </motion.div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </motion.div>
+
+          <RewardAnimation type="star" show={showReward} message="¡Excelente elección!" />
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={1000}
+              customMessage="¡Eres un narrador increíble!"
+              customSubtitle="¡Completaste tu aventura interactiva!"
+              celebrationText="¡Que genial!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
+          {showFinalStory && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-3 text-black sm:p-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <Card className="max-h-[min(92dvh,40rem)] w-full max-w-3xl overflow-hidden border-4 border-purple-300 bg-white">
+                <CardContent className="max-h-[inherit] space-y-4 overflow-y-auto p-4 sm:p-8 sm:space-y-6">
+                  <h2 className="text-center text-xl text-purple-700 sm:text-2xl">
+                    📖 Tu Historia Completa
+                  </h2>
+
                   <AudioPlayer
-                    text={removeEmojis(part.text)}
-                    duration={removeEmojis(part.text).length * 100}
+                    text={removeEmojis(finalStoryText)}
+                    duration={removeEmojis(finalStoryText).length * 60}
                     voice="child"
                   />
-                </div>
 
-                <div className="min-w-0 text-center md:text-left">
-                  <div className="mb-6 break-words rounded-lg border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 p-4 text-sm leading-relaxed text-black sm:p-6 sm:text-lg">
-                    {part.text}
+                  <div className="max-h-[min(40vh,16rem)] overflow-y-auto rounded-lg border-2 border-purple-200 bg-purple-50 p-3 text-sm leading-relaxed break-words sm:max-h-[300px] sm:p-4 sm:text-lg">
+                    {finalStoryText}
                   </div>
 
-                  {storyPath.length > 1 && (
-                    <div className="bg-purple-50 p-4 rounded-lg border-2 border-purple-200">
-                      <h4 className="text-sm text-purple-800 mb-2 flex items-center gap-2">
-                        <Users className="w-4 h-4" />
-                        Tu aventura hasta ahora:
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {storyPath.map((index) => (
-                          <div key={index} className="flex items-center">
-                            <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs">
-                              {index + 1}
-                            </div>
-                            {index < storyPath.length - 1 && (
-                              <div className="w-4 h-0.5 bg-purple-300 mx-1"></div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {part.choices.length > 0 && (
-            <Card className="h-fit min-w-0 w-full max-w-full overflow-hidden border-2 border-purple-200 bg-white/90 backdrop-blur-sm lg:min-w-0">
-              <CardContent className="min-w-0 overflow-hidden p-3 sm:p-6">
-                <h3 className="mb-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-black sm:mb-4 sm:text-lg">
-                  <Brain className="h-5 w-5 shrink-0 text-purple-500" />
-                  <span className="min-w-0 break-words">¿Qué decides hacer?</span>
-                </h3>
-                <div className="space-y-2 sm:space-y-3">
-                  {part.choices.map((choice, index) => (
-                    <motion.div key={index} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="min-w-0">
-                      <ButtonWithAudio
-                        onClick={() => makeChoice(index)}
-                        variant="outline"
-                        className="h-auto min-h-0 w-full max-w-full whitespace-normal break-words border-2 bg-white/80 p-3 text-left text-black transition-all hover:border-purple-300 hover:bg-white sm:p-5"
-                        playOnHover
-                        audioText={`${removeEmojis(choice.text)}. ${formatPointsForSpeech(choice.points)}`}
-                      >
-                        <div className="flex items-start gap-2 sm:gap-3">
-                          <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-500 text-sm text-white">
-                            {String.fromCharCode(65 + index)}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="text-xs leading-snug sm:text-base">{choice.text}</div>
-                            <div className="mt-1 text-xs text-purple-600 sm:text-sm">+{choice.points} puntos</div>
-                          </div>
-                        </div>
-                      </ButtonWithAudio>
-                    </motion.div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex justify-center gap-4 pt-2 sm:pt-4">
+                    <Button
+                      onClick={() => {
+                        setShowFinalStory(false);
+                        setShowMotivational(true);
+                      }}
+                      className="min-h-12 rounded-xl bg-purple-500 px-6 py-3 text-base text-white sm:text-lg"
+                    >
+                      Continuar
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           )}
-        </motion.div>
 
-        <RewardAnimation type="star" show={showReward} message="¡Excelente elección!" />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={1000}
-            customMessage="¡Eres un narrador increíble!"
-            customSubtitle="¡Completaste tu aventura interactiva!"
-            celebrationText="¡Que genial!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
-        {showFinalStory && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-3 text-black sm:p-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <Card className="max-h-[min(92dvh,40rem)] w-full max-w-3xl overflow-hidden border-4 border-purple-300 bg-white">
-              <CardContent className="max-h-[inherit] space-y-4 overflow-y-auto p-4 sm:p-8 sm:space-y-6">
-                <h2 className="text-center text-xl text-purple-700 sm:text-2xl">
-                  📖 Tu Historia Completa
-                </h2>
-
-                <AudioPlayer
-                  text={removeEmojis(finalStoryText)}
-                  duration={removeEmojis(finalStoryText).length * 60}
-                  voice="child"
-                />
-
-                <div className="max-h-[min(40vh,16rem)] overflow-y-auto rounded-lg border-2 border-purple-200 bg-purple-50 p-3 text-sm leading-relaxed break-words sm:max-h-[300px] sm:p-4 sm:text-lg">
-                  {finalStoryText}
-                </div>
-
-                <div className="flex justify-center gap-4 pt-2 sm:pt-4">
-                  <Button
-                    onClick={() => {
-                      setShowFinalStory(false);
-                      setShowMotivational(true);
-                    }}
-                    className="min-h-12 rounded-xl bg-purple-500 px-6 py-3 text-base text-white sm:text-lg"
-                  >
-                    Continuar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-
-        {/* MODAL FINAL */}
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={1000}
-            level={currentLevel}
-            isLastLevel={currentLevel >= 3}
-            onNextLevel={() => {
-              if (currentLevel < 3) {
-                setCurrentLevel(currentLevel + 1);
-                setShowLevelComplete(false);
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={1000}
+              level={currentLevel}
+              isLastLevel={currentLevel >= 3}
+              onNextLevel={() => {
+                if (currentLevel < 3) {
+                  setCurrentLevel(currentLevel + 1);
+                  setShowLevelComplete(false);
+                  setShowMotivational(false);
+                } else {
+                  onNextLevel();
+                }
+              }}
+              onRestart={() => {
+                setCurrentPart(story.startPart);
+                setStoryPath([story.startPart]);
+                setScore(0);
+                setConsequences([]);
+                setReadingComplete(false);
                 setShowMotivational(false);
-              } else {
-                onNextLevel();
-              }
-            }}
-            onRestart={() => {
-              setCurrentPart(story.startPart);
-              setStoryPath([story.startPart]);
-              setScore(0);
-              setConsequences([]);
-              setReadingComplete(false);
-              setShowMotivational(false);
-              setShowLevelComplete(false);
-            }}
-            onExit={onBack}
-          />
-        )}
+                setShowLevelComplete(false);
+              }}
+              onExit={onBack}
+            />
+          )}
+        </div>
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

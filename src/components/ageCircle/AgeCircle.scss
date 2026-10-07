@@ -1,6 +1,4 @@
-/* ===================== */
-/* AGE BUTTONS */
-/* ===================== */
+
 
 .age-buttons {
   display: flex;
@@ -9,8 +7,6 @@
   padding: 2rem;
   gap: 2rem;
   margin-top: -530px;
-
-  /* 🔹 Mover grupo hacia la derecha */
   margin-left: 500px;
 }
 
@@ -44,9 +40,7 @@
   }
 }
 
-/* ===================== */
-/* ANIMACIONES */
-/* ===================== */
+
 
 @keyframes click-press {
   0% {

@@ -44,7 +44,7 @@ export function MotivationalMessage({
 
     const bgAudio = new Audio(successMp3);
     bgAudio.volume = 0.6;
-    bgAudio.play().catch(() => {});
+    bgAudio.play().catch(() => { });
 
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(celebrationMsg);

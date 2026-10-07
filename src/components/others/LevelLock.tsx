@@ -12,10 +12,7 @@ interface LevelLockProps {
   onLoginRequired?: () => void;
 }
 
-/**
- * Componente que bloquea niveles y redirige al login
- * Nivel 1 siempre disponible, niveles 2+ requieren autenticación
- */
+
 export function LevelLock({ level, isLocked, children, onLoginRequired }: LevelLockProps) {
   const navigate = useNavigate();
 

@@ -1,12 +1,4 @@
-/**
- * Hook y utilidades para el bloqueo de niveles
- */
 
-/**
- * Hook para verificar si un nivel está bloqueado
- * @param level - Número del nivel a verificar
- * @returns true si el nivel está bloqueado, false si está desbloqueado
- */
 export const useLevelLock = (level: number): boolean => {
   // Nivel 1 siempre desbloqueado
   if (level === 1) return false;

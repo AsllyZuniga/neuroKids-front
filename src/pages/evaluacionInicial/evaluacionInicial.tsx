@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { API_CONFIG, buildApiUrl } from "@/config/api";
 import "./evaluacionInicial.scss";
 
-/* ── Tipos ── */
+
 interface Tema {
   nombre: string;
   emoji: string;
@@ -40,19 +40,19 @@ interface SetupResponse {
 
 type Fase = "temas" | "cargando" | "lectura" | "preguntas" | "enviando";
 
-/* Mapeo visual de temas */
+
 const TEMA_META: Record<string, { emoji: string; descripcion: string }> = {
-  animales:        { emoji: "🐾", descripcion: "Leemos sobre el mundo animal" },
-  naturaleza:      { emoji: "🌿", descripcion: "Exploramos el mundo natural" },
-  familia:         { emoji: "👨‍👩‍👧", descripcion: "Historias de familia y hogar" },
-  aventura:        { emoji: "🗺️", descripcion: "Emocionantes aventuras" },
-  deportes:        { emoji: "⚽", descripcion: "Juegos y deportes divertidos" },
-  ciencia:         { emoji: "🔬", descripcion: "Descubrimientos científicos" },
-  arte:            { emoji: "🎨", descripcion: "Creatividad y expresión" },
-  música:          { emoji: "🎵", descripcion: "El mundo de los sonidos" },
-  historia:        { emoji: "📜", descripcion: "Personajes y eventos históricos" },
-  tecnología:      { emoji: "💻", descripcion: "El mundo tecnológico" },
-  "medio ambiente":{ emoji: "🌍", descripcion: "Cuidamos nuestro planeta" },
+  animales: { emoji: "🐾", descripcion: "Leemos sobre el mundo animal" },
+  naturaleza: { emoji: "🌿", descripcion: "Exploramos el mundo natural" },
+  familia: { emoji: "👨‍👩‍👧", descripcion: "Historias de familia y hogar" },
+  aventura: { emoji: "🗺️", descripcion: "Emocionantes aventuras" },
+  deportes: { emoji: "⚽", descripcion: "Juegos y deportes divertidos" },
+  ciencia: { emoji: "🔬", descripcion: "Descubrimientos científicos" },
+  arte: { emoji: "🎨", descripcion: "Creatividad y expresión" },
+  música: { emoji: "🎵", descripcion: "El mundo de los sonidos" },
+  historia: { emoji: "📜", descripcion: "Personajes y eventos históricos" },
+  tecnología: { emoji: "💻", descripcion: "El mundo tecnológico" },
+  "medio ambiente": { emoji: "🌍", descripcion: "Cuidamos nuestro planeta" },
 };
 
 export default function EvaluacionInicial() {
@@ -67,7 +67,7 @@ export default function EvaluacionInicial() {
   const [error, setError] = useState("");
   const [tiempoInicioPregunta, setTiempoInicioPregunta] = useState<number>(Date.now());
 
-  /* ── Datos del estudiante desde localStorage ── */
+
   const getUserData = () => {
     try {
       const raw = localStorage.getItem("user");
@@ -79,13 +79,13 @@ export default function EvaluacionInicial() {
 
   const getToken = () => localStorage.getItem("token") ?? "";
 
-  /* ── 1. Cargar temas al montar ── */
+
   useEffect(() => {
     const fetchTemas = async () => {
       const user = getUserData();
       if (!user) { navigate("/estudiante/login"); return; }
 
-      /* grupo_edad_id según edad */
+
       const edad = Number(user.edad ?? 7);
       const grupoId = edad <= 8 ? 1 : edad <= 10 ? 2 : 3;
 
@@ -94,8 +94,7 @@ export default function EvaluacionInicial() {
           buildApiUrl(`${API_CONFIG.ENDPOINTS.EVAL_TEMAS}/${grupoId}`),
           { headers: { Authorization: `Bearer ${getToken()}` } }
         );
-        const json = await res.json();
-        /* El backend devuelve { temas: string[] } o { data: { temas: string[] } } */
+        const json = await res.json()
         const lista: string[] =
           json?.data?.temas ?? json?.temas ?? [];
 
@@ -114,7 +113,7 @@ export default function EvaluacionInicial() {
     fetchTemas();
   }, [navigate]);
 
-  /* ── 2. Llamar setup al seleccionar tema ── */
+
   const handleSeleccionarTema = async (tema: string) => {
     setTemaSeleccionado(tema);
     setFase("cargando");
@@ -140,7 +139,7 @@ export default function EvaluacionInicial() {
       const json = await res.json();
 
       if (!res.ok) {
-        /* Si ya tiene evaluación para este grupo → ir directo a plataforma */
+
         if (res.status === 409) {
           navigate("/bienvenida/estudiante");
           return;
@@ -160,14 +159,14 @@ export default function EvaluacionInicial() {
     }
   };
 
-  /* ── 3. Pasar de lectura a preguntas ── */
+
   const handleTerminarLectura = () => {
     setPreguntaActual(0);
     setTiempoInicioPregunta(Date.now());
     setFase("preguntas");
   };
 
-  /* ── 4. Registrar respuesta y avanzar ── */
+
   const handleResponder = (opcionId: number) => {
     if (!setupData) return;
     const pregunta = setupData.preguntas[preguntaActual];
@@ -181,7 +180,6 @@ export default function EvaluacionInicial() {
     }
   };
 
-  /* ── 5. Enviar respuestas finales ── */
   const handleEnviarRespuestas = async (respuestasFinales: Record<number, number>) => {
     if (!setupData) return;
     setFase("enviando");
@@ -205,15 +203,13 @@ export default function EvaluacionInicial() {
         body: JSON.stringify(payload),
       });
     } catch {
-      /* silencioso: si falla el envío igual redirigimos */
+
     }
 
     navigate("/bienvenida/estudiante");
   };
 
-  /* ─────────── RENDER ─────────── */
 
-  /* Fase: selección de tema */
   if (fase === "temas") {
     return (
       <div className="eval-container">
@@ -262,7 +258,7 @@ export default function EvaluacionInicial() {
     );
   }
 
-  /* Fase: cargando IA */
+
   if (fase === "cargando") {
     return (
       <div className="eval-container">
@@ -300,7 +296,7 @@ export default function EvaluacionInicial() {
     );
   }
 
-  /* Fase: lectura */
+
   if (fase === "lectura" && setupData) {
     return (
       <div className="eval-container">
@@ -337,7 +333,7 @@ export default function EvaluacionInicial() {
     );
   }
 
-  /* Fase: preguntas */
+
   if (fase === "preguntas" && setupData) {
     const pregunta = setupData.preguntas[preguntaActual];
     const total = setupData.preguntas.length;
@@ -354,7 +350,7 @@ export default function EvaluacionInicial() {
             exit={{ opacity: 0, x: -40 }}
             transition={{ duration: 0.25 }}
           >
-            {/* Barra de progreso */}
+
             <div className="eval-progress-wrap">
               <div
                 className="eval-progress-bar"
@@ -390,7 +386,6 @@ export default function EvaluacionInicial() {
     );
   }
 
-  /* Fase: enviando */
   return (
     <div className="eval-container">
       <motion.div

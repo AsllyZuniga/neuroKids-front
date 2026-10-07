@@ -16,11 +16,7 @@ import { speakText } from '@/utils/textToSpeech';
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  readingLevelFinished,
-  readingStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, readingLevelFinished, readingStart } from "@/utils/activityProgressPayloads";
 import { StartScreenFrasesMagicas } from "../IniciosJuegosLecturas/StartScreenFrasesMagicas";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import sol from "@/assets/7_8/frasesmagicas/sol1.svg"
@@ -206,10 +202,9 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     console.log('🔄 FrasesMagicas - Ejecutando useEffect, nivel:', level);
     guardarInicioNivel();
-  }, [level, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+  }, [level, activityConfig, saveProgress]);
 
   useEffect(() => {
     setMessage(
@@ -458,191 +453,190 @@ export function FrasesMagicas({ onBack, level: initialLevel }: FrasesMagicasProp
   return (
     <LevelLock level={level} isLocked={isLevelLocked}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, rgb(210, 168, 253) 0%, rgb(253, 181, 222) 100%)">
-      <div
-        className="relative min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8"
-      >
-        <ConfettiExplosion show={showMagic} />
-        <ConfettiExplosion show={readingComplete} />
-        <RewardAnimation type="star" show={showReward} />
+        <div
+          className="relative min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8"
+        >
+          <ConfettiExplosion show={showMagic} />
+          <ConfettiExplosion show={readingComplete} />
+          <RewardAnimation type="star" show={showReward} />
 
-        {/* HEADER */}
-        <GameHeader
-          title="Frases Mágicas"
-          level={level}
-          score={score}
-          onBack={onBack}
-          onRestart={restartReading}
-        />
+          {/* HEADER */}
+          <GameHeader
+            title="Frases Mágicas"
+            level={level}
+            score={score}
+            onBack={onBack}
+            onRestart={restartReading}
+          />
 
-        {/* BARRA DE PROGRESO */}
-        <ProgressBar
-          current={currentSentence + 1}
-          total={totalSentences}
-          progress={currentProgress}
-          className="mb-6"
-        />
+          {/* BARRA DE PROGRESO */}
+          <ProgressBar
+            current={currentSentence + 1}
+            total={totalSentences}
+            progress={currentProgress}
+            className="mb-6"
+          />
 
-        {/* GUÍA DEL BÚHO */}
-        <div className="mb-6">
-          <AnimalGuide animal="frog" message={message} />
-        </div>
+          {/* GUÍA DEL BÚHO */}
+          <div className="mb-6">
+            <AnimalGuide animal="frog" message={message} />
+          </div>
 
-        {/* JUEGO */}
-        {!readingComplete && !showMotivational && !showLevelComplete && (
-          <motion.div
-            key={currentSentence}
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            className="mx-auto w-full min-w-0 max-w-7xl"
-          >
-            <Card className="mb-6 border-2 border-purple-500 bg-white/90 backdrop-blur-sm">
-              <CardContent className="p-4 sm:p-6 lg:p-8">
-                <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-8">
-                  <div className="min-w-0 text-center">
-                    <div className="flex min-h-[min(42vh,14rem)] items-center justify-center rounded-2xl border-4 border-purple-300 bg-gradient-to-br from-purple-200 to-pink-200 p-4 sm:min-h-[220px] sm:p-8">
-                      {!showMagic ? (
-                        <motion.img
-                          key="before"
-                          src={sentence.beforeImage}
-                          alt="Antes de la magia"
-                          className="mx-auto h-auto max-h-[min(38vh,12rem)] w-full max-w-[260px] object-contain sm:max-h-52 sm:max-w-[280px]"
-                          animate={{ scale: [1, 1.05, 1] }}
-                          
-                        />
-                      ) : (
-                        <motion.img
-                          key="after"
-                          src={sentence.afterImage}
-                          alt="Después de la magia"
-                          className="mx-auto h-auto max-h-[min(38vh,12rem)] w-full max-w-[260px] object-contain sm:max-h-52 sm:max-w-[280px]"
-                         
-                          
-                        />
-                      )}
-                    </div>
+          {/* JUEGO */}
+          {!readingComplete && !showMotivational && !showLevelComplete && (
+            <motion.div
+              key={currentSentence}
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="mx-auto w-full min-w-0 max-w-7xl"
+            >
+              <Card className="mb-6 border-2 border-purple-500 bg-white/90 backdrop-blur-sm">
+                <CardContent className="p-4 sm:p-6 lg:p-8">
+                  <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-8">
+                    <div className="min-w-0 text-center">
+                      <div className="flex min-h-[min(42vh,14rem)] items-center justify-center rounded-2xl border-4 border-purple-300 bg-gradient-to-br from-purple-200 to-pink-200 p-4 sm:min-h-[220px] sm:p-8">
+                        {!showMagic ? (
+                          <motion.img
+                            key="before"
+                            src={sentence.beforeImage}
+                            alt="Antes de la magia"
+                            className="mx-auto h-auto max-h-[min(38vh,12rem)] w-full max-w-[260px] object-contain sm:max-h-52 sm:max-w-[280px]"
+                            animate={{ scale: [1, 1.05, 1] }}
+
+                          />
+                        ) : (
+                          <motion.img
+                            key="after"
+                            src={sentence.afterImage}
+                            alt="Después de la magia"
+                            className="mx-auto h-auto max-h-[min(38vh,12rem)] w-full max-w-[260px] object-contain sm:max-h-52 sm:max-w-[280px]"
 
 
-
-                  </div>
-                  <div className="min-w-0 space-y-4 sm:space-y-6">
-
-                    <div className="rounded-xl border-2 border-purple-500 bg-pink-100 p-4 text-center sm:p-5">
-                      <h4 className="mb-2 text-base text-black sm:text-lg">Palabra mágica</h4>
-                      <div className="text-4xl font-bold text-purple-700 sm:text-5xl">
-                        {sentence.magicWord}
+                          />
+                        )}
                       </div>
 
-                    </div>
-                    <ButtonWithAudio
-                      onClick={startListening}
-                      disabled={isListening || magicActivated}
-                      playOnClick
-                      playOnHover={false}
-                      className={`min-h-12 w-full touch-manipulation py-4 text-base sm:py-6 sm:text-lg ${magicActivated
-                        ? 'bg-gray-400 cursor-not-allowed'
-                        : isListening
-                          ? 'bg-red-400 animate-pulse'
-                          : 'bg-purple-500 hover:bg-purple-600'
-                        } text-black`}
-                    >
-                      {isListening ? (
-                        <>Escuchando...</>
-                      ) : magicActivated ? (
-                        <>¡Magia activada!</>
-                      ) : (
-                        <>Activar micrófono</>
-                      )}
-                    </ButtonWithAudio>
 
-                    <div className="rounded-xl border-2 border-yellow-200 bg-yellow-50 p-4 sm:p-5">
-                      <h4 className="mb-2 text-base text-yellow-800 sm:text-lg">Consejo 💡</h4>
-                      <p className="text-sm leading-snug text-yellow-700 sm:text-base">
-                        Activa el microfono y di con voz clara la palabra mágica resaltada. ¡Recuerda pronunciarla igual que aparece!
-                      </p>
-                    </div>
 
-                    <div className="rounded-xl border-2 border-blue-500 bg-gradient-to-r from-blue-100 to-green-100 p-4 text-center text-gray-800 sm:p-6">
-                      <p className="text-lg leading-snug sm:text-xl">
-                        {!showMagic ? sentence.beforeMagic : sentence.afterMagic}
-                      </p>
                     </div>
-                    <div className="space-y-3">
+                    <div className="min-w-0 space-y-4 sm:space-y-6">
+
+                      <div className="rounded-xl border-2 border-purple-500 bg-pink-100 p-4 text-center sm:p-5">
+                        <h4 className="mb-2 text-base text-black sm:text-lg">Palabra mágica</h4>
+                        <div className="text-4xl font-bold text-purple-700 sm:text-5xl">
+                          {sentence.magicWord}
+                        </div>
+
+                      </div>
                       <ButtonWithAudio
-                        onClick={playMagicTextAudio}
-                        disabled={isPlaying}
+                        onClick={startListening}
+                        disabled={isListening || magicActivated}
                         playOnClick
                         playOnHover={false}
-                        className={`min-h-12 w-full touch-manipulation py-4 text-base sm:py-6 sm:text-lg ${isPlaying
-                          ? 'bg-green-500 text-black animate-pulse'
-                          : 'bg-blue-500 hover:bg-blue-600 text-black'
-                          }`}
+                        className={`min-h-12 w-full touch-manipulation py-4 text-base sm:py-6 sm:text-lg ${magicActivated
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : isListening
+                            ? 'bg-red-400 animate-pulse'
+                            : 'bg-purple-500 hover:bg-purple-600'
+                          } text-black`}
                       >
-                        <Volume2 className={`w-5 h-5 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
-                        {isPlaying ? 'Reproduciendo...' : 'Escuchar Frase'}
+                        {isListening ? (
+                          <>Escuchando...</>
+                        ) : magicActivated ? (
+                          <>¡Magia activada!</>
+                        ) : (
+                          <>Activar micrófono</>
+                        )}
                       </ButtonWithAudio>
 
+                      <div className="rounded-xl border-2 border-yellow-200 bg-yellow-50 p-4 sm:p-5">
+                        <h4 className="mb-2 text-base text-yellow-800 sm:text-lg">Consejo 💡</h4>
+                        <p className="text-sm leading-snug text-yellow-700 sm:text-base">
+                          Activa el microfono y di con voz clara la palabra mágica resaltada. ¡Recuerda pronunciarla igual que aparece!
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl border-2 border-blue-500 bg-gradient-to-r from-blue-100 to-green-100 p-4 text-center text-gray-800 sm:p-6">
+                        <p className="text-lg leading-snug sm:text-xl">
+                          {!showMagic ? sentence.beforeMagic : sentence.afterMagic}
+                        </p>
+                      </div>
+                      <div className="space-y-3">
+                        <ButtonWithAudio
+                          onClick={playMagicTextAudio}
+                          disabled={isPlaying}
+                          playOnClick
+                          playOnHover={false}
+                          className={`min-h-12 w-full touch-manipulation py-4 text-base sm:py-6 sm:text-lg ${isPlaying
+                            ? 'bg-green-500 text-black animate-pulse'
+                            : 'bg-blue-500 hover:bg-blue-600 text-black'
+                            }`}
+                        >
+                          <Volume2 className={`w-5 h-5 mr-2 ${isPlaying ? 'animate-bounce' : ''}`} />
+                          {isPlaying ? 'Reproduciendo...' : 'Escuchar Frase'}
+                        </ButtonWithAudio>
+
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            {/* NAVEGACIÓN */}
-            <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-between">
-              <ButtonWithAudio
-                onClick={goToPreviousSentence}
-                disabled={currentSentence === 0}
-                playOnHover
-                playOnClick
-                variant="outline"
-                className="min-h-11 w-full bg-green-500 text-sm sm:w-auto sm:text-base"
-              >
-                <ChevronLeft className="mr-2 h-5 w-5 shrink-0" />
-                Anterior
-              </ButtonWithAudio>
+              <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-between">
+                <ButtonWithAudio
+                  onClick={goToPreviousSentence}
+                  disabled={currentSentence === 0}
+                  playOnHover
+                  playOnClick
+                  variant="outline"
+                  className="min-h-11 w-full bg-green-500 text-sm sm:w-auto sm:text-base"
+                >
+                  <ChevronLeft className="mr-2 h-5 w-5 shrink-0" />
+                  Anterior
+                </ButtonWithAudio>
 
-              <ButtonWithAudio
-                onClick={goToNextSentence}
-                disabled={!magicActivated}
-                playOnHover
-                playOnClick
-                className="min-h-11 w-full bg-purple-500 text-sm text-white hover:bg-purple-600 sm:w-auto sm:text-base"
-              >
-                Siguiente
-                <ChevronRight className="ml-2 h-5 w-5 shrink-0" />
-              </ButtonWithAudio>
-            </div>
-          </motion.div>
-        )}
+                <ButtonWithAudio
+                  onClick={goToNextSentence}
+                  disabled={!magicActivated}
+                  playOnHover
+                  playOnClick
+                  className="min-h-11 w-full bg-purple-500 text-sm text-white hover:bg-purple-600 sm:w-auto sm:text-base"
+                >
+                  Siguiente
+                  <ChevronRight className="ml-2 h-5 w-5 shrink-0" />
+                </ButtonWithAudio>
+              </div>
+            </motion.div>
+          )}
 
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={totalSentences * 30}
-            customMessage="¡Eres un mago de las palabras!"
-            customSubtitle="Activaste toda la magia del nivel"
-            celebrationText="¡Lo lograste!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={totalSentences * 30}
+              customMessage="¡Eres un mago de las palabras!"
+              customSubtitle="Activaste toda la magia del nivel"
+              celebrationText="¡Lo lograste!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
 
-        {/* MODAL DE NIVEL COMPLETADO */}
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={totalSentences * 30}
-            level={level}
-            isLastLevel={level >= 3}
-            onNextLevel={goToNextLevel}
-            onRestart={restartReading}
-            onExit={onBack}
-          />
-        )}
-      </div>
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={totalSentences * 30}
+              level={level}
+              isLastLevel={level >= 3}
+              onNextLevel={goToNextLevel}
+              onRestart={restartReading}
+              onExit={onBack}
+            />
+          )}
+        </div>
       </AccessibilitySettingsWrapper>
     </LevelLock>
   );

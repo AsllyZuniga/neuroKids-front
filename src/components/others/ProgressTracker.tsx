@@ -56,7 +56,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
   const [progress, setProgress] = useState<UserProgress>(getInitialProgress);
 
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(`neurokids-progress-${userAge}`);
@@ -73,7 +73,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
 
   const [selectedTab, setSelectedTab] = useState<'overview' | 'achievements' | 'goals'>('overview');
 
- 
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(`neurokids-progress-${userAge}`, JSON.stringify(progress));
@@ -104,7 +104,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             {onBack && (
-              <Button 
+              <Button
                 onClick={onBack}
                 variant="outline"
                 className="bg-white/80 backdrop-blur-sm border-2 hover:bg-white"
@@ -115,20 +115,20 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
             )}
             <h1 className="text-3xl text-gray-800">Mi Progreso</h1>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
               <Star className="w-5 h-5 text-yellow-500" />
               <span>{progress.totalPoints} puntos</span>
             </div>
-            
+
             <Badge variant="outline" className="bg-purple-100">
               Nivel {progress.level}
             </Badge>
           </div>
         </div>
 
- 
+
         <div className="flex gap-2 mb-6">
           {[
             { id: 'overview', label: 'Resumen', icon: TrendingUp },
@@ -138,11 +138,10 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
             <button
               key={tab.id}
               onClick={() => setSelectedTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                selectedTab === tab.id
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${selectedTab === tab.id
                   ? 'bg-white shadow-md text-purple-700 border-2 border-purple-200'
                   : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
-              }`}
+                }`}
             >
               <tab.icon className="w-4 h-4" />
               {tab.label}
@@ -150,10 +149,10 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
           ))}
         </div>
 
-      
+
         {selectedTab === 'overview' && (
           <div className="grid lg:grid-cols-3 gap-6">
-         
+
             <div className="lg:col-span-2 space-y-6">
               <Card>
                 <CardContent className="p-6">
@@ -161,7 +160,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                     <TrendingUp className="w-5 h-5" />
                     Progreso de Nivel
                   </h3>
-                  
+
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span>Nivel {progress.level}</span>
@@ -169,12 +168,12 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                         {progress.experiencePoints} / {progress.nextLevelXP} XP
                       </span>
                     </div>
-                    
-                    <Progress 
+
+                    <Progress
                       value={(progress.experiencePoints / progress.nextLevelXP) * 100}
                       className="h-3"
                     />
-                    
+
                     <p className="text-sm text-gray-600">
                       Faltan {progress.nextLevelXP - progress.experiencePoints} puntos para el siguiente nivel
                     </p>
@@ -221,7 +220,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
               </div>
             </div>
 
-    
+
             <div>
               <Card>
                 <CardContent className="p-6">
@@ -229,7 +228,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                     <Award className="w-5 h-5" />
                     Logros Recientes
                   </h3>
-                  
+
                   <div className="space-y-3">
                     {progress.achievements
                       .sort((a, b) => new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime())
@@ -254,7 +253,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                           </div>
                         </motion.div>
                       ))}
-                    
+
                     {progress.achievements.length === 0 && (
                       <p className="text-gray-500 text-center py-4">
                         ¡Completa actividades para ganar tus primeros logros!
@@ -294,7 +293,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                 </Card>
               </motion.div>
             ))}
-            
+
             {progress.achievements.length === 0 && (
               <div className="col-span-full text-center py-12">
                 <Trophy className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -313,7 +312,7 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                   <Target className="w-5 h-5" />
                   Objetivo Semanal
                 </h3>
-                
+
                 <div className="space-y-6">
                   <div>
                     <div className="flex items-center justify-between mb-2">
@@ -322,12 +321,12 @@ export function ProgressTracker({ userAge, onBack }: ProgressTrackerProps) {
                         {progress.weeklyProgress} / {progress.weeklyGoal}
                       </span>
                     </div>
-                    
-                    <Progress 
+
+                    <Progress
                       value={(progress.weeklyProgress / progress.weeklyGoal) * 100}
                       className="h-4"
                     />
-                    
+
                     {progress.weeklyProgress >= progress.weeklyGoal ? (
                       <p className="text-green-600 text-sm mt-2 flex items-center gap-2">
                         <Trophy className="w-4 h-4" />

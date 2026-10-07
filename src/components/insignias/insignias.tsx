@@ -16,8 +16,8 @@ export const InsigniaModal: React.FC<InsigniaModalProps> = ({ isOpen, onClose, i
                 <div className="insignia-celebration">
                     <h2>¡Felicitaciones!</h2>
                     <div className="insignia-display">
-                        <img 
-                            src={insignia.icono} 
+                        <img
+                            src={insignia.icono}
                             alt={insignia.nombre}
                             className="insignia-icon"
                             style={{ borderColor: insignia.color_hex }}

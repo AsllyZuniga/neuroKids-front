@@ -15,11 +15,7 @@ import { StartScreenPreguntasInferenciales } from '../IniciosJuegosLecturas/Star
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  gameLevelFinished,
-  gameLevelStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, gameLevelFinished, gameLevelStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 interface PreguntasInferencialesProps {
   onBack: () => void;
@@ -273,7 +269,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const [timeExpired, setTimeExpired] = useState(false);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(18); // Preguntas Inferenciales
+  const activityConfig = getActivityByDbId(18);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -283,9 +279,8 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   const currentLevelData = allLevels[currentLevel - 1] || allLevels[0];
   const challenges = currentLevelData.challenges;
@@ -294,7 +289,6 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
   const progress = ((currentChallenge + 1) / challenges.length) * 100;
 
 
-  // Reset al cambiar nivel
   useEffect(() => {
     setCurrentLevel(initialLevel);
     setCurrentChallenge(0);
@@ -317,7 +311,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
 
   useEffect(() => {
     if (gameStarted && challenge) {
-      setTimeLeft(45); // ✅ tiempo base
+      setTimeLeft(45);
       setSelectedAnswer(null);
       setShowResult(false);
       setShowHint(false);
@@ -445,7 +439,7 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Preguntas Inferenciales`}
           level={currentLevel}
@@ -468,176 +462,176 @@ export function PreguntasInferenciales({ onBack, level: initialLevel = 1 }: Preg
           />
         </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <motion.div
-          key={currentChallenge}
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="mt-6"
-        >
-          <div className="mb-6 flex flex-wrap items-center gap-3 max-[480px]:gap-2">
-            <Badge
-              className={`${getTypeColor(challenge.type)} border px-3 py-1 text-lg max-[480px]:text-xs max-[480px]:px-2 max-[480px]:py-0.5`}
-            >
-              <span className="mr-2">{getTypeIcon(challenge.type)}</span>
-              {getTypeLabel(challenge.type)}
-            </Badge>
-            <div className="flex gap-1">
-              {[...Array(challenge.difficulty)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              ))}
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <motion.div
+            key={currentChallenge}
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            className="mt-6"
+          >
+            <div className="mb-6 flex flex-wrap items-center gap-3 max-[480px]:gap-2">
+              <Badge
+                className={`${getTypeColor(challenge.type)} border px-3 py-1 text-lg max-[480px]:text-xs max-[480px]:px-2 max-[480px]:py-0.5`}
+              >
+                <span className="mr-2">{getTypeIcon(challenge.type)}</span>
+                {getTypeLabel(challenge.type)}
+              </Badge>
+              <div className="flex gap-1">
+                {[...Array(challenge.difficulty)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <Card className="mb-6 border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
-              <CardContent className="min-w-0 p-8 max-[480px]:p-4">
-                <div className="mb-4">
-                  <AudioPlayer text={currentLevelData.text} onSpeakingChange={setIsSpeaking} />
-                </div>
-                <div className="rounded-lg border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 text-lg leading-relaxed text-black max-[480px]:p-3 max-[480px]:text-sm">
-                  {currentLevelData.text}
-                </div>
-
-                <Button
-                  onClick={toggleHint}
-                  variant="outline"
-                  className="bg-yellow-100 border-yellow-300 text-yellow-700 hover:bg-yellow-200 mt-4"
-                >
-                  <Lightbulb className="w-4 h-4 mr-2" />
-                  Pista
-                </Button>
-
-                {showHint && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-4 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200 mt-4"
-                  >
-                    <p className="break-words text-yellow-800 max-[480px]:text-sm">{challenge.hint}</p>
-                  </motion.div>
-                )}
-
-              </CardContent>
-            </Card>
-
-            <Card className="mb-8 w-full max-w-full border-2 border-purple-200 bg-white/90 backdrop-blur-sm">
-              <CardContent className="min-w-0 p-4 sm:p-6">
-                <div className="mb-6">
-                  <h3 className="break-words text-lg leading-snug text-black max-[480px]:text-base sm:text-xl">
-                    {challenge.question}
-                  </h3>
-
-                </div>
-
-
-
-                <div className="grid gap-3">
-                  {challenge.options.map((option, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Button
-                        onClick={() => handleAnswerSelect(index)}
-                        disabled={selectedAnswer !== null}
-                        variant="outline"
-                        className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
-                          ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-purple-300'
-                          : selectedAnswer === index
-                            ? 'bg-indigo-200 border-indigo-400 text-indigo-800'
-                            : 'bg-gray-100 border-gray-300 text-gray-500'
-                          }`}
-                      >
-                        <div className="flex items-start gap-3 text-left w-full">
-
-                          <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm">
-                            {String.fromCharCode(65 + index)}
-                          </div>
-                          <span className="flex-1 text-lg text-black max-[480px]:text-sm">{option}</span>
-
-                        </div>
-                      </Button>
-                    </motion.div>
-                  ))}
-                </div>
-                {timeExpired && (
-                  <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
-                    <p className="text-sm">Se acabó el tiempo, pero aún no se ha seleccionado ninguna respuesta. Elige una opción con clic para marcarla.</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <Card className="mb-6 border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+                <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                  <div className="mb-4">
+                    <AudioPlayer text={currentLevelData.text} onSpeakingChange={setIsSpeaking} />
                   </div>
-                )}
-                <div className="mt-4 flex justify-end">
+                  <div className="rounded-lg border-2 border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 text-lg leading-relaxed text-black max-[480px]:p-3 max-[480px]:text-sm">
+                    {currentLevelData.text}
+                  </div>
+
                   <Button
-                    onClick={nextChallenge}
-                    className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-xl"
+                    onClick={toggleHint}
+                    variant="outline"
+                    className="bg-yellow-100 border-yellow-300 text-yellow-700 hover:bg-yellow-200 mt-4"
                   >
-                    Siguiente
+                    <Lightbulb className="w-4 h-4 mr-2" />
+                    Pista
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
 
-          {showResult && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
+                  {showHint && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mb-4 p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200 mt-4"
+                    >
+                      <p className="break-words text-yellow-800 max-[480px]:text-sm">{challenge.hint}</p>
+                    </motion.div>
+                  )}
 
-
-
-
-              <Card className="bg-blue-50 border-2 border-blue-200 mt-4">
-                <CardContent className="p-6">
-                  <h4 className="text-lg mb-3 text-blue-800 flex items-center gap-2">
-                    <Brain className="w-5 h-5" />
-                    Explicación de la Inferencia:
-                  </h4>
-                  <p className="break-words leading-relaxed text-blue-700 max-[480px]:text-sm">
-                    {challenge.explanation}
-                  </p>
                 </CardContent>
               </Card>
-            </motion.div>
+
+              <Card className="mb-8 w-full max-w-full border-2 border-purple-200 bg-white/90 backdrop-blur-sm">
+                <CardContent className="min-w-0 p-4 sm:p-6">
+                  <div className="mb-6">
+                    <h3 className="break-words text-lg leading-snug text-black max-[480px]:text-base sm:text-xl">
+                      {challenge.question}
+                    </h3>
+
+                  </div>
+
+
+
+                  <div className="grid gap-3">
+                    {challenge.options.map((option, index) => (
+                      <motion.div
+                        key={index}
+                        whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <Button
+                          onClick={() => handleAnswerSelect(index)}
+                          disabled={selectedAnswer !== null}
+                          variant="outline"
+                          className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
+                            ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-purple-300'
+                            : selectedAnswer === index
+                              ? 'bg-indigo-200 border-indigo-400 text-indigo-800'
+                              : 'bg-gray-100 border-gray-300 text-gray-500'
+                            }`}
+                        >
+                          <div className="flex items-start gap-3 text-left w-full">
+
+                            <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm">
+                              {String.fromCharCode(65 + index)}
+                            </div>
+                            <span className="flex-1 text-lg text-black max-[480px]:text-sm">{option}</span>
+
+                          </div>
+                        </Button>
+                      </motion.div>
+                    ))}
+                  </div>
+                  {timeExpired && (
+                    <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+                      <p className="text-sm">Se acabó el tiempo, pero aún no se ha seleccionado ninguna respuesta. Elige una opción con clic para marcarla.</p>
+                    </div>
+                  )}
+                  <div className="mt-4 flex justify-end">
+                    <Button
+                      onClick={nextChallenge}
+                      className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-xl"
+                    >
+                      Siguiente
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {showResult && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+
+
+
+
+                <Card className="bg-blue-50 border-2 border-blue-200 mt-4">
+                  <CardContent className="p-6">
+                    <h4 className="text-lg mb-3 text-blue-800 flex items-center gap-2">
+                      <Brain className="w-5 h-5" />
+                      Explicación de la Inferencia:
+                    </h4>
+                    <p className="break-words leading-relaxed text-blue-700 max-[480px]:text-sm">
+                      {challenge.explanation}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </motion.div>
+
+          <RewardAnimation
+            type="star"
+            show={showReward}
+            message="¡Inferencia correcta!"
+            onComplete={() => setShowReward(false)}
+          />
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={challenges.reduce((sum, c) => sum + c.difficulty * 15, 0)}
+              customMessage="¡Has completado el nivel!"
+              customSubtitle="Resolviste todas las preguntas inferenciales"
+              celebrationText="¡Eres lo mejor!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
           )}
-        </motion.div>
 
-        <RewardAnimation
-          type="star"
-          show={showReward}
-          message="¡Inferencia correcta!"
-          onComplete={() => setShowReward(false)}
-        />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={challenges.reduce((sum, c) => sum + c.difficulty * 15, 0)}
-            customMessage="¡Has completado el nivel!"
-            customSubtitle="Resolviste todas las preguntas inferenciales"
-            celebrationText="¡Eres lo mejor!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL */}
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={challenges.reduce((sum, c) => sum + c.difficulty * 15, 0)}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={loadNextLevel}
-            onRestart={restartLevel}
-            onExit={onBack}
-          />
-        )}
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={challenges.reduce((sum, c) => sum + c.difficulty * 15, 0)}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={loadNextLevel}
+              onRestart={restartLevel}
+              onExit={onBack}
+            />
+          )}
+        </div>
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

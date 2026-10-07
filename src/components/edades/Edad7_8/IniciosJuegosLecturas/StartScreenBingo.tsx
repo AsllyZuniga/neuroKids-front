@@ -32,7 +32,6 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
 
   return (
     <div className="relative isolate min-h-screen min-h-[100dvh] overflow-x-hidden overflow-y-auto">
-      {/* Móvil: fondo_telefono; desde md: fondo.svg */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-0 block min-h-full bg-cover bg-center bg-no-repeat md:hidden"
@@ -43,7 +42,7 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
         className="pointer-events-none absolute inset-0 z-0 hidden min-h-full bg-cover bg-center bg-no-repeat md:block"
         style={{ backgroundImage: `url(${fondo})` }}
       />
-      {/* Botón volver */}
+
       <ButtonWithAudio
         onClick={onBack}
         variant="outline"
@@ -53,7 +52,6 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
         Volver
       </ButtonWithAudio>
 
-      {/* Decoraciones */}
       <motion.div
         className="absolute top-20 left-20 text-pink-500"
         animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
@@ -92,7 +90,7 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
 
       <div className="relative z-20 flex min-h-[100dvh] min-h-screen w-full flex-col items-center justify-center gap-6 px-4 pb-10 pt-20 text-center sm:gap-10 sm:px-6 sm:pt-24">
 
-        {/* Línea 1 */}
+   
         <div className="flex flex-wrap justify-center gap-2">
           {titleLine1.split("").map((letter, index) => (
             <motion.span
@@ -124,7 +122,7 @@ export function StartScreenBingo({ onStart, onBack }: StartScreenProps) {
           ))}
         </div>
 
-        {/* Línea 2 */}
+
         <div className="flex flex-wrap justify-center gap-2">
           {titleLine2.split("").map((letter, index) => (
             <motion.span

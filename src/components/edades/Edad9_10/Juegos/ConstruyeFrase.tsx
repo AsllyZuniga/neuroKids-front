@@ -18,11 +18,7 @@ import { isUserAuthenticated } from '../../../../hooks/useLevelLock';
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  gameLevelFinished,
-  gameLevelStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, gameLevelFinished, gameLevelStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import gato from '../../../../assets/9_10/construye_frase/1gatonegro.svg';
 import flores from '../../../../assets/9_10/construye_frase/2florescoloridas.svg';
@@ -125,7 +121,6 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   const [availableWords, setAvailableWords] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  // Eliminado levelComplete no utilizado tras refactors
   const [gameComplete, setGameComplete] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -138,7 +133,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   const [draggedWord, setDraggedWord] = useState<{ word: string; index: number } | null>(null);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(13); // Construye Frase
+  const activityConfig = getActivityByDbId(13);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -148,9 +143,8 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   const currentLevelData = levels.find(l => l.level === currentLevel);
   const challenges = currentLevelData?.challenges || [];
@@ -163,13 +157,12 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
       onBack();
       return;
     }
-    // Si el juego inicia en un nivel > 1 y no está autenticado, pedir inicio de sesión
+
     if (currentLevel > 1 && !isUserAuthenticated()) {
       navigate('/estudiante/login');
       return;
     }
     resetChallenge();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChallenge, currentLevel, currentLevelData, challenges.length, onBack]);
 
   const resetChallenge = () => {
@@ -197,15 +190,12 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
 
   const handleWordHover = (word: string) => {
     if (!isSpeechSupported()) return;
-    // Evita repetir la misma palabra si ya se habló muy recientemente
     if (lastSpokenRef.current === word) return;
     lastSpokenRef.current = word;
-    // Cancela hover anterior programado
     if (hoverTimeoutRef.current) {
       window.clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
     }
-    // Pequeño delay para evitar disparos accidentales al mover rápido el mouse
     hoverTimeoutRef.current = window.setTimeout(() => {
       stopSpeech();
       speakText(word, { rate: 0.9, pitch: 1.05 });
@@ -214,7 +204,6 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
 
   useEffect(() => {
     return () => {
-      // Limpieza al desmontar
       if (hoverTimeoutRef.current) {
         window.clearTimeout(hoverTimeoutRef.current);
       }
@@ -277,7 +266,6 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
     if (currentLevel < levels.length) {
       const next = currentLevel + 1;
       if (next >= 2 && !isUserAuthenticated()) {
-        // Solicitar inicio de sesión
         navigate('/estudiante/login');
         return;
       }
@@ -297,7 +285,7 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #ffedd5 0%, #fef9c3 50%, #fef3c7 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <ConfettiExplosion show={showReward} />
         <RewardAnimation type="confetti" show={showReward} />
 
@@ -330,232 +318,233 @@ export function ConstruyeFrase({ onBack, level: initialLevel }: ConstruyeFrasePr
           />
         </motion.div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
-          <div className="lg:col-span-1">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-yellow-200 mb-4">
-              <CardContent className="p-4 sm:p-6">
-                <div className="text-center mb-4">
-                  <Badge variant="secondary" className="mb-2 text-black">
-                    Tema: {challenge.theme}
-                  </Badge>
-                  <div className="mb-3 flex justify-center">
-                    {challenge.image?.startsWith("http") || challenge.image?.includes("/") ? (
-                      <img
-                        src={challenge.image}
-                        alt={challenge.theme}
-                        className="mx-auto h-auto max-h-48 w-full max-w-[200px] object-contain sm:max-h-52 sm:max-w-[220px]"
-                        draggable={false}
-                      />
-                    ) : (
-                      <span className="text-6xl">{challenge.image}</span>
-                    )}
-                  </div>
-
-
-                  <h3 className="text-lg text-gray-800">Desafío {currentChallenge + 1}</h3>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="text-sm text-gray-600">
-                    Dificultad: {Array.from({ length: currentLevel }, () => '⭐').join('')}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Palabras: {challenge.words?.length || 0}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Intentos: {attempts}
-                  </div>
-                </div>
-
-                <Button
-                  onClick={() => setShowHint(!showHint)}
-                  variant="outline"
-                  className="w-full mt-4 bg-purple-500"
-                >
-                  <Lightbulb className="w-4 h-4 mr-2" />
-                  {showHint ? 'Ocultar' : 'Ver'} Pista
-                </Button>
-
-                {showHint && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200"
-                  >
-                    <p className="text-yellow-800 text-sm">{challenge.hint}</p>
-                  </motion.div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Button
-              onClick={resetChallenge}
-              variant="outline"
-              className="w-full bg-green-500 backdrop-blur-sm"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reiniciar
-            </Button>
-          </div>
-
-          <div className="lg:col-span-2">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 mb-6">
-              <CardContent className="p-4 sm:p-6">
-                <h3 className="text-lg mb-4 text-gray-800 flex items-center gap-2">
-                  <Wrench className="w-5 h-5 text-orange-500" />
-                  Tu frase construida:
-                </h3>
-
-                <div
-                  className="min-h-[80px] p-4 bg-orange-50 rounded-lg border-2 border-orange-200 border-dashed"
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => {
-                    if (!draggedWord) return;
-                    addWordToSentence(draggedWord.word, draggedWord.index);
-                    setDraggedWord(null);
-                  }}
-                >
-
-                  {userSentence.length === 0 ? (
-                    <div className="text-gray-500 text-center py-4">
-                      Arrastra las palabras aquí para construir tu frase
-                    </div>
-                  ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {userSentence.map((word, index) => (
-                        <motion.div
-                          key={`sentence-${index}`}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="bg-orange-200 text-orange-800 px-3 py-2 rounded-lg cursor-pointer border-2 border-orange-300 hover:bg-orange-300 transition-colors"
-                          onClick={() => removeWordFromSentence(index)}
-                          onMouseEnter={() => handleWordHover(word)}
-                        >
-                          {word}
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="text-sm text-gray-600">
-                    Palabras usadas: {userSentence.length} / {challenge.words?.length || 0}
-                  </div>
-
-                  <Button
-                    onClick={checkSentence}
-                    disabled={userSentence.length !== (challenge.words?.length || 0) || showResult}
-                    className="min-h-11 w-full bg-green-500 text-white hover:bg-green-600 sm:w-auto"
-                  >
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Verificar Frase
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* PALABRAS DISPONIBLES */}
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-amber-200">
-              <CardContent className="p-4 sm:p-6">
-                <h3 className="text-lg mb-4 text-gray-800">Palabras disponibles:</h3>
-
-                <div className="flex flex-wrap gap-3">
-                  {availableWords.map((word, index) => (
-                    <motion.div
-                      key={`available-${index}`}
-                      draggable
-                      onDragStart={() => setDraggedWord({ word, index })}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="bg-amber-100 text-amber-800 px-4 py-3 rounded-lg cursor-grab border-2 border-amber-200 hover:bg-amber-200 transition-colors dyslexia-friendly"
-                      onClick={() => addWordToSentence(word, index)}
-                      onMouseEnter={() => handleWordHover(word)}
-                    >
-                      {word}
-                    </motion.div>
-                  ))}
-
-                </div>
-
-                {availableWords.length === 0 && !showResult && (
-                  <div className="text-center py-4 text-gray-500">
-                    ¡Todas las palabras han sido usadas!
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-
-            {showResult && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-6"
-              >
-                <Card className={`border-2 ${userSentence.join(' ') === challenge.correctSentence
-                  ? 'bg-green-50 border-green-300'
-                  : 'bg-red-50 border-red-300'
-                  }`}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      {userSentence.join(' ') === challenge.correctSentence ? (
-                        <>
-                          <CheckCircle className="w-5 h-5 text-green-600" />
-                          <span className="text-green-800">¡Frase correcta!</span>
-                        </>
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+            <div className="lg:col-span-1">
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-yellow-200 mb-4">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="text-center mb-4">
+                    <Badge variant="secondary" className="mb-2 text-black">
+                      Tema: {challenge.theme}
+                    </Badge>
+                    <div className="mb-3 flex justify-center">
+                      {challenge.image?.startsWith("http") || challenge.image?.includes("/") ? (
+                        <img
+                          src={challenge.image}
+                          alt={challenge.theme}
+                          className="mx-auto h-auto max-h-48 w-full max-w-[200px] object-contain sm:max-h-52 sm:max-w-[220px]"
+                          draggable={false}
+                        />
                       ) : (
-                        <span className="text-red-800">Intenta de nuevo.</span>
+                        <span className="text-6xl">{challenge.image}</span>
                       )}
                     </div>
 
-                    <div className="text-sm text-gray-700">
-                      <strong>Frase correcta:</strong> {challenge.correctSentence}
-                    </div>
 
-                    {userSentence.join(' ') !== challenge.correctSentence && (
-                      <div className="text-sm text-gray-700 mt-1">
-                        <strong>Tu frase:</strong> {userSentence.join(' ')}
+                    <h3 className="text-lg text-gray-800">Desafío {currentChallenge + 1}</h3>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="text-sm text-gray-600">
+                      Dificultad: {Array.from({ length: currentLevel }, () => '⭐').join('')}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Palabras: {challenge.words?.length || 0}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Intentos: {attempts}
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={() => setShowHint(!showHint)}
+                    variant="outline"
+                    className="w-full mt-4 bg-purple-500"
+                  >
+                    <Lightbulb className="w-4 h-4 mr-2" />
+                    {showHint ? 'Ocultar' : 'Ver'} Pista
+                  </Button>
+
+                  {showHint && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200"
+                    >
+                      <p className="text-yellow-800 text-sm">{challenge.hint}</p>
+                    </motion.div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Button
+                onClick={resetChallenge}
+                variant="outline"
+                className="w-full bg-green-500 backdrop-blur-sm"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reiniciar
+              </Button>
+            </div>
+
+            <div className="lg:col-span-2">
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 mb-6">
+                <CardContent className="p-4 sm:p-6">
+                  <h3 className="text-lg mb-4 text-gray-800 flex items-center gap-2">
+                    <Wrench className="w-5 h-5 text-orange-500" />
+                    Tu frase construida:
+                  </h3>
+
+                  <div
+                    className="min-h-[80px] p-4 bg-orange-50 rounded-lg border-2 border-orange-200 border-dashed"
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={() => {
+                      if (!draggedWord) return;
+                      addWordToSentence(draggedWord.word, draggedWord.index);
+                      setDraggedWord(null);
+                    }}
+                  >
+
+                    {userSentence.length === 0 ? (
+                      <div className="text-gray-500 text-center py-4">
+                        Arrastra las palabras aquí para construir tu frase
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {userSentence.map((word, index) => (
+                          <motion.div
+                            key={`sentence-${index}`}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-orange-200 text-orange-800 px-3 py-2 rounded-lg cursor-pointer border-2 border-orange-300 hover:bg-orange-300 transition-colors"
+                            onClick={() => removeWordFromSentence(index)}
+                            onMouseEnter={() => handleWordHover(word)}
+                          >
+                            {word}
+                          </motion.div>
+                        ))}
                       </div>
                     )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
+                  </div>
+
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="text-sm text-gray-600">
+                      Palabras usadas: {userSentence.length} / {challenge.words?.length || 0}
+                    </div>
+
+                    <Button
+                      onClick={checkSentence}
+                      disabled={userSentence.length !== (challenge.words?.length || 0) || showResult}
+                      className="min-h-11 w-full bg-green-500 text-white hover:bg-green-600 sm:w-auto"
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Verificar Frase
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-amber-200">
+                <CardContent className="p-4 sm:p-6">
+                  <h3 className="text-lg mb-4 text-gray-800">Palabras disponibles:</h3>
+
+                  <div className="flex flex-wrap gap-3">
+                    {availableWords.map((word, index) => (
+                      <motion.div
+                        key={`available-${index}`}
+                        draggable
+                        onDragStart={() => setDraggedWord({ word, index })}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-amber-100 text-amber-800 px-4 py-3 rounded-lg cursor-grab border-2 border-amber-200 hover:bg-amber-200 transition-colors dyslexia-friendly"
+                        onClick={() => addWordToSentence(word, index)}
+                        onMouseEnter={() => handleWordHover(word)}
+                      >
+                        {word}
+                      </motion.div>
+                    ))}
+
+                  </div>
+
+                  {availableWords.length === 0 && !showResult && (
+                    <div className="text-center py-4 text-gray-500">
+                      ¡Todas las palabras han sido usadas!
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+
+              {showResult && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6"
+                >
+                  <Card className={`border-2 ${userSentence.join(' ') === challenge.correctSentence
+                    ? 'bg-green-50 border-green-300'
+                    : 'bg-red-50 border-red-300'
+                    }`}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        {userSentence.join(' ') === challenge.correctSentence ? (
+                          <>
+                            <CheckCircle className="w-5 h-5 text-green-600" />
+                            <span className="text-green-800">¡Frase correcta!</span>
+                          </>
+                        ) : (
+                          <span className="text-red-800">Intenta de nuevo.</span>
+                        )}
+                      </div>
+
+                      <div className="text-sm text-gray-700">
+                        <strong>Frase correcta:</strong> {challenge.correctSentence}
+                      </div>
+
+                      {userSentence.join(' ') !== challenge.correctSentence && (
+                        <div className="text-sm text-gray-700 mt-1">
+                          <strong>Tu frase:</strong> {userSentence.join(' ')}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* MENSAJES DE MOTIVACIÓN */}
+        {showMotivational && (
+          <MotivationalMessage
+            score={score}
+            total={levels.reduce((acc, l) => acc + l.challenges.length, 0) * 30}
+            customMessage={gameComplete ? "¡Eres un arquitecto de palabras!" : "¡Nivel completado!"}
+            customSubtitle={gameComplete ? "Completaste todos los niveles con maestría" : "Construiste todas las frases con precisión"}
+            celebrationText="¡Felicitaciones!"
+            onComplete={() => {
+              setShowMotivational(false);
+              setShowLevelCompleteModal(true);
+            }}
+          />
+        )}
+
+
+        {showLevelCompleteModal && (
+          <LevelCompleteModal
+            score={score}
+            total={gameComplete ? levels.reduce((acc, l) => acc + l.challenges.length, 0) * 30 : challenges.length * 30}
+            level={currentLevel}
+            isLastLevel={currentLevel >= levels.length}
+            onNextLevel={nextLevel}
+            onRestart={restartLevel}
+            onExit={onBack}
+          />
+        )}
       </div>
-
-      {/* MODALES */}
-      {showMotivational && (
-        <MotivationalMessage
-          score={score}
-          total={levels.reduce((acc, l) => acc + l.challenges.length, 0) * 30}
-          customMessage={gameComplete ? "¡Eres un arquitecto de palabras!" : "¡Nivel completado!"}
-          customSubtitle={gameComplete ? "Completaste todos los niveles con maestría" : "Construiste todas las frases con precisión"}
-          celebrationText="¡Felicitaciones!"
-          onComplete={() => {
-            setShowMotivational(false);
-            setShowLevelCompleteModal(true);
-          }}
-        />
-      )}
-
-      {showLevelCompleteModal && (
-        <LevelCompleteModal
-          score={score}
-          total={gameComplete ? levels.reduce((acc, l) => acc + l.challenges.length, 0) * 30 : challenges.length * 30}
-          level={currentLevel}
-          isLastLevel={currentLevel >= levels.length}
-          onNextLevel={nextLevel}
-          onRestart={restartLevel}
-          onExit={onBack}
-        />
-      )}
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

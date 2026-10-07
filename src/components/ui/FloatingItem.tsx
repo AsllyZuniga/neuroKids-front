@@ -2,35 +2,21 @@ import { motion } from "framer-motion";
 import { useMemo, type ReactNode, type CSSProperties } from "react";
 
 interface FloatingItemProps {
-  /** Contenido: emoji, texto, icono, card, etc */
   children: ReactNode;
 
-  /** Posición inicial */
+
   x?: number | string;
   y?: number | string;
 
-  /** Tamaño tailwind: text-4xl, w-12, etc */
   size?: string;
-
-  /** Color opcional */
   color?: string;
-
-  /** Animación */
   delay?: number;
   duration?: number;
-
-  /** Distancia de flotado */
   floatY?: number;
   floatX?: number;
-
-  /** Rotación */
   rotate?: boolean;
-
-  /** Interacción */
   hover?: boolean;
   pointer?: boolean;
-
-  /** Estilos extra */
   style?: CSSProperties;
 }
 
@@ -61,9 +47,8 @@ export function FloatingItem({
 
   return (
     <motion.div
-      className={`absolute select-none ${
-        pointer ? "cursor-pointer" : "pointer-events-none"
-      } ${size}`}
+      className={`absolute select-none ${pointer ? "cursor-pointer" : "pointer-events-none"
+        } ${size}`}
       style={{ left: x, top: y, color, ...style }}
       initial={{ opacity: 0, scale: 0, y: 80 }}
       animate={{
@@ -83,9 +68,9 @@ export function FloatingItem({
       whileHover={
         hover
           ? {
-              scale: 1.3,
-              rotate: [0, 10, -10, 0],
-            }
+            scale: 1.3,
+            rotate: [0, 10, -10, 0],
+          }
           : undefined
       }
     >

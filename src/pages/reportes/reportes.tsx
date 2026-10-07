@@ -179,7 +179,6 @@ export default function Reportes() {
           setInstituciones(Array.isArray(list) ? list : []);
         }
       } catch {
-        // Silenciar error, el filtro quedarÃ¡ vacÃ­o
       }
     };
     fetchInstituciones();

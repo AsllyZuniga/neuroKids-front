@@ -15,7 +15,7 @@ export default function AgeCircle() {
   ];
 
   const handleClick = (route: string) => {
-    console.log('Navigating to:', route); // Debug log
+    console.log('Navigating to:', route); 
     navigate(route);
   };
 
@@ -23,7 +23,7 @@ export default function AgeCircle() {
     <div className="age-buttons">
       {buttons.map((btn) => (
         <div
-          key={btn.age} // Usar age como key único en lugar del índice
+          key={btn.age} 
           className="age-button"
           onClick={() => handleClick(btn.to)}
           role="button"

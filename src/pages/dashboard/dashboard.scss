@@ -1,6 +1,4 @@
-/* ===================== */
-/* DASHBOARD DESKTOP */
-/* ===================== */
+
 .dashboard-container {
   display: grid;
   min-height: 100dvh;
@@ -23,14 +21,12 @@ footer {
   gap: 2rem;
 }
 
-/* Vista móvil oculta por defecto */
+
 .dashboard-mobile {
   display: none;
 }
 
-/* ===================== */
-/* TABLET */
-/* ===================== */
+
 @media (max-width: 1024px) {
   .dashboard-container {
     grid-template-rows: auto 1fr auto;
@@ -50,9 +46,7 @@ footer {
   }
 }
 
-/* ===================== */
-/* MÓVIL / TABLET <=768px */
-/* ===================== */
+
 @media (max-width: 768px) {
   .dashboard-container {
     display: none;
@@ -348,10 +342,7 @@ footer {
   }
 }
 
-/* ===================== */
-/* RANGO INTERMEDIO */
-/* evita que desaparezca el texto */
-/* ===================== */
+
 @media (min-width: 481px) and (max-width: 768px) {
   .dashboard-mobile__greeting {
     font-size: 1.28rem;
@@ -393,9 +384,7 @@ footer {
   }
 }
 
-/* ===================== */
-/* LANDSCAPE */
-/* ===================== */
+
 @media (max-width: 768px) and (orientation: landscape) {
   .dashboard-mobile__header {
     padding: 0.45rem 0.85rem;
@@ -413,7 +402,7 @@ footer {
     min-height: calc(100dvh - 48px - 0.3rem);
   }
 
-  /* YA NO ocultamos clouds ni animales */
+
   .dashboard-mobile__clouds {
     display: block;
   }
@@ -475,9 +464,7 @@ footer {
   }
 }
 
-/* ===================== */
-/* MÓVIL pequeño <=480px */
-/* ===================== */
+
 @media (max-width: 480px) {
   .dashboard-mobile__logo {
     height: 38px;

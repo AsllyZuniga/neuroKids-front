@@ -15,11 +15,7 @@ import { StartScreenBiografiasSencillas } from '../IniciosJuegosLecturas/StartSc
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  readingLevelFinished,
-  readingStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, readingLevelFinished, readingStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import marie from '../../../../assets/11_12/biografias_sencillas/marieCurie.svg';
 import leonardo from '../../../../assets/11_12/biografias_sencillas/leonardoDaVinci.svg';
@@ -512,7 +508,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
   const [, setIsSpeaking] = useState(false);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(7); // Biografías Sencillas
+  const activityConfig = getActivityByDbId(7);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -657,63 +653,63 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
           />
 
           <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="mt-8"
-          >
-            <Card className="border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
-              <CardContent className="min-w-0 p-8 max-[480px]:p-4">
-                <h3 className="mb-6 break-words text-xl text-black max-[480px]:text-lg">{biography.quiz.question}</h3>
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="mt-8"
+            >
+              <Card className="border-2 border-indigo-200 bg-white/90 backdrop-blur-sm">
+                <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                  <h3 className="mb-6 break-words text-xl text-black max-[480px]:text-lg">{biography.quiz.question}</h3>
 
-                <div className="grid gap-4">
-                  {biography.quiz.options.map((option, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <Button
-                        onClick={() => handleQuizAnswer(index)}
-                        disabled={selectedAnswer !== null}
-                        variant="outline"
-                        className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
-                          ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-indigo-300'
-                          : selectedAnswer === index
-                            ? index === biography.quiz.correct
-                              ? 'bg-green-100 border-green-400 text-green-800'
-                              : 'bg-red-100 border-red-400 text-red-800'
-                            : index === biography.quiz.correct && selectedAnswer !== null
-                              ? 'bg-green-100 border-green-400 text-green-800'
-                              : 'bg-gray-100 border-gray-300 text-gray-500'
-                          }`}
+                  <div className="grid gap-4">
+                    {biography.quiz.options.map((option, index) => (
+                      <motion.div
+                        key={index}
+                        whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
+                        whileTap={{ scale: 0.98 }}
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm">
-                            {String.fromCharCode(65 + index)}
+                        <Button
+                          onClick={() => handleQuizAnswer(index)}
+                          disabled={selectedAnswer !== null}
+                          variant="outline"
+                          className={`h-auto w-full justify-start whitespace-normal break-words p-6 text-left max-[480px]:p-3 max-[480px]:text-sm ${selectedAnswer === null
+                            ? 'bg-white/80 hover:bg-white border-gray-200 hover:border-indigo-300'
+                            : selectedAnswer === index
+                              ? index === biography.quiz.correct
+                                ? 'bg-green-100 border-green-400 text-green-800'
+                                : 'bg-red-100 border-red-400 text-red-800'
+                              : index === biography.quiz.correct && selectedAnswer !== null
+                                ? 'bg-green-100 border-green-400 text-green-800'
+                                : 'bg-gray-100 border-gray-300 text-gray-500'
+                            }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm">
+                              {String.fromCharCode(65 + index)}
+                            </div>
+                            <span className="flex-1 text-lg text-black max-[480px]:text-sm">{option}</span>
+                            {selectedAnswer !== null && index === biography.quiz.correct && (
+                              <CheckCircle className="w-5 h-5 text-green-600" />
+                            )}
                           </div>
-                          <span className="flex-1 text-lg text-black max-[480px]:text-sm">{option}</span>
-                          {selectedAnswer !== null && index === biography.quiz.correct && (
-                            <CheckCircle className="w-5 h-5 text-green-600" />
-                          )}
-                        </div>
-                      </Button>
-                    </motion.div>
-                  ))}
-                </div>
+                        </Button>
+                      </motion.div>
+                    ))}
+                  </div>
 
-                {selectedAnswer !== null && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200"
-                  >
-                    <h4 className="mb-2 text-lg text-indigo-800 max-[480px]:text-base">Explicación:</h4>
-                    <p className="break-words text-indigo-700 max-[480px]:text-sm">{biography.quiz.explanation}</p>
-                  </motion.div>
-                )}
-              </CardContent>
-            </Card>
+                  {selectedAnswer !== null && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200"
+                    >
+                      <h4 className="mb-2 text-lg text-indigo-800 max-[480px]:text-base">Explicación:</h4>
+                      <p className="break-words text-indigo-700 max-[480px]:text-sm">{biography.quiz.explanation}</p>
+                    </motion.div>
+                  )}
+                </CardContent>
+              </Card>
             </motion.div>
           </div>
 
@@ -750,7 +746,7 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Biografías Sencillas`}
           level={currentLevel}
@@ -773,204 +769,201 @@ export function BiografiasSencillas({ onBack, level: initialLevel = 1 }: Biograf
           />
         </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          {/* Main Biography — en móvil va después de cronología/datos curiosos (order-2) */}
-          <div className="max-[480px]:order-2 lg:col-span-2">
-            <motion.div
-              key={currentBio}
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card className="mb-6 border-2 border-indigo-300 bg-white/90 backdrop-blur-sm">
-                <CardContent className="min-w-0 p-8 max-[480px]:p-4">
-                  <div className="mb-6 flex items-center gap-6 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-3 max-[480px]:text-center">
-                    <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full border-4 border-indigo-300 shadow-lg">
-                      <img src={biography.image} className="h-full w-full object-cover" alt="" />
-                    </div>
-                    <div className="min-w-0 flex-1 max-[480px]:w-full">
-                      <h2 className="mb-2 break-words text-3xl text-black max-[480px]:text-2xl">{biography.name}</h2>
-                      <p className="mb-3 break-words text-xl text-black max-[480px]:text-lg">{biography.title}</p>
-                      <div className="flex flex-wrap items-center gap-3 max-[480px]:justify-center sm:justify-start">
-                        <Badge className={`${getCategoryColor(biography.category)} border`}>
-                          {biography.category}
-                        </Badge>
-                        <div className="flex items-center gap-1 text-black">
-                          <Calendar className="w-4 h-4 text-purple-500" />
-                          <span>{biography.birthYear}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-black">
-                          <MapPin className="w-4 h-4 text-red-500" />
-                          <span>{biography.country}</span>
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="mt-6 grid gap-6 lg:grid-cols-3">
+            <div className="max-[480px]:order-2 lg:col-span-2">
+              <motion.div
+                key={currentBio}
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className="mb-6 border-2 border-indigo-300 bg-white/90 backdrop-blur-sm">
+                  <CardContent className="min-w-0 p-8 max-[480px]:p-4">
+                    <div className="mb-6 flex items-center gap-6 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-3 max-[480px]:text-center">
+                      <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full border-4 border-indigo-300 shadow-lg">
+                        <img src={biography.image} className="h-full w-full object-cover" alt="" />
+                      </div>
+                      <div className="min-w-0 flex-1 max-[480px]:w-full">
+                        <h2 className="mb-2 break-words text-3xl text-black max-[480px]:text-2xl">{biography.name}</h2>
+                        <p className="mb-3 break-words text-xl text-black max-[480px]:text-lg">{biography.title}</p>
+                        <div className="flex flex-wrap items-center gap-3 max-[480px]:justify-center sm:justify-start">
+                          <Badge className={`${getCategoryColor(biography.category)} border`}>
+                            {biography.category}
+                          </Badge>
+                          <div className="flex items-center gap-1 text-black">
+                            <Calendar className="w-4 h-4 text-purple-500" />
+                            <span>{biography.birthYear}</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-black">
+                            <MapPin className="w-4 h-4 text-red-500" />
+                            <span>{biography.country}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mb-6 rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4 max-[480px]:p-3">
-                    <div className="mb-2 flex items-center gap-2">
-                      <Award className="h-5 w-5 shrink-0 text-yellow-600" />
-                      <h3 className="text-lg text-yellow-800 max-[480px]:text-base">Principal Logro:</h3>
+                    <div className="mb-6 rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4 max-[480px]:p-3">
+                      <div className="mb-2 flex items-center gap-2">
+                        <Award className="h-5 w-5 shrink-0 text-yellow-600" />
+                        <h3 className="text-lg text-yellow-800 max-[480px]:text-base">Principal Logro:</h3>
+                      </div>
+                      <p className="break-words text-yellow-700 max-[480px]:text-sm">{biography.mainAchievement}</p>
                     </div>
-                    <p className="break-words text-yellow-700 max-[480px]:text-sm">{biography.mainAchievement}</p>
-                  </div>
 
-                  <div className="mb-6">
-                    <AudioPlayer text={biography.story} onSpeakingChange={setIsSpeaking} />
-                  </div>
-
-                  <div className="mb-6 rounded-lg border-2 border-indigo-200 bg-indigo-50 p-6 max-[480px]:p-3">
-                    <p className="break-words text-lg leading-relaxed text-black max-[480px]:text-sm">
-                      {biography.story}
-                    </p>
-                  </div>
-
-                  <div className="rounded-lg border-2 border-purple-300 bg-purple-100 p-4 max-[480px]:p-3">
-                    <div className="mb-2 flex items-center gap-2">
-                      <span className="text-2xl">💫</span>
-                      <h4 className="text-lg text-purple-800 max-[480px]:text-base">Inspiración:</h4>
+                    <div className="mb-6">
+                      <AudioPlayer text={biography.story} onSpeakingChange={setIsSpeaking} />
                     </div>
-                    <p className="break-words text-purple-700 max-[480px]:text-sm">"{biography.inspiration}"</p>
+
+                    <div className="mb-6 rounded-lg border-2 border-indigo-200 bg-indigo-50 p-6 max-[480px]:p-3">
+                      <p className="break-words text-lg leading-relaxed text-black max-[480px]:text-sm">
+                        {biography.story}
+                      </p>
+                    </div>
+
+                    <div className="rounded-lg border-2 border-purple-300 bg-purple-100 p-4 max-[480px]:p-3">
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className="text-2xl">💫</span>
+                        <h4 className="text-lg text-purple-800 max-[480px]:text-base">Inspiración:</h4>
+                      </div>
+                      <p className="break-words text-purple-700 max-[480px]:text-sm">"{biography.inspiration}"</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {!readBiographies.has(currentBio) && (
+                  <div className="text-center mb-6">
+                    <Button
+                      onClick={finishReading}
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white px-8 py-3 text-lg"
+                    >
+                      <Book className="w-5 h-5 mr-2" />
+                      Terminar de Leer
+                    </Button>
                   </div>
-                </CardContent>
-              </Card>
+                )}
+              </motion.div>
+            </div>
 
-              {!readBiographies.has(currentBio) && (
-                <div className="text-center mb-6">
-                  <Button
-                    onClick={finishReading}
-                    className="bg-indigo-500 hover:bg-indigo-600 text-white px-8 py-3 text-lg"
-                  >
-                    <Book className="w-5 h-5 mr-2" />
-                    Terminar de Leer
-                  </Button>
-                </div>
-              )}
-            </motion.div>
-          </div>
-
-
-          {/* Cronología y datos curiosos — en móvil arriba (order-1); dos columnas lado a lado solo en móvil */}
-          <div className="max-[480px]:order-1 lg:col-span-1">
-            <div className="flex flex-col gap-6 max-[480px]:grid max-[480px]:grid-cols-2 max-[480px]:gap-2 max-[480px]:items-stretch">
-              <Card className="min-w-0 border-2 border-green-300 bg-white/90 backdrop-blur-sm max-[480px]:h-full">
-                <CardContent className="min-w-0 p-6 max-[480px]:p-2 max-[480px]:pt-3">
-                  <h3 className="mb-4 flex items-center gap-1.5 text-lg text-black max-[480px]:mb-2 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-1 max-[480px]:text-center max-[480px]:text-[11px] max-[480px]:leading-tight">
-                    <Calendar className="h-5 w-5 shrink-0 text-green-500 max-[480px]:h-3.5 max-[480px]:w-3.5" />
-                    <span className="break-words">Cronología</span>
-                  </h3>
-                  <div className="space-y-4 max-[480px]:space-y-2">
-                    {biography.timeline.map((event, index) => (
-                      <div key={index} className="flex items-start gap-2 max-[480px]:gap-1">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500 text-sm text-white max-[480px]:h-5 max-[480px]:w-5 max-[480px]:text-[9px]">
-                          {event.age}
+            <div className="max-[480px]:order-1 lg:col-span-1">
+              <div className="flex flex-col gap-6 max-[480px]:grid max-[480px]:grid-cols-2 max-[480px]:gap-2 max-[480px]:items-stretch">
+                <Card className="min-w-0 border-2 border-green-300 bg-white/90 backdrop-blur-sm max-[480px]:h-full">
+                  <CardContent className="min-w-0 p-6 max-[480px]:p-2 max-[480px]:pt-3">
+                    <h3 className="mb-4 flex items-center gap-1.5 text-lg text-black max-[480px]:mb-2 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-1 max-[480px]:text-center max-[480px]:text-[11px] max-[480px]:leading-tight">
+                      <Calendar className="h-5 w-5 shrink-0 text-green-500 max-[480px]:h-3.5 max-[480px]:w-3.5" />
+                      <span className="break-words">Cronología</span>
+                    </h3>
+                    <div className="space-y-4 max-[480px]:space-y-2">
+                      {biography.timeline.map((event, index) => (
+                        <div key={index} className="flex items-start gap-2 max-[480px]:gap-1">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500 text-sm text-white max-[480px]:h-5 max-[480px]:w-5 max-[480px]:text-[9px]">
+                            {event.age}
+                          </div>
+                          <p className="min-w-0 break-words text-sm text-black max-[480px]:text-[10px] max-[480px]:leading-snug">
+                            {event.event}
+                          </p>
                         </div>
-                        <p className="min-w-0 break-words text-sm text-black max-[480px]:text-[10px] max-[480px]:leading-snug">
-                          {event.event}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
 
-              <Card className="min-w-0 border-2 border-orange-300 bg-white/90 backdrop-blur-sm max-[480px]:h-full">
-                <CardContent className="min-w-0 p-6 max-[480px]:p-2 max-[480px]:pt-3">
-                  <h3 className="mb-4 flex items-center gap-1.5 text-lg text-black max-[480px]:mb-2 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-1 max-[480px]:text-center max-[480px]:text-[11px] max-[480px]:leading-tight">
-                    <span className="text-orange-500 max-[480px]:text-sm">🤔</span>
-                    <span className="break-words">Datos curiosos</span>
-                  </h3>
-                  <div className="space-y-3 max-[480px]:space-y-1.5">
-                    {biography.funFacts.map((fact, index) => (
-                      <div
-                        key={index}
-                        className="rounded-lg border border-orange-200 bg-orange-50 p-3 max-[480px]:p-1.5"
-                      >
-                        <p className="break-words text-sm text-orange-800 max-[480px]:text-[10px] max-[480px]:leading-snug">
-                          {fact}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                <Card className="min-w-0 border-2 border-orange-300 bg-white/90 backdrop-blur-sm max-[480px]:h-full">
+                  <CardContent className="min-w-0 p-6 max-[480px]:p-2 max-[480px]:pt-3">
+                    <h3 className="mb-4 flex items-center gap-1.5 text-lg text-black max-[480px]:mb-2 max-[480px]:flex-col max-[480px]:items-center max-[480px]:gap-1 max-[480px]:text-center max-[480px]:text-[11px] max-[480px]:leading-tight">
+                      <span className="text-orange-500 max-[480px]:text-sm">🤔</span>
+                      <span className="break-words">Datos curiosos</span>
+                    </h3>
+                    <div className="space-y-3 max-[480px]:space-y-1.5">
+                      {biography.funFacts.map((fact, index) => (
+                        <div
+                          key={index}
+                          className="rounded-lg border border-orange-200 bg-orange-50 p-3 max-[480px]:p-1.5"
+                        >
+                          <p className="break-words text-sm text-orange-800 max-[480px]:text-[10px] max-[480px]:leading-snug">
+                            {fact}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
-        </div>
 
 
-        <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <Button
-            onClick={previousBiography}
-            disabled={currentBio === 0}
-            variant="outline"
-            className="order-2 min-h-11 w-full bg-white/80 backdrop-blur-sm sm:order-1 sm:w-auto"
-          >
-            <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
-            Anterior
-          </Button>
+          <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+            <Button
+              onClick={previousBiography}
+              disabled={currentBio === 0}
+              variant="outline"
+              className="order-2 min-h-11 w-full bg-white/80 backdrop-blur-sm sm:order-1 sm:w-auto"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
+              Anterior
+            </Button>
 
-          <div className="order-1 flex max-w-full flex-wrap justify-center gap-1.5 overflow-x-auto px-1 py-1 sm:order-2 sm:max-w-[min(100%,14rem)] sm:gap-2 md:max-w-none">
-            {biographies.map((_, index) => (
-              <div
-                key={index}
-                className={`h-2.5 shrink-0 rounded-full transition-colors sm:h-3 ${index === currentBio
-                  ? 'w-7 bg-indigo-500 sm:w-8'
-                  : readBiographies.has(index)
-                    ? 'w-2.5 bg-green-400 sm:w-3'
-                    : 'w-2.5 bg-gray-300 sm:w-3'
-                  }`}
-              />
-            ))}
+            <div className="order-1 flex max-w-full flex-wrap justify-center gap-1.5 overflow-x-auto px-1 py-1 sm:order-2 sm:max-w-[min(100%,14rem)] sm:gap-2 md:max-w-none">
+              {biographies.map((_, index) => (
+                <div
+                  key={index}
+                  className={`h-2.5 shrink-0 rounded-full transition-colors sm:h-3 ${index === currentBio
+                    ? 'w-7 bg-indigo-500 sm:w-8'
+                    : readBiographies.has(index)
+                      ? 'w-2.5 bg-green-400 sm:w-3'
+                      : 'w-2.5 bg-gray-300 sm:w-3'
+                    }`}
+                />
+              ))}
+            </div>
+
+            <Button
+              onClick={nextBiography}
+              disabled={currentBio === biographies.length - 1 || !readBiographies.has(currentBio)}
+              className="order-3 min-h-11 w-full bg-indigo-500 text-white hover:bg-indigo-600 sm:w-auto"
+            >
+              {currentBio === biographies.length - 1 ? "Finalizar Nivel" : "Siguiente"}
+              <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
+            </Button>
           </div>
 
-          <Button
-            onClick={nextBiography}
-            disabled={currentBio === biographies.length - 1 || !readBiographies.has(currentBio)}
-            className="order-3 min-h-11 w-full bg-indigo-500 text-white hover:bg-indigo-600 sm:w-auto"
-          >
-            {currentBio === biographies.length - 1 ? "Finalizar Nivel" : "Siguiente"}
-            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
-          </Button>
+          <RewardAnimation
+            type="star"
+            show={showReward}
+            message="¡Respuesta correcta!"
+            onComplete={() => setShowReward(false)}
+          />
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={maxPoints}
+              customMessage="¡Has conocido vidas inspiradoras!"
+              customSubtitle="Completaste todas las lecturas del nivel"
+              celebrationText="¡Excelente lector!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL */}
+          {levelComplete && !showMotivational && (
+            <LevelCompleteModal
+              score={score}
+              total={maxPoints}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={loadNextLevel}
+              onRestart={restartLevel}
+              onExit={onBack}
+            />
+          )}
         </div>
-
-        <RewardAnimation
-          type="star"
-          show={showReward}
-          message="¡Respuesta correcta!"
-          onComplete={() => setShowReward(false)}
-        />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={maxPoints}
-            customMessage="¡Has conocido vidas inspiradoras!"
-            customSubtitle="Completaste todas las lecturas del nivel"
-            celebrationText="¡Excelente lector!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL */}
-        {levelComplete && !showMotivational && (
-          <LevelCompleteModal
-            score={score}
-            total={maxPoints}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={loadNextLevel}
-            onRestart={restartLevel}
-            onExit={onBack}
-          />
-        )}
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

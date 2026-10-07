@@ -8,20 +8,20 @@ interface AudioPlayerProps {
   duration?: number;
   onPlay?: () => void;
   onEnd?: () => void;
-    onSpeakingChange?: (value: boolean) => void; 
+  onSpeakingChange?: (value: boolean) => void;
   className?: string;
   disabled?: boolean;
   autoPlay?: boolean;
   voice?: 'child' | 'adult' | 'robot';
-  
+
 }
 
-export function AudioPlayer({ 
-  text = "", 
-  duration, 
-  onPlay, 
-  onEnd, 
-  onSpeakingChange, 
+export function AudioPlayer({
+  text = "",
+  duration,
+  onPlay,
+  onEnd,
+  onSpeakingChange,
   className = "",
   disabled = false,
   voice = 'child'
@@ -32,12 +32,12 @@ export function AudioPlayer({
   const calculateDuration = (text: string) => {
     const words = text.split(' ').length;
     const wordsPerMinute = voice === 'child' ? 100 : voice === 'adult' ? 130 : 80;
-    const baseDuration = Math.max((words / wordsPerMinute) * 60000, 2000); 
+    const baseDuration = Math.max((words / wordsPerMinute) * 60000, 2000);
     const sentences = text.split(/[.!?]/).length;
     const pauseTime = sentences * 300;
     return baseDuration + pauseTime;
   };
-  
+
   const audioDuration = duration || calculateDuration(text);
 
   const handlePlay = () => {
@@ -45,43 +45,42 @@ export function AudioPlayer({
     if (isPlaying) {
       setIsPlaying(false);
       setProgress(0);
-      stopSpeech(); // Detener la voz si está hablando
-      onSpeakingChange?.(false);  
+      stopSpeech();
+      onSpeakingChange?.(false);
     } else {
       setIsPlaying(true);
       setProgress(0);
-      // Iniciar la lectura del texto con voz (siempre usa 'child' que es compatible)
       speakText(text, { voiceType: 'child' });
-      onSpeakingChange?.(true); 
+      onSpeakingChange?.(true);
     }
   };
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | undefined;
-    
+
     if (isPlaying) {
       if (onPlay) {
         onPlay();
       }
-      
+
       const startTime = Date.now();
-      
+
       interval = setInterval(() => {
         const elapsed = Date.now() - startTime;
         const progressPercent = Math.min((elapsed / audioDuration) * 100, 100);
         setProgress(progressPercent);
-        
+
         if (progressPercent >= 100) {
           setIsPlaying(false);
           setProgress(0);
           if (onEnd) {
             onEnd();
-             onSpeakingChange?.(false);
+            onSpeakingChange?.(false);
           }
         }
       }, 50);
     }
-    
+
     return () => {
       if (interval) {
         clearInterval(interval);
@@ -97,7 +96,7 @@ export function AudioPlayer({
       default: return 'bg-blue-500 hover:bg-blue-600';
     }
   };
-  
+
   const getVoiceLabel = () => {
     switch (voice) {
       case 'child': return 'Escuchar';
@@ -121,16 +120,15 @@ export function AudioPlayer({
         )}
         {isPlaying ? 'Pausar' : getVoiceLabel()}
       </Button>
-      
+
       {isPlaying && (
         <div className="flex items-center gap-2 flex-1 max-w-48">
           <div className="flex-1 bg-gray-200 rounded-full h-2 overflow-hidden">
-            <div 
-              className={`h-full transition-all duration-75 ease-linear ${
-                voice === 'child' ? 'bg-purple-500' :
-                voice === 'adult' ? 'bg-blue-500' :
-                'bg-green-500'
-              }`}
+            <div
+              className={`h-full transition-all duration-75 ease-linear ${voice === 'child' ? 'bg-purple-500' :
+                  voice === 'adult' ? 'bg-blue-500' :
+                    'bg-green-500'
+                }`}
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -139,8 +137,8 @@ export function AudioPlayer({
           </span>
         </div>
       )}
-      
-      
+
+
     </div>
   );
 }

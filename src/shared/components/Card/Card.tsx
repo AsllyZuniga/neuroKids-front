@@ -7,7 +7,7 @@ interface CardProps {
   footer?: React.ReactNode;
   variant?: "default" | "outlined" | "shadow";
   className?: string;
-  onClick?: () => void; // 👈 nueva propiedad para hacerla clicable
+  onClick?: () => void; 
 }
 
 const Card: React.FC<CardProps> = ({
@@ -22,7 +22,7 @@ const Card: React.FC<CardProps> = ({
     <div
       className={`card card--${variant} ${className} ${onClick ? "card--clickable" : ""}`}
       onClick={onClick}
-      style={{ cursor: onClick ? "pointer" : "default" }} // 👈 cambia el cursor
+      style={{ cursor: onClick ? "pointer" : "default" }} 
     >
       {title && <div className="card__header">{title}</div>}
       <div className="card__body">{children}</div>

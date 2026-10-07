@@ -13,11 +13,7 @@ import { StartScreenLaberintoLector } from "../IniciosJuegosLecturas/StartScreen
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  gameLevelFinished,
-  gameLevelStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, gameLevelFinished, gameLevelStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface LaberintoLectorProps {
@@ -148,7 +144,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(14); // Laberinto Lector
+  const activityConfig = getActivityByDbId(14);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -158,9 +154,8 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   const totalObjectives = totalTreasures + totalQuestions;
   const completedObjectives = treasuresFound + questionsAnsweredCount;
@@ -367,7 +362,7 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #d1fae5 0%, #ccfbf1 50%, #dbeafe 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Laberinto Lector`}
           level={currentLevel}
@@ -396,189 +391,189 @@ export function LaberintoLector({ onBack, level }: LaberintoLectorProps) {
           />
         </motion.div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-teal-200 mb-4">
-              <CardContent className="p-6">
-                <h3 className="text-lg mb-4 text-black flex items-center gap-2">
-                  <Navigation className="w-5 h-5 text-teal-500" />
-                  Controles
-                </h3>
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  <div></div>
-                  <Button onClick={() => movePlayer('up')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80  text-black" disabled={showQuestion}>↑</Button>
-                  <div></div>
-                  <Button onClick={() => movePlayer('left')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80 text-black" disabled={showQuestion}>←</Button>
-                  <div className="h-12 bg-gray-100 rounded border-2 border-gray-200 flex items-center justify-center text-2xl">🧭</div>
-                  <Button onClick={() => movePlayer('right')} variant="outline" className="h-12 border-2 border-gray-200  bg-white/80 text-black" disabled={showQuestion}>→</Button>
-                  <div></div>
-                  <Button onClick={() => movePlayer('down')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80 text-black" disabled={showQuestion}>↓</Button>
-                  <div></div>
-                </div>
-                <div className="text-sm text-black space-y-2">
-                  <div className="flex items-center gap-2"><div className="w-4 h-4 bg-green-400 rounded"></div><span>Camino</span></div>
-                  <div className="flex items-center gap-2"><div className="w-4 h-4 bg-blue-400 rounded"></div><span>Pregunta</span></div>
-                  <div className="flex items-center gap-2"><div className="w-4 h-4 bg-yellow-400 rounded"></div><span>Tesoro</span></div>
-                  <div className="flex items-center gap-2"><div className="w-4 h-4 bg-red-400 rounded"></div><span>Meta</span></div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="lg:col-span-2">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-emerald-200">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Flag className="w-5 h-5 text-emerald-500" />
-                  <h3 className="text-lg text-black">Laberinto</h3>
-                </div>
-                <div className={`grid gap-1 mx-auto`} style={{ gridTemplateColumns: `repeat(${maze[0]?.length || 8}, minmax(0, 1fr))`, maxWidth: maze[0]?.length > 8 ? '800px' : '100%' }}>
-                  {maze.map((row, rowIndex) =>
-                    row.map((cell, colIndex) => {
-                      const isPlayer = playerPosition.row === rowIndex && playerPosition.col === colIndex;
-                      let cellClass = `${maze[0]?.length > 8 ? 'w-6 h-6' : 'w-8 h-8'} flex items-center justify-center text-xs transition-all duration-200 border rounded`;
-                      let content: string | JSX.Element = "";
-                      switch (cell.type) {
-                        case 'wall':
-                          cellClass += " bg-gray-800 border-gray-700 shadow-inner relative overflow-hidden";
-                          content = (
-                            <motion.div
-                              initial={{ y: -4 }}
-                              animate={{ y: [0, -2, 0] }}
-                              transition={{ duration: 1.5, repeat: Infinity }}
-                              className="w-full h-full bg-gray-900"
-                            />
-                          );
-                          break;
-
-                        case 'path': case 'start': cellClass += cell.visited ? " bg-green-200 border-green-300" : " bg-green-100 border-green-200"; break;
-                        case 'question': cellClass += cell.visited ? " bg-blue-200 border-blue-300" : " bg-blue-100 border-blue-200"; content = "❓"; break;
-                        case 'treasure': cellClass += cell.visited ? " bg-yellow-200 border-yellow-300" : " bg-yellow-100 border-yellow-200"; content = cell.visited ? "✔️" : (cell.treasureInfo?.emoji || "💎"); break;
-                        case 'finish': cellClass += " bg-red-100 border-red-200"; content = "🏁"; break;
-                      }
-                      return (
-                        <motion.div key={`${rowIndex}-${colIndex}`} className={cellClass} animate={isPlayer ? { scale: [1, 1.2, 1] } : {}}>
-                          {isPlayer ? "🚶" : content}
-                        </motion.div>
-                      );
-                    })
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {showQuestion && currentQuestion && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <motion.div initial={{ scale: 0.8, y: 50 }} animate={{ scale: 1, y: 0 }} className="max-w-lg w-full">
-              <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 border-4 border-blue-400">
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-1">
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-teal-200 mb-4">
                 <CardContent className="p-6">
-                  <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 2, repeat: Infinity }}><Book className="h-6 w-6 shrink-0 text-blue-500" /></motion.div>
-                      <h3 className="text-lg text-black sm:text-xl"> 🤔 Pregunta del Laberinto</h3>
-                    </div>
-                    <motion.div animate={{ scale: [1, 1.1, 1] }} className="w-fit shrink-0 self-start rounded-full bg-blue-500 px-3 py-1 text-white sm:self-center">
-                      <span className="text-sm">+{currentQuestion.points} pts</span>
-                    </motion.div>
+                  <h3 className="text-lg mb-4 text-black flex items-center gap-2">
+                    <Navigation className="w-5 h-5 text-teal-500" />
+                    Controles
+                  </h3>
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div></div>
+                    <Button onClick={() => movePlayer('up')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80  text-black" disabled={showQuestion}>↑</Button>
+                    <div></div>
+                    <Button onClick={() => movePlayer('left')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80 text-black" disabled={showQuestion}>←</Button>
+                    <div className="h-12 bg-gray-100 rounded border-2 border-gray-200 flex items-center justify-center text-2xl">🧭</div>
+                    <Button onClick={() => movePlayer('right')} variant="outline" className="h-12 border-2 border-gray-200  bg-white/80 text-black" disabled={showQuestion}>→</Button>
+                    <div></div>
+                    <Button onClick={() => movePlayer('down')} variant="outline" className="h-12 border-2 border-gray-200 bg-white/80 text-black" disabled={showQuestion}>↓</Button>
+                    <div></div>
                   </div>
-                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 p-4 bg-white/80 rounded-lg border-2 border-blue-200">
-                    <p className="text-black text-lg">{currentQuestion.text}</p>
-                  </motion.div>
-                  <div className="space-y-3">
-                    {currentQuestion.options.map((option: string, index: number) => (
-                      <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }}>
-                        <Button onClick={() => handleQuestionAnswer(index)} disabled={questionAnswered} variant={questionAnswered ? (index === currentQuestion.correct ? "default" : "outline") : "outline"}
-                          className={`w-full justify-start p-4 text-left text-black ${questionAnswered ? (index === currentQuestion.correct ? "bg-green-500 text-white" : "opacity-50") : "bg-white/90 hover:bg-white"}`}>
-                          <span className="mr-3 font-bold">{String.fromCharCode(65 + index)}.</span>{option}
-                        </Button>
-                      </motion.div>
-                    ))}
+                  <div className="text-sm text-black space-y-2">
+                    <div className="flex items-center gap-2"><div className="w-4 h-4 bg-green-400 rounded"></div><span>Camino</span></div>
+                    <div className="flex items-center gap-2"><div className="w-4 h-4 bg-blue-400 rounded"></div><span>Pregunta</span></div>
+                    <div className="flex items-center gap-2"><div className="w-4 h-4 bg-yellow-400 rounded"></div><span>Tesoro</span></div>
+                    <div className="flex items-center gap-2"><div className="w-4 h-4 bg-red-400 rounded"></div><span>Meta</span></div>
                   </div>
-                  {questionAnswered && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-6 p-4 bg-blue-100 rounded-lg border-2 border-blue-300">
-                      <div className="flex items-start gap-2">
-                        <div className="text-2xl">💡</div>
-                        <div>
-                          <div className="text-black font-semibold mb-1">Explicación:</div>
-                          <p className="text-black">{currentQuestion.explanation}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
                 </CardContent>
               </Card>
-            </motion.div>
-          </motion.div>
-        )}
-
-        <RewardAnimation type="star" show={showReward} />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={finalScore}
-            total={1000}
-            customMessage="¡Eres un explorador increíble!"
-            customSubtitle="¡Completaste el laberinto!"
-            celebrationText="¡Eres lo máximo!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL */}
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={finalScore}
-            total={1000}
-            level={currentLevel}
-            isLastLevel={currentLevel >= 3}
-            onNextLevel={handleNextLevel}
-            onRestart={handleRepeatLevel}
-            onExit={onBack}
-          />
-        )}
-        {showFinishWarning && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center"
-          >
-            <div className="bg-white/90 backdrop-blur-md px-6 py-4 rounded-xl shadow-xl text-center text-lg font-bold text-purple-700">
-              🧭 ¡Aún no terminamos!
-              <br />
-              Recorre todo el camino y encuentra los tesoros y preguntas.
             </div>
-          </motion.div>
-        )}
 
-        {showTreasureModal && currentTreasure && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <motion.div initial={{ scale: 0.5, y: 50 }} animate={{ scale: 1, y: 0 }} className="max-w-sm w-full">
-              <Card className="bg-gradient-to-br from-yellow-100 to-orange-100 border-4 border-yellow-400">
-                <CardContent className="p-8 text-center">
-                  <motion.div animate={{ scale: [1, 1.2, 1, 1.1, 1], rotate: [0, 10, -10, 5, 0] }} className="text-6xl mb-4">{currentTreasure.emoji}</motion.div>
-                  <motion.h3 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-2xl mb-2 text-black">¡Tesoro Encontrado!</motion.h3>
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                    <div className="text-xl text-black mb-1">{currentTreasure.name}</div>
-                    <div className="text-lg text-black">+{currentTreasure.points} puntos</div>
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}>
-                    <Button onClick={() => setShowTreasureModal(false)} className="bg-yellow-500 hover:bg-yellow-600 text-white mt-4">¡Continuar!</Button>
-                  </motion.div>
+            <div className="lg:col-span-2">
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-emerald-200">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Flag className="w-5 h-5 text-emerald-500" />
+                    <h3 className="text-lg text-black">Laberinto</h3>
+                  </div>
+                  <div className={`grid gap-1 mx-auto`} style={{ gridTemplateColumns: `repeat(${maze[0]?.length || 8}, minmax(0, 1fr))`, maxWidth: maze[0]?.length > 8 ? '800px' : '100%' }}>
+                    {maze.map((row, rowIndex) =>
+                      row.map((cell, colIndex) => {
+                        const isPlayer = playerPosition.row === rowIndex && playerPosition.col === colIndex;
+                        let cellClass = `${maze[0]?.length > 8 ? 'w-6 h-6' : 'w-8 h-8'} flex items-center justify-center text-xs transition-all duration-200 border rounded`;
+                        let content: string | JSX.Element = "";
+                        switch (cell.type) {
+                          case 'wall':
+                            cellClass += " bg-gray-800 border-gray-700 shadow-inner relative overflow-hidden";
+                            content = (
+                              <motion.div
+                                initial={{ y: -4 }}
+                                animate={{ y: [0, -2, 0] }}
+                                transition={{ duration: 1.5, repeat: Infinity }}
+                                className="w-full h-full bg-gray-900"
+                              />
+                            );
+                            break;
+
+                          case 'path': case 'start': cellClass += cell.visited ? " bg-green-200 border-green-300" : " bg-green-100 border-green-200"; break;
+                          case 'question': cellClass += cell.visited ? " bg-blue-200 border-blue-300" : " bg-blue-100 border-blue-200"; content = "❓"; break;
+                          case 'treasure': cellClass += cell.visited ? " bg-yellow-200 border-yellow-300" : " bg-yellow-100 border-yellow-200"; content = cell.visited ? "✔️" : (cell.treasureInfo?.emoji || "💎"); break;
+                          case 'finish': cellClass += " bg-red-100 border-red-200"; content = "🏁"; break;
+                        }
+                        return (
+                          <motion.div key={`${rowIndex}-${colIndex}`} className={cellClass} animate={isPlayer ? { scale: [1, 1.2, 1] } : {}}>
+                            {isPlayer ? "🚶" : content}
+                          </motion.div>
+                        );
+                      })
+                    )}
+                  </div>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+
+          {showQuestion && currentQuestion && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+              <motion.div initial={{ scale: 0.8, y: 50 }} animate={{ scale: 1, y: 0 }} className="max-w-lg w-full">
+                <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 border-4 border-blue-400">
+                  <CardContent className="p-6">
+                    <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 2, repeat: Infinity }}><Book className="h-6 w-6 shrink-0 text-blue-500" /></motion.div>
+                        <h3 className="text-lg text-black sm:text-xl"> 🤔 Pregunta del Laberinto</h3>
+                      </div>
+                      <motion.div animate={{ scale: [1, 1.1, 1] }} className="w-fit shrink-0 self-start rounded-full bg-blue-500 px-3 py-1 text-white sm:self-center">
+                        <span className="text-sm">+{currentQuestion.points} pts</span>
+                      </motion.div>
+                    </div>
+                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-6 p-4 bg-white/80 rounded-lg border-2 border-blue-200">
+                      <p className="text-black text-lg">{currentQuestion.text}</p>
+                    </motion.div>
+                    <div className="space-y-3">
+                      {currentQuestion.options.map((option: string, index: number) => (
+                        <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }}>
+                          <Button onClick={() => handleQuestionAnswer(index)} disabled={questionAnswered} variant={questionAnswered ? (index === currentQuestion.correct ? "default" : "outline") : "outline"}
+                            className={`w-full justify-start p-4 text-left text-black ${questionAnswered ? (index === currentQuestion.correct ? "bg-green-500 text-white" : "opacity-50") : "bg-white/90 hover:bg-white"}`}>
+                            <span className="mr-3 font-bold">{String.fromCharCode(65 + index)}.</span>{option}
+                          </Button>
+                        </motion.div>
+                      ))}
+                    </div>
+                    {questionAnswered && (
+                      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-6 p-4 bg-blue-100 rounded-lg border-2 border-blue-300">
+                        <div className="flex items-start gap-2">
+                          <div className="text-2xl">💡</div>
+                          <div>
+                            <div className="text-black font-semibold mb-1">Explicación:</div>
+                            <p className="text-black">{currentQuestion.explanation}</p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
+          )}
+
+          <RewardAnimation type="star" show={showReward} />
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={finalScore}
+              total={1000}
+              customMessage="¡Eres un explorador increíble!"
+              customSubtitle="¡Completaste el laberinto!"
+              celebrationText="¡Eres lo máximo!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={finalScore}
+              total={1000}
+              level={currentLevel}
+              isLastLevel={currentLevel >= 3}
+              onNextLevel={handleNextLevel}
+              onRestart={handleRepeatLevel}
+              onExit={onBack}
+            />
+          )}
+          {showFinishWarning && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center"
+            >
+              <div className="bg-white/90 backdrop-blur-md px-6 py-4 rounded-xl shadow-xl text-center text-lg font-bold text-purple-700">
+                🧭 ¡Aún no terminamos!
+                <br />
+                Recorre todo el camino y encuentra los tesoros y preguntas.
+              </div>
+            </motion.div>
+          )}
+
+          {showTreasureModal && currentTreasure && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+              <motion.div initial={{ scale: 0.5, y: 50 }} animate={{ scale: 1, y: 0 }} className="max-w-sm w-full">
+                <Card className="bg-gradient-to-br from-yellow-100 to-orange-100 border-4 border-yellow-400">
+                  <CardContent className="p-8 text-center">
+                    <motion.div animate={{ scale: [1, 1.2, 1, 1.1, 1], rotate: [0, 10, -10, 5, 0] }} className="text-6xl mb-4">{currentTreasure.emoji}</motion.div>
+                    <motion.h3 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-2xl mb-2 text-black">¡Tesoro Encontrado!</motion.h3>
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                      <div className="text-xl text-black mb-1">{currentTreasure.name}</div>
+                      <div className="text-lg text-black">+{currentTreasure.points} puntos</div>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}>
+                      <Button onClick={() => setShowTreasureModal(false)} className="bg-yellow-500 hover:bg-yellow-600 text-white mt-4">¡Continuar!</Button>
+                    </motion.div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </motion.div>
+          )}
+        </div>
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

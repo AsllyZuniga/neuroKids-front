@@ -64,7 +64,6 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
         <div className="mb-8 text-center">
           <div className="mb-10 text-center">
             <div className="flex flex-col items-center gap-2">
-              {/* LINEA 1 */}
               <div className="flex justify-center gap-2">
                 {letters1.map((letter, index) => (
                   <motion.span
@@ -90,7 +89,7 @@ export function StartScreenOrdenaHistoria({ onStart, onBack }: StartScreenOrdena
                 ))}
               </div>
 
-              {/* LINEA 2 */}
+
               <div className="flex justify-center gap-2">
                 {letters2.map((letter, index) => (
                   <motion.span

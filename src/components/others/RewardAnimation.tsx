@@ -4,7 +4,7 @@ import { Star, Rocket, Award, Sparkles } from 'lucide-react';
 interface RewardAnimationProps {
   type: 'star' | 'rocket' | 'medal' | 'confetti' | 'magic' | 'emoji' | 'points' | 'correct';
   show: boolean;
-  message?: string; 
+  message?: string;
   onComplete?: () => void;
 }
 

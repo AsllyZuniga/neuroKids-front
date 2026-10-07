@@ -51,45 +51,45 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
       </Button>
 
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-      {floatingElements.map((element, index) => (
-        <motion.div
-          key={index}
-          className="absolute"
-          style={{ left: element.x, top: element.y }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ 
-            opacity: 0.6, 
-            scale: 1,
-            y: [0, -20, 0],
-          }}
-          transition={{
-            opacity: { delay: element.delay, duration: 0.8 },
-            scale: { delay: element.delay, duration: 0.8 },
-            y: {
-              delay: element.delay + 0.8,
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }
-          }}
-        >
-          {element.type === 'book' && (
-            <Book className="w-12 h-12 text-indigo-300" strokeWidth={1.5} />
-          )}
-          {element.type === 'diamond' && (
-            <Gem className="w-10 h-10 text-pink-300" strokeWidth={1.5} />
-          )}
-          {element.type === 'emoji' && (
-            <span className="text-4xl">{element.emoji}</span>
-          )}
-          {element.type === 'maze' && (
-            <div className="w-16 h-16 border-4 border-purple-300 rounded-lg relative">
-              <div className="absolute top-0 left-0 w-full h-1/2 border-r-4 border-purple-300"></div>
-              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 border-t-4 border-purple-300"></div>
-            </div>
-          )}
-        </motion.div>
-      ))}
+        {floatingElements.map((element, index) => (
+          <motion.div
+            key={index}
+            className="absolute"
+            style={{ left: element.x, top: element.y }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{
+              opacity: 0.6,
+              scale: 1,
+              y: [0, -20, 0],
+            }}
+            transition={{
+              opacity: { delay: element.delay, duration: 0.8 },
+              scale: { delay: element.delay, duration: 0.8 },
+              y: {
+                delay: element.delay + 0.8,
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }
+            }}
+          >
+            {element.type === 'book' && (
+              <Book className="w-12 h-12 text-indigo-300" strokeWidth={1.5} />
+            )}
+            {element.type === 'diamond' && (
+              <Gem className="w-10 h-10 text-pink-300" strokeWidth={1.5} />
+            )}
+            {element.type === 'emoji' && (
+              <span className="text-4xl">{element.emoji}</span>
+            )}
+            {element.type === 'maze' && (
+              <div className="w-16 h-16 border-4 border-purple-300 rounded-lg relative">
+                <div className="absolute top-0 left-0 w-full h-1/2 border-r-4 border-purple-300"></div>
+                <div className="absolute bottom-0 right-0 w-1/2 h-1/2 border-t-4 border-purple-300"></div>
+              </div>
+            )}
+          </motion.div>
+        ))}
       </div>
       <div className="relative z-20 flex min-h-screen flex-col items-center justify-center px-4">
         <motion.div
@@ -108,7 +108,7 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
             <motion.span
               key={index}
               className="inline-block max-[480px]:text-xl text-2xl text-transparent bg-clip-text bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-400 sm:text-4xl md:text-6xl"
-              style={{ 
+              style={{
                 textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
               }}
               initial={{ opacity: 0, y: -50, rotate: -10 }}
@@ -150,7 +150,7 @@ export function StartScreenLaberintoLector({ onStart, onBack }: StartScreenLaber
           </Button>
         </motion.div>
 
-        
+
       </div>
 
       <div className="absolute inset-0 pointer-events-none">

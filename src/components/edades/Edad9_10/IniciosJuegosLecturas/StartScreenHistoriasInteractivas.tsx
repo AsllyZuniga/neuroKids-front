@@ -93,15 +93,15 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
           className="flex justify-center mb-8"
         >
           <div className="relative">
-            
-         
+
+
           </div>
         </motion.div>
 
         <div className="mb-8 text-center">
           <div className="flex flex-col items-center gap-2">
 
-            {/* LINEA 1 */}
+
             <div className="flex justify-center gap-2">
               {letters1.map((letter, index) => (
                 <motion.span
@@ -127,7 +127,7 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
               ))}
             </div>
 
-            {/* LINEA 2 */}
+
             <div className="flex justify-center gap-2">
               {letters2.map((letter, index) => (
                 <motion.span
@@ -157,7 +157,7 @@ export function StartScreenHistoriasInteractivas({ onStart, onBack }: StartScree
         </div>
 
 
- 
+
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}

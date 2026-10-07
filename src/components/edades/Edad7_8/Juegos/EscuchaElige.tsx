@@ -124,7 +124,7 @@ const levelQuestions: Record<number, Question[]> = {
       soundLabel: "Reproducir sonido"
     },
     {
-      id: 2, 
+      id: 2,
       audio: relojAudio,
       options: ["⏰ Reloj", "🎞️ Camára", "📻 Radio", "🔔 Campanilla"],
       correct: 0,
@@ -172,7 +172,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   const [showLevelComplete, setShowLevelComplete] = useState(false);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(12); // Escucha y Elige (juego)
+  const activityConfig = getActivityByDbId(12);
   const { getElapsedSeconds } = useActivityTimer([localLevel]);
 
   const guardarInicioNivel = () => {
@@ -182,17 +182,15 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
     console.log('🔄 EscuchaElige - Ejecutando useEffect, nivel:', localLevel);
     guardarInicioNivel();
-  }, [localLevel, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+  }, [localLevel, activityConfig, saveProgress]);
 
   const currentQ = questions[currentQuestion];
   const totalQuestions = questions.length;
   const baseProgress = (currentQuestion / totalQuestions) * 100;
   const incrementPerCorrect = 100 / totalQuestions;
 
-  // Reinicia estado del juego (estable: no depende de audio para evitar reinicios inesperados)
   const restartGame = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -211,7 +209,6 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   }, []);
 
   useEffect(() => {
-    // Solo reinicia cuando cambia el nivel
     restartGame();
   }, [localLevel, restartGame]);
 
@@ -282,7 +279,7 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
     }, 2000);
   };
 
-  // (restartGame ya definido con useCallback arriba)
+
 
   const handleNextLevel = async () => {
     if (activityConfig && gameComplete) {
@@ -316,124 +313,123 @@ export function EscuchaElige({ onBack, level: initialLevel, onNextLevel }: Escuc
   return (
     <LevelLock level={localLevel} isLocked={isLevelLocked}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #f79facff 0%, #87CEEB 100%)">
-    <div
-      className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8"
-    >
-      <RewardAnimation type="star" show={showReward} />
-
-      {/* HEADER */}
-      <GameHeader
-        title="Escucha y Elige"
-        level={localLevel}
-        score={score}
-        onBack={onBack}
-        onRestart={restartGame}
-      />
-
-      {/* PROGRESS BAR */}
-      <ProgressBar
-        current={currentQuestion + 1}
-        total={totalQuestions}
-        progress={currentProgress}
-        className="mb-6"
-      />
-
-      {/* ANIMAL GUIDE */}
-      <div className="mb-6">
-        <AnimalGuide
-          animal="monkey"
-          message="¡Escucha atentamente el sonido y elige la respuesta correcta!"
-        />
-      </div>
-
-      {/* JUEGO */}
-      {!gameComplete && !showMotivational && !showLevelComplete && (
-        <motion.div
-          key={currentQuestion}
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 gap-4 md:grid-cols-2 sm:gap-8"
+        <div
+          className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8"
         >
-          {/* BOTÓN DE SONIDO */}
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 flex items-center justify-center">
-            <CardContent className="p-4 sm:p-6">
-              <ButtonWithAudio
-                onClick={playAudio}
-                playOnClick
-                playOnHover
-                disabled={isPlaying}
-                audioText={currentQ.soundLabel}
-                className="bg-orange-500 hover:bg-orange-600 text-white text-base sm:text-xl px-4 py-4 sm:px-10 sm:py-6 w-full min-h-[3rem] sm:min-h-0"
-              >
-                <Volume2 className="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3 shrink-0" />
-                {isPlaying ? "Reproduciendo..." : currentQ.soundLabel}
-              </ButtonWithAudio>
-            </CardContent>
-          </Card>
+          <RewardAnimation type="star" show={showReward} />
 
-          {/* OPCIONES */}
-          <div className="space-y-4">
-            {currentQ.options.map((option, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Card
-                  className={`cursor-pointer transition-all border-2 p-3 sm:p-4 text-base sm:text-lg min-h-[3rem] flex items-center
-                  ${selectedAnswer === null
-                      ? 'bg-white hover:bg-orange-50 border-gray-200 hover:border-orange-300 text-black'
-                      : selectedAnswer === index
-                        ? index === currentQ.correct
-                          ? 'bg-green-100 border-green-500 shadow-lg text-black'
-                          : 'bg-red-100 border-red-500 text-black'
-                        : index === currentQ.correct
-                          ? 'bg-green-100 border-green-500 shadow-lg text-black'
-                          : 'bg-gray-100 border-gray-300 text-black'
-                    }`}
-                  onClick={() => handleAnswerSelect(index)}
-                  onMouseEnter={() => { if (canSpeakOnHover()) speakText(option.replace(/^[^\p{L}\p{N}]+/u, ''), { voiceType: 'child' }); }}
-                  onFocus={() => { if (canSpeakOnHover()) speakText(option.replace(/^[^\p{L}\p{N}]+/u, ''), { voiceType: 'child' }); }}
-                >
-                  <CardContent className="p-0">
-                    {option}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+          {/* HEADER */}
+          <GameHeader
+            title="Escucha y Elige"
+            level={localLevel}
+            score={score}
+            onBack={onBack}
+            onRestart={restartGame}
+          />
+
+          {/* PROGRESS BAR */}
+          <ProgressBar
+            current={currentQuestion + 1}
+            total={totalQuestions}
+            progress={currentProgress}
+            className="mb-6"
+          />
+
+          {/* ANIMAL GUIDE */}
+          <div className="mb-6">
+            <AnimalGuide
+              animal="monkey"
+              message="¡Escucha atentamente el sonido y elige la respuesta correcta!"
+            />
           </div>
-        </motion.div>
-      )}
 
-      {/* MENSAJE MOTIVACIONAL */}
-      {showMotivational && (
-        <MotivationalMessage
-          score={correctAnswers}
-          total={totalQuestions}
-          customMessage="¡Excelente oído! ¡Eres un genio del sonido!"
-          customSubtitle="Escuchaste y elegiste con precisión"
-          celebrationText="¡Eres increíble!"
-          onComplete={() => {
-            setShowMotivational(false);
-            setShowLevelComplete(true);
-          }}
-        />
-      )}
+          {/* JUEGO */}
+          {!gameComplete && !showMotivational && !showLevelComplete && (
+            <motion.div
+              key={currentQuestion}
+              initial={{ x: 100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="mx-auto grid w-full min-w-0 max-w-7xl grid-cols-1 gap-4 md:grid-cols-2 sm:gap-8"
+            >
+              <Card className="bg-white/90 backdrop-blur-sm border-2 border-orange-200 flex items-center justify-center">
+                <CardContent className="p-4 sm:p-6">
+                  <ButtonWithAudio
+                    onClick={playAudio}
+                    playOnClick
+                    playOnHover
+                    disabled={isPlaying}
+                    audioText={currentQ.soundLabel}
+                    className="bg-orange-500 hover:bg-orange-600 text-white text-base sm:text-xl px-4 py-4 sm:px-10 sm:py-6 w-full min-h-[3rem] sm:min-h-0"
+                  >
+                    <Volume2 className="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3 shrink-0" />
+                    {isPlaying ? "Reproduciendo..." : currentQ.soundLabel}
+                  </ButtonWithAudio>
+                </CardContent>
+              </Card>
 
-      {/* MODAL FINAL */}
-      {showLevelComplete && (
-        <LevelCompleteModal
-          score={score}
-          total={totalQuestions}
-          level={localLevel}
-          isLastLevel={localLevel >= 3}
-          onNextLevel={handleNextLevel}
-          onRestart={restartGame}
-          onExit={onBack}
-        />
-      )}
-    </div>
-    </AccessibilitySettingsWrapper>
+              {/* OPCIONES */}
+              <div className="space-y-4">
+                {currentQ.options.map((option, index) => (
+                  <motion.div
+                    key={index}
+                    whileHover={{ scale: selectedAnswer === null ? 1.02 : 1 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Card
+                      className={`cursor-pointer transition-all border-2 p-3 sm:p-4 text-base sm:text-lg min-h-[3rem] flex items-center
+                  ${selectedAnswer === null
+                          ? 'bg-white hover:bg-orange-50 border-gray-200 hover:border-orange-300 text-black'
+                          : selectedAnswer === index
+                            ? index === currentQ.correct
+                              ? 'bg-green-100 border-green-500 shadow-lg text-black'
+                              : 'bg-red-100 border-red-500 text-black'
+                            : index === currentQ.correct
+                              ? 'bg-green-100 border-green-500 shadow-lg text-black'
+                              : 'bg-gray-100 border-gray-300 text-black'
+                        }`}
+                      onClick={() => handleAnswerSelect(index)}
+                      onMouseEnter={() => { if (canSpeakOnHover()) speakText(option.replace(/^[^\p{L}\p{N}]+/u, ''), { voiceType: 'child' }); }}
+                      onFocus={() => { if (canSpeakOnHover()) speakText(option.replace(/^[^\p{L}\p{N}]+/u, ''), { voiceType: 'child' }); }}
+                    >
+                      <CardContent className="p-0">
+                        {option}
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={correctAnswers}
+              total={totalQuestions}
+              customMessage="¡Excelente oído! ¡Eres un genio del sonido!"
+              customSubtitle="Escuchaste y elegiste con precisión"
+              celebrationText="¡Eres increíble!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={totalQuestions}
+              level={localLevel}
+              isLastLevel={localLevel >= 3}
+              onNextLevel={handleNextLevel}
+              onRestart={restartGame}
+              onExit={onBack}
+            />
+          )}
+        </div>
+      </AccessibilitySettingsWrapper>
     </LevelLock>
   );
 }

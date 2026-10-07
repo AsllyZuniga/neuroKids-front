@@ -138,20 +138,14 @@ export default function TeacherWelcome() {
   };
 
   const handleViewStudents = () => {
-    // TODO: Implementar página de gestión de estudiantes
     navigate("/estudiantes");
   };
 
   const handleViewReports = () => {
-    // TODO: Implementar página de reportes
+
     navigate("/reportes");
   };
 
-
-  // const handleManageReadings = () => {
-  //   // TODO: Implementar página de gestión de lecturas
-  //   navigate("/lecturas");
-  // };
 
   if (!teacher) {
     return <div className="loading">Cargando...</div>;
@@ -234,24 +228,6 @@ export default function TeacherWelcome() {
               />
             </Card>
 
-
-
-            {/* <Card className="teacher-welcome__card teacher-welcome__card--quaternary">
-              <div className="teacher-welcome__card-icon">
-                <img src="/avatars/lecturas.svg" alt="Lecturas" />
-              </div>
-              <h3 className="teacher-welcome__card-title">Lecturas</h3>
-              <p className="teacher-welcome__card-description">
-                Administra el contenido de lectura disponible
-              </p>
-              <Button
-                label="Gestionar Lecturas"
-                variant="secondary"
-                size="large"
-                onClick={handleManageReadings}
-                className="teacher-welcome__card-button"
-              />
-            </Card> */}
           </div>
         </div>
 

@@ -36,9 +36,8 @@ export function StartScreenCuentoPictogramas({
         style={{ backgroundImage: `url(${fondo})` }}
       />
 
-      {/* CAPA DE FONDO (imágenes + emojis flotantes) */}
       <div className="absolute inset-0 z-0 opacity-80">
-        {/* Emojis flotantes */}
+
         {floatingEmojis.map((emoji, index) => (
           <FloatingItem
             key={index}
@@ -59,7 +58,7 @@ export function StartScreenCuentoPictogramas({
 
       </div>
 
-      {/* CAPA DE CONTENIDO PRINCIPAL (centrada, encima de todo) */}
+
       <div className="relative z-20 flex min-h-[100dvh] min-h-screen flex-col items-center justify-center px-4 pb-10 pt-20 sm:px-6 sm:pt-24">
         {/* Botón Volver */}
         <div className="absolute top-4 left-4 z-[100] pointer-events-auto">
@@ -75,7 +74,6 @@ export function StartScreenCuentoPictogramas({
           </ButtonWithAudio>
         </div>
 
-        {/* Ícono principal */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -101,14 +99,14 @@ export function StartScreenCuentoPictogramas({
           </div>
         </motion.div>
 
-        {/* Título */}
+
         <div className="mb-12 md:mb-14">
           <div className="max-[480px]:text-2xl text-3xl sm:text-4xl md:text-5xl text-[#FF6B9D]">
             <AnimatedText text="Cuentos con pictogramas" />
           </div>
         </div>
 
-        {/* Botón principal */}
+
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}

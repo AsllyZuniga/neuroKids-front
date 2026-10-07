@@ -11,12 +11,12 @@ interface GameHeaderProps {
   onRestart: () => void;
 }
 
-export function GameHeader({ 
-  title, 
-  level, 
-  score, 
-  onBack, 
-  onRestart 
+export function GameHeader({
+  title,
+  level,
+  score,
+  onBack,
+  onRestart
 }: GameHeaderProps) {
 
 

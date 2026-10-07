@@ -51,7 +51,7 @@ export function StartScreenConstruyeFrase({
         Volver
       </Button>
 
-      {/* 🌟 Floating syllables */}
+
       <div className="absolute inset-0">
         {syllables.map((s, index) => (
           <FloatingItem

@@ -67,7 +67,6 @@ export default function Docentes() {
         list.forEach((i) => (map[i.id] = i.nombre));
         setInstitucionesMap(map);
       } catch {
-        // ignore
       }
     };
 

@@ -15,7 +15,7 @@
     max-width: 100%;
   }
 
-  // Menú Lateral
+
   &__sidebar {
     width: 280px;
     background: white;
@@ -35,14 +35,14 @@
       font-weight: 700;
       color: #1e293b;
       margin: 0.5rem 0 0.25rem;
-      min-height: 1.5rem; // Evita que colapse
+      min-height: 1.5rem; 
     }
 
     &-subtitle {
       font-size: 0.875rem;
       color: #64748b;
       margin: 0;
-      min-height: 1rem; // Evita que colapse
+      min-height: 1rem; 
     }
 
     &-nav {
@@ -66,7 +66,7 @@
       transition: all 0.2s;
       margin-bottom: 0.5rem;
 
-      /* Evita que el SVG colapse (p. ej. “Personalización” + sidebar estrecho) */
+
       svg {
         flex-shrink: 0;
         min-width: 1.25rem;
@@ -117,7 +117,7 @@
     }
   }
 
-  // Contenido Principal
+
   &__main {
     flex: 1;
     min-width: 0;
@@ -161,7 +161,7 @@
     }
   }
 
-  // Mapa Interactivo
+ 
   &__map-container {
     position: relative;
     width: 100%;
@@ -319,7 +319,7 @@
   }
 }
 
-/* ——— Diseño panel tipo Figma (sin archivos extra) ——— */
+
 .student-welcome--figma {
   transition: background 0.45s ease;
 
@@ -547,7 +547,7 @@
     border: 2px solid #e2e8f0;
   }
 
-  /* Mapa solo lectura: camino en serpiente / zigzag, sin abrir juegos */
+  
   .student-welcome__map-container--snake {
     height: auto;
     min-height: 340px;
@@ -809,7 +809,7 @@
     }
   }
 
-  /* Mi progreso */
+ 
   .student-welcome__progreso {
     max-width: 1100px;
     margin: 0 auto;
@@ -1123,7 +1123,7 @@
     font-size: 0.88rem;
   }
 
-  /* Personalización */
+
   .student-welcome__perso {
     max-width: 820px;
     margin: 0 auto;
@@ -1437,7 +1437,7 @@
       max-width: 100%;
     }
 
-    /* Barra lateral blanca: mismo ancho que el diseño base; altura hasta el borde inferior de la ventana */
+
     .student-welcome__sidebar--figma {
       position: sticky;
       top: 5rem;
@@ -1462,7 +1462,7 @@
       box-sizing: border-box;
     }
 
-    /* Mapa: sin desplazamientos heredados de móvil */
+
     .student-welcome__map-container--snake {
       transform: none;
     }
@@ -1498,7 +1498,7 @@
   }
 }
 
-/* Solo teléfono (≤480px): mapa / márgenes — no afecta tablet ni escritorio */
+
 @media (max-width: 480px) {
   .student-welcome {
     &__main {
@@ -1516,7 +1516,7 @@
   }
 
   .student-welcome--figma {
-    /* Puntos, lecturas, juegos, rachas… en 2 columnas (ahorra altura) */
+    
     .student-welcome__figma-stats {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.5rem;
@@ -1551,7 +1551,7 @@
       font-size: 1.05rem;
     }
 
-    /* Mapa completo visible (sin scroll interno); sin transform — escritorio/tablet intactos */
+    
     .student-welcome__map-container--snake {
       height: auto !important;
       max-height: none !important;
@@ -1589,7 +1589,7 @@
   }
 }
 
-// Estilos del Modal de Insignia
+
 .confetti-container {
   position: fixed;
   top: 0;
@@ -1747,7 +1747,7 @@
   opacity: 1 !important;
   visibility: visible !important;
 
-  // Evitar que las animaciones interfieran
+
   animation: none !important;
   transform: none !important;
 }

@@ -3,21 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Select from "@radix-ui/react-select";
 import { ReportAnalysisTabContent } from "./ReportAnalysisTabContent";
-import {
-  X,
-  ChevronDown,
-  BookOpen,
-  Headphones,
-  Clock,
-  CheckCircle,
-  XCircle,
-  BarChart,
-  Trophy,
-  Gamepad2,
-  Calendar,
-  Layers,
-  History,
-} from "lucide-react";
+import { X, ChevronDown, BookOpen, Headphones, Clock, CheckCircle, XCircle, BarChart, Trophy, Gamepad2, Calendar, Layers, History, } from "lucide-react";
 
 type DetalleActividad = {
   actividad_id: number;
@@ -108,7 +94,6 @@ function formatDate(d: string | null): string {
   }
 }
 
-/** Fecha y hora local del servidor (ISO) para el historial de accesos a la plataforma */
 function formatAccesoParts(fechaHora: string | null): { fecha: string; hora: string } {
   if (!fechaHora) return { fecha: "-", hora: "-" };
   try {
@@ -472,7 +457,7 @@ export function ReportDetailsModal({
               </Tabs.List>
 
               <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain">
-                {/* Pestaña Lecturas */}
+
                 <Tabs.Content value="lecturas" className="p-4 sm:p-6 focus:outline-none">
                   <div className="mb-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -763,9 +748,8 @@ export function ReportDetailsModal({
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-4">
                                 <div
-                                  className={`w-2 h-2 rounded-full ${
-                                    session.completado ? "bg-green-500" : "bg-yellow-500"
-                                  }`}
+                                  className={`w-2 h-2 rounded-full ${session.completado ? "bg-green-500" : "bg-yellow-500"
+                                    }`}
                                 />
                                 <div>
                                   <p className="text-sm">{formatDate(session.fecha)}</p>
@@ -776,11 +760,10 @@ export function ReportDetailsModal({
                                 </div>
                               </div>
                               <span
-                                className={`px-3 py-1 rounded-full text-xs ${
-                                  session.completado
+                                className={`px-3 py-1 rounded-full text-xs ${session.completado
                                     ? "bg-green-100 text-green-700"
                                     : "bg-yellow-100 text-yellow-700"
-                                }`}
+                                  }`}
                               >
                                 {session.completado ? "Completada" : "Incompleta"}
                               </span>
@@ -814,7 +797,7 @@ export function ReportDetailsModal({
                   </div>
                 </Tabs.Content>
 
-                {/* Pestaña Juegos */}
+
                 <Tabs.Content value="juegos" className="p-4 sm:p-6 focus:outline-none">
                   <div className="mb-6 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -839,15 +822,15 @@ export function ReportDetailsModal({
                           <Select.Portal>
                             <Select.Content className="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-[1100]">
                               <Select.Viewport className="p-1">
-{catalogoJuegos.map((g) => (
-                                <Select.Item
-                                  key={g.id}
-                                  value={g.id.toString()}
-                                  className="px-4 py-3 cursor-pointer hover:bg-purple-50 rounded-md outline-none"
-                                >
-                                  <Select.ItemText>{g.nombre}</Select.ItemText>
-                                </Select.Item>
-                              ))}
+                                {catalogoJuegos.map((g) => (
+                                  <Select.Item
+                                    key={g.id}
+                                    value={g.id.toString()}
+                                    className="px-4 py-3 cursor-pointer hover:bg-purple-50 rounded-md outline-none"
+                                  >
+                                    <Select.ItemText>{g.nombre}</Select.ItemText>
+                                  </Select.Item>
+                                ))}
                               </Select.Viewport>
                             </Select.Content>
                           </Select.Portal>
@@ -1123,7 +1106,7 @@ export function ReportDetailsModal({
                   </div>
                 </Tabs.Content>
 
-                {/* Pestaña Insignias */}
+
                 <Tabs.Content value="insignias" className="p-4 sm:p-6 focus:outline-none">
                   <h3 className="text-xl mb-4 flex items-center gap-2">
                     <Trophy className="text-purple-600" size={24} />
@@ -1133,17 +1116,15 @@ export function ReportDetailsModal({
                     {badgesFormatted.map((badge) => (
                       <div
                         key={badge.id}
-                        className={`rounded-xl p-6 border-2 ${
-                          badge.unlocked
+                        className={`rounded-xl p-6 border-2 ${badge.unlocked
                             ? "bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-300"
                             : "bg-gray-50 border-gray-200 opacity-60"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-start gap-4">
                           <div
-                            className={`p-3 rounded-full ${
-                              badge.unlocked ? "bg-yellow-400" : "bg-gray-300"
-                            }`}
+                            className={`p-3 rounded-full ${badge.unlocked ? "bg-yellow-400" : "bg-gray-300"
+                              }`}
                           >
                             <Trophy
                               size={32}
@@ -1178,11 +1159,10 @@ export function ReportDetailsModal({
                         <div
                           className="bg-gradient-to-r from-purple-600 to-blue-600 h-full transition-all"
                           style={{
-                            width: `${
-                              badgesFormatted.length > 0
+                            width: `${badgesFormatted.length > 0
                                 ? (unlockedCount / badgesFormatted.length) * 100
                                 : 0
-                            }%`,
+                              }%`,
                           }}
                         />
                       </div>

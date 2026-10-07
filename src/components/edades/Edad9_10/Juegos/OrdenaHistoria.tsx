@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from "framer-motion";
-import {  RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
+import { RotateCcw, CheckCircle, AlertCircle } from 'lucide-react';
 import { ButtonWithAudio } from '../../../ui/ButtonWithAudio';
 import { Card, CardContent } from '../../../ui/card';
 import { AnimalGuide } from '../../../others/AnimalGuide';
@@ -15,11 +15,7 @@ import { speakText, canSpeakOnHover } from '../../../../utils/textToSpeech';
 import { useProgress } from '../../../../hooks/useProgress';
 import { useActivityTimer } from '@/hooks/useActivityTimer';
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  gameLevelFinished,
-  gameLevelStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, gameLevelFinished, gameLevelStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 
 interface OrdenaHistoriaProps {
@@ -66,7 +62,7 @@ const levels: Level[] = [
           { id: 3, text: "Vieron primero a los leones.", correctOrder: 3 },
           { id: 4, text: "Luego alimentaron a las jirafas.", correctOrder: 4 },
           { id: 5, text: "Regresaron a casa con fotos y recuerdos felices.", correctOrder: 5 }
-          
+
         ]
       },
       {
@@ -194,7 +190,7 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
   const [showLevelComplete, setShowLevelComplete] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  const activityConfig = getActivityByDbId(15); // Ordena Historia
+  const activityConfig = getActivityByDbId(15);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -204,9 +200,8 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia el juego, sin importar si ya jugó antes
     guardarInicioNivel();
-  }, [currentLevel]); // Se ejecuta cada vez que cambia el nivel o al montar el componente
+  }, [currentLevel]);
 
   const initializeStory = useCallback(() => {
     const currentStory = levels[currentLevel - 1].stories[currentStoryIndex];
@@ -221,9 +216,9 @@ export function OrdenaHistoria({ onBack }: OrdenaHistoriaProps) {
     initializeStory();
   }, [initializeStory]);
 
-const handleDragStart = (fragment: StoryFragment) => {
-  setDraggedFragment(fragment);
-};
+  const handleDragStart = (fragment: StoryFragment) => {
+    setDraggedFragment(fragment);
+  };
 
 
 
@@ -231,41 +226,40 @@ const handleDragStart = (fragment: StoryFragment) => {
     e.preventDefault();
   };
 
-const handleDrop = (e: React.DragEvent, position?: number) => {
-  e.preventDefault();
-  if (!draggedFragment) return;
+  const handleDrop = (e: React.DragEvent, position?: number) => {
+    e.preventDefault();
+    if (!draggedFragment) return;
 
-  setUserOrder(prev => {
-    const newOrder = [...prev];
-    const fromIndex = newOrder.findIndex(f => f.id === draggedFragment.id);
+    setUserOrder(prev => {
+      const newOrder = [...prev];
+      const fromIndex = newOrder.findIndex(f => f.id === draggedFragment.id);
 
-    // 👉 VIENE DESDE FRAGMENTS → SIEMPRE AL FINAL
-    if (fromIndex === -1) {
-      newOrder.push(draggedFragment);
-    } 
-    // 👉 VIENE DESDE USERORDER → REORDENAR
-    else {
-      newOrder.splice(fromIndex, 1);
-      const insertIndex = position === undefined ? newOrder.length : position;
-      newOrder.splice(insertIndex, 0, draggedFragment);
-    }
+      if (fromIndex === -1) {
+        newOrder.push(draggedFragment);
+      }
 
-    return newOrder;
-  });
+      else {
+        newOrder.splice(fromIndex, 1);
+        const insertIndex = position === undefined ? newOrder.length : position;
+        newOrder.splice(insertIndex, 0, draggedFragment);
+      }
 
-  setFragments(prev => prev.filter(f => f.id !== draggedFragment.id));
-  setDraggedFragment(null);
-};
+      return newOrder;
+    });
 
+    setFragments(prev => prev.filter(f => f.id !== draggedFragment.id));
+    setDraggedFragment(null);
+  };
 
 
 
-const handleFragmentClick = (fragment: StoryFragment) => {
-  if (userOrder.some(f => f.id === fragment.id)) return;
 
-  setUserOrder(prev => [...prev, fragment]);
-  setFragments(prev => prev.filter(f => f.id !== fragment.id));
-};
+  const handleFragmentClick = (fragment: StoryFragment) => {
+    if (userOrder.some(f => f.id === fragment.id)) return;
+
+    setUserOrder(prev => [...prev, fragment]);
+    setFragments(prev => prev.filter(f => f.id !== fragment.id));
+  };
 
 
   const handleRemoveFromOrder = (fragmentId: number) => {
@@ -283,7 +277,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
     }
 
     setAttempts(attempts + 1);
-    const isCorrect = userOrder.every((fragment, index) => 
+    const isCorrect = userOrder.every((fragment, index) =>
       fragment.correctOrder === index + 1
     );
 
@@ -350,22 +344,22 @@ const handleFragmentClick = (fragment: StoryFragment) => {
   if (gameComplete) {
     return (
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dcfce7 0%, #dbeafe 50%, #f3e8ff 100%)">
-      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
-        <ConfettiExplosion show={true} />
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto text-center">
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-200">
-            <CardContent className="p-8">
-              <div className="text-6xl mb-4">Trophy</div>
-              <h2 className="text-3xl mb-4 text-black">¡Has completado todos los niveles!</h2>
-              <div className="text-xl mb-6 text-black">Puntuación final: {score} puntos</div>
-              <div className="flex justify-center gap-4">
-                <ButtonWithAudio onClick={handleRestartGame} className="bg-green-500 hover:bg-green-600 text-white px-6 py-3" playOnHover audioText="Jugar de nuevo">Jugar de nuevo</ButtonWithAudio>
-                <ButtonWithAudio onClick={onBack} variant="outline" className="px-6 py-3" playOnHover audioText="Volver al dashboard">Volver al dashboard</ButtonWithAudio>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
+        <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+          <ConfettiExplosion show={true} />
+          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-2xl mx-auto text-center">
+            <Card className="bg-white/90 backdrop-blur-sm border-2 border-green-200">
+              <CardContent className="p-8">
+                <div className="text-6xl mb-4">Trophy</div>
+                <h2 className="text-3xl mb-4 text-black">¡Has completado todos los niveles!</h2>
+                <div className="text-xl mb-6 text-black">Puntuación final: {score} puntos</div>
+                <div className="flex justify-center gap-4">
+                  <ButtonWithAudio onClick={handleRestartGame} className="bg-green-500 hover:bg-green-600 text-white px-6 py-3" playOnHover audioText="Jugar de nuevo">Jugar de nuevo</ButtonWithAudio>
+                  <ButtonWithAudio onClick={onBack} variant="outline" className="px-6 py-3" playOnHover audioText="Volver al dashboard">Volver al dashboard</ButtonWithAudio>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
       </AccessibilitySettingsWrapper>
     );
   }
@@ -379,7 +373,7 @@ const handleFragmentClick = (fragment: StoryFragment) => {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dcfce7 0%, #dbeafe 50%, #f3e8ff 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         {/* HEADER */}
         <GameHeader
           title="Ordena la Historia"
@@ -403,153 +397,153 @@ const handleFragmentClick = (fragment: StoryFragment) => {
           />
         </motion.div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl text-black">"{currentStories[currentStoryIndex].title}"</h2>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-lg mb-4 text-black">Frases disponibles:</h3>
-            <div className="space-y-3">
-              {fragments.map((fragment) => (
-                <motion.div
-                  key={fragment.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                 
-                >
-                  <Card
-                    className="cursor-move bg-white/80 hover:bg-white border-2 border-blue-200 hover:border-blue-400 transition-all"
-                    draggable
-                    role="button"
-                    tabIndex={0}
-                    aria-label={fragment.text}
-                    onFocus={() => speakText(fragment.text, { voiceType: 'child' })}
-                    onMouseEnter={() => {
-                      if (canSpeakOnHover()) speakText(fragment.text, { voiceType: 'child' });
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        handleFragmentClick(fragment);
-                      }
-                    }}
-                    onDragStart={() => handleDragStart(fragment)}
-                    onClick={() => handleFragmentClick(fragment)}
-                    
-                  >
-                    <CardContent className="p-4">
-                      <p className="text-black leading-relaxed">{fragment.text}</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl text-black">"{currentStories[currentStoryIndex].title}"</h2>
           </div>
 
-          <div>
-            <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <h3 className="text-lg text-black">Tu historia ordenada:</h3>
-              <ButtonWithAudio onClick={initializeStory} variant="outline" size="sm" className="w-full bg-blue-500 sm:w-auto" playOnHover audioText="Reiniciar historia">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reiniciar
-              </ButtonWithAudio>
-            </div>
-            <div className="space-y-3 min-h-[400px]">
-              {userOrder.map((fragment, index) => (
-                
-                <motion.div
-                  key={fragment.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="relative"
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, index)}
-                >
-                  <Card
-                    draggable
-                    onDragStart={() => handleDragStart(fragment)}
-                    className="bg-green-50 border-2 border-green-300"
-                    tabIndex={0}
-                    aria-label={fragment.text}
-                    onFocus={() => speakText(fragment.text, { voiceType: 'child' })}
-                    onMouseEnter={() => {
-                      if (canSpeakOnHover()) speakText(fragment.text, { voiceType: 'child' });
-                    }}
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-lg mb-4 text-black">Frases disponibles:</h3>
+              <div className="space-y-3">
+                {fragments.map((fragment) => (
+                  <motion.div
+                    key={fragment.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+
                   >
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
-                          {index + 1}
+                    <Card
+                      className="cursor-move bg-white/80 hover:bg-white border-2 border-blue-200 hover:border-blue-400 transition-all"
+                      draggable
+                      role="button"
+                      tabIndex={0}
+                      aria-label={fragment.text}
+                      onFocus={() => speakText(fragment.text, { voiceType: 'child' })}
+                      onMouseEnter={() => {
+                        if (canSpeakOnHover()) speakText(fragment.text, { voiceType: 'child' });
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleFragmentClick(fragment);
+                        }
+                      }}
+                      onDragStart={() => handleDragStart(fragment)}
+                      onClick={() => handleFragmentClick(fragment)}
+
+                    >
+                      <CardContent className="p-4">
+                        <p className="text-black leading-relaxed">{fragment.text}</p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <h3 className="text-lg text-black">Tu historia ordenada:</h3>
+                <ButtonWithAudio onClick={initializeStory} variant="outline" size="sm" className="w-full bg-blue-500 sm:w-auto" playOnHover audioText="Reiniciar historia">
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Reiniciar
+                </ButtonWithAudio>
+              </div>
+              <div className="space-y-3 min-h-[400px]">
+                {userOrder.map((fragment, index) => (
+
+                  <motion.div
+                    key={fragment.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="relative"
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, index)}
+                  >
+                    <Card
+                      draggable
+                      onDragStart={() => handleDragStart(fragment)}
+                      className="bg-green-50 border-2 border-green-300"
+                      tabIndex={0}
+                      aria-label={fragment.text}
+                      onFocus={() => speakText(fragment.text, { voiceType: 'child' })}
+                      onMouseEnter={() => {
+                        if (canSpeakOnHover()) speakText(fragment.text, { voiceType: 'child' });
+                      }}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
+                            {index + 1}
+                          </div>
+                          <p className="text-black leading-relaxed flex-1">{fragment.text}</p>
+                          <ButtonWithAudio onClick={() => handleRemoveFromOrder(fragment.id)} variant="ghost" size="sm" className="text-red-500 hover:text-red-700" playOnHover audioText="Quitar frase">X</ButtonWithAudio>
                         </div>
-                        <p className="text-black leading-relaxed flex-1">{fragment.text}</p>
-                        <ButtonWithAudio onClick={() => handleRemoveFromOrder(fragment.id)} variant="ghost" size="sm" className="text-red-500 hover:text-red-700" playOnHover audioText="Quitar frase">X</ButtonWithAudio>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-              {userOrder.length === 0 && (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500" onDragOver={handleDragOver} onDrop={handleDrop}>
-                  Arrastra las frases aquí para ordenar la historia
-                </div>
-              )}
-            </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+                {userOrder.length === 0 && (
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500" onDragOver={handleDragOver} onDrop={handleDrop}>
+                    Arrastra las frases aquí para ordenar la historia
+                  </div>
+                )}
+              </div>
 
-            <div className="mt-6 text-center">
-              <ButtonWithAudio
-                onClick={checkOrder}
-                disabled={userOrder.length !== currentStories[currentStoryIndex].fragments.length}
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-3"
-                playOnHover
-                audioText="Verificar orden"
-              >
-                <CheckCircle className="w-5 h-5 mr-2" />
-                Verificar orden
-              </ButtonWithAudio>
+              <div className="mt-6 text-center">
+                <ButtonWithAudio
+                  onClick={checkOrder}
+                  disabled={userOrder.length !== currentStories[currentStoryIndex].fragments.length}
+                  className="bg-green-500 hover:bg-green-600 text-white px-8 py-3"
+                  playOnHover
+                  audioText="Verificar orden"
+                >
+                  <CheckCircle className="w-5 h-5 mr-2" />
+                  Verificar orden
+                </ButtonWithAudio>
+              </div>
             </div>
           </div>
+
+          {showResult && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fixed bottom-4 right-4 bg-red-100 border-2 border-red-300 rounded-lg p-4 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-red-500" />
+              <span className="text-red-700">No es el orden correcto. ¡Inténtalo de nuevo!</span>
+            </motion.div>
+          )}
+
+          <RewardAnimation type="confetti" show={showReward} message="¡Historia ordenada correctamente!" />
+
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={currentStories.length * 100}
+              customMessage="¡Eres un maestro de las historias!"
+              customSubtitle="¡Has ordenado todas las historias del nivel!"
+              celebrationText="¡Eres increible!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
+
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={currentStories.length * 100}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={handleNextLevel}
+              onRestart={handleRepeatLevel}
+              onExit={onBack}
+            />
+          )}
         </div>
-
-        {showResult && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fixed bottom-4 right-4 bg-red-100 border-2 border-red-300 rounded-lg p-4 flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <span className="text-red-700">No es el orden correcto. ¡Inténtalo de nuevo!</span>
-          </motion.div>
-        )}
-
-        <RewardAnimation type="confetti" show={showReward} message="¡Historia ordenada correctamente!" />
-
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={currentStories.length * 100}
-            customMessage="¡Eres un maestro de las historias!"
-            customSubtitle="¡Has ordenado todas las historias del nivel!"
-            celebrationText="¡Eres increible!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
-
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={currentStories.length * 100}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={handleNextLevel}
-            onRestart={handleRepeatLevel}
-            onExit={onBack}
-          />
-        )}
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

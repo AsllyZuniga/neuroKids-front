@@ -1,7 +1,4 @@
-/**
- * Payloads coherentes con el backend (detalle_niveles, solo_registro, nivel_completado).
- * Usar en todos los juegos y lecturas.
- */
+
 import type { ActivityConfig } from '@/config/activities';
 import type { SaveProgressParams } from '@/hooks/useProgress';
 
@@ -20,7 +17,7 @@ export function baseFromActivityConfig(c: ActivityConfig): Pick<
   };
 }
 
-/** Entrada a un nivel de juego (sin puntos de nivel). */
+
 export function gameLevelStart(
   base: ReturnType<typeof baseFromActivityConfig>,
   level: number
@@ -38,7 +35,7 @@ export function gameLevelStart(
   };
 }
 
-/** Fin de un nivel de juego. `completed` solo true en el último nivel. */
+
 export function gameLevelFinished(
   base: ReturnType<typeof baseFromActivityConfig>,
   opts: {
@@ -68,7 +65,7 @@ export function gameLevelFinished(
   };
 }
 
-/** Inicio / cambio de sección en lectura (sin completar). */
+
 export function readingStart(
   base: ReturnType<typeof baseFromActivityConfig>,
   level: number = 1
@@ -86,7 +83,7 @@ export function readingStart(
   };
 }
 
-/** Lectura lineal completada de una vez (mapa 3/3 en backend). */
+
 export function readingComplete(
   base: ReturnType<typeof baseFromActivityConfig>,
   opts: {
@@ -112,7 +109,7 @@ export function readingComplete(
   };
 }
 
-/** Lectura con varios niveles (1–3): al terminar cada nivel. */
+
 export function readingLevelFinished(
   base: ReturnType<typeof baseFromActivityConfig>,
   opts: {

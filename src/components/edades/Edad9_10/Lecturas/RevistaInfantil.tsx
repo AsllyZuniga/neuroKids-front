@@ -11,14 +11,10 @@ import { GameHeader } from '../../../others/GameHeader';
 import { ProgressBar } from '../../../others/ProgressBar';
 import { MotivationalMessage } from '../../../others/MotivationalMessage';
 import { LevelCompleteModal } from '../../../others/LevelCompleteModal';
-import { StartScreenRevistaInfantil } from "../IniciosJuegosLecturas/StartScreenRevistaInfantil";import { useProgress } from "@/hooks/useProgress";
+import { StartScreenRevistaInfantil } from "../IniciosJuegosLecturas/StartScreenRevistaInfantil"; import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  readingLevelFinished,
-  readingStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, readingLevelFinished, readingStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import delfin from '../../../../assets/9_10/revista_infantil/delfin1.svg';
 import planta from '../../../../assets/9_10/revista_infantil/planta2.svg';
@@ -274,7 +270,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
   const [levelComplete, setLevelComplete] = useState(false);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(6); // Revista Infantil
+  const activityConfig = getActivityByDbId(6);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const guardarInicioNivel = () => {
@@ -514,7 +510,7 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #dbeafe 0%, #dcfce7 50%, #fef9c3 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title={`Revista Infantil`}
           level={currentLevel}
@@ -537,150 +533,149 @@ export function RevistaInfantil({ onBack, level: initialLevel = 1 }: RevistaInfa
           />
         </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <motion.div
-          key={currentArticle}
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -50, opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-6"
-        >
-          <Card className="min-w-0 border-2 border-blue-200 bg-white/90 backdrop-blur-sm">
-            <CardContent className="min-w-0 overflow-hidden p-4 sm:p-8">
-              <div className="mb-6 border-b-2 border-gray-200 pb-6">
-                {/* Móvil: imagen arriba, título y meta abajo · sm+: fila como antes */}
-                <div className="mb-4 flex flex-col items-center gap-4 sm:mb-0 sm:flex-row sm:items-start sm:gap-4">
-                  <div className="flex w-full shrink-0 justify-center sm:w-auto sm:justify-start">
-                    <img
-                      src={article.image}
-                      alt={article.title}
-                      className="h-28 max-h-32 w-full max-w-[220px] rounded-xl object-contain sm:h-24 sm:max-h-none sm:w-32 sm:max-w-[8.5rem]"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1 text-center sm:text-left">
-                    <h2 className="mb-2 break-words text-xl text-black sm:text-2xl">{article.title}</h2>
-                    <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start sm:gap-3">
-                      <Badge className={`${getCategoryColor(article.category)} border`}>
-                        <Tag className="mr-1 h-3 w-3" />
-                        {article.category}
-                      </Badge>
-                      <div className="flex items-center gap-1 text-sm text-black">
-                        <User className="h-4 w-4 shrink-0" />
-                        <span className="break-words">{article.author}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm text-black">
-                        <Calendar className="h-4 w-4 shrink-0" />
-                        {article.date}
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <motion.div
+            key={currentArticle}
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -50, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-6"
+          >
+            <Card className="min-w-0 border-2 border-blue-200 bg-white/90 backdrop-blur-sm">
+              <CardContent className="min-w-0 overflow-hidden p-4 sm:p-8">
+                <div className="mb-6 border-b-2 border-gray-200 pb-6">
+                  <div className="mb-4 flex flex-col items-center gap-4 sm:mb-0 sm:flex-row sm:items-start sm:gap-4">
+                    <div className="flex w-full shrink-0 justify-center sm:w-auto sm:justify-start">
+                      <img
+                        src={article.image}
+                        alt={article.title}
+                        className="h-28 max-h-32 w-full max-w-[220px] rounded-xl object-contain sm:h-24 sm:max-h-none sm:w-32 sm:max-w-[8.5rem]"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1 text-center sm:text-left">
+                      <h2 className="mb-2 break-words text-xl text-black sm:text-2xl">{article.title}</h2>
+                      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start sm:gap-3">
+                        <Badge className={`${getCategoryColor(article.category)} border`}>
+                          <Tag className="mr-1 h-3 w-3" />
+                          {article.category}
+                        </Badge>
+                        <div className="flex items-center gap-1 text-sm text-black">
+                          <User className="h-4 w-4 shrink-0" />
+                          <span className="break-words">{article.author}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-black">
+                          <Calendar className="h-4 w-4 shrink-0" />
+                          {article.date}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="mb-6 min-w-0">
-                <AudioPlayer text={article.content} />
-              </div>
-
-              <div className="mb-6 min-w-0">
-                <div className="rounded-lg border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-green-50 p-4 sm:p-6">
-                  <p className="break-words text-base leading-relaxed text-black sm:text-lg">{article.content}</p>
+                <div className="mb-6 min-w-0">
+                  <AudioPlayer text={article.content} />
                 </div>
-              </div>
 
-              <div className="mb-6 rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">💡</span>
-                  <h4 className="text-lg text-yellow-800">Dato Curioso:</h4>
+                <div className="mb-6 min-w-0">
+                  <div className="rounded-lg border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-green-50 p-4 sm:p-6">
+                    <p className="break-words text-base leading-relaxed text-black sm:text-lg">{article.content}</p>
+                  </div>
                 </div>
-                <p className="text-yellow-700">{article.funFact}</p>
-              </div>
 
-              {!readArticles.has(currentArticle) && (
-                <div className="mx-auto max-w-full text-center">
-                  <Button
-                    onClick={markAsRead}
-                    className="h-auto min-h-11 w-full max-w-full !whitespace-normal break-words bg-blue-500 px-3 py-2.5 text-center text-sm leading-snug text-white hover:bg-blue-600 sm:w-auto sm:max-w-md sm:px-8 sm:py-3 sm:text-lg sm:leading-normal"
-                  >
-                    Marcar como leído y hacer quiz
-                  </Button>
+                <div className="mb-6 rounded-lg border-2 border-yellow-200 bg-yellow-50 p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl">💡</span>
+                    <h4 className="text-lg text-yellow-800">Dato Curioso:</h4>
+                  </div>
+                  <p className="text-yellow-700">{article.funFact}</p>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </motion.div>
 
-        <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <Button
-            onClick={previousArticle}
-            disabled={currentArticle === 0}
-            variant="outline"
-            className="order-2 min-h-11 w-full border-2 bg-green-500 backdrop-blur-sm sm:order-1 sm:w-auto"
-          >
-            <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
-            Artículo Anterior
-          </Button>
+                {!readArticles.has(currentArticle) && (
+                  <div className="mx-auto max-w-full text-center">
+                    <Button
+                      onClick={markAsRead}
+                      className="h-auto min-h-11 w-full max-w-full !whitespace-normal break-words bg-blue-500 px-3 py-2.5 text-center text-sm leading-snug text-white hover:bg-blue-600 sm:w-auto sm:max-w-md sm:px-8 sm:py-3 sm:text-lg sm:leading-normal"
+                    >
+                      Marcar como leído y hacer quiz
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <div className="order-1 flex max-w-full flex-wrap justify-center gap-1.5 overflow-x-auto px-1 py-1 sm:order-2 sm:max-w-[min(100%,14rem)] sm:gap-2 md:max-w-none">
-            {currentArticles.map((_, index) => (
-              <div
-                key={index}
-                className={`h-2.5 shrink-0 rounded-full transition-colors sm:h-3 ${index === currentArticle
-                  ? 'w-7 bg-blue-500 sm:w-8'
-                  : readArticles.has(index)
-                    ? 'w-2.5 bg-green-400 sm:w-3'
-                    : 'w-2.5 bg-gray-300 sm:w-3'
-                  }`}
-              />
-            ))}
+          <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+            <Button
+              onClick={previousArticle}
+              disabled={currentArticle === 0}
+              variant="outline"
+              className="order-2 min-h-11 w-full border-2 bg-green-500 backdrop-blur-sm sm:order-1 sm:w-auto"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
+              Artículo Anterior
+            </Button>
+
+            <div className="order-1 flex max-w-full flex-wrap justify-center gap-1.5 overflow-x-auto px-1 py-1 sm:order-2 sm:max-w-[min(100%,14rem)] sm:gap-2 md:max-w-none">
+              {currentArticles.map((_, index) => (
+                <div
+                  key={index}
+                  className={`h-2.5 shrink-0 rounded-full transition-colors sm:h-3 ${index === currentArticle
+                    ? 'w-7 bg-blue-500 sm:w-8'
+                    : readArticles.has(index)
+                      ? 'w-2.5 bg-green-400 sm:w-3'
+                      : 'w-2.5 bg-gray-300 sm:w-3'
+                    }`}
+                />
+              ))}
+            </div>
+
+            <Button
+              onClick={nextArticle}
+              disabled={currentArticle === currentArticles.length - 1 || !readArticles.has(currentArticle)}
+              className="order-3 min-h-11 w-full bg-blue-500 text-white hover:bg-blue-600 sm:w-auto"
+            >
+              {currentArticle === currentArticles.length - 1 ? "Finalizar Nivel" : "Siguiente Artículo"}
+              <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
+            </Button>
           </div>
 
-          <Button
-            onClick={nextArticle}
-            disabled={currentArticle === currentArticles.length - 1 || !readArticles.has(currentArticle)}
-            className="order-3 min-h-11 w-full bg-blue-500 text-white hover:bg-blue-600 sm:w-auto"
-          >
-            {currentArticle === currentArticles.length - 1 ? "Finalizar Nivel" : "Siguiente Artículo"}
-            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
-          </Button>
+          <RewardAnimation
+            type="star"
+            show={showReward}
+            message="¡Respuesta correcta!"
+            onComplete={() => setShowReward(false)}
+          />
+
+          {/* MENSAJE MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={currentArticles.length * 50}
+              customMessage="¡Has leído todos los artículos!"
+              customSubtitle="Completaste todas las lecturas del nivel"
+              celebrationText="¡Eres un genio!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL -  */}
+          {levelComplete && !showMotivational && (
+            <LevelCompleteModal
+              score={score}
+              total={currentArticles.length * 50}
+              level={currentLevel}
+              isLastLevel={currentLevel >= MAX_LEVEL}
+              onNextLevel={loadNextLevel}
+              onRestart={restartLevel}
+              onExit={onBack}
+            />
+          )}
         </div>
-
-        <RewardAnimation
-          type="star"
-          show={showReward}
-          message="¡Respuesta correcta!"
-          onComplete={() => setShowReward(false)}
-        />
-
-        {/* MENSAJE MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={currentArticles.length * 50}
-            customMessage="¡Has leído todos los artículos!"
-            customSubtitle="Completaste todas las lecturas del nivel"
-            celebrationText="¡Eres un genio!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL -  */}
-        {levelComplete && !showMotivational && (
-          <LevelCompleteModal
-            score={score}
-            total={currentArticles.length * 50}
-            level={currentLevel}
-            isLastLevel={currentLevel >= MAX_LEVEL}
-            onNextLevel={loadNextLevel}
-            onRestart={restartLevel}
-            onExit={onBack}
-          />
-        )}
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }

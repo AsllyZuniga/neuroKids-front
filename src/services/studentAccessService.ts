@@ -1,6 +1,6 @@
 import { buildApiUrl } from "@/config/api";
 
-/** Registra una visita al panel del estudiante (antiduplicado en servidor ~25 min). Silencioso si falla. */
+
 export async function registerStudentPlatformVisit(): Promise<void> {
   const token = localStorage.getItem("token");
   if (!token) return;
@@ -14,6 +14,6 @@ export async function registerStudentPlatformVisit(): Promise<void> {
       body: "{}",
     });
   } catch {
-    /* ignorar: red o servidor */
+
   }
 }

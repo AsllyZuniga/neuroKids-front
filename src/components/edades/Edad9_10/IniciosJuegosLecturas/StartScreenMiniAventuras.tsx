@@ -126,14 +126,12 @@ export function StartScreenMiniAventuras({ onStart, onBack }: StartScreenMiniAve
               startScreenMobileComenzarButton
             )}
           >
-           <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
-          ¡Comenzar a Jugar!
+            <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
+            ¡Comenzar a Jugar!
           </Button>
         </motion.div>
 
       </div>
-
-
     </div>
   );
 }

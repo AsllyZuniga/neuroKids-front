@@ -17,11 +17,7 @@ import { speakText } from "@/utils/textToSpeech";
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  readingLevelFinished,
-  readingStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, readingLevelFinished, readingStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import sol from "@/assets/7_8/primerapalabra/sol.svg"
 import mar from "@/assets/7_8/primerapalabra/mar.svg"
@@ -173,9 +169,9 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   const [showQuestions, setShowQuestions] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const locked = useLevelLock(currentLevel);
-  
+
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(3); // Mi Primera Palabra (lectura)
+  const activityConfig = getActivityByDbId(3);
   const { getElapsedSeconds } = useActivityTimer([currentLevel]);
 
   const recognitionRef = useRef<any>(null);
@@ -193,10 +189,9 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   };
 
   useEffect(() => {
-    // Registrar CADA vez que se inicia la lectura, sin importar si ya leyó antes
     console.log('🔄 PrimeraPalabra - Ejecutando useEffect, nivel:', currentLevel);
     guardarInicioNivel();
-  }, [currentLevel, activityConfig, saveProgress]); // Se ejecuta cada vez que cambia el nivel
+  }, [currentLevel, activityConfig, saveProgress]);
 
   const updateProgress = () => {
     let newProgress = baseProgress;
@@ -402,7 +397,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     rec.start();
   };
 
-  //  LEVEL 1
+
   const renderLevel1 = () => {
     const item = currentItem as any;
     return (
@@ -480,7 +475,7 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
     );
   };
 
-  //LEVEL 2
+
   const renderLevel2 = () => {
     const item = currentItem as any;
 
@@ -555,7 +550,6 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   };
 
 
-  //  LEVEL 3
   const renderLevel3 = () => {
     const item = currentItem as any;
 
@@ -685,107 +679,104 @@ export function PrimeraPalabra({ onBack, level = 1 }: PrimeraPalabraProps) {
   return (
     <LevelLock level={currentLevel} isLocked={locked} onLoginRequired={onBack}>
       <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg,#B3E5FC 100%)">
-      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
-        {/* RECOMPENSAS */}
-        <RewardAnimation type="star" show={showReward} />
-        <ConfettiExplosion show={showLevelComplete} />
+        <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+          <RewardAnimation type="star" show={showReward} />
+          <ConfettiExplosion show={showLevelComplete} />
 
-        {/* HEADER */}
-        <GameHeader
-          title={`Mi Primera Palabra`}
-          level={currentLevel}
-          score={score}
-          onBack={onBack}
-          onRestart={() => resetLevel(currentLevel)}
-        />
-
-        {/* PROGRESO */}
-        <ProgressBar
-          current={currentIndex + 1}
-          total={data.length}
-          progress={currentProgress}
-          className="mb-8"
-        />
-
-        {/* GUÍA */}
-        <div className="mb-6">
-          <AnimalGuide
-            animal="bear"
-            message={
-              currentLevel === 1
-                ? 'Escucha y repite la palabra.'
-                : currentLevel === 2
-                  ? 'Di toda la frase completa.'
-                  : 'Responde las preguntas.'
-            }
-          />
-        </div>
-
-        {/* CONTENIDO */}
-        <div className="mb-8">
-          {currentLevel === 1 && renderLevel1()}
-          {currentLevel === 2 && renderLevel2()}
-          {currentLevel === 3 && renderLevel3()}
-        </div>
-
-        {/* NAVEGACIÓN - CORREGIDA */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
-          <ButtonWithAudio
-            onClick={handlePrevious}
-            disabled={currentIndex === 0}
-            variant="outline"
-            className="min-h-11 w-full border-black bg-white/80 text-black hover:bg-gray-100 sm:w-auto"
-            audioText="Anterior"
-            playOnHover={true}
-            playOnClick={true}
-          >
-            <ChevronLeft className="mr-2 h-4 w-4 shrink-0" /> Anterior
-          </ButtonWithAudio>
-
-          <ButtonWithAudio
-            onClick={handleNext}
-            disabled={!completedItems[currentIndex]}
-            className={`min-h-11 w-full touch-manipulation text-white transition-all sm:w-auto ${completedItems[currentIndex]
-              ? 'bg-green-500 hover:bg-green-600'
-              : 'cursor-not-allowed bg-gray-400'
-              }`}
-            audioText={completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
-            playOnHover={false}
-            playOnClick={true}
-          >
-            {completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
-            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
-          </ButtonWithAudio>
-        </div>
-
-        {/* MOTIVACIONAL */}
-        {showMotivational && (
-          <MotivationalMessage
-            score={score}
-            total={currentLevel === 3 ? data.length * 2 : data.length}
-            customMessage="¡Eres un lector increíble!"
-            customSubtitle="¡Completaste todo el nivel!"
-            celebrationText="¡Eres genial!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }}
-          />
-        )}
-
-        {/* MODAL FINAL */}
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={currentLevel === 3 ? data.length * 2 : data.length}
+          {/* HEADER */}
+          <GameHeader
+            title={`Mi Primera Palabra`}
             level={currentLevel}
-            isLastLevel={currentLevel >= 3}
-            onNextLevel={handleNextLevel}
-            onRestart={handleRepeatLevel}
-            onExit={onBack}
+            score={score}
+            onBack={onBack}
+            onRestart={() => resetLevel(currentLevel)}
           />
-        )}
-      </div>
+
+          {/* PROGRESO */}
+          <ProgressBar
+            current={currentIndex + 1}
+            total={data.length}
+            progress={currentProgress}
+            className="mb-8"
+          />
+
+          {/* Animal Guide */}
+          <div className="mb-6">
+            <AnimalGuide
+              animal="bear"
+              message={
+                currentLevel === 1
+                  ? 'Escucha y repite la palabra.'
+                  : currentLevel === 2
+                    ? 'Di toda la frase completa.'
+                    : 'Responde las preguntas.'
+              }
+            />
+          </div>
+
+          <div className="mb-8">
+            {currentLevel === 1 && renderLevel1()}
+            {currentLevel === 2 && renderLevel2()}
+            {currentLevel === 3 && renderLevel3()}
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
+            <ButtonWithAudio
+              onClick={handlePrevious}
+              disabled={currentIndex === 0}
+              variant="outline"
+              className="min-h-11 w-full border-black bg-white/80 text-black hover:bg-gray-100 sm:w-auto"
+              audioText="Anterior"
+              playOnHover={true}
+              playOnClick={true}
+            >
+              <ChevronLeft className="mr-2 h-4 w-4 shrink-0" /> Anterior
+            </ButtonWithAudio>
+
+            <ButtonWithAudio
+              onClick={handleNext}
+              disabled={!completedItems[currentIndex]}
+              className={`min-h-11 w-full touch-manipulation text-white transition-all sm:w-auto ${completedItems[currentIndex]
+                ? 'bg-green-500 hover:bg-green-600'
+                : 'cursor-not-allowed bg-gray-400'
+                }`}
+              audioText={completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
+              playOnHover={false}
+              playOnClick={true}
+            >
+              {completedItems[currentIndex] ? '¡Siguiente!' : 'Di la palabra'}
+              <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
+            </ButtonWithAudio>
+          </div>
+
+          {/* MOTIVACIONAL */}
+          {showMotivational && (
+            <MotivationalMessage
+              score={score}
+              total={currentLevel === 3 ? data.length * 2 : data.length}
+              customMessage="¡Eres un lector increíble!"
+              customSubtitle="¡Completaste todo el nivel!"
+              celebrationText="¡Eres genial!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }}
+            />
+          )}
+
+          {/* MODAL FINAL */}
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={currentLevel === 3 ? data.length * 2 : data.length}
+              level={currentLevel}
+              isLastLevel={currentLevel >= 3}
+              onNextLevel={handleNextLevel}
+              onRestart={handleRepeatLevel}
+              onExit={onBack}
+            />
+          )}
+        </div>
       </AccessibilitySettingsWrapper>
     </LevelLock>
   );

@@ -59,9 +59,9 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
               delay: Math.random() * 2
             }}
           >
-            <Star 
-              size={8 + Math.random() * 12} 
-              fill="#ffeb7c" 
+            <Star
+              size={8 + Math.random() * 12}
+              fill="#ffeb7c"
               color="#f8e475"
               style={{ filter: 'drop-shadow(0 0 4px rgba(255, 215, 0, 0.6))' }}
             />
@@ -89,7 +89,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
       </div>
 
 
-    
+
       <div className="relative z-20 mx-auto flex min-h-[100dvh] min-h-screen max-w-4xl flex-col items-center justify-center px-4 pb-10 pt-20 text-center sm:pt-24">
 
         <motion.div
@@ -99,32 +99,32 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
           className="mb-12"
         >
           <div className="flex justify-center gap-2">
-            
-                      {letters.map((letter, index) => (
-                        <motion.span
-                          key={index}
-                          className="inline-block max-[480px]:text-3xl text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
-                          style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
-                          initial={{ opacity: 0, y: -40, rotate: -10 }}
-                          animate={{ opacity: 1, y: 0, rotate: 0 }}
-                          transition={{
-                            duration: 0.45,
-          
-                            delay: index * 0.08,
-                            type: "spring",
-                            bounce: 0.4,
-                          }}
-                          whileHover={{
-                            scale: 1.2,
-                            rotate: 5,
-                            transition: { duration: 0.2 },
-                          }}
-                        >
-                          {letter === " " ? "\u00A0" : letter}
-                        </motion.span>
-                      ))}
-                    </div>
-          
+
+            {letters.map((letter, index) => (
+              <motion.span
+                key={index}
+                className="inline-block max-[480px]:text-3xl text-4xl text-transparent bg-clip-text bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 sm:text-5xl md:text-7xl"
+                style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.15)" }}
+                initial={{ opacity: 0, y: -40, rotate: -10 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{
+                  duration: 0.45,
+
+                  delay: index * 0.08,
+                  type: "spring",
+                  bounce: 0.4,
+                }}
+                whileHover={{
+                  scale: 1.2,
+                  rotate: 5,
+                  transition: { duration: 0.2 },
+                }}
+              >
+                {letter === " " ? "\u00A0" : letter}
+              </motion.span>
+            ))}
+          </div>
+
         </motion.div>
 
         <motion.div
@@ -146,12 +146,12 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
               color: 'white'
             }}
           >
-           <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
-          ¡Comenzar a Jugar!
+            <Play className={cn("mr-3 h-8 w-8 fill-white", startScreenMobilePlayIcon)} />
+            ¡Comenzar a Jugar!
           </Button>
         </motion.div>
 
-    
+
         <motion.div
           className="absolute -bottom-8 left-1/2 transform -translate-x-1/2"
           animate={{
@@ -167,7 +167,7 @@ export function StartScreenCoheteLector({ onStart, onBack }: StartScreenCoheteLe
         </motion.div>
       </div>
 
- 
+
       <motion.div
         className="absolute bottom-0 left-0 w-full h-32 opacity-30"
         style={{

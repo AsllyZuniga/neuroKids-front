@@ -12,7 +12,7 @@ export interface Insignia {
     estado: boolean;
 }
 
-/** Respuesta de GET .../estudiante/:id/catalogo — nombres desde tabla `insignias` */
+
 export interface InsigniaCatalogoItem {
     id: number;
     nombre: string;
@@ -41,7 +41,7 @@ export interface NotificacionInsignia {
 }
 
 export const insigniaService = {
-    // Obtener notificaciones pendientes
+    
     async getNotificacionesPendientes(estudianteId: string): Promise<NotificacionInsignia[]> {
         try {
             const url = buildApiUrl(`${API_CONFIG.ENDPOINTS.STUDENT_NOTIFICATIONS}/${estudianteId}`);
@@ -64,7 +64,7 @@ export const insigniaService = {
         }
     },
 
-    /** Marca una notificación concreta como leída (cualquier insignia). */
+    
     async marcarNotificacionLeida(estudianteId: string, notificacionId: string | number): Promise<boolean> {
         try {
             const url = buildApiUrl(
@@ -85,7 +85,7 @@ export const insigniaService = {
         }
     },
 
-    // Marcar notificación de bienvenida como leída
+
     async marcarBienvenidaLeida(estudianteId: string): Promise<boolean> {
         try {
             const url = buildApiUrl(`${API_CONFIG.ENDPOINTS.MARK_NOTIFICATION_READ}/${estudianteId}`);
@@ -112,7 +112,6 @@ export const insigniaService = {
         }
     },
 
-    /** Catálogo completo de insignias (BD) con estado bloqueada / desbloqueada */
     async getCatalogoInsigniasEstudiante(estudianteId: string): Promise<InsigniaCatalogoItem[]> {
         try {
             const url = buildApiUrl(`${API_CONFIG.ENDPOINTS.STUDENT_INSIGNIAS}/${estudianteId}/catalogo`);
@@ -128,7 +127,7 @@ export const insigniaService = {
         }
     },
 
-    // Obtener insignias del estudiante
+
     async getInsigniasEstudiante(estudianteId: string): Promise<any[]> {
         try {
             const url = buildApiUrl(`${API_CONFIG.ENDPOINTS.STUDENT_INSIGNIAS}/${estudianteId}`);

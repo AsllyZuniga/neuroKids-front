@@ -4,19 +4,16 @@ import { speakText, canSpeakOnHover, trackAudioHelpUseForCurrentActivity } from 
 
 interface ButtonWithAudioProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  audioText?: string; // Texto a reproducir, si es diferente del contenido del botón
+  audioText?: string;
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
   size?: 'default' | 'sm' | 'lg' | 'icon';
-  enableAudio?: boolean; // Permite desactivar el audio si es necesario
-  onClickWithAudio?: () => void; // Callback adicional después del click
-  playOnHover?: boolean; // Reproducir audio al hacer hover (por defecto true)
-  playOnClick?: boolean; // Reproducir audio al hacer click (por defecto false)
+  enableAudio?: boolean;
+  onClickWithAudio?: () => void;
+  playOnHover?: boolean;
+  playOnClick?: boolean;
 }
 
-/**
- * Botón que reproduce audio al hacer hover o click
- * Extiende el componente Button estándar con funcionalidad de audio
- */
+
 export function ButtonWithAudio({
   children,
   audioText,
@@ -29,11 +26,10 @@ export function ButtonWithAudio({
   onClick,
   ...props
 }: ButtonWithAudioProps) {
-  // Extraer texto del botón si no se proporciona audioText
+
   const getTextToSpeak = (): string => {
     if (audioText) return audioText;
     if (typeof children === 'string') return children;
-    // Si children contiene elementos, intentar extraer el texto
     if (Array.isArray(children)) {
       const textParts = children.filter(child => typeof child === 'string');
       if (textParts.length > 0) return textParts.join(' ');
@@ -46,7 +42,6 @@ export function ButtonWithAudio({
       const text = getTextToSpeak();
       if (text) {
         speakText(text, { voiceType: 'child' });
-        // Solo contar ayuda en clic explícito de botones tipo "escuchar/repetir".
         if (/(escuchar|repetir|oir|oír|audio|narrar)/i.test(text)) {
           trackAudioHelpUseForCurrentActivity();
         }
@@ -55,15 +50,14 @@ export function ButtonWithAudio({
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Reproducir audio si está configurado
     if (enableAudio && playOnClick && !props.disabled) {
       const text = getTextToSpeak();
       if (text) {
         speakText(text, { voiceType: 'child' });
       }
     }
-    
-    // Llamar callbacks
+
+
     if (onClick) {
       onClick(e);
     }

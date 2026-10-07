@@ -8,7 +8,7 @@ import App from './App.tsx'
 import { initVoices } from './utils/textToSpeech'
 import { ErrorBoundary } from './components/others/ErrorBoundary'
 
-// Inicializar las voces del navegador
+
 initVoices();
 
 createRoot(document.getElementById('root')!).render(

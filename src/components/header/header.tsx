@@ -18,8 +18,8 @@ export default function Header() {
   const [user, setUser] = useState<User | null>(null);
   const [userType, setUserType] = useState<string>("");
   const navigate = useNavigate();
-   const location = useLocation();
-    const isStudentProfile = location.pathname === "/perfil/estudiante";
+  const location = useLocation();
+  const isStudentProfile = location.pathname === "/perfil/estudiante";
 
   useEffect(() => {
     checkAuthStatus();
@@ -30,7 +30,6 @@ export default function Header() {
     const userData = localStorage.getItem("user");
     const userTypeData = localStorage.getItem("userType");
 
-    // Evita errores cuando no hay usuario o el valor guardado no es JSON válido
     if (token && userData && userData !== "undefined") {
       try {
         const parsedUser: User = JSON.parse(userData);
@@ -39,7 +38,6 @@ export default function Header() {
         setUserType(userTypeData || "");
         return;
       } catch {
-        // Si falla el parseo, limpiamos cualquier dato corrupto
         localStorage.removeItem("user");
       }
     }
@@ -54,7 +52,6 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    // No eliminar claves neurokids-progress-*, neurokids-streak-*, neurokids-student-panel-ui-* (progreso persistente)
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("userType");
@@ -116,15 +113,15 @@ export default function Header() {
 
 
 
-             {!isStudentProfile && (
-  <Button
-    label={HEADER_TEXT.logout}
-    variant="secondary"
-    size="medium"
-    onClick={handleLogout}
-    className="header__logout-btn"
-  />
-)}
+              {!isStudentProfile && (
+                <Button
+                  label={HEADER_TEXT.logout}
+                  variant="secondary"
+                  size="medium"
+                  onClick={handleLogout}
+                  className="header__logout-btn"
+                />
+              )}
             </div>
           ) : (
             <Button

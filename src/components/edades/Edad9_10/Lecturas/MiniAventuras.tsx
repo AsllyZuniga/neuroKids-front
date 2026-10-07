@@ -13,11 +13,7 @@ import { StartScreenMiniAventuras } from '../IniciosJuegosLecturas/StartScreenMi
 import { useProgress } from "@/hooks/useProgress";
 import { useActivityTimer } from "@/hooks/useActivityTimer";
 import { getActivityByDbId } from "@/config/activities";
-import {
-  baseFromActivityConfig,
-  readingLevelFinished,
-  readingStart
-} from "@/utils/activityProgressPayloads";
+import { baseFromActivityConfig, readingLevelFinished, readingStart } from "@/utils/activityProgressPayloads";
 import { AccessibilitySettingsWrapper } from "@/components/others/AccessibilitySettingsWrapper";
 import img1 from '../../../../assets/9_10/mini_aventuras/nivel1/1.png';
 import img2 from '../../../../assets/9_10/mini_aventuras/nivel1/2.png';
@@ -29,7 +25,7 @@ import img7 from '../../../../assets/9_10/mini_aventuras/nivel1/7.png';
 import img8 from '../../../../assets/9_10/mini_aventuras/nivel1/8.png';
 import image1 from '../../../../assets/9_10/mini_aventuras/nivel2/1.png';
 import image2 from '../../../../assets/9_10/mini_aventuras/nivel2/2.png';
-import image3 from '../../../../assets/9_10/mini_aventuras/nivel2/3.png'; 
+import image3 from '../../../../assets/9_10/mini_aventuras/nivel2/3.png';
 import image4 from '../../../../assets/9_10/mini_aventuras/nivel2/4.png';
 import image5 from '../../../../assets/9_10/mini_aventuras/nivel2/5.png';
 import image6 from '../../../../assets/9_10/mini_aventuras/nivel2/6.png';
@@ -38,7 +34,7 @@ import image8 from '../../../../assets/9_10/mini_aventuras/nivel2/8.png';
 import imgA1 from '../../../../assets/9_10/mini_aventuras/nivel3/1.png';
 import imgA2 from '../../../../assets/9_10/mini_aventuras/nivel3/2.png';
 import imgA3 from '../../../../assets/9_10/mini_aventuras/nivel3/3.png';
-import imgA4 from '../../../../assets/9_10/mini_aventuras/nivel3/4.png';  
+import imgA4 from '../../../../assets/9_10/mini_aventuras/nivel3/4.png';
 import imgA5 from '../../../../assets/9_10/mini_aventuras/nivel3/5.png';
 import imgA6 from '../../../../assets/9_10/mini_aventuras/nivel3/6.png';
 import imgA7 from '../../../../assets/9_10/mini_aventuras/nivel3/7.png';
@@ -259,7 +255,7 @@ const adventures: Adventure[] = [
         id: 6,
         text: "Alex plantó las semillas y la jungla se volvió aún más hermosa y llena de vida. Desde entonces, protegió el secreto para que otros pudieran descubrirlo.",
         image: imgA6,
-   
+
       },
       {
         id: 7,
@@ -297,7 +293,7 @@ export function MiniAventuras({ onBack }: MiniAventurasProps) {
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   const { saveProgress } = useProgress();
-  const activityConfig = getActivityByDbId(5); // Mini Aventuras
+  const activityConfig = getActivityByDbId(5);
   const { getElapsedSeconds } = useActivityTimer([currentAdventure]);
 
   const guardarInicioNivel = () => {
@@ -319,45 +315,45 @@ export function MiniAventuras({ onBack }: MiniAventurasProps) {
 
 
 
-const playPageAudio = () => {
-  if (!window.speechSynthesis) return;
+  const playPageAudio = () => {
+    if (!window.speechSynthesis) return;
 
-  if (isSpeaking) {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
     window.speechSynthesis.cancel();
-    setIsSpeaking(false);
-    return;
-  }
 
-  window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(page.text);
+    utterance.lang = "es-ES";
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
 
-  const utterance = new SpeechSynthesisUtterance(page.text);
-  utterance.lang = "es-ES";
-  utterance.rate = 0.9;
-  utterance.pitch = 1;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
 
-  utterance.onstart = () => setIsSpeaking(true);
-  utterance.onend = () => setIsSpeaking(false);
-  utterance.onerror = () => setIsSpeaking(false);
-
-  window.speechSynthesis.speak(utterance);
-};
+    window.speechSynthesis.speak(utterance);
+  };
 
 
 
   const handleInteraction = (optionIndex: number) => {
-  if (interactionComplete) return;
+    if (interactionComplete) return;
 
-  setSelectedOption(optionIndex);
-  setInteractionComplete(true);
+    setSelectedOption(optionIndex);
+    setInteractionComplete(true);
 
-  const isCorrect = page.interactive?.correct === optionIndex;
+    const isCorrect = page.interactive?.correct === optionIndex;
 
-  if (isCorrect) {
-    setScore(prev => prev + 5);
-    setShowReward(true);
-    setTimeout(() => setShowReward(false), 1500);
-  }
-};
+    if (isCorrect) {
+      setScore(prev => prev + 5);
+      setShowReward(true);
+      setTimeout(() => setShowReward(false), 1500);
+    }
+  };
 
 
   const goToNextPage = () => {
@@ -412,7 +408,7 @@ const playPageAudio = () => {
       setShowQuestion(false);
       setShowLevelComplete(false);
     } else {
-      onBack(); // Todas completadas
+      onBack();
     }
   };
 
@@ -422,10 +418,10 @@ const playPageAudio = () => {
     return "¡Lee con atención y disfruta la historia!";
   };
 
-useEffect(() => {
-  window.speechSynthesis.cancel();
-  setIsSpeaking(false);
-}, [currentPage, currentAdventure]);
+  useEffect(() => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  }, [currentPage, currentAdventure]);
 
 
 
@@ -435,7 +431,7 @@ useEffect(() => {
 
   return (
     <AccessibilitySettingsWrapper defaultBackground="linear-gradient(135deg, #E3F2FD 0%, #C8E6C9 100%)">
-    <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
+      <div className="min-h-screen min-h-[100dvh] overflow-x-hidden p-3 sm:p-5 lg:p-8">
         <GameHeader
           title="Mini Aventuras"
           level={currentAdventure + 1}
@@ -458,137 +454,134 @@ useEffect(() => {
           />
         </div>
 
-      <div className="mx-auto w-full min-w-0 max-w-7xl">
-        <div className="text-center mb-4">
-          <h2 className="text-xl text-gray-800 sm:text-2xl">
-            {adventure.title}
-          </h2>
-        </div>
+        <div className="mx-auto w-full min-w-0 max-w-7xl">
+          <div className="text-center mb-4">
+            <h2 className="text-xl text-gray-800 sm:text-2xl">
+              {adventure.title}
+            </h2>
+          </div>
 
-        <motion.div
-          key={`${currentAdventure}-${currentPage}`}
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="mb-6"
-        >
-          <Card className="min-w-0 border-2 border-blue-200 bg-white/90 text-black">
-            <CardContent className="min-w-0 overflow-x-hidden p-4 sm:p-8 lg:p-10">
-              <div className="grid min-w-0 grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
-                <div className="min-w-0 text-center">
-                  <motion.img
-                    src={page.image}
-                    alt="ilustración"
-                    className="mx-auto mb-4 h-auto max-h-52 w-full max-w-[min(100%,16rem)] object-contain sm:max-h-64 md:max-w-[14rem]"
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                  />
-                  <Button
-                    onClick={playPageAudio}
-                    className="min-h-11 bg-blue-500 text-white hover:bg-blue-600"
-                  >
-                    <Volume2 className="mr-2 h-4 w-4 shrink-0" />
-                    {isSpeaking ? "Reproduciendo..." : "Escuchar"}
-                  </Button>
-                </div>
-
-                <div className="min-w-0 overflow-x-hidden">
-                  {/* TEXTO */}
-                  {(!page.interactive || !showQuestion) && (
-                    <p className="mb-4 break-words text-base leading-relaxed text-black sm:mb-6 sm:text-xl md:text-2xl">
-                      {page.text}
-                    </p>
-                  )}
-
-                  {/* BOTÓN */}
-                  {page.interactive && !showQuestion && (
-                    <Button
-                      onClick={() => setShowQuestion(true)}
-                      className="mb-4 min-h-11 w-full bg-purple-500 text-white hover:bg-purple-600 sm:w-auto"
-                    >
-                      Responder pregunta
-                    </Button>
-                  )}
-
-                  {/* PREGUNTA */}
-                  {page.interactive && showQuestion && (
-                    <Card className="max-w-full min-w-0 border-2 border-yellow-200 bg-yellow-50">
-                      <CardContent className="flex max-h-[min(75dvh,36rem)] min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto p-3 sm:max-h-[min(80dvh,40rem)] sm:p-4">
-                        <h4 className="shrink-0 break-words whitespace-pre-wrap text-sm font-semibold leading-relaxed text-yellow-800 [overflow-wrap:anywhere] sm:text-lg md:text-xl">
-                          {page.interactive.content}
-                        </h4>
-                        <div className="min-h-0 space-y-2 sm:space-y-3">
-                          {page.interactive.options.map((opt, i) => (
-                            <Button
-                              key={i}
-                              onClick={() => handleInteraction(i)}
-                              disabled={interactionComplete}
-                              className="h-auto min-h-12 w-full min-w-0 shrink items-start justify-start gap-2 whitespace-normal rounded-md px-3 py-3 text-left text-xs leading-snug sm:text-base sm:leading-relaxed"
-                            >
-                              <span className="block min-w-0 flex-1 whitespace-pre-wrap break-words text-left [overflow-wrap:anywhere]">
-                                {opt}
-                              </span>
-                            </Button>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-between">
-          <Button onClick={goToPreviousPage} 
-          className="min-h-11 w-full bg-green-500 backdrop-blur-sm sm:w-auto"
-          >       
-        <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
-            Anterior
-          </Button>
-
-          <Button
-            onClick={goToNextPage}
-            disabled={page.interactive && !interactionComplete}
-            className="min-h-11 w-full bg-blue-500 text-white hover:bg-blue-600 sm:w-auto"
+          <motion.div
+            key={`${currentAdventure}-${currentPage}`}
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            className="mb-6"
           >
-            {currentPage === totalPages - 1 ? "Finalizar" : "Siguiente"}
-            <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
-          </Button>
+            <Card className="min-w-0 border-2 border-blue-200 bg-white/90 text-black">
+              <CardContent className="min-w-0 overflow-x-hidden p-4 sm:p-8 lg:p-10">
+                <div className="grid min-w-0 grid-cols-1 items-start gap-6 md:grid-cols-2 md:gap-8">
+                  <div className="min-w-0 text-center">
+                    <motion.img
+                      src={page.image}
+                      alt="ilustración"
+                      className="mx-auto mb-4 h-auto max-h-52 w-full max-w-[min(100%,16rem)] object-contain sm:max-h-64 md:max-w-[14rem]"
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                    />
+                    <Button
+                      onClick={playPageAudio}
+                      className="min-h-11 bg-blue-500 text-white hover:bg-blue-600"
+                    >
+                      <Volume2 className="mr-2 h-4 w-4 shrink-0" />
+                      {isSpeaking ? "Reproduciendo..." : "Escuchar"}
+                    </Button>
+                  </div>
+
+                  <div className="min-w-0 overflow-x-hidden">
+                    {(!page.interactive || !showQuestion) && (
+                      <p className="mb-4 break-words text-base leading-relaxed text-black sm:mb-6 sm:text-xl md:text-2xl">
+                        {page.text}
+                      </p>
+                    )}
+                    {page.interactive && !showQuestion && (
+                      <Button
+                        onClick={() => setShowQuestion(true)}
+                        className="mb-4 min-h-11 w-full bg-purple-500 text-white hover:bg-purple-600 sm:w-auto"
+                      >
+                        Responder pregunta
+                      </Button>
+                    )}
+
+
+                    {page.interactive && showQuestion && (
+                      <Card className="max-w-full min-w-0 border-2 border-yellow-200 bg-yellow-50">
+                        <CardContent className="flex max-h-[min(75dvh,36rem)] min-h-0 flex-col gap-3 overflow-x-hidden overflow-y-auto p-3 sm:max-h-[min(80dvh,40rem)] sm:p-4">
+                          <h4 className="shrink-0 break-words whitespace-pre-wrap text-sm font-semibold leading-relaxed text-yellow-800 [overflow-wrap:anywhere] sm:text-lg md:text-xl">
+                            {page.interactive.content}
+                          </h4>
+                          <div className="min-h-0 space-y-2 sm:space-y-3">
+                            {page.interactive.options.map((opt, i) => (
+                              <Button
+                                key={i}
+                                onClick={() => handleInteraction(i)}
+                                disabled={interactionComplete}
+                                className="h-auto min-h-12 w-full min-w-0 shrink items-start justify-start gap-2 whitespace-normal rounded-md px-3 py-3 text-left text-xs leading-snug sm:text-base sm:leading-relaxed"
+                              >
+                                <span className="block min-w-0 flex-1 whitespace-pre-wrap break-words text-left [overflow-wrap:anywhere]">
+                                  {opt}
+                                </span>
+                              </Button>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          <div className="mt-4 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:justify-between">
+            <Button onClick={goToPreviousPage}
+              className="min-h-11 w-full bg-green-500 backdrop-blur-sm sm:w-auto"
+            >
+              <ChevronLeft className="mr-2 h-4 w-4 shrink-0" />
+              Anterior
+            </Button>
+
+            <Button
+              onClick={goToNextPage}
+              disabled={page.interactive && !interactionComplete}
+              className="min-h-11 w-full bg-blue-500 text-white hover:bg-blue-600 sm:w-auto"
+            >
+              {currentPage === totalPages - 1 ? "Finalizar" : "Siguiente"}
+              <ChevronRight className="ml-2 h-4 w-4 shrink-0" />
+            </Button>
+          </div>
+
+          <RewardAnimation
+            type="star"
+            show={showReward}
+            message="¡Respuesta correcta!"
+            onComplete={() => setShowReward(false)} />
+
+          {showMotivational &&
+            (<MotivationalMessage
+              score={score}
+              total={totalPages * 10}
+              customMessage="¡Has leído toda la aventura!"
+              customSubtitle="Completaste todas las páginas con éxito"
+              celebrationText="¡Que habilidad!"
+              onComplete={() => {
+                setShowMotivational(false);
+                setShowLevelComplete(true);
+              }} />)}
+
+          {showLevelComplete && (
+            <LevelCompleteModal
+              score={score}
+              total={totalPages * 10}
+              level={currentAdventure + 1}
+              isLastLevel={currentAdventure >= adventures.length - 1}
+              onNextLevel={handleNextLevel}
+              onRestart={handleRestart}
+              onExit={onBack}
+            />
+          )}
+
         </div>
-
-        <RewardAnimation
-          type="star"
-          show={showReward}
-          message="¡Respuesta correcta!"
-          onComplete={() => setShowReward(false)} />
-
-        {showMotivational &&
-          (<MotivationalMessage
-            score={score}
-            total={totalPages * 10}
-            customMessage="¡Has leído toda la aventura!"
-            customSubtitle="Completaste todas las páginas con éxito"
-            celebrationText="¡Que habilidad!"
-            onComplete={() => {
-              setShowMotivational(false);
-              setShowLevelComplete(true);
-            }} />)}
-
-        {showLevelComplete && (
-          <LevelCompleteModal
-            score={score}
-            total={totalPages * 10}
-            level={currentAdventure + 1}
-            isLastLevel={currentAdventure >= adventures.length - 1}
-            onNextLevel={handleNextLevel}
-            onRestart={handleRestart}
-            onExit={onBack}
-          />
-        )}
-
       </div>
-    </div>
     </AccessibilitySettingsWrapper>
   );
 }
